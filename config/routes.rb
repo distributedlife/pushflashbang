@@ -7,7 +7,15 @@ PushFlashBang::Application.routes.draw do
   match 'info/about' => 'info#about'
 
   resources :users, :as => "user"
-  
+
+  resources :deck, :as => "deck" do
+    member do
+      post 'create', :as => "create"
+      get 'create'
+
+      get 'show'
+    end
+  end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
