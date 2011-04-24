@@ -1,0 +1,12 @@
+=render :partial => '/header', :locals => {:title => t('user.registration.title'), :subtitle => t('user.registration.subtitle')}
+%section{:class => ["panel"]}
+  = semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
+    = f.input :email, :as => :email, :label => false, :hint => I18n.t('user.registration.labels.email'), :required => false, :wrapper_html => {:class => 'full_width'}
+    .pad_from_top
+    = f.input :password, :as => :password, :label => false, :hint => I18n.t('user.registration.labels.password'), :required => false, :wrapper_html => {:class => 'full_width'}
+    .pad_from_top
+    = f.input :password_confirmation, :as => :password, :label => false, :hint => I18n.t('user.registration.labels.confirm_password'), :required => false, :wrapper_html => {:style => 'full_width'}
+    .pad_from_top
+    = f.submit I18n.t('user.registration.labels.create_account'), :class => 'positive'
+    - if devise_mapping.recoverable? && controller_name != 'passwords'
+      = link_to I18n.t('user.actions.forgot_password'), new_password_path(resource_name), :class => 'neutral'

@@ -1,0 +1,587 @@
+$table_row_base : #fff ;
+$table_row_vary : #eee ;
+$table_row_hover: #ffa ;
+
+$page_background: #eee ;
+$page_background_offset: #ddd ;
+$li_background:   #fff ;
+$pending_background: #ffd;
+$success_notice_color: #efe;
+$failure_notice_color: #fee;
+$info_notice_color: #fff;
+$help_notice_color: #faa;
+$selected_item_color: #0f0;
+
+$text_colour: black ;
+$add_filter_colour: green ;
+$remove_filter_colour: red ;
+$included_filter_colour: black ;
+$excluded_filter_colour: grey;
+
+$button_positive: lightgreen ;
+$button_positive_hover: darkgreen ;
+$button_positive_outline: green ;
+$button_negative: indianred;
+$button_negative_hover: red;
+$button_negative_outline: red;
+$button_neutral: white;
+$button_neutral_hover: black;
+$button_neutral_outline: black;
+
+$button_text: black;
+$button_text_hover: white;
+
+$font_size_letter: 3.0em;
+$font_size_large: 1.6em;
+$font_size_normal: 1.0em;
+$font_size_small: 0.6em;
+$font_size_tiny: 0.4em;
+
+////////////////////////////////////////////////////////////////////////////////
+// LAYOUT
+////////////////////////////////////////////////////////////////////////////////
+
+body
+{
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0em;
+  margin-bottom: 0em;
+  font-size: $font_size_large ;
+  background-color: $page_background;
+
+  font-family: 'Times New Roman', serif;
+}
+
+li
+{
+  list-style: none;
+}
+
+header
+{
+  clear: both;
+  margin-bottom: 0.6em ;
+  margin-left: 0.6em ;
+  margin-right: 0.6em ;
+
+  padding-bottom: 0.6em;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+}
+
+.left
+{
+  float: left;
+}
+
+.right
+{
+  float: right;
+}
+
+.pad_from_top
+{
+  padding-top: 1.0em;
+}
+
+.panel
+{
+  background-color: $li_background;
+  border-radius: 20px;
+  padding: 0.6em;
+  margin: 0.6em;
+}
+
+.top_menu_panel
+{
+  background-color: $page_background_offset;
+
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+
+  text-align: center;
+
+    span
+  {
+    font-size: $font_size_small;
+  }
+}
+
+.created_item
+{
+  background-color: $success_notice_color;
+  border-radius: 10px;
+  padding: 0.6em;
+  margin: 0.6em;
+}
+
+.search
+{
+  padding-right: 0.6em;
+
+  float: right;
+  clear: both;
+}
+
+.strong
+{
+  font-weight: bold;
+}
+
+legend.label
+{
+  font-weight: bold;
+}
+
+.section_break
+{
+  padding-top: 0.6em;
+  border-bottom: 1px solid black;
+}
+
+.definition
+{
+  p
+  {
+    font-size: $font_size_small !important;
+  }
+
+  float: right;
+  clear: none;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center ;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// INTERACTIONS
+////////////////////////////////////////////////////////////////////////////////
+
+.pending
+{
+  background-color: $pending_background;
+}
+
+a
+{
+  text-decoration: none;
+  color: $included_filter_colour;
+}
+
+a:visited
+{
+  color: $included_filter_colour;
+}
+
+a:hover
+{
+  color: $add_filter_colour;
+}
+
+a:visited
+{
+}
+
+a:hover
+{
+  text-decoration: none;
+}
+
+textarea
+{
+  width: 90%;
+  margin: auto;
+  font-size: $font_size_small;
+  border-radius: 5px;
+  border: 2px solid $page_background;
+  height: 6em;
+  padding: 0.6em;
+}
+
+input
+{
+  margin: auto;
+  font-size: $font_size_small;
+  border-radius: 5px;
+  border: 2px solid $page_background;
+  padding: 0.6em;
+}
+
+input[type="email"]
+{
+  width: 90%;
+}
+
+input[type="password"]
+{
+  width: 90%;
+}
+
+input[type="submit"]
+{
+  font-family: 'Times New Roman', serif;
+  color: $button_text;
+}
+
+input[type="submit"]:hover
+{
+  color: $button_text_hover;
+}
+
+input[type="submit"].positive
+{
+  background: $button_positive;
+  border: 1px solid $button_positive_outline;
+}
+
+input[type="submit"].positive:hover
+{
+  background: $button_positive_hover;
+}
+
+input[type="submit"].negative
+{
+  background: $button_negative;
+  border: 1px solid $button_negative_outline;
+}
+
+input[type="submit"].negative:hover
+{
+  background: $button_negative_hover;
+}
+
+input[type="submit"].neutral
+{
+  background: $button_neutral;
+  border: 1px solid $button_neutral_outline;
+}
+
+input[type="submit"].neutral:hover
+{
+  background: $button_neutral_hover;
+}
+
+select
+{
+  font-size: $font_size_small;
+  border-radius: 5px;
+  display: block;
+}
+
+.help
+{
+  font-style: italics;
+  color: $help_notice_color;
+}
+
+form
+{
+  width: 100% !important;
+
+  li
+  {
+     list-style: none;
+
+    p
+    {
+      display: inline !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+  }
+
+  li.lo_propose
+  {
+    width: 60%;
+  }
+
+  li.full_width
+  {
+    width: 100%;
+  }
+
+  a
+  {
+    margin: auto;
+    font-size: $font_size_small;
+    border-radius: 5px;
+    border: 2px solid $page_background;
+    height: 6em;
+    padding: 0.6em;
+    color: $button_text;
+  }
+
+  a:hover
+  {
+    color: $button_text_hover;
+  }
+
+  a.positive
+  {
+    background: $button_positive;
+    border: 1px solid $button_positive_outline;
+  }
+
+  a.positive:hover
+  {
+    background: $button_positive_hover;
+  }
+
+  a.negative
+  {
+    background: $button_negative;
+    border: 1px solid $button_negative_outline;
+  }
+
+  a.negative:hover
+  {
+    background: $button_negative_hover;
+  }
+
+  a.neutral
+  {
+    background: $button_neutral;
+    border: 1px solid $button_neutral_outline;
+  }
+
+  a.neutral:hover
+  {
+    background: $button_neutral_hover;
+  }
+}
+
+nav
+{
+  span.include
+  {
+    a
+    {
+      color: $included_filter_colour;
+    }
+
+    a:visited
+    {
+      color: $included_filter_colour;
+    }
+
+    a:hover
+    {
+      color: $remove_filter_colour;
+    }
+  }
+
+  span.exclude
+  {
+    a
+    {
+      color: $excluded_filter_colour;
+    }
+
+    a:visited
+    {
+      color: $excluded_filter_colour;
+    }
+
+    a:hover
+    {
+      color: $add_filter_colour;
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// STYLES
+////////////////////////////////////////////////////////////////////////////////
+
+p.title
+{
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: $font_size_large;
+}
+
+p.subtitle
+{
+  font-family: "Book Antiqua", serif;
+  font-style: italic;
+  font-size: $font_size_small;
+}
+
+p.definition_text
+{
+  font-family: "Book Antiqua", serif;
+  font-style: italic;
+  font-size: $font_size_normal;
+  text-align: left;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// CUSTOMISED
+////////////////////////////////////////////////////////////////////////////////
+
+.list_summary
+{
+  clear: both;
+  margin-bottom: 0.6em;
+  float: right;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+
+  min-height: 1.0em;
+}
+
+.learning_objective_search
+{
+  ul
+  {
+    clear: both;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  div
+  {
+    margin-bottom: 1.2em;
+
+    p
+    {
+      width: 80%;
+      margin: 0;
+      padding: 0;
+    }
+
+    span
+    {
+      color: black;
+      float: right;
+      padding-top: 0.6em;
+      padding-left: 0.3em;
+      padding-right: 0.3em;
+    }
+
+    span#discipline
+    {
+      clear: both;
+      font-weight: bold ;
+      font-size: $font_size_small;
+    }
+
+    span#category
+    {
+      clear: both;
+      font-size: 0.6em;
+    }
+
+    span#category_new
+    {
+      float: right;
+      clear: both;
+      font-size: $font_size_letter;
+      padding-top: 0;
+      padding-left:0;
+      margin-bottom: 0.3em;
+    }
+
+    p#pending
+    {
+      float: left ;
+      font-style: italic;
+      font-size: $font_size_tiny;
+      padding-bottom: 0.3em;
+
+      a
+      {
+        font-weight: bold !important;
+      }
+
+      a:hover
+      {
+        font-weight: bold !important;
+      }
+    }
+  }
+
+  p
+  {
+    padding: 0.6em;
+  }
+
+  float: left;
+  width: 70%;
+}
+
+.pad
+{
+  clear: both;
+}
+
+nav.filter
+{
+  clear: right;
+  float: right;
+  width: 30%;
+
+  ul
+  {
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+
+    li
+    {
+      font-size: $font_size_small ;
+      padding: 0;
+      margin: 0;
+      text-align: right;
+    } 
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Flash Notices
+////////////////////////////////////////////////////////////////////////////////
+.flash
+{
+  p
+  {
+    font-size: $font_size_small;
+    padding: 0.6em;
+    margin: 0.6em;
+    border-radius: 5px;
+  }
+  
+  p.success
+  {
+    background-color: $success_notice_color;
+  }
+
+  p.failure
+  {
+    background-color: $failure_notice_color;
+  }
+  
+  p.error
+  {
+    background-color: $failure_notice_color;
+  }
+
+  p.notice
+  {
+    background-color: $info_notice_color;
+  }
+
+  p.info
+  {
+    background-color: $info_notice_color;
+  }
+}

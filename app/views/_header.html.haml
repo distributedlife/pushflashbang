@@ -1,0 +1,11 @@
+= render :partial => '/common/auth_menu'
+%header
+  %p.title= title
+  %p.subtitle= subtitle
+  .section_break
+  .flash
+    - flash.each do |key, value|
+      %p{:class => key}
+        %span= value.html_safe
+:javascript
+  $(".flash").delay(5000).hide('slow');

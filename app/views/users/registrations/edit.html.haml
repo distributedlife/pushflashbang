@@ -1,0 +1,13 @@
+=render :partial => '/header', :locals => {:title => t('user.edit.title'), :subtitle => t('user.edit.subtitle')}
+%section{:class => ["panel"]}
+  = semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+    = f.input :email, :as => :email, :label => false, :hint => I18n.t('user.edit.labels.email'), :required => false, :wrapper_html => {:class => 'full_width'}
+    .pad_from_top
+    = f.input :password, :as => :password, :label => false, :hint => I18n.t('user.edit.labels.password'), :required => false, :wrapper_html => {:class => 'full_width'}
+    .pad_from_top
+    = f.input :password_confirmation, :as => :password, :label => false, :hint => I18n.t('user.edit.labels.confirm_password'), :required => false, :wrapper_html => {:style => 'full_width'}
+    .pad_from_top
+    = f.input :current_password, :as => :password, :label => false, :hint => I18n.t('user.edit.labels.current_password'), :required => false, :wrapper_html => {:style => 'full_width'}
+    .pad_from_top
+    = f.submit I18n.t('user.edit.labels.update_account'), :class => 'positive'
+    = link_to I18n.t('user.edit.labels.cancel_account'), registration_path(resource_name), :confirm => I18n.t('user.edit.labels.cancel_account_confirm'), :method => :delete, :class => 'negative'

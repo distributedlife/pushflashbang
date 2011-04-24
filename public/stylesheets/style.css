@@ -1,0 +1,306 @@
+body {
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0em;
+  margin-bottom: 0em;
+  font-size: 1.6em;
+  background-color: #eeeeee;
+  font-family: 'Times New Roman', serif; }
+
+li {
+  list-style: none; }
+
+header {
+  clear: both;
+  margin-bottom: 0.6em;
+  margin-left: 0.6em;
+  margin-right: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 0.6em;
+  padding-right: 0.6em; }
+
+.left {
+  float: left; }
+
+.right {
+  float: right; }
+
+.pad_from_top {
+  padding-top: 1.0em; }
+
+.panel {
+  background-color: white;
+  border-radius: 20px;
+  padding: 0.6em;
+  margin: 0.6em; }
+
+.top_menu_panel {
+  background-color: #dddddd;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  text-align: center; }
+  .top_menu_panel span {
+    font-size: 0.6em; }
+
+.created_item {
+  background-color: #eeffee;
+  border-radius: 10px;
+  padding: 0.6em;
+  margin: 0.6em; }
+
+.search {
+  padding-right: 0.6em;
+  float: right;
+  clear: both; }
+
+.strong {
+  font-weight: bold; }
+
+legend.label {
+  font-weight: bold; }
+
+.section_break {
+  padding-top: 0.6em;
+  border-bottom: 1px solid black; }
+
+.definition {
+  float: right;
+  clear: none;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center; }
+  .definition p {
+    font-size: 0.6em !important; }
+
+.pending {
+  background-color: #ffffdd; }
+
+a {
+  text-decoration: none;
+  color: black; }
+
+a:visited {
+  color: black; }
+
+a:hover {
+  color: green; }
+
+a:hover {
+  text-decoration: none; }
+
+textarea {
+  width: 90%;
+  margin: auto;
+  font-size: 0.6em;
+  border-radius: 5px;
+  border: 2px solid #eeeeee;
+  height: 6em;
+  padding: 0.6em; }
+
+input {
+  margin: auto;
+  font-size: 0.6em;
+  border-radius: 5px;
+  border: 2px solid #eeeeee;
+  padding: 0.6em; }
+
+input[type="email"] {
+  width: 90%; }
+
+input[type="password"] {
+  width: 90%; }
+
+input[type="submit"] {
+  font-family: 'Times New Roman', serif;
+  color: black; }
+
+input[type="submit"]:hover {
+  color: white; }
+
+input[type="submit"].positive {
+  background: lightgreen;
+  border: 1px solid green; }
+
+input[type="submit"].positive:hover {
+  background: darkgreen; }
+
+input[type="submit"].negative {
+  background: indianred;
+  border: 1px solid red; }
+
+input[type="submit"].negative:hover {
+  background: red; }
+
+input[type="submit"].neutral {
+  background: white;
+  border: 1px solid black; }
+
+input[type="submit"].neutral:hover {
+  background: black; }
+
+select {
+  font-size: 0.6em;
+  border-radius: 5px;
+  display: block; }
+
+.help {
+  font-style: italics;
+  color: #ffaaaa; }
+
+form {
+  width: 100% !important; }
+  form li {
+    list-style: none; }
+    form li p {
+      display: inline !important;
+      padding: 0 !important;
+      margin: 0 !important; }
+  form li.lo_propose {
+    width: 60%; }
+  form li.full_width {
+    width: 100%; }
+  form a {
+    margin: auto;
+    font-size: 0.6em;
+    border-radius: 5px;
+    border: 2px solid #eeeeee;
+    height: 6em;
+    padding: 0.6em;
+    color: black; }
+  form a:hover {
+    color: white; }
+  form a.positive {
+    background: lightgreen;
+    border: 1px solid green; }
+  form a.positive:hover {
+    background: darkgreen; }
+  form a.negative {
+    background: indianred;
+    border: 1px solid red; }
+  form a.negative:hover {
+    background: red; }
+  form a.neutral {
+    background: white;
+    border: 1px solid black; }
+  form a.neutral:hover {
+    background: black; }
+
+nav span.include a {
+  color: black; }
+nav span.include a:visited {
+  color: black; }
+nav span.include a:hover {
+  color: red; }
+nav span.exclude a {
+  color: grey; }
+nav span.exclude a:visited {
+  color: grey; }
+nav span.exclude a:hover {
+  color: green; }
+
+p.title {
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: 1.6em; }
+
+p.subtitle {
+  font-family: "Book Antiqua", serif;
+  font-style: italic;
+  font-size: 0.6em; }
+
+p.definition_text {
+  font-family: "Book Antiqua", serif;
+  font-style: italic;
+  font-size: 1em;
+  text-align: left; }
+
+.list_summary {
+  clear: both;
+  margin-bottom: 0.6em;
+  float: right;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+  min-height: 1.0em; }
+
+.learning_objective_search {
+  float: left;
+  width: 70%; }
+  .learning_objective_search ul {
+    clear: both;
+    margin: 0;
+    padding: 0;
+    list-style-type: none; }
+  .learning_objective_search div {
+    margin-bottom: 1.2em; }
+    .learning_objective_search div p {
+      width: 80%;
+      margin: 0;
+      padding: 0; }
+    .learning_objective_search div span {
+      color: black;
+      float: right;
+      padding-top: 0.6em;
+      padding-left: 0.3em;
+      padding-right: 0.3em; }
+    .learning_objective_search div span#discipline {
+      clear: both;
+      font-weight: bold;
+      font-size: 0.6em; }
+    .learning_objective_search div span#category {
+      clear: both;
+      font-size: 0.6em; }
+    .learning_objective_search div span#category_new {
+      float: right;
+      clear: both;
+      font-size: 3em;
+      padding-top: 0;
+      padding-left: 0;
+      margin-bottom: 0.3em; }
+    .learning_objective_search div p#pending {
+      float: left;
+      font-style: italic;
+      font-size: 0.4em;
+      padding-bottom: 0.3em; }
+      .learning_objective_search div p#pending a {
+        font-weight: bold !important; }
+      .learning_objective_search div p#pending a:hover {
+        font-weight: bold !important; }
+  .learning_objective_search p {
+    padding: 0.6em; }
+
+.pad {
+  clear: both; }
+
+nav.filter {
+  clear: right;
+  float: right;
+  width: 30%; }
+  nav.filter ul {
+    margin-top: 0.6em;
+    margin-bottom: 0.6em; }
+    nav.filter ul li {
+      font-size: 0.6em;
+      padding: 0;
+      margin: 0;
+      text-align: right; }
+
+.flash p {
+  font-size: 0.6em;
+  padding: 0.6em;
+  margin: 0.6em;
+  border-radius: 5px; }
+.flash p.success {
+  background-color: #eeffee; }
+.flash p.failure {
+  background-color: #ffeeee; }
+.flash p.error {
+  background-color: #ffeeee; }
+.flash p.notice {
+  background-color: white; }
+.flash p.info {
+  background-color: white; }

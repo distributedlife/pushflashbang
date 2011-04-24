@@ -2,4 +2,81 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "that can't be blank"
+              taken: "that has not been used before"
+              too_long: "that has to be shorted"
+            password:
+              blank: "that can't be blank"
+              too_short: "that needs to be at longer"
+              confirmation: "that must match the confirmation"
+            current_password:
+              blank: "that can't be blank"
+              invalid: "that must be correct :)"
+  about:
+    title: "PushFlashBang"
+    subtitle: "Language learning tools"
+  general:
+    labels:
+      undo: "Click here to undo."
+    terms:
+  user:
+    registration:
+      title: "Sign up to LearnTesting!"
+      subtitle: "signing up allows you to keep track of your learning progress"
+      labels:
+        email: "your email"
+        password: "a password"
+        confirm_password: "and the password again"
+        create_account: "Join!"
+    reset_password:
+      title: "Reset your password"
+      subtitle: ""
+      labels:
+        email: "enter your email address"
+        button: "Send me password reset instructions"
+      email:
+        greeting: "Hello"
+        what_is_this_email: "Someone has requested a link to change your password, and you can do this through the link below."
+        reset_password_link: "Change my password"
+        further_information: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
+    login:
+      title: "Sign in to LearnTesting!"
+      subtitle: ""
+      labels:
+        email: "my email"
+        password: "my password"
+        remember_me: "and remember me from now on?"
+    edit:
+      title: "Manage your account"
+      subtitle: ""
+      labels:
+        email: "change email address?"
+        password: "change password? or leave blank"
+        confirm_password: "confirm your new password"
+        current_password: "your current password; to confirm changes"
+        update_account: "make changes"
+        cancel_account: "cancel my account"
+        cancel_account_confirm: "Are you sure?"
+    change_password:
+      title: "Change your password"
+      subtitle: ""
+      labels:
+        password: "your new password"
+        confirm_password: "confirm new password"
+        change_password: "Change Password"
+    actions:
+      forgot_password: "Forgot your password?"
+      sign_in: "Login"
+      sign_up: "Join"
+      sign_out: "Logout"
+      edit_registration: "Edit registration"
+      search: "Search"
+  search:
+    labels:
+      clear_filter: "clear filter"

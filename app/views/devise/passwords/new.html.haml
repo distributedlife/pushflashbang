@@ -1,0 +1,6 @@
+=render :partial => '/header', :locals => {:title => t('user.reset_password.title'), :subtitle => t('user.reset_password.subtitle')}
+%section{:class => ["panel"]}
+  = semantic_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
+    = f.input :email, :as => :email, :label => false, :hint => I18n.t('user.reset_password.labels.email'), :required => false, :wrapper_html => {:class => 'full_width'}
+    .pad_from_top
+    = f.submit I18n.t('user.reset_password.labels.button'), :class => 'positive'

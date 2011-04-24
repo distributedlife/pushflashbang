@@ -1,0 +1,40 @@
+=render :partial => '/header', :locals => {:title => t('Check style title'), :subtitle => t('All new controls should be added here')}
+%section{:class => ["panel"]}
+  - semantic_form_for(:learning_objective, :url => 'create', :method => :post, :remote => true) do |f|
+    = f.input :brief, :as => :text, :label => false, :hint => I18n.t('learning_objective.propose.labels.brief'), :required => false, :wrapper_html => {:class => 'lo_propose'}
+    .pad_from_top
+    #discipline_definition
+      //=render :partial => 'definitions', :locals => {:definitions => @discipline_definitions}
+    = f.input :discipline, :label => 'select one of many', :required => false, :as => :radio, :collection => ['one', 'two', 'three'], :wrapper_html => {:class => 'lo_propose'}
+    .pad_from_top
+    #category_definition
+      //=render :partial => 'definitions', :locals => {:definitions => @category_definitions}
+    = f.input :category, :label => 'a question of choice?', :required => false, :as => :boolean, :wrapper_html => {:class => 'lo_propose'}
+    .pad_from_top
+    - f.buttons do
+      = f.submit 'do change', :class => 'positive'
+
+%section{:class => ["panel"]}
+  - semantic_form_for(:learning_objective, :url => 'create', :method => :post, :remote => true) do |f|
+    - f.buttons do
+      = f.submit 'the desired path', :class => 'positive'
+      = f.submit 'something non destuctive', :class => 'neutral'
+      = f.submit 'non-desirable', :class => 'negative'
+
+%section{:class => ["panel"]}
+  = semantic_form_for(:user, :url => '/') do |f|
+    = link_to "the desired path", '/', :class => 'positive'
+    = link_to "something non destuctive", '/', :class => 'neutral'
+    = link_to "non-desirable", '/', :class => 'negative'
+
+%section{:class => ["panel"]}
+  = semantic_form_for(:user, :url => '/') do |f|
+    = f.input :email, :as => :email, :label => false, :hint => I18n.t('user.registration.labels.email'), :required => false, :wrapper_html => {:class => 'full_width'}
+    .pad_from_top
+    = f.input :password, :as => :password, :label => false, :hint => I18n.t('user.registration.labels.password'), :required => false, :wrapper_html => {:class => 'full_width'}
+    .pad_from_top
+    = f.input :password_confirmation, :as => :password, :label => false, :hint => I18n.t('user.registration.labels.confirm_password'), :required => false, :wrapper_html => {:style => 'full_width'}
+    .pad_from_top
+    = f.submit "Sign up", :class => 'positive'
+    - if controller_name != 'passwords'
+      = link_to "Forgot your password?", '/', :class => 'neutral'

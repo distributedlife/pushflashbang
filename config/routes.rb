@@ -1,4 +1,13 @@
 PushFlashBang::Application.routes.draw do
+  devise_for :users, :controllers => { :registrations => "users/registrations" }
+
+  root :to => "info#about"
+
+  match 'info/check_style' => 'info#check_style'
+  match 'info/about' => 'info#about'
+
+  resources :users, :as => "user"
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
