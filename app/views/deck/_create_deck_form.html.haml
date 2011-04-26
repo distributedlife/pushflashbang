@@ -1,0 +1,23 @@
+- semantic_form_for(@deck, :url => create_deck_path, :method => :post) do |f|
+  #brief_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('deck.terminology.name.title'), :detail => I18n.t('deck.terminology.name.description')}
+  = f.input :name, :as => :string, :label => false, :hint => I18n.t('deck.create.labels.name'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+  #description_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('deck.terminology.description.title'), :detail => I18n.t('deck.terminology.description.description')}
+  = f.input :description, :as => :text, :label => false, :hint => I18n.t('deck.create.labels.description'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+  #lang_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('deck.terminology.lang.title'), :detail => I18n.t('deck.terminology.lang.description')}
+  = f.input :lang, :as => :string, :label => false, :hint => I18n.t('deck.create.labels.lang'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+  #country_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('deck.terminology.country.title'), :detail => I18n.t('deck.terminology.country.description')}
+  = f.input :country, :as => :string, :label => false, :hint => I18n.t('deck.create.labels.country'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+  - f.buttons do
+    = f.submit I18n.t('deck.create.labels.save'), :class => 'positive'

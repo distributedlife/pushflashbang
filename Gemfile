@@ -48,5 +48,6 @@ group :development, :test do
   gem 'ruby-debug'
   gem 'metric_fu'
   gem 'bermuda'
+  gem 'blueprints'
 #  gem 'capybara-webkit'
 end

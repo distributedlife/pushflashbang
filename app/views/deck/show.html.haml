@@ -1,0 +1,10 @@
+=render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "language code: #{@deck.lang}, country code: #{@deck.country}"}
+- unless @deck.description == ""
+  .right{:class => ["panel"], :style => "width: 25%"}
+    %p.description= @deck.description
+    .pad_from_top
+    %p.description= link_to "Edit Deck", edit_deck_path(@deck.id)
+    .pad
+%section{:class => ["left panel"], :style => "width: 60%"}
+  %p This deck has no cards; click here to start adding cards to the deck
+  .pad

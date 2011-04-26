@@ -205,6 +205,7 @@ textarea
   border: 2px solid $page_background;
   height: 6em;
   padding: 0.6em;
+  display: block;
 }
 
 input
@@ -214,6 +215,12 @@ input
   border-radius: 5px;
   border: 2px solid $page_background;
   padding: 0.6em;
+  display: block;
+}
+
+input[type="text"]
+{
+  width: 90%;
 }
 
 input[type="email"]
@@ -226,8 +233,14 @@ input[type="password"]
   width: 90%;
 }
 
+input[type="checkbox"]
+{
+  display: inline;
+}
+
 input[type="submit"]
 {
+  display: inline;
   font-family: 'Times New Roman', serif;
   color: $button_text;
 }
@@ -299,7 +312,7 @@ form
     }
   }
 
-  li.lo_propose
+  li.width60
   {
     width: 60%;
   }
@@ -398,6 +411,11 @@ nav
   }
 }
 
+.width35
+{
+  width: 35%;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // STYLES
 ////////////////////////////////////////////////////////////////////////////////
@@ -407,6 +425,21 @@ p.title
   font-family: "Consolas", sans-serif;
   font-weight: bold;
   font-size: $font_size_large;
+}
+
+p.minor_title
+{
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: $font_size_normal;
+}
+
+p.description
+{
+  font-family: "Consolas", sans-serif;
+  font-style: italic;
+  font-size: $font_size_small;
+  text-align: left;
 }
 
 p.subtitle
@@ -424,6 +457,11 @@ p.definition_text
   text-align: left;
 }
 
+.subscript
+{
+  font-size: $font_size_small;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // CUSTOMISED
 ////////////////////////////////////////////////////////////////////////////////
@@ -437,87 +475,6 @@ p.definition_text
   padding-right: 0.6em;
 
   min-height: 1.0em;
-}
-
-.learning_objective_search
-{
-  ul
-  {
-    clear: both;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-  }
-  
-  div
-  {
-    margin-bottom: 1.2em;
-
-    p
-    {
-      width: 80%;
-      margin: 0;
-      padding: 0;
-    }
-
-    span
-    {
-      color: black;
-      float: right;
-      padding-top: 0.6em;
-      padding-left: 0.3em;
-      padding-right: 0.3em;
-    }
-
-    span#discipline
-    {
-      clear: both;
-      font-weight: bold ;
-      font-size: $font_size_small;
-    }
-
-    span#category
-    {
-      clear: both;
-      font-size: 0.6em;
-    }
-
-    span#category_new
-    {
-      float: right;
-      clear: both;
-      font-size: $font_size_letter;
-      padding-top: 0;
-      padding-left:0;
-      margin-bottom: 0.3em;
-    }
-
-    p#pending
-    {
-      float: left ;
-      font-style: italic;
-      font-size: $font_size_tiny;
-      padding-bottom: 0.3em;
-
-      a
-      {
-        font-weight: bold !important;
-      }
-
-      a:hover
-      {
-        font-weight: bold !important;
-      }
-    }
-  }
-
-  p
-  {
-    padding: 0.6em;
-  }
-
-  float: left;
-  width: 70%;
 }
 
 .pad
@@ -545,7 +502,6 @@ nav.filter
     } 
   }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Flash Notices

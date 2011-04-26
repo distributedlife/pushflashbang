@@ -100,14 +100,19 @@ textarea {
   border-radius: 5px;
   border: 2px solid #eeeeee;
   height: 6em;
-  padding: 0.6em; }
+  padding: 0.6em;
+  display: block; }
 
 input {
   margin: auto;
   font-size: 0.6em;
   border-radius: 5px;
   border: 2px solid #eeeeee;
-  padding: 0.6em; }
+  padding: 0.6em;
+  display: block; }
+
+input[type="text"] {
+  width: 90%; }
 
 input[type="email"] {
   width: 90%; }
@@ -115,7 +120,11 @@ input[type="email"] {
 input[type="password"] {
   width: 90%; }
 
+input[type="checkbox"] {
+  display: inline; }
+
 input[type="submit"] {
+  display: inline;
   font-family: 'Times New Roman', serif;
   color: black; }
 
@@ -160,7 +169,7 @@ form {
       display: inline !important;
       padding: 0 !important;
       margin: 0 !important; }
-  form li.lo_propose {
+  form li.width60 {
     width: 60%; }
   form li.full_width {
     width: 100%; }
@@ -203,10 +212,24 @@ nav span.exclude a:visited {
 nav span.exclude a:hover {
   color: green; }
 
+.width35 {
+  width: 35%; }
+
 p.title {
   font-family: "Consolas", sans-serif;
   font-weight: bold;
   font-size: 1.6em; }
+
+p.minor_title {
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: 1em; }
+
+p.description {
+  font-family: "Consolas", sans-serif;
+  font-style: italic;
+  font-size: 0.6em;
+  text-align: left; }
 
 p.subtitle {
   font-family: "Book Antiqua", serif;
@@ -219,6 +242,9 @@ p.definition_text {
   font-size: 1em;
   text-align: left; }
 
+.subscript {
+  font-size: 0.6em; }
+
 .list_summary {
   clear: both;
   margin-bottom: 0.6em;
@@ -226,52 +252,6 @@ p.definition_text {
   padding-left: 0.6em;
   padding-right: 0.6em;
   min-height: 1.0em; }
-
-.learning_objective_search {
-  float: left;
-  width: 70%; }
-  .learning_objective_search ul {
-    clear: both;
-    margin: 0;
-    padding: 0;
-    list-style-type: none; }
-  .learning_objective_search div {
-    margin-bottom: 1.2em; }
-    .learning_objective_search div p {
-      width: 80%;
-      margin: 0;
-      padding: 0; }
-    .learning_objective_search div span {
-      color: black;
-      float: right;
-      padding-top: 0.6em;
-      padding-left: 0.3em;
-      padding-right: 0.3em; }
-    .learning_objective_search div span#discipline {
-      clear: both;
-      font-weight: bold;
-      font-size: 0.6em; }
-    .learning_objective_search div span#category {
-      clear: both;
-      font-size: 0.6em; }
-    .learning_objective_search div span#category_new {
-      float: right;
-      clear: both;
-      font-size: 3em;
-      padding-top: 0;
-      padding-left: 0;
-      margin-bottom: 0.3em; }
-    .learning_objective_search div p#pending {
-      float: left;
-      font-style: italic;
-      font-size: 0.4em;
-      padding-bottom: 0.3em; }
-      .learning_objective_search div p#pending a {
-        font-weight: bold !important; }
-      .learning_objective_search div p#pending a:hover {
-        font-weight: bold !important; }
-  .learning_objective_search p {
-    padding: 0.6em; }
 
 .pad {
   clear: both; }

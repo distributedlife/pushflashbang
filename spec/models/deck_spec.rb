@@ -40,18 +40,5 @@ describe Deck do
       deck.country = 'gb'
       deck.valid?.should == true
     end
-
-    it 'should require names to be unique' do
-      deck1 = Deck.new(:name => 'name', :desc => 'something', :lang => 'en', :country => 'au')
-      deck1.user = @user
-      deck1.valid?.should == true
-      deck1.save!
-
-      deck2 = Deck.new(:name => 'name', :desc => 'something', :lang => 'en', :country => 'au')
-      deck2.user = @user
-      deck2.valid?.should == false
-      deck2.name = 'something else'
-      deck2.valid?.should == true
-    end
   end
 end

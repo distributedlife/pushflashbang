@@ -42,6 +42,7 @@ GEM
     bermuda (0.0.3)
       capybara (~> 0.4.0)
       cucumber (~> 0.10.0)
+    blueprints (0.6.3)
     builder (2.1.2)
     capybara (0.4.1.2)
       celerity (>= 0.7.9)
@@ -237,6 +238,7 @@ DEPENDENCIES
   autotest-rails
   awesome_print
   bermuda
+  blueprints
   capybara
   cucumber
   cucumber-rails

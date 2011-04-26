@@ -3,7 +3,7 @@ class Deck < ActiveRecord::Base
 
   attr_accessible :name, :description, :lang, :country
 
-  validates :name, :presence => true, :length => { :maximum => 40 }, :uniqueness =>  true
+  validates :name, :presence => true, :length => { :maximum => 40 }
   validates :lang, :presence => true, :length => { :maximum => 3 }
   validates :country, :presence => true, :length => { :maximum => 3 }
   validates :user_id, :presence => true

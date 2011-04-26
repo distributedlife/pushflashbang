@@ -1,9 +1,13 @@
 module UserHomePage
+  def is_get?
+    true
+  end
+
   def url *params
-    "/user/home"
+    "/users"
   end
 
   def is_current_page?
-    true
+    @session.has_content?("Welcome")
   end
 end

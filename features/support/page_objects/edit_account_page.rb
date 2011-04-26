@@ -1,4 +1,8 @@
 module EditAccountPage
+  def is_get?
+    true
+  end
+  
   def url *params
     "/users/edit"
   end
@@ -11,17 +15,17 @@ module EditAccountPage
     @session.click_on "cancel my account"
   end
 
-  def change_email_address email
+  def change_email_address email, password
     @session.fill_in('user_email', :with => email)
-    @session.fill_in('user_current_password', :with => @current_password)
+    @session.fill_in('user_current_password', :with => password)
 
     self.do_update
   end
 
-  def change_password password
-    @session.fill_in('user_password', :with => password)
-    @session.fill_in('user_password_confirmation', :with => password)
-    @session.fill_in('user_current_password', :with => @current_password)
+  def change_password old_password, new_password
+    @session.fill_in('user_password', :with => new_password)
+    @session.fill_in('user_password_confirmation', :with => new_password)
+    @session.fill_in('user_current_password', :with => old_password)
 
     self.do_update
   end

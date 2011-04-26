@@ -26,8 +26,11 @@ en:
       undo: "Click here to undo."
     terms:
   user:
+    home:
+      title: "Welcome %{email}"
+      subtitle: ""
     registration:
-      title: "Sign up to LearnTesting!"
+      title: "Sign up to PushFlashBang!"
       subtitle: "signing up allows you to keep track of your learning progress"
       labels:
         email: "your email"
@@ -46,7 +49,7 @@ en:
         reset_password_link: "Change my password"
         further_information: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
     login:
-      title: "Sign in to LearnTesting!"
+      title: "Sign in to PushFlashBang!"
       subtitle: ""
       labels:
         email: "my email"
@@ -77,6 +80,40 @@ en:
       sign_out: "Logout"
       edit_registration: "Edit registration"
       search: "Search"
-  search:
-    labels:
-      clear_filter: "clear filter"
+      home: "Home"
+      create_deck: "Create Deck"
+  deck:
+    create:
+      title: "Create new deck"
+      subtitle: "a deck is a collection of flash cards that you want to learn"
+      labels:
+        name: "a name"
+        description: "a brief description"
+        lang: "the language code"
+        country: "the country code"
+        save: "Create Deck"
+    edit:
+      title: "Edit Deck"
+      subtitle: "You can change all properties of your deck here"
+      labels:
+        name: "a name"
+        description: "a brief description"
+        lang: "the language code"
+        country: "the country code"
+        save: "Save Changes"
+        delete: "Delete Deck"
+        delete_confirm: "Are you sure?"
+    terminology:
+      name:
+        title: "name"
+        description: ""
+      description:
+        title: "description"
+        description: ""
+      lang:
+        title: "language code"
+        description: ""
+      country:
+        title: "country code"
+        description: ""
+

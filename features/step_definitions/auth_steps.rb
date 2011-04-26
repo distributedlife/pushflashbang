@@ -13,6 +13,8 @@ When /^I create an account for "([^"]*)"$/ do |email|
   fill_in('user_password', :with => password)
   fill_in('user_password_confirmation', :with => password)
   click_on("Join!")
+
+  @current_user = User.where(:email => email).first
 end
 
 Given /^I am not authenticated$/ do
@@ -23,6 +25,8 @@ Given /^I have one\s+user "([^\"]*)" with password "([^\"]*)"$/ do |email, passw
   User.new(:email => email,
            :password => password,
            :password_confirmation => password).save!
+
+  @current_user = User.where(:email => email).first
 end
 
 Given /^I am a new, authenticated user$/ do
@@ -39,8 +43,10 @@ Given /^I login with "([^\"]*)" and "([^\"]*)"$/ do |email, password|
   And %{I fill in "user_password" with "#{password}"}
   And %{I press "Login"}
 
-  current_username = email
-  current_password = password
+  @current_username = email
+  @current_password = password
+
+  @current_user = User.where(:email => email)
 end
 
 Then /^I am redirected to "([^\"]*)"$/ do |url|
@@ -58,6 +64,8 @@ end
 
 When /^I click log out$/ do
   click_on 'Logout'
+
+  @current_user = nil
 end
 
 Then /^I should be on the site index$/ do
@@ -84,25 +92,20 @@ end
 
 Given /^I change my email address to "([^"]*)"$/ do |email|
   on_page :EditAccountPage, Capybara.current_session do |page|
-    page.change_email_address email
+    page.change_email_address email, @current_password
   end
 end
 
 Given /^I change my password to "([^"]*)"$/ do |password|
   on_page :EditAccountPage, Capybara.current_session do |page|
-    page.change_password password
+    page.change_password @current_password, password
   end
 end
 
-
 When /^I log in using "([^"]*)"$/ do |email|
   And %{I login with "#{email}" and "#{@current_password}"}
-
-  @current_username = email
 end
 
 When /^I log in using a password of "([^"]*)"$/ do |password|
-  And %{I login with "#{@current_email}" and "#{@password}"}
-
-  @current_password = password
+  And %{I login with "#{@current_username}" and "#{password}"}
 end

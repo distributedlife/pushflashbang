@@ -49,6 +49,10 @@ end
 #  visit path_to(page_name)
 #end
 
+When /^(?:|I )click on "([^"]*)"$/ do |button_or_link|
+  click_on(button_or_link)
+end
+
 When /^(?:|I )press "([^"]*)"$/ do |button|
   click_button(button)
 end

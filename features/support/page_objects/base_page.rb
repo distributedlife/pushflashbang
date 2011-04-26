@@ -3,8 +3,12 @@ class BasePage
     @session = session
   end
 
-  def visit
-    @session.visit url
+  def visit *params
+    if is_get?
+      @session.visit url params
+    else
+      navigate_to
+    end
   end
 
   def is_current_page?
@@ -13,5 +17,13 @@ class BasePage
 
   def url *params
     raise "you haven't declared a url here"
+  end
+
+  def is_get?
+    raise "you haven't said if this page is a GET request"
+  end
+
+  def navigate_to
+    raise "you haven't implemented this yet"
   end
 end

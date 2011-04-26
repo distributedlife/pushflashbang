@@ -13,7 +13,8 @@ module TestWorld
 
     page = on_page page_name, session
 
-    session.visit page.url *params
+#    session.visit page.url *params
+    page.visit params
 
     yield page if block_given?
 
