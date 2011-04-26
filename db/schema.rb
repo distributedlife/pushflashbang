@@ -10,7 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110426095743) do
+ActiveRecord::Schema.define(:version => 20110426123236) do
+
+  create_table "card_timings", :force => true do |t|
+    t.integer  "seconds"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "cards", :force => true do |t|
     t.text     "front"
