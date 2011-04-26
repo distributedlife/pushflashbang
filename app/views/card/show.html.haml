@@ -1,0 +1,11 @@
+=render :partial => '/header', :locals => {:title => t('card.show.title'), :subtitle => t('card.show.subtitle')}
+.right{:class => ["panel"], :style => "width: 25%"}
+  %p.description= link_to t('card.show.edit'), edit_deck_card_path(@card.deck_id, @card.id)
+  .pad
+%section{:class => ["left panel"], :style => "width: 60%"}
+  %p= @card.front
+  - unless @card.back == ""
+    .section_break
+    %p= @card.back
+  .pad
+

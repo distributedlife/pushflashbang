@@ -207,6 +207,17 @@ describe DeckController do
       assigns[:deck].should == deck
     end
 
+    it 'should return the cards for the given deck' do
+      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
+      deck.user = @user
+      deck.save!
+
+      get :show, :id => deck.id
+
+      assigns[:deck].should == deck
+      assigns[:cards].should == Card.where(:deck_id => deck.id)
+    end
+
     it 'should redirect to user home if the id does not belong to the user' do
       user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
 

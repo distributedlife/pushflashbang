@@ -5,6 +5,12 @@
     .pad_from_top
     %p.description= link_to "Edit Deck", edit_deck_path(@deck.id)
     .pad
+    %p.description= link_to "Add Card", new_deck_card_path(@deck.id)
+    .pad
 %section{:class => ["left panel"], :style => "width: 60%"}
-  %p This deck has no cards; click here to start adding cards to the deck
+  - if @cards.empty?
+    %p This deck has no cards; click here to start adding cards to the deck
+  - else
+    - @cards.each do |card|
+      %p= link_to card.front, deck_card_path(card.deck_id, card.id)
   .pad

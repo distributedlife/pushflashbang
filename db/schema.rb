@@ -10,7 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110424035246) do
+ActiveRecord::Schema.define(:version => 20110426095743) do
+
+  create_table "cards", :force => true do |t|
+    t.text     "front"
+    t.text     "back"
+    t.integer  "deck_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "decks", :force => true do |t|
     t.string   "name",        :limit => 40

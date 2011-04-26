@@ -116,4 +116,32 @@ en:
       country:
         title: "country code"
         description: ""
+  card:
+    create:
+      title: "Add Card"
+      subtitle: "a flash card contains what you want to remember"
+      labels:
+        front: "the question"
+        back: "the answer"
+        save: "Add"
+    edit:
+      title: "Edit Card"
+      subtitle: "You can change all properties of your card here"
+      labels:
+        front: "the question"
+        back: "the answer"
+        save: "Save Changes"
+        delete: "Delete Card"
+        delete_confirm: "Are you sure?"
+    show:
+      title: "Card Details"
+      subtitle: ""
+      edit: "Edit Card"
+    terminology:
+      front:
+        title: "question"
+        description: "The front of the card is what you want build an association to, with the answer."
+      back:
+        title: "answer"
+        description: "The back of the card has the correct answer; you're trying to remember this using only the front"
 

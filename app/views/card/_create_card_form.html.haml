@@ -1,0 +1,13 @@
+- semantic_form_for(@card, :url => "/deck/#{@card.deck_id}/card", :method => :post) do |f|
+  #brief_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.front.title'), :detail => I18n.t('card.terminology.front.description')}
+  = f.input :front, :as => :text, :label => false, :hint => I18n.t('card.create.labels.front'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+  #description_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.back.title'), :detail => I18n.t('card.terminology.back.description')}
+  = f.input :back, :as => :text, :label => false, :hint => I18n.t('card.create.labels.back'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+  - f.buttons do
+    = f.submit I18n.t('card.create.labels.save'), :class => 'positive'

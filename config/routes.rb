@@ -13,8 +13,10 @@ PushFlashBang::Application.routes.draw do
       post 'create', :as => 'create'
       get 'show', :as => 'show'
     end
+    
+    resources :card
   end
-  
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

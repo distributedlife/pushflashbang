@@ -57,6 +57,8 @@ class DeckController < ApplicationController
         flash[:failure] = "Unable to show deck as it does not belong to the user that is currently logged in on this machine."
         redirect_to user_index_path
       end
+
+      @cards = Card.where(:deck_id => params[:id])
     rescue
       flash[:failure] = "Could not find deck."
       redirect_to user_index_path
