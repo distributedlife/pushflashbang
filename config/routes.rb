@@ -12,6 +12,7 @@ PushFlashBang::Application.routes.draw do
     member do
       post 'create', :as => 'create'
       get 'show', :as => 'show'
+      get 'session', :as => 'session'
     end
     
     resources :card

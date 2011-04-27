@@ -81,4 +81,52 @@ class DeckController < ApplicationController
     
     redirect_to user_index_path
   end
+
+  def session
+    begin
+      is_deck_valid
+
+      #if there are no cards in deck; we should not try and schedule any
+      cards = Card.order(:created_at).where(:deck_id => params[:id])
+      if cards.empty?
+        redirect_to deck_path(params[:id])
+        return
+      end
+
+      #get next scheduled card for user
+      @scheduled_card = UserCardSchedule::get_next_due_for_user(current_user.id)
+
+      #if there are no scheduled cards for the user; get the first card in the deck that has not been scheduled and schedule it
+      if @scheduled_card.nil?
+        @scheduled_card = UserCardSchedule.new(:user_id => current_user.id, :due => Time.now, :interval => CardTiming.get_first.seconds)
+
+        cards = Card.find_by_sql("SELECT * FROM cards where deck_id = #{params[:id]} and id not in (select card_id from user_card_schedules where user_id = #{current_user.id}) order by created_at asc")        
+        if cards.empty?
+          @card = nil
+          @scheduled_card = nil
+        else
+          @card = cards[0]
+          @scheduled_card.card_id = @card.id
+        end
+      else
+        @card = Card.find(@scheduled_card.card_id)
+      end
+    rescue
+    end
+  end
+
+  private
+  def is_deck_valid
+    begin
+      deck = Deck.find(params[:id])
+
+      if deck.user != current_user
+        flash[:failure] = "Unable to show deck as it does not belong to the user that is currently logged in on this machine."
+        redirect_to user_index_path
+      end
+    rescue
+      flash[:failure] = "The deck no longer exists"
+      redirect_to user_index_path
+    end
+  end
 end
