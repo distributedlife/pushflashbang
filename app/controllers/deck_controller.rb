@@ -82,13 +82,14 @@ class DeckController < ApplicationController
     redirect_to user_index_path
   end
 
-  def session
+  def learn
     begin
       is_deck_valid
 
       #if there are no cards in deck; we should not try and schedule any
       cards = Card.order(:created_at).where(:deck_id => params[:id])
       if cards.empty?
+        flash[:failure] = "You can't start a session until you have added cards to the deck."
         redirect_to deck_path(params[:id])
         return
       end
@@ -100,13 +101,17 @@ class DeckController < ApplicationController
       if @scheduled_card.nil?
         @scheduled_card = UserCardSchedule.new(:user_id => current_user.id, :due => Time.now, :interval => CardTiming.get_first.seconds)
 
-        cards = Card.find_by_sql("SELECT * FROM cards where deck_id = #{params[:id]} and id not in (select card_id from user_card_schedules where user_id = #{current_user.id}) order by created_at asc")        
+        cards = Card.find_by_sql("SELECT * FROM cards where deck_id = #{params[:id]} and id not in (select card_id from user_card_schedules where user_id = #{current_user.id}) order by created_at asc")
+
         if cards.empty?
           @card = nil
           @scheduled_card = nil
+
+          @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
         else
           @card = cards[0]
           @scheduled_card.card_id = @card.id
+          @scheduled_card.save!
         end
       else
         @card = Card.find(@scheduled_card.card_id)

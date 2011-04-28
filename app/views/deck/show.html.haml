@@ -7,6 +7,8 @@
     .pad
     %p.description= link_to "Add Card", new_deck_card_path(@deck.id)
     .pad
+    %p.description= link_to "Review", learn_deck_path(@deck.id)
+    .pad
 %section{:class => ["left panel"], :style => "width: 60%"}
   - if @cards.empty?
     %p This deck has no cards; click here to start adding cards to the deck

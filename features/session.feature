@@ -6,6 +6,7 @@ Feature: sessions
   Background:
     Given I am logged in and have created a deck
     And I have created many items in the deck
+    And reference data has been loaded
 
   Scenario: first session for deck for user
     Given I have not performed any sessions before
@@ -26,6 +27,7 @@ Feature: sessions
 
   Scenario: no cards are due there are cards that have not been scheduled
     Given there are no cards due
+    And there are cards due later
     And there are unscheduled cards
     When I go to the deck session page
     Then the first unscheduled card is scheduled

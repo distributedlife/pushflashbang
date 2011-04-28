@@ -279,7 +279,7 @@ describe DeckController do
     end
   end
 
-  context "'GET' session" do
+  context "'GET' learn" do
     before(:each) do
       @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
       sign_in :user, @user
@@ -308,7 +308,7 @@ describe DeckController do
     it 'should redirect to show deck page if there are no cards in the deck' do
       Card.delete_all
 
-      get :session, :id => @deck.id
+      get :learn, :id => @deck.id
 
       response.should be_redirect
       response.should redirect_to(deck_path(@deck.id))
@@ -322,7 +322,7 @@ describe DeckController do
       it 'should schedule the first card in the deck' do
         start_of_test = Time.now
 
-        get :session, :id => @deck.id
+        get :learn, :id => @deck.id
 
         assigns[:scheduled_card].user_id.should == @user.id
         assigns[:scheduled_card].card_id.should == @card1.id
@@ -330,6 +330,8 @@ describe DeckController do
         assigns[:scheduled_card].due.should <= Time.now
         assigns[:scheduled_card].interval.should == 5
         assigns[:card].should == @card1
+
+        UserCardSchedule.count.should == 1
       end
     end
 
@@ -339,10 +341,12 @@ describe DeckController do
         UserCardSchedule.create(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago, :interval => 5)
         UserCardSchedule.create(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago, :interval => 5)
 
-        get :session, :id => @deck.id
+        get :learn, :id => @deck.id
 
         assigns[:scheduled_card].card_id.should == @card3.id
         assigns[:card].should == @card3
+
+        UserCardSchedule.count.should == 3
       end
     end
 
@@ -351,21 +355,31 @@ describe DeckController do
         UserCardSchedule.create(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now, :interval => 5)
         UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 2.days.from_now, :interval => 5)
 
-        get :session, :id => @deck.id
+        get :learn, :id => @deck.id
 
         assigns[:scheduled_card].card_id.should == @card2.id
         assigns[:card].should == @card2
+
+        UserCardSchedule.count.should == 3
       end
 
-      it 'should return nil if there are no cards to schedule' do
+      it 'should return upcoming cards if there are no cards to schedule' do
         UserCardSchedule.create(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now, :interval => 5)
         UserCardSchedule.create(:user_id => @user.id, :card_id => @card2.id, :due => 1.day.from_now, :interval => 5)
         UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 2.days.from_now, :interval => 5)
 
-        get :session, :id => @deck.id
+        get :learn, :id => @deck.id
 
         assigns[:scheduled_card].should == nil
         assigns[:card].should == nil
+        assigns[:upcoming_cards].count.should == UserCardSchedule.where(:user_id => @user.id).count
+
+        assigns[:upcoming_cards].first["front"].nil?.should == false
+        assigns[:upcoming_cards].first["back"].nil?.should == false
+        assigns[:upcoming_cards].first["due"].nil?.should == false
+        assigns[:upcoming_cards].first["id"].nil?.should == false
+
+        UserCardSchedule.count.should == 3
       end
     end
   end

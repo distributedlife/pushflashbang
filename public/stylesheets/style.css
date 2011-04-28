@@ -220,6 +220,12 @@ p.title {
   font-weight: bold;
   font-size: 1.6em; }
 
+p.giant {
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: 4em;
+  text-align: center; }
+
 p.minor_title {
   font-family: "Consolas", sans-serif;
   font-weight: bold;

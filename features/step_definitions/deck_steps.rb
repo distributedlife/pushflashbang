@@ -147,3 +147,13 @@ Then /^I should be redirected to the edit deck page$/ do
     page.is_current_page?.should == true
   end
 end
+
+Given /^I have created many items in the deck$/ do
+  5.times do
+    card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
+    card.deck = @current_deck
+    card.save!
+  end
+end
+
+

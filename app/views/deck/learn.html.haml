@@ -1,0 +1,9 @@
+=render :partial => '/header', :locals => {:title => t('deck.learn.title'), :subtitle => t('deck.learn.subtitle')}
+%section{:class => ["left panel"], :style => "width: 100%"}
+  - if @card.nil?
+    %p There are no cards due and all cards in the deck are scheduled.
+    - @upcoming_cards.each do |upcoming_card|
+      %p= "#{upcoming_card["front"]} (#{(Time.parse(upcoming_card["due"])).strftime("%d-%b-%Y @ %H:%M:%S")})"
+  - else
+    %p.giant= @card.front
+  .pad
