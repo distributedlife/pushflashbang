@@ -103,6 +103,9 @@ en:
         save: "Save Changes"
         delete: "Delete Deck"
         delete_confirm: "Are you sure?"
+    learn:
+      title: "Card Review"
+      subtitle: "Cards due for review: %{count}"
     terminology:
       name:
         title: "name"

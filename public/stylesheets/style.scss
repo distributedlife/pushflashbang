@@ -372,6 +372,58 @@ form
   }
 }
 
+.button
+{
+  a
+  {
+    margin: auto;
+    font-size: $font_size_small;
+    border-radius: 5px;
+    border: 2px solid $page_background;
+    height: 6em;
+    padding: 0.6em;
+    color: $button_text;
+  }
+
+  a:hover
+  {
+    color: $button_text_hover;
+  }
+
+  a.positive
+  {
+    background: $button_positive;
+    border: 1px solid $button_positive_outline;
+  }
+
+  a.positive:hover
+  {
+    background: $button_positive_hover;
+  }
+
+  a.negative
+  {
+    background: $button_negative;
+    border: 1px solid $button_negative_outline;
+  }
+
+  a.negative:hover
+  {
+    background: $button_negative_hover;
+  }
+
+  a.neutral
+  {
+    background: $button_neutral;
+    border: 1px solid $button_neutral_outline;
+  }
+
+  a.neutral:hover
+  {
+    background: $button_neutral_hover;
+  }
+}
+
 nav
 {
   span.include

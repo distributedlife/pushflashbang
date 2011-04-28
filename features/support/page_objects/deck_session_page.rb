@@ -8,6 +8,6 @@ module DeckSessionPage
   end
 
   def is_current_page?
-    raise "you need to put a simply check in here"
+    @session.has_content? "Card Review"
   end
 end

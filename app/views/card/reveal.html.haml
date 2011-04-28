@@ -1,0 +1,13 @@
+=render :partial => '/header', :locals => {:title => t('card.reveal.title'), :subtitle => t('card.reveal.subtitle')}
+%section{:class => "panel"}
+  %p= @card.front
+  - unless @card.back == ""
+    .section_break
+    %p= @card.back
+  .pad
+.pad_from_top
+%section{:class=> "panel"}
+  .button
+    = link_to "I knew the answer", review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'yes'), :class => 'positive', :method => :post
+    = link_to "I did not know the answer", review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'no'), :class => 'negative', :method => :post
+  .pad

@@ -45,3 +45,27 @@ Feature: sessions
     And I go to the deck session page
     Then I should be redirected to the show deck page
     And I should see "You can't start a session until you have added cards to the deck."
+
+  Scenario: items due count
+    Given there are cards due
+    When I go to the deck session page
+    Then the number of cards due is shown
+
+  Scenario: see card back
+    Given I am reviewing a card
+    When I click on "Reveal"
+    Then I should see the back of the card
+
+  Scenario: review card as a success
+    Given I have reviewed a card
+    When I click on "I knew the answer"
+    Then I should be redirected to the deck session page
+    And the card should be rescheduled
+    And the card interval should be increased
+
+  Scenario: review card as a failure
+    Given I have reviewed a card
+    When I click on "I did not know the answer"
+    Then I should be redirected to the deck session page
+    And the card should be rescheduled
+    And the card interval should be reset

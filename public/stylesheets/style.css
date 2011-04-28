@@ -199,6 +199,32 @@ form {
   form a.neutral:hover {
     background: black; }
 
+.button a {
+  margin: auto;
+  font-size: 0.6em;
+  border-radius: 5px;
+  border: 2px solid #eeeeee;
+  height: 6em;
+  padding: 0.6em;
+  color: black; }
+.button a:hover {
+  color: white; }
+.button a.positive {
+  background: lightgreen;
+  border: 1px solid green; }
+.button a.positive:hover {
+  background: darkgreen; }
+.button a.negative {
+  background: indianred;
+  border: 1px solid red; }
+.button a.negative:hover {
+  background: red; }
+.button a.neutral {
+  background: white;
+  border: 1px solid black; }
+.button a.neutral:hover {
+  background: black; }
+
 nav span.include a {
   color: black; }
 nav span.include a:visited {

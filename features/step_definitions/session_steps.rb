@@ -37,12 +37,12 @@ Given /^there are cards due$/ do
   card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
   card.deck = @current_deck
   card.save!
-  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 1.day.ago, :interval => CardTiming::get_first.seconds)
+  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 1.day.ago, :interval => 0)
 
   card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
   card.deck = @current_deck
   card.save!
-  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.ago, :interval => CardTiming::get_first.seconds)
+  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.ago, :interval => 0)
 
   @first_due_card = card
 end
@@ -51,7 +51,7 @@ Given /^there are cards due later$/ do
   card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
   card.deck = @current_deck
   card.save!
-  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.from_now, :interval => CardTiming::get_first.seconds)
+  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.from_now, :interval => 0)
 end
 
 Given /^there are unscheduled cards$/ do
@@ -78,7 +78,6 @@ Then /^the first unscheduled card is scheduled$/ do
 
   UserCardSchedule.last.card_id.should == cards.first.id
   UserCardSchedule.last.user_id.should == @current_user[0].id
-
 end
 
 Then /^the first unscheduled card is shown$/ do
@@ -90,7 +89,7 @@ end
 Given /^there are no unscheduled cards$/ do
   Card.all.each do |card|
     if UserCardSchedule.where(:card_id => card.id, :user_id => @current_user[0].id).count == 0
-      UserCardSchedule.create(:card_id => card.id, :user_id => @current_user[0].id, :due => 1.day.from_now, :interval => 5)
+      UserCardSchedule.create(:card_id => card.id, :user_id => @current_user[0].id, :due => 1.day.from_now, :interval => 0)
     end
   end
 end
@@ -104,4 +103,46 @@ end
 
 Given /^there are no cards in the deck$/ do
   Card.delete_all(:deck_id => @current_deck.id)
+end
+
+Then /^the number of cards due is shown$/ do
+  And %{I should see "#{UserCardSchedule.get_due_count_for_user(@current_user[0].id)}"}
+end
+
+Given /^I am reviewing a card$/ do
+  Given %{there are cards due}
+  When %{I go to the deck session page}
+end
+
+Then /^I should see the back of the card$/ do
+  scheduled_card = Card.find(UserCardSchedule.order(:due).find(:first, :conditions => ["user_id = ? and due <= ?", @current_user[0].id, Time.now]).card_id)
+  And %{I should see "#{scheduled_card.back}"}
+end
+
+Given /^I have reviewed a card$/ do
+  Given %{there are cards due}
+  And %{I go to the deck session page}
+  And %{I click on "Reveal"}
+end
+
+Then /^I should be redirected to the deck session page$/ do
+  on_page :DeckSessionPage, Capybara.current_session do |page|
+    page.is_current_page?
+  end
+end
+
+Then /^the card should be rescheduled$/ do
+  scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
+  scheduled_card.due.should >= Time.now
+  scheduled_card.interval.should == 5
+end
+
+Then /^the card interval should be increased$/ do
+  scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
+  scheduled_card.interval.should == 5
+end
+
+Then /^the card interval should be reset$/ do
+  scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
+  scheduled_card.interval.should == 5
 end

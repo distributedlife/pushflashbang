@@ -348,6 +348,16 @@ describe DeckController do
 
         UserCardSchedule.count.should == 3
       end
+
+      it 'should return the due count' do
+        UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago, :interval => 5)
+        UserCardSchedule.create(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago, :interval => 5)
+        UserCardSchedule.create(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago, :interval => 5)
+
+        get :learn, :id => @deck.id
+
+        assigns[:due_count].should == 3
+      end
     end
 
     context "user has no cards due" do

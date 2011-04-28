@@ -15,7 +15,12 @@ PushFlashBang::Application.routes.draw do
       get 'learn', :as => 'learn'
     end
     
-    resources :card
+    resources :card do
+      member do
+        get 'reveal'
+        post 'review'
+      end
+    end
   end
 
   # The priority is based upon order of creation:

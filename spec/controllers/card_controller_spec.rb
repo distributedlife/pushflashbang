@@ -203,4 +203,89 @@ describe CardController do
       assigns[:card].should == @card
     end
   end
+
+  context "'GET' reveal" do
+    it_should_behave_like "all operations"
+    it_should_behave_like "all operations that require a card"
+
+    before(:each) do
+      @card = Card.new(:front => 'front')
+      @card.deck = @deck
+      @card.save!
+    end
+
+    it 'should return the card for the given id' do
+      get :show, :deck_id => @deck.id, :id => @card.id
+
+      assigns[:card].should == @card
+    end
+  end
+
+  context "'POST' review" do
+    it_should_behave_like "all operations"
+    it_should_behave_like "all operations that require a card"
+
+    before(:each) do
+      @card = Card.new(:front => 'front')
+      @card.deck = @deck
+      @card.save!
+
+      @scheduled_card = UserCardSchedule.create(:card_id => @card.id, :user_id => @user.id, :due => Time.now, :interval => 0)
+
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+    end
+
+    it 'should redirect to deck session if answer is not "yes" or "no"' do
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => ''
+      response.should be_redirect
+      response.should redirect_to(learn_deck_path)
+
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'adlksfhjjas'
+      response.should be_redirect
+      response.should redirect_to(learn_deck_path)
+    end
+
+    it 'should redirect to deck session path in positive case' do
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
+      response.should be_redirect
+      response.should redirect_to(learn_deck_path)
+
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'no'
+      response.should be_redirect
+      response.should redirect_to(learn_deck_path)
+    end
+
+    it 'should reschedule the card for 5 seconds if it was incorrect' do
+      start_time = Time.now
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
+      stop_time = Time.now
+
+      @scheduled_card.reload
+      @scheduled_card.interval.should == 5
+      @scheduled_card.due.should >= start_time + @scheduled_card.interval
+      @scheduled_card.due.should <= stop_time + @scheduled_card.interval
+
+      start_time = Time.now
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
+      stop_time = Time.now
+
+      @scheduled_card.reload
+      @scheduled_card.interval.should == 25
+      @scheduled_card.due.should >= start_time + @scheduled_card.interval
+      @scheduled_card.due.should <= stop_time + @scheduled_card.interval
+    end
+
+    it 'should reschedule the card for the next interval if it was correct' do
+      start_time = Time.now
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
+      stop_time = Time.now
+
+      @scheduled_card.reload
+      @scheduled_card.interval.should == 5
+      @scheduled_card.due.should >= start_time + @scheduled_card.interval
+      @scheduled_card.due.should <= stop_time + @scheduled_card.interval
+    end
+  end
 end

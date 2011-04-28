@@ -73,4 +73,40 @@ describe UserCardSchedule do
       schedule.card_id.should == @card2.id
     end
   end
+
+  context 'get_due_count_for_user' do
+    before(:each) do
+      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
+
+      @deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
+      @deck.user = @user
+      @deck.save!
+
+      @card1 = Card.new(:front => 'first card', :back => 'back of first')
+      @card1.deck = @deck
+      @card1.save!
+
+      @card2 = Card.new(:front => 'second card', :back => 'back of second')
+      @card2.deck = @deck
+      @card2.save!
+
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+    end
+
+    it 'should not include cards that are not due' do
+      UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now, :interval => 5)
+      UserCardSchedule.create(:user_id => @user.id, :card_id => @card2.id, :due => 2.day.from_now, :interval => 5)
+
+      UserCardSchedule.get_due_count_for_user(@user.id).should == 0
+    end
+
+    it 'should include cards that are due' do
+      UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago, :interval => 5)
+      UserCardSchedule.create(:user_id => @user.id, :card_id => @card2.id, :due => 2.day.ago, :interval => 5)
+
+      UserCardSchedule.get_due_count_for_user(@user.id).should == 2
+    end
+  end
 end

@@ -1,5 +1,5 @@
-=render :partial => '/header', :locals => {:title => t('deck.learn.title'), :subtitle => t('deck.learn.subtitle')}
-%section{:class => ["left panel"], :style => "width: 100%"}
+=render :partial => '/header', :locals => {:title => t('deck.learn.title'), :subtitle => t('deck.learn.subtitle', :count => @due_count)}
+%section{:class => ["panel"]}
   - if @card.nil?
     %p There are no cards due and all cards in the deck are scheduled.
     - @upcoming_cards.each do |upcoming_card|
@@ -7,3 +7,9 @@
   - else
     %p.giant= @card.front
   .pad
+.pad_from_top
+- unless @card.nil?
+  %section{:class=> "panel"}
+    .button
+      = link_to "Reveal", reveal_deck_card_path(:deck_id => @card.deck_id, :id => @card.id), :class => 'positive'
+    .pad
