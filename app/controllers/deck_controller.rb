@@ -97,6 +97,7 @@ class DeckController < ApplicationController
       #get next scheduled card for user
       @scheduled_card = UserCardSchedule::get_next_due_for_user(current_user.id)
       @due_count = UserCardSchedule::get_due_count_for_user(current_user.id)
+      @review_start = Time.now
 
       #if there are no scheduled cards for the user; get the first card in the deck that has not been scheduled and schedule it
       if @scheduled_card.nil?

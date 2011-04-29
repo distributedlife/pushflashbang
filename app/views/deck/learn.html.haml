@@ -11,5 +11,5 @@
 - unless @card.nil?
   %section{:class=> "panel"}
     .button
-      = link_to "Reveal", reveal_deck_card_path(:deck_id => @card.deck_id, :id => @card.id), :class => 'positive'
+      = link_to "Reveal", reveal_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :review_start => @review_start), :class => 'positive'
     .pad

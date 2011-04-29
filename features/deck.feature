@@ -64,8 +64,8 @@ Feature: language decks
 #    Given a deck created by another user that is shared
 #    When I browse for decks
 #    Then I should see that deck
-
-#  Scenario: user can unshare a deck and it will no longer be seen
+#
+#  Scenario: user can unshare their own deck and it will no longer be seen
 #    Given a deck created by another user that is shared
 #    When that deck is no longer shared
 #    And I go to the browse decks page

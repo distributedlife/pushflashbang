@@ -215,9 +215,28 @@ describe CardController do
     end
 
     it 'should return the card for the given id' do
-      get :show, :deck_id => @deck.id, :id => @card.id
+      review_start = Time.now - 20
+      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
 
       assigns[:card].should == @card
+      assigns[:reveal].should >= Time.now - 5
+      assigns[:reveal].should <= Time.now
+    end
+
+    it 'should return the passed in review_start date' do
+      review_start = Time.now - 20
+      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
+
+      assigns[:card].should == @card
+      assigns[:review_start].should == review_start
+    end
+
+    it 'should set review start to now if not supplied' do
+      get :reveal, :deck_id => @deck.id, :id => @card.id
+
+      assigns[:card].should == @card
+      assigns[:review_start].should >= Time.now - 5
+      assigns[:review_start].should <= Time.now
     end
   end
 
@@ -230,7 +249,7 @@ describe CardController do
       @card.deck = @deck
       @card.save!
 
-      @scheduled_card = UserCardSchedule.create(:card_id => @card.id, :user_id => @user.id, :due => Time.now, :interval => 0)
+      @scheduled_card = UserCardSchedule.create(:card_id => @card.id, :user_id => @user.id, :due => 1.day.ago, :interval => 0)
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -286,6 +305,47 @@ describe CardController do
       @scheduled_card.interval.should == 5
       @scheduled_card.due.should >= start_time + @scheduled_card.interval
       @scheduled_card.due.should <= stop_time + @scheduled_card.interval
+    end
+
+    it 'should record a user card review' do
+      start_interval = @scheduled_card.interval
+      card_due_date = @scheduled_card.due
+      review_start = Time.now - 20
+      reveal_date = Time.now - 10
+
+      start_time = Time.now
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes', :review_start => review_start, :reveal => reveal_date
+      stop_time = Time.now
+
+      user_card_review = UserCardReview.first
+
+      user_card_review.card_id.should == @card.id
+      user_card_review.user_id.should == @user.id
+      user_card_review.due.should == card_due_date
+      user_card_review.review_start.should == review_start
+      user_card_review.reveal.utc.should == reveal_date.utc
+      user_card_review.result_recorded.should >= start_time
+      user_card_review.result_recorded.should <= stop_time
+      user_card_review.result_success.should == true
+      user_card_review.interval.should == start_interval
+
+      UserCardReview.delete_all
+
+
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'no', :review_start => review_start, :reveal => reveal_date
+
+      user_card_review = UserCardReview.first
+      user_card_review.result_success.should == false
+    end
+
+    it 'should set review_start and reveal to now if not supplied' do
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'no'
+
+      user_card_review = UserCardReview.first
+      user_card_review.review_start.should >= Time.now - 5
+      user_card_review.review_start.should <= Time.now
+      user_card_review.reveal.should >= Time.now - 5
+      user_card_review.reveal.should <= Time.now
     end
   end
 end

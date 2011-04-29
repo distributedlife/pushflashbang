@@ -2,7 +2,7 @@ class UserCardSchedule < ActiveRecord::Base
   belongs_to :card
   belongs_to :user
 
-  attr_accessible :user_id, :card_id, :due, :interval
+  attr_accessible :user_id, :card_id, :due, :interval, :created_at
 
   validates :user_id, :presence => true
   validates :card_id, :presence => true

@@ -330,6 +330,8 @@ describe DeckController do
         assigns[:scheduled_card].due.should <= Time.now
         assigns[:scheduled_card].interval.should == 5
         assigns[:card].should == @card1
+        assigns[:review_start].should >= Time.now - 5
+        assigns[:review_start].should <= Time.now
 
         UserCardSchedule.count.should == 1
       end
@@ -345,6 +347,8 @@ describe DeckController do
 
         assigns[:scheduled_card].card_id.should == @card3.id
         assigns[:card].should == @card3
+        assigns[:review_start].should >= Time.now - 5
+        assigns[:review_start].should <= Time.now
 
         UserCardSchedule.count.should == 3
       end
@@ -369,6 +373,8 @@ describe DeckController do
 
         assigns[:scheduled_card].card_id.should == @card2.id
         assigns[:card].should == @card2
+        assigns[:review_start].should >= Time.now - 5
+        assigns[:review_start].should <= Time.now
 
         UserCardSchedule.count.should == 3
       end
@@ -388,6 +394,9 @@ describe DeckController do
         assigns[:upcoming_cards].first["back"].nil?.should == false
         assigns[:upcoming_cards].first["due"].nil?.should == false
         assigns[:upcoming_cards].first["id"].nil?.should == false
+
+        assigns[:review_start].should >= Time.now - 5
+        assigns[:review_start].should <= Time.now
 
         UserCardSchedule.count.should == 3
       end

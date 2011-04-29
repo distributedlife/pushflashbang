@@ -146,3 +146,73 @@ Then /^the card interval should be reset$/ do
   scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
   scheduled_card.interval.should == 5
 end
+
+When /^a card is scheduled$/ do
+  And %{I go to the deck session page}
+end
+
+Then /^the date the card is scheduled is recorded$/ do
+  UserCardSchedule.first.created_at.should >= Time.now - 5
+  UserCardSchedule.first.created_at.should <= Time.now
+end
+
+When /^I record my result$/ do
+  And %{I click on "I knew the answer"}
+end
+
+Then /^the review contains the time the card was due$/ do
+  user_card_review = UserCardReview.first
+  user_card_schedule = UserCardSchedule.first
+
+  #TODO work out someway of having this value before the change
+  user_card_review.due.should_not == user_card_schedule.due
+  user_card_review.due.should <= Time.now
+end
+
+Then /^the review contains the time the card was reviewed$/ do
+  user_card_review = UserCardReview.first
+
+  user_card_review.review_start.should >= Time.now - 5
+  user_card_review.review_start.should <= Time.now
+end
+
+Then /^the review contains the time the card was revealed$/ do
+  user_card_review = UserCardReview.first
+
+  user_card_review.reveal.should >= Time.now - 5
+  user_card_review.reveal.should <= Time.now
+end
+
+Then /^the review contains the time the result was recorded$/ do
+  user_card_review = UserCardReview.first
+
+  user_card_review.result_recorded.should >= Time.now - 5
+  user_card_review.result_recorded.should <= Time.now
+end
+
+Then /^the review contains the outcome of the result$/ do
+  user_card_review = UserCardReview.first
+
+  user_card_review.result_success.should == true
+end
+
+Then /^the review contains the interval of the review$/ do
+  user_card_review = UserCardReview.first
+
+  user_card_review.interval.should == 0
+end
+
+When /^I review the same card again$/ do
+  card_schedule = UserCardSchedule.where(:card_id => @first_due_card.id).first
+  card_schedule.due = 10.days.ago
+  card_schedule.save!
+
+  And %{I go to the deck session page}
+  And %{I click on "Reveal"}
+  And %{I click on "I knew the answer"}
+end
+
+
+Then /^there should be two reviews for the same card$/ do
+  UserCardReview.where(:card_id => @first_due_card.id).count.should == 2
+end
