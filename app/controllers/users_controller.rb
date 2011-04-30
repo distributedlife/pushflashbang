@@ -3,11 +3,10 @@ class UsersController < ApplicationController
 
   def index
     @decks = Deck.order(:name).where("user_id = ? OR shared = ?", current_user.id, true)
-    card_counts = Card.find_by_sql(["SELECT deck_id, count(deck_id) FROM cards where deck_id in (SELECT id from decks where user_id = ? OR shared = ?) group by deck_id", current_user.id, true])
 
     @card_counts = []
-    card_counts.each do |count|
-      @card_counts[count['deck_id']] = count['count(deck_id)']
+    @decks.each do |deck|
+      @card_counts[deck.id] = Card.where(:deck_id => deck.id).count
     end
 
     @due_counts = []
