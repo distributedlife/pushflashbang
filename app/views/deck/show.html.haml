@@ -5,7 +5,7 @@
   //=render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "language code: #{@deck.lang}, country code: #{@deck.country}"}
   =render :partial => '/header', :locals => {:title => @deck.name, :subtitle => ""}
 %nav{:class => ["right"], :style => "width: 25%"}
-  - unless @deck.description.nil?
+  - unless @deck.description.nil? || @deck.description == ""
     .panel
       %p.description= @deck.description
   .panel
@@ -23,7 +23,8 @@
       .pad
 %section{:class => ["left"], :style => "width: 75%"}
   - if @cards.empty?
-    %p This deck has no cards; click here to start adding cards to the deck
+    .div{:class => "panel left", :style => ""}
+      %p This deck has no cards; click here to start adding cards to the deck
   - else
     - @cards.each do |card|
       .div{:class => "card_panel left", :style => ""}
