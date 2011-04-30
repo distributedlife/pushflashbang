@@ -1,7 +1,8 @@
-@font-face {
+/*@font-face
+{
   font-family: "AR PL KaitiM GB";
-  src: url("/fonts/gkai00mp.ttf"); }
-
+  src: url('/fonts/gkai00mp.ttf') ;
+}*/
 /*宋体, mostly used for large chunks of paragraphs in small font sizes.*/
 /*黑体, works out well in either headings or paragraphs.*/
 /*幼圆, slender touches and rounded corners, pearl’s way.*/
@@ -260,12 +261,7 @@ p.giant {
   font-family: "隶书";
   font-weight: bold;
   font-size: 4em;
-  text-align: center;
-  /*宋体, mostly used for large chunks of paragraphs in small font sizes.*/
-  /*黑体, works out well in either headings or paragraphs.*/
-  /*幼圆, slender touches and rounded corners, pearl’s way.*/
-  /*隶书, renaissance of a rather traditional Chinese brush writing dating thousands of years back, generally modest and conservative with an ancient style yet powerful from within.*/
-  /*微软雅黑, the new Chinese character font introduced in Vista and with IE7, though not that safe compared with the former 4 in that it’s not automatically included in the Chinese localized version of Windows XP, it’s generally accepted as the most elegant and beautiful of the Mandarin Chinese web safe fonts by Chinese web designers.*/ }
+  text-align: center; }
 
 p.minor_title {
   font-family: "Consolas", sans-serif;
