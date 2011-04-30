@@ -1,3 +1,7 @@
+@font-face {
+  font-family: "AR PL KaitiM GB";
+  src: url("/fonts/gkai00mp.ttf"); }
+
 body {
   width: 1000px;
   margin-left: auto;
@@ -247,7 +251,7 @@ p.title {
   font-size: 1.6em; }
 
 p.giant {
-  font-family: "Consolas", sans-serif;
+  font-family: "AR PL KaitiM GB";
   font-weight: bold;
   font-size: 4em;
   text-align: center; }

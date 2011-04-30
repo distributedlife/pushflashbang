@@ -3,9 +3,9 @@
   %p.description= link_to t('card.show.edit'), edit_deck_card_path(@card.deck_id, @card.id)
   .pad
 %section{:class => ["left panel"], :style => "width: 60%"}
-  %p= @card.front
+  %p.giant= @card.front
   - unless @card.back == ""
     .section_break
-    %p= @card.back
+    %p.giant= @card.back
   .pad
 
