@@ -231,6 +231,19 @@ describe DeckController do
       response.should redirect_to(user_index_path)
     end
 
+    it 'should return a shared deck beloning to another user' do
+      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
+
+      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au', :shared => true)
+      deck.user = user2
+      deck.save!
+
+      get :show, :id => deck.id
+
+      assigns[:deck].should == deck
+      assigns[:cards].should == Card.where(:deck_id => deck.id)
+    end
+
     it 'should redirect to user home if the id does not exist' do
       get :show, :id => 1
 
@@ -404,6 +417,41 @@ describe DeckController do
 
         UserCardSchedule.count.should == 3
       end
+    end
+  end
+
+  context "'GET' toggle_share" do
+    before(:each) do
+      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
+      sign_in :user, @user
+
+      @deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
+      @deck.user = @user
+      @deck.save!
+    end
+
+    it 'should redirect show deck' do
+      get :toggle_share, :id => @deck.id
+
+      response.should be_redirect
+      response.should redirect_to(deck_path(@deck.id))
+    end
+
+    it 'should share if deck is not shared' do
+      get :toggle_share, :id => @deck.id
+
+      @deck.reload
+      @deck.shared.should == true
+    end
+
+    it 'should stop sharing a deck if is shared' do
+      @deck.shared = true
+      @deck.save!
+
+      get :toggle_share, :id => @deck.id
+
+      @deck.reload
+      @deck.shared.should == false
     end
   end
 end

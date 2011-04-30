@@ -13,6 +13,7 @@ PushFlashBang::Application.routes.draw do
       post 'create', :as => 'create'
       get 'show', :as => 'show'
       get 'learn', :as => 'learn'
+      get 'toggle_share', :as => 'toggle_share'
     end
     
     resources :card do

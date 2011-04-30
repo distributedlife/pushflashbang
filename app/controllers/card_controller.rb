@@ -146,7 +146,7 @@ class CardController < ApplicationController
       card = Card.find(params[:id])
       deck = Deck.find(params[:deck_id])
 
-      if deck.user != current_user
+      if deck.user != current_user && deck.shared == false
         flash[:failure] = "Unable to show card as it does not belong to the user that is currently logged in on this machine."
         redirect_to user_index_path
       end
@@ -169,7 +169,7 @@ class CardController < ApplicationController
     begin
       deck = Deck.find(params[:deck_id])
 
-      if deck.user != current_user
+      if deck.user != current_user && deck.shared == false
         flash[:failure] = "Unable to show card as it does not belong to the user that is currently logged in on this machine."
         redirect_to user_index_path
       end

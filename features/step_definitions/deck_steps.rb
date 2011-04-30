@@ -156,4 +156,53 @@ Given /^I have created many items in the deck$/ do
   end
 end
 
+Given /^a deck created by another user that is shared$/ do
+  another_user = User.create(:email => "notme@somewhere-else.com", :password => "password", :confirm_password => "password")
+  @current_deck = Deck.new(:name => "SimpleDeck", :lang => "en", :country => "au", :shared => true)
+  @current_deck.user = another_user
+  @current_deck.save!
+end
 
+Then /^I will see shared decks created by other users$/ do
+  decks = Deck.all
+  
+  decks.each do |deck|
+    if deck.user_id != @current_user.first.id
+      if deck.shared == true
+        And %{I should see "#{deck.name}"}
+        And %{I should see "#{deck.lang}"}
+        And %{I should see "#{deck.country}"}
+
+        unless deck.description.nil?
+          And %{I should see "#{deck.description}"}
+        end
+      else
+        And %{I should not see "#{deck.name}"}
+        And %{I should not see "#{deck.lang}"}
+        And %{I should not see "#{deck.country}"}
+
+        unless deck.description.nil?
+          And %{I should not see "#{deck.description}"}
+        end
+      end
+    end
+  end
+
+  Deck.where(:shared => true).count.should >= 1
+end
+
+Then /^the deck will be shared$/ do
+  @current_deck.reload
+  @current_deck.shared.should == true
+end
+
+Then /^the deck will no longer be shared$/ do
+  @current_deck.reload
+  @current_deck.shared.should == false
+end
+
+Given /^I have created a shared deck$/ do
+  @current_deck = Deck.new(:name => "My Deck", :lang => "en", :country => "au", :shared => true)
+  @current_deck.user = @current_user.first
+  @current_deck.save!
+end

@@ -1,8 +1,10 @@
 - @decks.each do |deck|
   #deck{:id => deck.id, :class => 'panel'}
-    %span
-      #discipline{:class => 'right subscript'}= "#{deck.country.downcase}"
-    %span#category{:class => 'right subscript'}= "#{deck.lang.downcase}-"
-    %p.minor_title= link_to deck.name, show_deck_path(deck.id)
+    %span#country{:class => 'right subscript'}= "#{deck.country.downcase}"
+    %span#language{:class => 'right subscript'}= "#{deck.lang.downcase}-"
+    %p.minor_title
+      = link_to deck.name, show_deck_path(deck.id)
+      - if deck.shared
+        %span#shared{:class => 'subscript'}= "(shared)"
     %p.description= deck.description
     .pad

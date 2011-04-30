@@ -53,7 +53,7 @@ class DeckController < ApplicationController
     begin
       @deck = Deck.find(params[:id])
 
-      if @deck.user != current_user
+      if @deck.user != current_user && @deck.shared == false
         flash[:failure] = "Unable to show deck as it does not belong to the user that is currently logged in on this machine."
         redirect_to user_index_path
       end
@@ -71,7 +71,7 @@ class DeckController < ApplicationController
 
       if deck.user == current_user
         Deck.delete(params[:id])
-        flash[:failure] = "Deck successfully deleted"
+        flash[:success] = "Deck successfully deleted"
       else
         flash[:failure] = "Unable to delete deck as it does not belong to the user that is currently logged in on this machine."
       end
@@ -125,13 +125,28 @@ class DeckController < ApplicationController
     end
   end
 
+  def toggle_share
+    is_deck_valid
+
+    deck = Deck.find(params[:id])
+
+    if deck.user == current_user
+      deck.shared = !deck.shared
+      deck.save!
+    else
+      flash[:failure] = "Unable to change deck sharing as it does not belong to you"
+    end
+
+    redirect_to deck_path(params[:id])
+  end
+
   private
   def is_deck_valid
     begin
       deck = Deck.find(params[:id])
 
-      if deck.user != current_user
-        flash[:failure] = "Unable to show deck as it does not belong to the user that is currently logged in on this machine."
+      if deck.user != current_user && deck.shared == false
+        flash[:failure] = "Unable to show deck as it does not belong to you and it has not been shared"
         redirect_to user_index_path
       end
     rescue

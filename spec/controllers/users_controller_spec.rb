@@ -29,5 +29,22 @@ describe UsersController do
       assigns[:decks][0].name.should == "a second deck"
       assigns[:decks][1].name.should == "my first deck"
     end
+
+    it 'should return decks created by other users that are shared' do
+      deck = Deck.new(:name => 'my first deck', :lang => "en", :country => 'au')
+      deck.user = @user
+      deck.save!
+      deck = Deck.new(:name => 'a second deck', :lang => "en", :country => 'au', :shared => true)
+      deck.user_id = @user.id + 1
+      deck.save!
+      deck = Deck.new(:name => 'a third deck', :lang => "en", :country => 'au', :shared => false)
+      deck.user_id = @user.id + 1
+      deck.save!
+
+      get :index
+      assigns[:decks].count.should == 2
+      assigns[:decks][0].name.should == "a second deck"
+      assigns[:decks][1].name.should == "my first deck"
+    end
   end
 end
