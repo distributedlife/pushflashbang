@@ -341,7 +341,7 @@ describe DeckController do
         assigns[:scheduled_card].card_id.should == @card1.id
         assigns[:scheduled_card].due.should >= start_of_test
         assigns[:scheduled_card].due.should <= Time.now
-        assigns[:scheduled_card].interval.should == 0
+        assigns[:scheduled_card].interval.should == 0 
         assigns[:card].should == @card1
         assigns[:review_start].should >= Time.now - 5
         assigns[:review_start].should <= Time.now
