@@ -222,3 +222,40 @@ When /^a new card is scheduled$/ do
   And %{there are unscheduled cards}
   When %{I go to the deck session page}
 end
+
+When /^I click on the "([^"]*)" button$/ do |button_number|
+  if button_number == "first"
+    And %{I click on "I didn't know the answer"}
+  elsif button_number == "second"
+    And %{I click on "I knew some of the answer"}
+  elsif button_number == "third"
+    And %{I click on "I was shaky but I got it"}
+  elsif button_number == "fourth"
+    And %{I click on "I knew the answer"}
+  end
+end
+
+When /^the card interval is (\d+)$/ do |interval|
+  card_schedule = UserCardSchedule.where(:card_id => @first_due_card.id).first
+  card_schedule.interval = interval
+  card_schedule.save!
+end
+
+Given /^I have reviewed a card with an interval of (\d+)$/ do |interval|
+  Given %{there are cards due}
+  And %{the card interval is #{interval}}
+  And %{I go to the deck session page}
+  And %{I click on "Reveal"}
+end
+
+Then /^the "([^"]*)" button is "([^"]*)"$/ do |button_number, style|
+  if button_number == "first"
+    find_link("I didn't know the answer")[:class].should == style
+  elsif button_number == "second"
+    find_link("I knew some of the answer")[:class].should == style
+  elsif button_number == "third"
+    find_link("I was shaky but I got it")[:class].should == style
+  elsif button_number == "fourth"
+    find_link("I knew the answer")[:class].should == style
+  end
+end

@@ -91,6 +91,7 @@ class CardController < ApplicationController
       end
 
       @reveal = Time.now
+      @card_schedule = UserCardSchedule.where(:card_id => params[:id], :user_id => current_user.id).first
     rescue
     end
   end

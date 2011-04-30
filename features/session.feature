@@ -58,14 +58,14 @@ Feature: sessions
 
   Scenario: review card as a success
     Given I have reviewed a card
-    When I click on "I knew the answer"
+    When I click on the "third" button
     Then I should be redirected to the deck session page
     And the card should be rescheduled
     And the card interval should be increased
 
   Scenario: review card as a failure
     Given I have reviewed a card
-    When I click on "I did not know the answer"
+    When I click on the "first" button
     Then I should be redirected to the deck session page
     And the card should be rescheduled
     And the card interval should be reset

@@ -8,6 +8,23 @@
 .pad_from_top
 %section{:class=> "panel"}
   .button
-    = link_to "I knew the answer", review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'yes', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
-    = link_to "I did not know the answer", review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'no', :review_start => @review_start, :reveal => @reveal), :class => 'negative', :method => :post
+    - if @card_schedule.interval == 0
+      = link_to t('card.reveal.labels.didnt_know'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'no', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
+    - else
+      = link_to t('card.reveal.labels.didnt_know'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'no', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
+
+    - if @card_schedule.interval == 5 || @card_schedule.interval == 25
+      = link_to t('card.reveal.labels.partial_answer'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'no', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
+    - else
+      = link_to t('card.reveal.labels.partial_answer'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'no', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
+
+    - if @card_schedule.interval == 120 || @card_schedule.interval == 600
+      = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'yes', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
+    - else
+      = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'yes', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
+
+    - if @card_schedule.interval > 600
+      = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'yes', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
+    - else
+      = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'yes', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
   .pad

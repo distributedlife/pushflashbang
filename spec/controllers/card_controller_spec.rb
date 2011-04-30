@@ -221,6 +221,7 @@ describe CardController do
       assigns[:card].should == @card
       assigns[:reveal].should >= Time.now - 5
       assigns[:reveal].should <= Time.now
+      assigns[:card_schedule].should == UserCardSchedule.where(:card_id => @card.id, :user_id => @user.id).first
     end
 
     it 'should return the passed in review_start date' do
