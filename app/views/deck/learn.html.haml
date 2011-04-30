@@ -1,4 +1,7 @@
-=render :partial => '/header', :locals => {:title => t('deck.learn.title'), :subtitle => t('deck.learn.subtitle', :count => @due_count)}
+-if @new_card
+  =render :partial => '/header', :locals => {:title => t('deck.learn.title.new'), :subtitle => t('deck.learn.subtitle', :count => @due_count)}
+-else
+  =render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => t('deck.learn.subtitle', :count => @due_count)}
 %section{:class => ["panel"]}
   - if @card.nil?
     %p There are no cards due and all cards in the deck are scheduled.

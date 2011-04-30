@@ -104,7 +104,9 @@ en:
         delete: "Delete Deck"
         delete_confirm: "Are you sure?"
     learn:
-      title: "Card Review"
+      title:
+        new: "New Card"
+        old: "Card Review"
       subtitle: "Cards due for review: %{count}"
     terminology:
       name:

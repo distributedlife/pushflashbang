@@ -70,11 +70,12 @@ Feature: sessions
     And the card should be rescheduled
     And the card interval should be reset
 
-#  Scenario: new card notification
-#    When a new card is scheduled
-#    Then I should see "This is a new card. You will not have seen it before"
-#    Then I should see "New card"
-#
-#  Scenario: card review notification
-#    When a new card is scheduled
-#    Then I should see "Card review"
+  Scenario: new card notification
+    When a new card is scheduled
+    Then I should see "This is a new card. You will not have seen it before"
+    Then I should see "New Card"
+
+  Scenario: card review notification
+    Given there are cards due
+    When I go to the deck session page
+    Then I should see "Card Review"

@@ -212,7 +212,13 @@ When /^I review the same card again$/ do
   And %{I click on "I knew the answer"}
 end
 
-
 Then /^there should be two reviews for the same card$/ do
   UserCardReview.where(:card_id => @first_due_card.id).count.should == 2
+end
+
+When /^a new card is scheduled$/ do
+  Given %{there are no cards due}
+  And %{there are cards due later}
+  And %{there are unscheduled cards}
+  When %{I go to the deck session page}
 end

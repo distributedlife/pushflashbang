@@ -349,6 +349,8 @@ describe DeckController do
         assigns[:card].should == @card3
         assigns[:review_start].should >= Time.now - 5
         assigns[:review_start].should <= Time.now
+        assigns[:new_card].should == false
+        flash[:success].nil?.should == true
 
         UserCardSchedule.count.should == 3
       end
@@ -375,6 +377,8 @@ describe DeckController do
         assigns[:card].should == @card2
         assigns[:review_start].should >= Time.now - 5
         assigns[:review_start].should <= Time.now
+        assigns[:new_card].should == true
+        flash[:success].should == "This is a new card. You will not have seen it before"
 
         UserCardSchedule.count.should == 3
       end
