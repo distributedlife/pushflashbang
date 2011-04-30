@@ -102,7 +102,7 @@ class DeckController < ApplicationController
 
       #if there are no scheduled cards for the user; get the first card in the deck that has not been scheduled and schedule it
       if @scheduled_card.nil?
-        @scheduled_card = UserCardSchedule.new(:user_id => current_user.id, :due => Time.now, :interval => CardTiming.get_first.seconds)
+        @scheduled_card = UserCardSchedule.new(:user_id => current_user.id, :due => Time.now, :interval => 0)
 
         cards = Card.find_by_sql("SELECT * FROM cards where deck_id = #{params[:id]} and id not in (select card_id from user_card_schedules where user_id = #{current_user.id}) order by created_at asc")
 

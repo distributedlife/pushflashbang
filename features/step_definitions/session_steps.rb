@@ -97,7 +97,7 @@ end
 Then /^I should see when each card is scheduled to be reviewed$/ do
   UserCardSchedule.all.each do |scheduled_card|
     And %{I should see "#{Card.find(scheduled_card.card_id).front}"}
-    And %{I should see "#{scheduled_card.due.strftime("%d-%b-%Y @ %H:%M:%S")}"}
+    And %{I should see "due in 1 day"}
   end
 end
 

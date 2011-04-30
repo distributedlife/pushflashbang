@@ -206,3 +206,14 @@ Given /^I have created a shared deck$/ do
   @current_deck.user = @current_user.first
   @current_deck.save!
 end
+
+Then /^I should see the card count$/ do
+  card_count = Card.where(:deck_id => @current_deck.id).count
+  And %{I should see "#{card_count}"}
+end
+
+Then /^I should see the card due count$/ do
+  due_count = UserCardSchedule.get_due_count_for_user_for_deck(@current_user[0].id, @current_deck.id)
+
+  And %{I should see "#{due_count}"}
+end

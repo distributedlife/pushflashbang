@@ -6,7 +6,7 @@
   - if @card.nil?
     %p There are no cards due and all cards in the deck are scheduled.
     - @upcoming_cards.each do |upcoming_card|
-      %p= "#{upcoming_card["front"]} (#{(Time.parse(upcoming_card["due"])).strftime("%d-%b-%Y @ %H:%M:%S")})"
+      %p= "#{upcoming_card["front"]} (due in #{distance_of_time_in_words(Time.now, upcoming_card["due"], true)})"
   - else
     %p.giant= @card.front
   .pad

@@ -22,36 +22,22 @@ Feature: Graduated Response
     And the "third" button is "neutral"
     And the "fourth" button is "neutral"
 
-  Scenario: green button indicator (2/4)
-    When I have reviewed a card with an interval of 5
-    Then the "first" button is "neutral"
-    And the "second" button is "positive"
-    And the "third" button is "neutral"
-    And the "fourth" button is "neutral"
-
-  Scenario: green button indicator (2/4)
-    When I have reviewed a card with an interval of 25
-    Then the "first" button is "neutral"
-    And the "second" button is "positive"
-    And the "third" button is "neutral"
-    And the "fourth" button is "neutral"
-
   Scenario: green button indicator (3/4)
-    When I have reviewed a card with an interval of 120
+    When I have reviewed a card with an interval of 5
     Then the "first" button is "neutral"
     And the "second" button is "neutral"
     And the "third" button is "positive"
     And the "fourth" button is "neutral"
 
   Scenario: green button indicator (3/4)
-    When I have reviewed a card with an interval of 600
+    When I have reviewed a card with an interval of 25
     Then the "first" button is "neutral"
     And the "second" button is "neutral"
     And the "third" button is "positive"
     And the "fourth" button is "neutral"
 
   Scenario: green button indicator (4/4)
-    When I have reviewed a card with an interval of 601
+    When I have reviewed a card with an interval of 120
     Then the "first" button is "neutral"
     And the "second" button is "neutral"
     And the "third" button is "neutral"

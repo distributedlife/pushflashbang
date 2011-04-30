@@ -26,6 +26,22 @@ describe CardController do
       response.should be_redirect
       response.should redirect_to(user_index_path)
     end
+    
+    it 'should not redirect to user home if the deck does not belong to the user but is shared' do
+      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
+
+      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au', :shared => true)
+      deck.user = user2
+      deck.save!
+
+      card = Card.new(:front => 'front')
+      card.deck = deck
+      card.save!
+
+      get :show, :deck_id => deck.id, :id => card.id
+
+      response.should_not be_redirect
+    end
 
     it 'should redirect to user home if the deck does not exist' do
       card = Card.new(:front => 'front')

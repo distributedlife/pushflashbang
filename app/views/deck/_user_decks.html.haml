@@ -7,4 +7,9 @@
       - if deck.shared
         %span#shared{:class => 'subscript'}= "(shared)"
     %p.description= deck.description
+    .pad_from_top
+    - if @card_counts[deck.id].nil?
+      %p{:class => ['subscript', 'right']}= "no cards in deck"
+    - else
+      %p{:class => ['subscript', 'right']}= "#{@card_counts[deck.id]} cards (#{@due_counts[deck.id]} due)"
     .pad

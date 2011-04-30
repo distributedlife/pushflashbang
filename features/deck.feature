@@ -92,6 +92,19 @@ Feature: language decks
     When I am on the show deck page
     Then I should see "(shared)"
 
+  Scenario: user home page shows card count
+    Given I have created a deck
+    And I have created multiple cards
+    When I go to the user home page
+    Then I should see the card count
+
+  Scenario: deck home page shows due cards count
+    Given I have created a deck
+    And I have created multiple cards
+    And there are cards due
+    When I go to the user home page
+    Then I should see the card due count
+
 #  Scenario: user can clone deck created by another person
 #    Given a deck created by another user that is shared
 #    And I am on the view deck page

@@ -46,5 +46,35 @@ describe UsersController do
       assigns[:decks][0].name.should == "a second deck"
       assigns[:decks][1].name.should == "my first deck"
     end
+
+    it 'should return the card count for each deck' do
+      deck = Deck.new(:name => 'my first deck', :lang => "en", :country => 'au')
+      deck.user = @user
+      deck.save!
+
+      card = Card.new(:front => "front", :back => "back")
+      card.deck = deck
+      card.save!
+
+      get :index
+
+      assigns[:card_counts][deck.id].should == 1
+    end
+
+    it 'should return the due card count for each deck' do
+      deck = Deck.new(:name => 'my first deck', :lang => "en", :country => 'au')
+      deck.user = @user
+      deck.save!
+
+      card = Card.new(:front => "front", :back => "back")
+      card.deck = deck
+      card.save!
+
+      scheduled_card = UserCardSchedule.create(:card_id => card.id, :user_id => @user.id, :due => 1.day.ago, :interval => 0)
+
+      get :index
+
+      assigns[:due_counts][deck.id].should == 1
+    end
   end
 end
