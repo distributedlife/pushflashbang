@@ -7,7 +7,7 @@
   .pad
 .pad_from_top
 %section{:class=> "panel"}
-  .button
+  .button{:class => "centre large_button"}
     - if @card_schedule.interval == 0
       = link_to t('card.reveal.labels.didnt_know'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
     - else

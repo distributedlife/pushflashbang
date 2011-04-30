@@ -98,6 +98,14 @@ header
   float: right;
 }
 
+.centre
+{
+  width: 100%;
+  text-align: center ;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .pad_from_top
 {
   padding-top: 1.0em;
@@ -398,7 +406,10 @@ form
     border-radius: 5px;
     border: 2px solid $page_background;
     height: 6em;
-    padding: 0.6em;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
     color: $button_text;
   }
 
@@ -439,6 +450,18 @@ form
   {
     background: $button_neutral_hover;
   }
+}
+
+.large_button
+{
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.big_button
+{
+  font-weight: bold;
+  font-size: 2em;
 }
 
 nav

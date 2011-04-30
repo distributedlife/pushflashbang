@@ -36,6 +36,12 @@ header {
 .right {
   float: right; }
 
+.centre {
+  width: 100%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto; }
+
 .pad_from_top {
   padding-top: 1.0em; }
 
@@ -215,7 +221,10 @@ form {
   border-radius: 5px;
   border: 2px solid #eeeeee;
   height: 6em;
-  padding: 0.6em;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 1.2em;
+  padding-right: 1.2em;
   color: black; }
 .button a:hover {
   color: white; }
@@ -234,6 +243,14 @@ form {
   border: 1px solid black; }
 .button a.neutral:hover {
   background: black; }
+
+.large_button {
+  font-weight: bold;
+  font-size: 1.2em; }
+
+.big_button {
+  font-weight: bold;
+  font-size: 2em; }
 
 nav span.include a {
   color: black; }

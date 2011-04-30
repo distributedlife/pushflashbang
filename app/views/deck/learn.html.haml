@@ -17,6 +17,6 @@
 .pad_from_top
 - unless @card.nil?
   %section{:class=> "panel"}
-    .button
+    .button{:class => "centre big_button"}
       = link_to "Reveal", reveal_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :review_start => @review_start), :class => 'positive'
-    .pad
+    .pad_from_top
