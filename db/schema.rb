@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(:version => 20110429093854) do
     t.datetime "review_start"
     t.datetime "reveal"
     t.datetime "result_recorded"
-    t.boolean  "result_success"
+    t.string   "result_success"
     t.integer  "interval"
     t.datetime "created_at"
     t.datetime "updated_at"

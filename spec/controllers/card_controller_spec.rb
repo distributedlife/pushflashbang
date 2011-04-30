@@ -257,7 +257,7 @@ describe CardController do
       CardTiming.create(:seconds => 120)
     end
 
-    it 'should redirect to deck session if answer is not "yes" or "no"' do
+    it 'should redirect to deck session if answer is not in results' do
       post :review, :deck_id => @deck.id, :id => @card.id, :answer => ''
       response.should be_redirect
       response.should redirect_to(learn_deck_path)
@@ -268,18 +268,23 @@ describe CardController do
     end
 
     it 'should redirect to deck session path in positive case' do
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
-      response.should be_redirect
-      response.should redirect_to(learn_deck_path)
-
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'no'
-      response.should be_redirect
-      response.should redirect_to(learn_deck_path)
+      UserCardReview::RESULTS.each do |result|
+        post :review, :deck_id => @deck.id, :id => @card.id, :answer => result
+        response.should be_redirect
+        response.should redirect_to(learn_deck_path)
+      end
+#      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
+#      response.should be_redirect
+#      response.should redirect_to(learn_deck_path)
+#
+#      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'no'
+#      response.should be_redirect
+#      response.should redirect_to(learn_deck_path)
     end
 
-    it 'should reschedule the card for 5 seconds if it was incorrect' do
+    it 'should reschedule the card for the next interval if it was correct' do
       start_time = Time.now
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'shaky_good'
       stop_time = Time.now
 
       @scheduled_card.reload
@@ -288,7 +293,7 @@ describe CardController do
       @scheduled_card.due.should <= stop_time + @scheduled_card.interval
 
       start_time = Time.now
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good'
       stop_time = Time.now
 
       @scheduled_card.reload
@@ -297,9 +302,18 @@ describe CardController do
       @scheduled_card.due.should <= stop_time + @scheduled_card.interval
     end
 
-    it 'should reschedule the card for the next interval if it was correct' do
+    it 'should reschedule the card for 5 seconds if it was incorrect' do
       start_time = Time.now
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'didnt_know'
+      stop_time = Time.now
+
+      @scheduled_card.reload
+      @scheduled_card.interval.should == 5
+      @scheduled_card.due.should >= start_time + @scheduled_card.interval
+      @scheduled_card.due.should <= stop_time + @scheduled_card.interval
+
+      start_time = Time.now
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'partial_correct'
       stop_time = Time.now
 
       @scheduled_card.reload
@@ -315,7 +329,7 @@ describe CardController do
       reveal_date = Time.now - 10
 
       start_time = Time.now
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes', :review_start => review_start, :reveal => reveal_date
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good', :review_start => review_start, :reveal => reveal_date
       stop_time = Time.now
 
       user_card_review = UserCardReview.first
@@ -327,20 +341,29 @@ describe CardController do
       user_card_review.reveal.utc.should == reveal_date.utc
       user_card_review.result_recorded.should >= start_time
       user_card_review.result_recorded.should <= stop_time
-      user_card_review.result_success.should == true
+      user_card_review.result_success.should == "good"
       user_card_review.interval.should == start_interval
 
+
+
       UserCardReview.delete_all
-
-
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'no', :review_start => review_start, :reveal => reveal_date
-
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'didnt_know', :review_start => review_start, :reveal => reveal_date
       user_card_review = UserCardReview.first
-      user_card_review.result_success.should == false
+      user_card_review.result_success.should == "didnt_know"
+
+      UserCardReview.delete_all
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'partial_correct', :review_start => review_start, :reveal => reveal_date
+      user_card_review = UserCardReview.first
+      user_card_review.result_success.should == "partial_correct"
+
+      UserCardReview.delete_all
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'shaky_good', :review_start => review_start, :reveal => reveal_date
+      user_card_review = UserCardReview.first
+      user_card_review.result_success.should == "shaky_good"
     end
 
     it 'should set review_start and reveal to now if not supplied' do
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'no'
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'didnt_know'
 
       user_card_review = UserCardReview.first
       user_card_review.review_start.should >= Time.now - 5

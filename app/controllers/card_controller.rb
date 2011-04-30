@@ -110,7 +110,8 @@ class CardController < ApplicationController
         :user_id => current_user.id,
         :review_start => params[:review_start],
         :reveal => params[:reveal],
-        :result_recorded => Time.now
+        :result_recorded => Time.now,
+        :result_success => answer
         )
 
       card_schedule = UserCardSchedule.where(:card_id => params[:id], :user_id => current_user.id)
@@ -119,20 +120,18 @@ class CardController < ApplicationController
       user_card_review.due = card_schedule.due
       user_card_review.interval = card_schedule.interval
 
-      if answer == "yes"
+      if answer == "shaky_good" || answer == "good"
         card_schedule.interval = CardTiming.get_next(card_schedule.interval).seconds
         card_schedule.due = Time.now + card_schedule.interval
         card_schedule.save!
 
-        user_card_review.result_success = true
         user_card_review.save!
       end
-      if answer == "no"
+      if answer == "didnt_know" || answer == "partial_correct"
         card_schedule.interval = CardTiming.get_first.seconds
         card_schedule.due = Time.now + card_schedule.interval
         card_schedule.save!
 
-        user_card_review.result_success = false
         user_card_review.save!
       end
 

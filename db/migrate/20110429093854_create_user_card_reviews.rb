@@ -7,7 +7,7 @@ class CreateUserCardReviews < ActiveRecord::Migration
       t.datetime    :review_start
       t.datetime    :reveal
       t.datetime    :result_recorded, :default => false
-      t.boolean     :result_success
+      t.string      :result_success
       t.integer     :interval
 
       t.timestamps

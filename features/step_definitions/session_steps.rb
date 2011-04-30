@@ -193,7 +193,7 @@ end
 Then /^the review contains the outcome of the result$/ do
   user_card_review = UserCardReview.first
 
-  user_card_review.result_success.should == true
+  user_card_review.result_success.should == "good"
 end
 
 Then /^the review contains the interval of the review$/ do
