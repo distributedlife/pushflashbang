@@ -1,15 +1,15 @@
 - @decks.each do |deck|
   #deck{:id => deck.id, :class => 'panel'}
-    %span#country{:class => 'right subscript'}= "#{deck.country.downcase}"
-    %span#language{:class => 'right subscript'}= "#{deck.lang.downcase}-"
+    //%span#country{:class => 'right subscript'}= "#{deck.country.downcase}"
+    //%span#language{:class => 'right subscript'}= "#{deck.lang.downcase}-"
+    - if @card_counts[deck.id].nil?
+      %p{:class => ['subscript', 'right']}= "no cards in deck"
+    - else
+      %p{:class => ['subscript', 'right']}= "#{@card_counts[deck.id]} cards (#{@due_counts[deck.id]} due)"
     %p.minor_title
       = link_to deck.name, show_deck_path(deck.id)
       - if deck.shared
         %span#shared{:class => 'subscript'}= "(shared)"
     %p.description= deck.description
     .pad_from_top
-    - if @card_counts[deck.id].nil?
-      %p{:class => ['subscript', 'right']}= "no cards in deck"
-    - else
-      %p{:class => ['subscript', 'right']}= "#{@card_counts[deck.id]} cards (#{@due_counts[deck.id]} due)"
     .pad

@@ -26,9 +26,7 @@ header {
   margin-bottom: 0.6em;
   margin-left: 0.6em;
   margin-right: 0.6em;
-  padding-bottom: 0.6em;
-  padding-left: 0.6em;
-  padding-right: 0.6em; }
+  padding: 0.6em; }
 
 .left {
   float: left; }
@@ -100,11 +98,19 @@ a {
   text-decoration: none;
   color: black; }
 
+a.contrast {
+  text-decoration: none;
+  color: orange; }
+
+a.contrast:visited {
+  text-decoration: none;
+  color: orange; }
+
 a:visited {
   color: black; }
 
 a:hover {
-  color: green; }
+  color: orange; }
 
 a:hover {
   text-decoration: none; }
@@ -137,6 +143,9 @@ input[type="password"] {
   width: 90%; }
 
 input[type="checkbox"] {
+  display: inline; }
+
+input[type="radio"] {
   display: inline; }
 
 input[type="submit"] {
@@ -263,7 +272,7 @@ nav span.exclude a {
 nav span.exclude a:visited {
   color: grey; }
 nav span.exclude a:hover {
-  color: green; }
+  color: orange; }
 
 .width35 {
   width: 35%; }
@@ -328,6 +337,17 @@ nav.filter {
       padding: 0;
       margin: 0;
       text-align: right; }
+
+.card_panel {
+  background-color: white;
+  border-radius: 20px;
+  padding: 0.6em;
+  margin-top: 0.6em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  margin-bottom: 0.3em;
+  width: 100px;
+  height: 75px; }
 
 .flash p {
   font-size: 0.6em;

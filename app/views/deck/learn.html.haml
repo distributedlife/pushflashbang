@@ -20,3 +20,10 @@
     .button{:class => "centre big_button"}
       = link_to "Reveal", reveal_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :review_start => @review_start), :class => 'positive'
     .pad_from_top
+:javascript
+  $('html').keypress(function(event) {
+    if (event.which == '32') 
+    {
+        document.location = $(".big_button a").attr('href');
+    }
+  });

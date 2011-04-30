@@ -13,10 +13,11 @@ $help_notice_color: #faa;
 $selected_item_color: #0f0;
 
 $text_colour: black ;
-$add_filter_colour: green ;
+$add_filter_colour: orange ;
 $remove_filter_colour: red ;
 $included_filter_colour: black ;
 $excluded_filter_colour: grey;
+$contrast_link_colour: orange;
 
 $button_positive: lightgreen ;
 $button_positive_hover: darkgreen ;
@@ -83,9 +84,7 @@ header
   margin-left: 0.6em ;
   margin-right: 0.6em ;
 
-  padding-bottom: 0.6em;
-  padding-left: 0.6em;
-  padding-right: 0.6em;
+  padding: 0.6em;
 }
 
 .left
@@ -202,6 +201,18 @@ a
   color: $included_filter_colour;
 }
 
+a.contrast
+{
+  text-decoration: none;
+  color: $contrast_link_colour;
+}
+
+a.contrast:visited
+{
+  text-decoration: none;
+  color: $contrast_link_colour;
+}
+
 a:visited
 {
   color: $included_filter_colour;
@@ -259,6 +270,11 @@ input[type="password"]
 }
 
 input[type="checkbox"]
+{
+  display: inline;
+}
+
+input[type="radio"]
 {
   display: inline;
 }
@@ -602,6 +618,19 @@ nav.filter
       text-align: right;
     } 
   }
+}
+
+.card_panel
+{
+  background-color: $li_background;
+  border-radius: 20px;
+  padding: 0.6em;
+  margin-top: 0.6em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  margin-bottom: 0.3em;
+  width: 100px;
+  height: 75px;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

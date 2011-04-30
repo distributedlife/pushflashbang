@@ -8,6 +8,6 @@ module ShowDeckPage
   end
 
   def is_current_page?
-    @session.has_content?("language code") && @session.has_content?("country code")
+    @session.has_content?("Review")
   end
 end

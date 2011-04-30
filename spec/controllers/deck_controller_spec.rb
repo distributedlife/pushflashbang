@@ -63,8 +63,8 @@ describe DeckController do
       post :create, :deck => {}
 
       assigns[:deck].errors[:name].should == ["can't be blank"]
-      assigns[:deck].errors[:lang].should == ["can't be blank"]
-      assigns[:deck].errors[:country].should == ["can't be blank"]
+#      assigns[:deck].errors[:lang].should == ["can't be blank"]
+#      assigns[:deck].errors[:country].should == ["can't be blank"]
     end
   end
 

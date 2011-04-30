@@ -15,8 +15,8 @@ module CreateDeckPage
   def create_deck name, description, lang, country
     @session.fill_in('deck_name', :with => name)
     @session.fill_in('deck_description', :with => description)
-    @session.fill_in('deck_lang', :with => lang)
-    @session.fill_in('deck_country', :with => country)
+#    @session.fill_in('deck_lang', :with => lang)
+#    @session.fill_in('deck_country', :with => country)
 
     self.do_create
   end

@@ -111,10 +111,10 @@ en:
     terminology:
       name:
         title: "name"
-        description: ""
+        description: "A simple name that will allow you to identify this collection of learning items."
       description:
         title: "description"
-        description: ""
+        description: "A longer description that expands on the name to provide you and others with more information about the contents of the deck"
       lang:
         title: "language code"
         description: ""

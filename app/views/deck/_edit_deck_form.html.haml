@@ -9,16 +9,15 @@
   = f.input :description, :as => :text, :label => false, :hint => I18n.t('deck.edit.labels.description'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
-  #lang_definition
-    =render :partial => '/common/definitions', :locals => {:title => I18n.t('deck.terminology.lang.title'), :detail => I18n.t('deck.terminology.lang.description')}
-  = f.input :lang, :as => :string, :label => false, :hint => I18n.t('deck.edit.labels.lang'), :required => false, :wrapper_html => {:class => 'width60'}
-  .pad_from_top
+  //#lang_definition
+  //  =render :partial => '/common/definitions', :locals => {:title => I18n.t('deck.terminology.lang.title'), :detail => I18n.t('deck.terminology.lang.description')}
+  //= f.input :lang, :as => :string, :label => false, :hint => I18n.t('deck.edit.labels.lang'), :required => false, :wrapper_html => {:class => 'width60'}
+  //.pad_from_top
 
-  #country_definition
-    =render :partial => '/common/definitions', :locals => {:title => I18n.t('deck.terminology.country.title'), :detail => I18n.t('deck.terminology.country.description')}
-  = f.input :country, :as => :string, :label => false, :hint => I18n.t('deck.edit.labels.country'), :required => false, :wrapper_html => {:class => 'width60'}
-  .pad_from_top
+  //#country_definition
+  //  =render :partial => '/common/definitions', :locals => {:title => I18n.t('deck.terminology.country.title'), :detail => I18n.t('deck.terminology.country.description')}
+  //= f.input :country, :as => :string, :label => false, :hint => I18n.t('deck.edit.labels.country'), :required => false, :wrapper_html => {:class => 'width60'}
+  //.pad_from_top
 
-  //- f.buttons do
   = f.submit I18n.t('deck.edit.labels.save'), :class => 'positive'
   = link_to I18n.t('deck.edit.labels.delete'), deck_path(@deck.id), :confirm => I18n.t('deck.edit.labels.delete_confirm'), :method => :delete, :class => 'negative'

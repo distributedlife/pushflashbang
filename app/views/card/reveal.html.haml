@@ -25,3 +25,31 @@
     - else
       = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
   .pad
+:javascript
+  $('html').keypress(function(event) {
+    //hitting space will click the green button
+    //if (event.which == '32')
+    //{
+    //    document.location = $("a.positive").attr('href');
+    //}
+    //hitting 1 will click on didnt_know
+    //if (event.which == '49')
+    //{
+    //    document.location = $(".large_button a")[0].href;
+    //}
+    //hiting 2 will click on partial_correct
+    //if (event.which == '50')
+    //{
+    //  document.location = $(".large_button a")[1].href;
+    //}
+    //hitting 3 will click on shaky_good
+    //if (event.which == '51')
+    //{
+    //  document.location = $(".large_button a")[2].href;
+    //}
+    //hitting 4 will clik on good
+    //if (event.which == '52')
+    //{
+    //  document.location = $(".large_button a")[3].href;
+    //}
+  });

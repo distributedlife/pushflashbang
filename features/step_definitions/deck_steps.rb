@@ -56,8 +56,8 @@ Given /^I edit all deck properties$/ do
   goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
     page.name = "Edit deck name"
     page.description = "Edit deck description"
-    page.lang = "zz"
-    page.country = "aaa"
+#    page.lang = "zz"
+#    page.country = "aaa"
   end
 end
 
@@ -71,8 +71,8 @@ Then /^the deck should be updated$/ do
   on_page :ShowDeckPage, Capybara.current_session do |page|
     And %{I should see "Edit deck name"}
     And %{I should see "Edit deck description"}
-    And %{I should see "zz"}
-    And %{I should see "aaa"}
+#    And %{I should see "zz"}
+#    And %{I should see "aaa"}
   end
 end
 
@@ -80,8 +80,8 @@ Given /^I edit all deck properties to be invalid$/ do
   goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
     page.name = ""
     page.description = "X" * 501
-    page.lang = ""
-    page.country = ""
+#    page.lang = ""
+#    page.country = ""
   end
 end
 
@@ -90,8 +90,8 @@ Then /^the deck is not updated$/ do
 
   deck.name.should_not == ""
   deck.description.should_not == "X" * 501
-  deck.lang.should_not == ""
-  deck.country.should_not == ""
+#  deck.lang.should_not == ""
+#  deck.country.should_not == ""
 end
 
 Then /^I should be on the edit deck page$/ do
@@ -120,8 +120,8 @@ Then /^I can see all of my decks$/ do
   decks.each do |deck|
     And %{I should see "#{deck.name}"}
     And %{I should see "#{deck.description}"}
-    And %{I should see "#{deck.lang}"}
-    And %{I should see "#{deck.country}"}
+#    And %{I should see "#{deck.lang}"}
+#    And %{I should see "#{deck.country}"}
   end
 end
 
@@ -131,8 +131,8 @@ Then /^I will not see decks created by other users$/ do
   decks.each do |deck|
     if deck.user_id != @current_user.first.id
       And %{I should not see "#{deck.name}"}
-      And %{I should not see "#{deck.lang}"}
-      And %{I should not see "#{deck.country}"}
+#      And %{I should not see "#{deck.lang}"}
+#      And %{I should not see "#{deck.country}"}
 
       unless deck.description.nil?
         And %{I should not see "#{deck.description}"}
@@ -170,16 +170,16 @@ Then /^I will see shared decks created by other users$/ do
     if deck.user_id != @current_user.first.id
       if deck.shared == true
         And %{I should see "#{deck.name}"}
-        And %{I should see "#{deck.lang}"}
-        And %{I should see "#{deck.country}"}
+#        And %{I should see "#{deck.lang}"}
+#        And %{I should see "#{deck.country}"}
 
         unless deck.description.nil?
           And %{I should see "#{deck.description}"}
         end
       else
         And %{I should not see "#{deck.name}"}
-        And %{I should not see "#{deck.lang}"}
-        And %{I should not see "#{deck.country}"}
+#        And %{I should not see "#{deck.lang}"}
+#        And %{I should not see "#{deck.country}"}
 
         unless deck.description.nil?
           And %{I should not see "#{deck.description}"}

@@ -1,1 +1,44 @@
 =render :partial => '/header', :locals => {:title => t('about.title'), :subtitle => t('about.subtitle')}
+.panel
+  %p What is PushFlashBang?
+  .pad_from_top
+  %p For me; it's a place to try out different ways of augmenting language learning with technology.
+  .pad_from_top
+  %p For you; it's free to tools that may help you learn a language
+  .pad_from_top
+  %p 
+    At the moment there is only one tool here and it's a variation on flash card programs like Anki and Mnemosyne.
+    What I am trialing with the flash card app is two things.
+  .pad_from_top
+  %p 
+    The first is a throttle control that will ensure that you are not swamped with new things to learn. The concept
+    is that you should only have new things to learn when you have achieved some level of comfort with the items
+    already presented to you.
+  .pad_from_top
+  %p
+    The second is to heuristically adjust the frequency that the same card is presented to you. When you learn a new
+    item it will be presented to you many times. In the first day you will see each item at least seven times and then
+    increasinly less frequent from then as you remember. What this prototype tries to do is adjust the interval between
+    each showing so that it is tailored to your learning patterns. If we detect that you don't remember at a certain
+    point, we will try to reduce the interval so that you get it right more often. If you're doing well; then we'll look
+    at increasing the interval so that you can learn faster.
+  .pad_from_top
+  %p
+    A third factor is your learning behaviours on a daily basis and over time. Over time your learning habits will
+    change and we will try to cater for that. Equally as important is some days you're ability to learn isn't as good
+    as it could be while others are ideal. Balancing the two sometimes contradictory factors will, I suspect, difficult
+    to do but part of the purpose of this prototy.
+  .pad_from_top
+  %p
+    The bottom line is that using PushFlashBang you should be able to learn faster.
+  .pad_from_top
+  %p
+    %span So
+    %span= link_to(I18n.t('user.actions.sign_up').downcase, new_user_registration_path, :class => 'contrast')
+    %span and give it a go.
+  .pad_from_top
+  %p
+    Regards,
+  %p
+    Ryan Boucher
+  .pad_from_top

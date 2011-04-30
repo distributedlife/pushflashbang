@@ -1,12 +1,19 @@
 - if @deck.shared
-  =render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "language code: #{@deck.lang}, country code: #{@deck.country} (shared)"}
+  //=render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "language code: #{@deck.lang}, country code: #{@deck.country} (shared)"}
+  =render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "(shared)"}
 - else
-  =render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "language code: #{@deck.lang}, country code: #{@deck.country}"}
-- unless @deck.description == ""
-  .right{:class => ["panel"], :style => "width: 25%"}
-    %p.description= @deck.description
+  //=render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "language code: #{@deck.lang}, country code: #{@deck.country}"}
+  =render :partial => '/header', :locals => {:title => @deck.name, :subtitle => ""}
+%nav{:class => ["right"], :style => "width: 25%"}
+  - unless @deck.description.nil?
+    .panel
+      %p.description= @deck.description
+  .panel
+    %p.description= link_to "Review", learn_deck_path(@deck.id)
     .pad_from_top
     - if @deck.user_id == current_user.id
+      %p.description= link_to "Add Card", new_deck_card_path(@deck.id)
+      .pad
       %p.description= link_to "Edit Deck", edit_deck_path(@deck.id)
       .pad
       - if @deck.shared
@@ -14,14 +21,12 @@
       - else
         %p.description= link_to "Share Deck", toggle_share_deck_path(@deck.id)
       .pad
-      %p.description= link_to "Add Card", new_deck_card_path(@deck.id)
-      .pad
-    %p.description= link_to "Review", learn_deck_path(@deck.id)
-    .pad
-%section{:class => ["left panel"], :style => "width: 60%"}
+%section{:class => ["left"], :style => "width: 75%"}
   - if @cards.empty?
     %p This deck has no cards; click here to start adding cards to the deck
   - else
     - @cards.each do |card|
-      %p= link_to card.front, deck_card_path(card.deck_id, card.id)
+      .div{:class => "card_panel left", :style => ""}
+        %p.centre= link_to card.front, deck_card_path(card.deck_id, card.id)
+        //.pad_from_top
   .pad
