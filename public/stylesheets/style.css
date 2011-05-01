@@ -40,6 +40,9 @@ header {
   margin-left: auto;
   margin-right: auto; }
 
+.tiny_pad_from_top {
+  padding-top: 0.6em; }
+
 .pad_from_top {
   padding-top: 1.0em; }
 
@@ -348,6 +351,17 @@ nav.filter {
   margin-bottom: 0.3em;
   width: 100px;
   height: 75px; }
+
+.card_panel_full_page {
+  background-color: white;
+  border-radius: 20px;
+  padding: 0.6em;
+  margin-top: 0.6em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  margin-bottom: 0.3em;
+  width: 155px;
+  height: 100px; }
 
 .flash p {
   font-size: 0.6em;

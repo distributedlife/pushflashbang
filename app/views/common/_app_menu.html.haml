@@ -3,7 +3,7 @@
     %span.top_menu_panel
       %span= link_to(I18n.t('user.actions.home'), user_index_path)
     %span.top_menu_panel
-      %span= link_to 'Create Deck', '/deck/create', :method => :post
+      %span= link_to 'New Deck', '/deck/create', :method => :post
 
     //attempt to display a deck home and then a card home depending on the current page.
     //#TODO: simplify this code using before filters
@@ -15,8 +15,9 @@
           %span= link_to 'Card Home', "/deck/#{params[:deck_id]}/card/#{params[:id]}"
     - else
       - unless @deck.nil?
-        %span.top_menu_panel
-          %span= link_to 'Deck Home', "/deck/#{@deck.id}"
+        - unless @deck.id.nil?
+          %span.top_menu_panel
+            %span= link_to 'Deck Home', "/deck/#{@deck.id}"
       - else
         -if params[:controller] == "deck"
           %span.top_menu_panel

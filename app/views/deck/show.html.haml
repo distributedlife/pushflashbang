@@ -29,5 +29,4 @@
     - @cards.each do |card|
       .div{:class => "card_panel left", :style => ""}
         %p.centre= link_to card.front, deck_card_path(card.deck_id, card.id)
-        //.pad_from_top
   .pad

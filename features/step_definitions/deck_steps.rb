@@ -6,7 +6,7 @@ end
 
 When /^I create a deck$/ do
   on_page :CreateDeckPage, Capybara.current_session do |page|
-    page.create_deck "my deck", "this is my deck of stuff to learn", "en", "au"
+    page.create_deck "my deck", "this is my deck of stuff to learn"#, "en", "au"
   end
 end
 
