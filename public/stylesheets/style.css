@@ -50,6 +50,7 @@ header {
   background-color: white;
   border-radius: 20px;
   -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
   padding: 0.6em;
   margin: 0.6em; }
 
@@ -57,8 +58,10 @@ header {
   background-color: #dddddd;
   border-bottom-left-radius: 10px;
   -moz-border-radius-bottomleft: 10px;
+  -webkit-border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   -moz-border-radius-bottomright: 10px;
+  -webkit-border-bottom-right-radius: 10px;
   padding-left: 0.3em;
   padding-right: 0.3em;
   margin-left: 0.3em;
@@ -71,6 +74,7 @@ header {
   background-color: #eeffee;
   border-radius: 10px;
   -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
   padding: 0.6em;
   margin: 0.6em; }
 
@@ -128,6 +132,7 @@ textarea {
   font-size: 0.6em;
   border-radius: 5px;
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   border: 2px solid #eeeeee;
   height: 6em;
   padding: 0.6em;
@@ -138,6 +143,7 @@ input {
   font-size: 0.6em;
   border-radius: 5px;
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   border: 2px solid #eeeeee;
   padding: 0.6em;
   display: block; }
@@ -190,6 +196,7 @@ select {
   font-size: 0.6em;
   border-radius: 5px;
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   display: block; }
 
 .help {
@@ -213,6 +220,7 @@ form {
     font-size: 0.6em;
     border-radius: 5px;
     -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
     border: 2px solid #eeeeee;
     height: 6em;
     padding: 0.6em;
@@ -240,6 +248,7 @@ form {
   font-size: 0.6em;
   border-radius: 5px;
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   border: 2px solid #eeeeee;
   height: 6em;
   padding-top: 0.6em;
@@ -354,6 +363,7 @@ nav.filter {
   background-color: white;
   border-radius: 20px;
   -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
   padding: 0.6em;
   margin-top: 0.6em;
   margin-left: 0.3em;
@@ -366,6 +376,7 @@ nav.filter {
   background-color: white;
   border-radius: 20px;
   -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
   padding: 0.6em;
   margin-top: 0.6em;
   margin-left: 0.3em;
@@ -379,7 +390,8 @@ nav.filter {
   padding: 0.6em;
   margin: 0.6em;
   border-radius: 5px;
-  -moz-border-radius: 5px; }
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px; }
 .flash p.success {
   background-color: #eeffee; }
 .flash p.failure {
