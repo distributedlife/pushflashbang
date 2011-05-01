@@ -39,13 +39,21 @@ else
   user = user.first
 end
 
-deck = Deck.where(:name => 'Simplified Hanzi to English', :user_id => user.id)
-if deck.empty?
-  deck = Deck.new(:name => 'Simplified Hanzi to English', :lang => 'cn', :country=> 'cn', :shared => true)
-  deck.user = user
-  deck.save!
+forward_deck = Deck.where(:name => 'Simplified Hanzi to English', :user_id => user.id)
+reverse_deck = Deck.where(:name => 'English to Simplified Hanzi', :user_id => user.id)
+if forward_deck.empty?
+  forward_deck = Deck.new(:name => 'Simplified Hanzi to English', :lang => 'cn', :country=> 'cn', :shared => true)
+  forward_deck.user = user
+  forward_deck.save!
 else
-  deck = deck.first
+  forward_deck = forward_deck.first
+end
+if reverse_deck.empty?
+  reverse_deck = Deck.new(:name => 'English to Simplified Hanzi', :lang => 'cn', :country=> 'cn', :shared => true)
+  reverse_deck.user = user
+  reverse_deck.save!
+else
+  reverse_deck = reverse_deck.first
 end
 
 cards = []
@@ -153,10 +161,145 @@ cards = [
   ]
 
 cards.each do |card|
-  if Card.where(:front => card["front"], "back" => card["back"], :deck_id => deck.id).empty?
+  if Card.where(:front => card["front"], "back" => card["back"], :deck_id => forward_deck.id).empty?
     card = Card.new(:front => card["front"], "back" => card["back"])
-    card.deck = deck
+    card.deck = forward_deck
+    card.save!
+  end
+  if Card.where(:front => card["back"], "back" => card["front"], :deck_id => reverse_deck.id).empty?
+    card = Card.new(:front => card["back"], "back" => card["front"])
+    card.deck = reverse_deck
     card.save!
   end
 end
 
+
+
+
+
+forward_deck = Deck.where(:name => 'ACCS - Twers (hanzi to english)', :user_id => user.id)
+reverse_deck = Deck.where(:name => 'ACCS - Twers (english to hanzi)', :user_id => user.id)
+if forward_deck.empty?
+  forward_deck = Deck.new(:name => 'ACCS - Twers (hanzi to english)', :lang => 'cn', :country=> 'cn', :shared => true)
+  forward_deck.user = user
+  forward_deck.save!
+else
+  forward_deck = forward_deck.first
+end
+if reverse_deck.empty?
+  reverse_deck = Deck.new(:name => 'ACCS - Twers (english to hanzi)', :lang => 'cn', :country=> 'cn', :shared => true)
+  reverse_deck.user = user
+  reverse_deck.save!
+else
+  reverse_deck = reverse_deck.first
+end
+
+cards = []
+cards = [
+  #Lesson 1
+  {"front" => "一", "back" => "1 (yī)"},
+  {"front" => "二", "back" => "2 (èr)"},
+  {"front" => "三", "back" => "3 (sān)"},
+  {"front" => "四", "back" => "4 (sì)"},
+  {"front" => "五", "back" => "5 (wŭ)"},
+  {"front" => "六", "back" => "6 (liù)"},
+  {"front" => "七", "back" => "7 (qī)"},
+  {"front" => "八", "back" => "8 (bā)"},
+  {"front" => "九", "back" => "9 (jiŭ)"},
+  {"front" => "十", "back" => "10 (shí)"},
+  {"front" => "女", "back" => "female (nǚ)"},
+  {"front" => "安", "back" => "peace (ān)"},
+  {"front" => "子", "back" => "child (zǐ)"},
+  {"front" => "好", "back" => "good (hăo)"},
+  {"front" => "人", "back" => "Man / mankind (rén)"},
+  {"front" => "大", "back" => "big (dà)"},
+  {"front" => "太", "back" => "excessive (tài)"},
+  {"front" => "天", "back" => "sky (tiān)"},
+  {"front" => "日", "back" => "sun (rì)"},
+  {"front" => "月", "back" => "moon (yuè)"},
+  {"front" => "明", "back" => "bright (míng)"},
+  {"front" => "白", "back" => "clear (bái)"},
+  {"front" => "明白", "back" => "understand (míng bái)"},
+  {"front" => "晶", "back" => "crystal (jīng)"},
+  {"front" => "但", "back" => "dawn (dàn)"},
+  {"front" => "字", "back" => "word (zì)"},
+  {"front" => "早", "back" => "early (zăo)"},
+  {"front" => "百", "back" => "hundred (băi)"},
+  {"front" => "千", "back" => "thousand (qiān)"},
+  {"front" => "万", "back" => "ten thousand (wàn)"},
+  {"front" => "亿", "back" => "hundred million (yì)"},
+  {"front" => "奴", "back" => "woman (nǚ rén)"},
+  {"front" => "早安", "back" => "good morning (zăo ān)"},
+  {"front" => "大人", "back" => "adult / big man (dà rén)"},
+  {"front" => "太太", "back" => "Mrs (tài tài)"},
+  {"front" => "白天", "back" => "daytime (bái tiān)"},
+  {"front" => "明天", "back" => "tomorrow (míng tiān)"},
+  {"front" => "天天", "back" => "everyday (tiān tiān)"},
+  {"front" => "太大", "back" => "too big (tài dà)"},
+  {"front" => "好人", "back" => "good person (hăo rén)"},
+  {"front" => "零", "back" => "zero (lìng)"}
+  #Lesson 2
+  ]
+
+cards.each do |card|
+  if Card.where(:front => card["front"], "back" => card["back"], :deck_id => forward_deck.id).empty?
+    card = Card.new(:front => card["front"], "back" => card["back"])
+    card.deck = forward_deck
+    card.save!
+  end
+end
+
+cards = []
+cards = [
+  #Lesson 1
+  {"front" => "一 (yī)", "back" => "1"},
+  {"front" => "二 (èr)", "back" => "2"},
+  {"front" => "三 (sān)", "back" => "3"},
+  {"front" => "四 (sì)", "back" => "4"},
+  {"front" => "五 (wŭ)", "back" => "5"},
+  {"front" => "六 (liù)", "back" => "6"},
+  {"front" => "七 (qī)", "back" => "7"},
+  {"front" => "八 (bā)", "back" => "8"},
+  {"front" => "九 (jiŭ)", "back" => "9"},
+  {"front" => "十 (shí)", "back" => "10"},
+  {"front" => "女 (nǚ)", "back" => "female"},
+  {"front" => "安 (ān)", "back" => "peace"},
+  {"front" => "子 (zǐ)", "back" => "child"},
+  {"front" => "好 (hăo)", "back" => "good"},
+  {"front" => "人 (rén)", "back" => "Man / mankind"},
+  {"front" => "大 (dà)", "back" => "big"},
+  {"front" => "太 (tài)", "back" => "excessive"},
+  {"front" => "天 (tiān)", "back" => "sky"},
+  {"front" => "日 (rì)", "back" => "sun"},
+  {"front" => "月 (yuè)", "back" => "moon"},
+  {"front" => "明 (míng)", "back" => "bright"},
+  {"front" => "白 (bái)", "back" => "clear"},
+  {"front" => "明白 (míng bái)", "back" => "understand"},
+  {"front" => "晶 (jīng)", "back" => "crystal"},
+  {"front" => "但 (dàn)", "back" => "dawn"},
+  {"front" => "字 (zì)", "back" => "word"},
+  {"front" => "早 (zăo)", "back" => "early"},
+  {"front" => "百 (băi)", "back" => "hundred"},
+  {"front" => "千 (qiān)", "back" => "thousand"},
+  {"front" => "万 (wàn)", "back" => "ten thousand"},
+  {"front" => "亿 (yì)", "back" => "hundred million"},
+  {"front" => "奴 (nǚ rén)", "back" => "woman"},
+  {"front" => "早安 (zăo ān)", "back" => "good morning"},
+  {"front" => "大人 (dà rén)", "back" => "adult / big man"},
+  {"front" => "太太 (tài tài)", "back" => "Mrs"},
+  {"front" => "白天 (bái tiān)", "back" => "daytime"},
+  {"front" => "明天 (míng tiān)", "back" => "tomorrow"},
+  {"front" => "天天 (tiān tiān)", "back" => "everyday"},
+  {"front" => "太大 (tài dà)", "back" => "too big"},
+  {"front" => "好人 (hăo rén)", "back" => "good person"},
+  {"front" => "零 (lìng)", "back" => "zero"}
+  #Lesson 2
+  ]
+
+cards.each do |card|
+  if Card.where(:front => card["back"], "back" => card["front"], :deck_id => reverse_deck.id).empty?
+    card = Card.new(:front => card["back"], "back" => card["front"])
+    card.deck = reverse_deck
+    card.save!
+  end
+end
