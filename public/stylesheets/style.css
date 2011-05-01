@@ -49,13 +49,16 @@ header {
 .panel {
   background-color: white;
   border-radius: 20px;
+  -moz-border-radius: 20px;
   padding: 0.6em;
   margin: 0.6em; }
 
 .top_menu_panel {
   background-color: #dddddd;
   border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
   border-bottom-right-radius: 10px;
+  -moz-border-radius-bottomright: 10px;
   padding-left: 0.3em;
   padding-right: 0.3em;
   margin-left: 0.3em;
@@ -67,6 +70,7 @@ header {
 .created_item {
   background-color: #eeffee;
   border-radius: 10px;
+  -moz-border-radius: 10px;
   padding: 0.6em;
   margin: 0.6em; }
 
@@ -123,6 +127,7 @@ textarea {
   margin: auto;
   font-size: 0.6em;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   border: 2px solid #eeeeee;
   height: 6em;
   padding: 0.6em;
@@ -132,6 +137,7 @@ input {
   margin: auto;
   font-size: 0.6em;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   border: 2px solid #eeeeee;
   padding: 0.6em;
   display: block; }
@@ -183,6 +189,7 @@ input[type="submit"].neutral:hover {
 select {
   font-size: 0.6em;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   display: block; }
 
 .help {
@@ -205,6 +212,7 @@ form {
     margin: auto;
     font-size: 0.6em;
     border-radius: 5px;
+    -moz-border-radius: 5px;
     border: 2px solid #eeeeee;
     height: 6em;
     padding: 0.6em;
@@ -231,6 +239,7 @@ form {
   margin: auto;
   font-size: 0.6em;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   border: 2px solid #eeeeee;
   height: 6em;
   padding-top: 0.6em;
@@ -344,6 +353,7 @@ nav.filter {
 .card_panel {
   background-color: white;
   border-radius: 20px;
+  -moz-border-radius: 20px;
   padding: 0.6em;
   margin-top: 0.6em;
   margin-left: 0.3em;
@@ -355,6 +365,7 @@ nav.filter {
 .card_panel_full_page {
   background-color: white;
   border-radius: 20px;
+  -moz-border-radius: 20px;
   padding: 0.6em;
   margin-top: 0.6em;
   margin-left: 0.3em;
@@ -367,7 +378,8 @@ nav.filter {
   font-size: 0.6em;
   padding: 0.6em;
   margin: 0.6em;
-  border-radius: 5px; }
+  border-radius: 5px;
+  -moz-border-radius: 5px; }
 .flash p.success {
   background-color: #eeffee; }
 .flash p.failure {

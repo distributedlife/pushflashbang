@@ -119,6 +119,7 @@ header
 {
   background-color: $li_background;
   border-radius: 20px;
+  -moz-border-radius: 20px;
   padding: 0.6em;
   margin: 0.6em;
 }
@@ -128,7 +129,9 @@ header
   background-color: $page_background_offset;
 
   border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
   border-bottom-right-radius: 10px;
+  -moz-border-radius-bottomright: 10px;
 
   padding-left: 0.3em;
   padding-right: 0.3em;
@@ -148,6 +151,7 @@ header
 {
   background-color: $success_notice_color;
   border-radius: 10px;
+  -moz-border-radius: 10px;
   padding: 0.6em;
   margin: 0.6em;
 }
@@ -243,6 +247,7 @@ textarea
   margin: auto;
   font-size: $font_size_small;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   border: 2px solid $page_background;
   height: 6em;
   padding: 0.6em;
@@ -254,6 +259,7 @@ input
   margin: auto;
   font-size: $font_size_small;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   border: 2px solid $page_background;
   padding: 0.6em;
   display: block;
@@ -333,6 +339,7 @@ select
 {
   font-size: $font_size_small;
   border-radius: 5px;
+  -moz-border-radius: 5px;
   display: block;
 }
 
@@ -373,6 +380,7 @@ form
     margin: auto;
     font-size: $font_size_small;
     border-radius: 5px;
+    -moz-border-radius: 5px;
     border: 2px solid $page_background;
     height: 6em;
     padding: 0.6em;
@@ -425,6 +433,7 @@ form
     margin: auto;
     font-size: $font_size_small;
     border-radius: 5px;
+    -moz-border-radius: 5px;
     border: 2px solid $page_background;
     height: 6em;
     padding-top: 0.6em;
@@ -629,6 +638,7 @@ nav.filter
 {
   background-color: $li_background;
   border-radius: 20px;
+  -moz-border-radius: 20px;
   padding: 0.6em;
   margin-top: 0.6em;
   margin-left: 0.3em;
@@ -642,6 +652,7 @@ nav.filter
 {
   background-color: $li_background;
   border-radius: 20px;
+  -moz-border-radius: 20px;
   padding: 0.6em;
   margin-top: 0.6em;
   margin-left: 0.3em;
@@ -662,6 +673,7 @@ nav.filter
     padding: 0.6em;
     margin: 0.6em;
     border-radius: 5px;
+    -moz-border-radius: 5px;
   }
   
   p.success

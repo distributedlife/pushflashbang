@@ -19,7 +19,8 @@
       location.reload();
     }, 0);
 - else
-  %p.giant= @card.front
+  %section{:class => ["panel"]}
+    %p.giant= @card.front
 .pad
 .pad_from_top
 - unless @card.nil?
