@@ -267,7 +267,7 @@ DEPENDENCIES
   metric_fu
   nokogiri
   rails (= 3.0.5)
-  rspec-rails (>= 2.0.0.beta.10)
+  rspec-rails (= 2.6.0.rc.2)
   ruby-debug
   spork
   sqlite3

@@ -37,7 +37,7 @@ group :development, :test do
   gem 'gherkin'
   gem 'cucumber-rails'
   gem 'cucumber'
-  gem 'rspec-rails', '>= 2.0.0.beta.10'
+  gem 'rspec-rails', '= 2.6.0.rc.2'
   gem 'spork'
   gem 'launchy'    # So you can do Then show me the page
   gem 'autotest-rails'
