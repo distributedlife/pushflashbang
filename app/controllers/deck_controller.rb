@@ -95,8 +95,9 @@ class DeckController < ApplicationController
       end
 
       #get next scheduled card for user
-      @scheduled_card = UserCardSchedule::get_next_due_for_user(current_user.id)
-      @due_count = UserCardSchedule::get_due_count_for_user(current_user.id)
+      @scheduled_card = UserCardSchedule::get_next_due_for_user_for_deck(current_user.id, params[:id])
+      @due_count = UserCardSchedule::get_due_count_for_user_for_deck(current_user.id, params[:id])
+#      @due_count = UserCardSchedule::get_due_count_for_user(current_user.id)
       @review_start = Time.now
       @new_card = false
 
