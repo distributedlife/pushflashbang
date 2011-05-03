@@ -261,7 +261,7 @@ describe CardController do
       get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
       assigns[:quick_response].should == true
 
-      review_start = Time.now - 2.00
+      review_start = Time.now - 1.00
       get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
       assigns[:quick_response].should == true
 

@@ -77,6 +77,11 @@ li
   list-style: none;
 }
 
+li.inline
+{
+  display: inline !important;
+}
+
 header
 {
   clear: both;

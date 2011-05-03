@@ -21,6 +21,9 @@ body {
 li {
   list-style: none; }
 
+li.inline {
+  display: inline !important; }
+
 header {
   clear: both;
   margin-bottom: 0.6em;
