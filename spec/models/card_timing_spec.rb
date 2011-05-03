@@ -41,9 +41,19 @@ describe CardTiming do
     it 'should get the last row if there is no later' do
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
-      CardTiming.create(:seconds => 120)
 
-      CardTiming::get_next(120).seconds.should == 120
+      CardTiming::get_next(25).seconds.should == 25
+    end
+
+    it 'should not return a range if the current is equal to or above the threshold' do
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+      CardTiming.create(:seconds => 600)
+
+      CardTiming::get_next(120).seconds.should >= (600 - CardTiming::range)
+      CardTiming::get_next(120).seconds.should <= (600 + CardTiming::range)
+      CardTiming::get_next(120).seconds.should_not == 600
     end
   end
 end

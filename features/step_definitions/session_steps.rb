@@ -273,3 +273,18 @@ Then /^the card interval should be increased by two$/ do
   scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
   scheduled_card.interval.should == 25
 end
+
+When /^the card interval should be (\d+)$/ do |interval|
+  scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
+  scheduled_card.interval.to_s.should == interval
+end
+
+Then /^the interval should be (\d+) to the next plus or minus (\d+) seconds$/ do |interval, range|
+  interval = interval.to_i
+  range = range.to_i
+
+  scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
+  scheduled_card.interval.should >= interval - range
+  scheduled_card.interval.should <= interval + range
+  scheduled_card.interval.should_not == interval
+end

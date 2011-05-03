@@ -340,8 +340,11 @@ describe CardController do
       post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good'
       stop_time = Time.now
 
+
       @scheduled_card.reload
-      @scheduled_card.interval.should == 600
+      #considering ranges for larger increments
+      @scheduled_card.interval.should >= 600 - CardTiming.range
+      @scheduled_card.interval.should <= 600 + CardTiming.range
       @scheduled_card.due.should >= start_time + @scheduled_card.interval
       @scheduled_card.due.should <= stop_time + @scheduled_card.interval
     end
