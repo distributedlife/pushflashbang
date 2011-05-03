@@ -9,21 +9,21 @@
 %section{:class=> "panel"}
   .button{:class => "centre large_button"}
     - if @card_schedule.interval == 0
-      = link_to t('card.reveal.labels.didnt_know'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
+      = link_to t('card.reveal.labels.didnt_know'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'positive', :method => :post
     - else
-      = link_to t('card.reveal.labels.didnt_know'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
+      = link_to t('card.reveal.labels.didnt_know'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post
 
-    = link_to t('card.reveal.labels.partial_answer'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'partial_correct', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
+    = link_to t('card.reveal.labels.partial_answer'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'partial_correct', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post
 
-    - if @card_schedule.interval > 0 && @card_schedule.interval < 120
-      = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
+    - if !@quick_response && @card_schedule.interval > 0
+      = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'positive', :method => :post
     - else
-      = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
+      = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post
 
-    - if @card_schedule.interval >= 120
-      = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start, :reveal => @reveal), :class => 'positive', :method => :post
+    - if @quick_response && @card_schedule.interval > 0
+      = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'positive', :method => :post
     - else
-      = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start, :reveal => @reveal), :class => 'neutral', :method => :post
+      = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post
   .pad
 :javascript
   $('html').keypress(function(event) {

@@ -87,10 +87,12 @@ class CardController < ApplicationController
       if params[:review_start].nil?
         @review_start = Time.now
       else
-        @review_start = params[:review_start]
+        @review_start = Time.parse(params[:review_start].to_s)
       end
 
+
       @reveal = Time.now
+      @quick_response = @reveal - @review_start <= 2.5
       @card_schedule = UserCardSchedule.where(:card_id => params[:id], :user_id => current_user.id).first
     rescue
     end
@@ -120,8 +122,15 @@ class CardController < ApplicationController
       user_card_review.due = card_schedule.due
       user_card_review.interval = card_schedule.interval
 
-      if answer == "shaky_good" || answer == "good"
+      if answer == "shaky_good"
         card_schedule.interval = CardTiming.get_next(card_schedule.interval).seconds
+        card_schedule.due = Time.now + card_schedule.interval
+        card_schedule.save!
+
+        user_card_review.save!
+      end
+      if answer == "good"
+        card_schedule.interval = CardTiming.get_next(CardTiming.get_next(card_schedule.interval).seconds).seconds
         card_schedule.due = Time.now + card_schedule.interval
         card_schedule.save!
 

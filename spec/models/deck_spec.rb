@@ -23,24 +23,6 @@ describe Deck do
       deck.valid?.should == true
     end
 
-#    it 'should require a language code' do
-#      deck = Deck.new(:name => 'name', :desc => 'something', :country => 'au')
-#      deck.user = @user
-#
-#      deck.valid?.should == false
-#      deck.lang = 'es'
-#      deck.valid?.should == true
-#    end
-#
-#    it 'should require a country code' do
-#      deck = Deck.new(:name => 'name', :desc => 'something', :lang => 'en')
-#      deck.user = @user
-#
-#      deck.valid?.should == false
-#      deck.country = 'gb'
-#      deck.valid?.should == true
-#    end
-
     it 'should default shared to false' do
       deck = Deck.new(:name => 'name', :desc => 'something', :lang => 'en', :country => 'au')
       deck.user = @user

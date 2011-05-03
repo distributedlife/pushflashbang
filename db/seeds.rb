@@ -39,17 +39,17 @@ else
   user = user.first
 end
 
-forward_deck = Deck.where(:name => 'Simplified Hanzi to English', :user_id => user.id)
-reverse_deck = Deck.where(:name => 'English to Simplified Hanzi', :user_id => user.id)
+forward_deck = Deck.where(:name => 'Simplified Hanzi to English (reading)', :user_id => user.id)
+reverse_deck = Deck.where(:name => 'English to Simplified Hanzi (writing)', :user_id => user.id)
 if forward_deck.empty?
-  forward_deck = Deck.new(:name => 'Simplified Hanzi to English', :lang => 'cn', :country=> 'cn', :shared => true)
+  forward_deck = Deck.new(:name => 'Simplified Hanzi to English (reading)', :lang => 'cn', :country=> 'cn', :shared => true)
   forward_deck.user = user
   forward_deck.save!
 else
   forward_deck = forward_deck.first
 end
 if reverse_deck.empty?
-  reverse_deck = Deck.new(:name => 'English to Simplified Hanzi', :lang => 'cn', :country=> 'cn', :shared => true)
+  reverse_deck = Deck.new(:name => 'English to Simplified Hanzi (writing)', :lang => 'cn', :country=> 'cn', :shared => true)
   reverse_deck.user = user
   reverse_deck.save!
 else
@@ -59,21 +59,21 @@ end
 cards = []
 cards = [
   #Lesson 1
-  {"front" => "一", "back" => "1"},
+  {"front" => "一", "back" => "1 / (floor, ceiling)"},
   {"front" => "二", "back" => "2"},
   {"front" => "三", "back" => "3"},
   {"front" => "四", "back" => "4"},
   {"front" => "五", "back" => "5"},
   {"front" => "六", "back" => "6"},
-  {"front" => "七", "back" => "7"},
+  {"front" => "七", "back" => "7 / (diced)"},
   {"front" => "八", "back" => "8"},
-  {"front" => "九", "back" => "9"},
+  {"front" => "九", "back" => "9 / (baseball)"},
   {"front" => "十", "back" => "10"},
   {"front" => "目", "back" => "eye"},
-  {"front" => "月", "back" => "month"},
+  {"front" => "月", "back" => "month / (moon, flesh, part of body)"},
   {"front" => "口", "back" => "mouth"},
-  {"front" => "田", "back" => "rice field"},
-  {"front" => "日", "back" => "day"},
+  {"front" => "田", "back" => "rice field / (brains)"},
+  {"front" => "日", "back" => "day / (sun, tonque wagging)"},
   #Lesson 2
   {"front" => "古", "back" => "ancient"},
   {"front" => "胡", "back" => "recklessly"},
@@ -85,7 +85,7 @@ cards = [
   {"front" => "晶", "back" => "sparkling"},
   {"front" => "品", "back" => "goods"},
   {"front" => "昌", "back" => "prosperous"},
-  {"front" => "早", "back" => "early"},
+  {"front" => "早", "back" => "early / (sunflower)"},
   {"front" => "旭", "back" => "rising sun"},
   {"front" => "世", "back" => "generation"},
   {"front" => "胃", "back" => "stomach"},
@@ -93,42 +93,42 @@ cards = [
   {"front" => "凹", "back" => "concave"},
   {"front" => "凸", "back" => "convex"},
   #Lesson 3
-  {"front" => "自", "back" => "oneself"},
+  {"front" => "自", "back" => "oneself / (nose)"},
   {"front" => "白", "back" => "white"},
   {"front" => "百", "back" => "hundred"},
   {"front" => "皂", "back" => "soap"},
   {"front" => "旧", "back" => "old"},
-  {"front" => "中", "back" => "middle"},
+  {"front" => "中", "back" => "middle (n/adj)"},
   {"front" => "千", "back" => "thousand"},
   {"front" => "舌", "back" => "tonque"},
   {"front" => "升", "back" => "litre"},
-  {"front" => "丸", "back" => "pill"},
-  {"front" => "卜", "back" => "divination"},
+  {"front" => "丸", "back" => "pill / (bottle of pills)"},
+  {"front" => "卜", "back" => "divination / (divining rod / magic wand)"},
   {"front" => "占", "back" => "tell fortunes"},
   {"front" => "上", "back" => "above"},
   {"front" => "下", "back" => "below"},
   {"front" => "卡", "back" => "card"},
   {"front" => "卓", "back" => "eminent"},
   {"front" => "朝", "back" => "dynasty"},
-  {"front" => "嘲", "back" => "ridicule"},
+  {"front" => "嘲", "back" => "ridicule (v)"},
   #Lesson 4
   {"front" => "只", "back" => "only"},
   {"front" => "贝", "back" => "shellfish"},
-  {"front" => "贴", "back" => "paste"},
+  {"front" => "贴", "back" => "paste (v)"},
   {"front" => "贞", "back" => "chaste"},
   {"front" => "员", "back" => "employee"},
-  {"front" => "儿", "back" => "youngster"},
-  {"front" => "几", "back" => "how many?"},
+  {"front" => "儿", "back" => "youngster / (human legs)"},
+  {"front" => "几", "back" => "how many? / (wind / small table)"},
   {"front" => "见", "back" => "see"},
   {"front" => "元", "back" => "beginning"},
-  {"front" => "页", "back" => "page"},
+  {"front" => "页", "back" => "page / (head)"},
   {"front" => "顽", "back" => "stubborn"},
   {"front" => "凡", "back" => "ordinary"},
   {"front" => "肌", "back" => "muscle"},
-  {"front" => "负", "back" => "defeated"},
+  {"front" => "负", "back" => "defeated (adj)"},
   {"front" => "万", "back" => "ten thousand"},
-  {"front" => "匀", "back" => "uniform"},
-  {"front" => "句", "back" => "sentence"},
+  {"front" => "匀", "back" => "uniform (adj)"},
+  {"front" => "句", "back" => "sentence (n)"},
   {"front" => "旬", "back" => "decameron"},
   {"front" => "勺", "back" => "ladle"},
   {"front" => "的", "back" => "bull's eye"},
@@ -137,25 +137,25 @@ cards = [
   #Lesson 5
   {"front" => "直", "back" => "straight"},
   {"front" => "置", "back" => "setup"},
-  {"front" => "俱", "back" => "tool"},
+  {"front" => "具", "back" => "tool"},
   {"front" => "真", "back" => "true"},
-  {"front" => "工", "back" => "work"},
-  {"front" => "左", "back" => "left"},
-  {"front" => "右", "back" => "right"},
+  {"front" => "工", "back" => "work (n)"},
+  {"front" => "左", "back" => "left (n/adj)"},
+  {"front" => "右", "back" => "right (n/adj) "},
   {"front" => "有", "back" => "possess"},
-  {"front" => "贿", "back" => "bribe"},
+  {"front" => "贿", "back" => "bribe (n) "},
   {"front" => "贡", "back" => "tribute"},
   {"front" => "项", "back" => "item"},
-  {"front" => "刀", "back" => "sword"},
+  {"front" => "刀", "back" => "sword (dagger / saber)"},
   {"front" => "仞", "back" => "blade"},
-  {"front" => "切", "back" => "cut"},
+  {"front" => "切", "back" => "cut (v) "},
   {"front" => "召", "back" => "summon"},
   {"front" => "昭", "back" => "evident"},
-  {"front" => "则", "back" => "rule"},
+  {"front" => "则", "back" => "rule (n) "},
   {"front" => "副", "back" => "vice-"},
-  {"front" => "丁", "back" => "fourth"},
-  {"front" => "叮", "back" => "sting"},
-  {"front" => "可", "back" => "can"},
+  {"front" => "丁", "back" => "fourth (nail / spike)"},
+  {"front" => "叮", "back" => "sting (v)"},
+  {"front" => "可", "back" => "can (ad.v)"},
   {"front" => "哥", "back" => "older brother"},
   {"front" => "顶", "back" => "crest"}
   ]
@@ -177,17 +177,17 @@ end
 
 
 
-forward_deck = Deck.where(:name => 'ACCS - Twers (hanzi to english)', :user_id => user.id)
-reverse_deck = Deck.where(:name => 'ACCS - Twers (english to hanzi)', :user_id => user.id)
+forward_deck = Deck.where(:name => 'ACCS - Twers (reading practice)', :user_id => user.id)
+reverse_deck = Deck.where(:name => 'ACCS - Twers (writing practice)', :user_id => user.id)
 if forward_deck.empty?
-  forward_deck = Deck.new(:name => 'ACCS - Twers (hanzi to english)', :lang => 'cn', :country=> 'cn', :shared => true)
+  forward_deck = Deck.new(:name => 'ACCS - Twers (reading practice)', :lang => 'cn', :country=> 'cn', :shared => true)
   forward_deck.user = user
   forward_deck.save!
 else
   forward_deck = forward_deck.first
 end
 if reverse_deck.empty?
-  reverse_deck = Deck.new(:name => 'ACCS - Twers (english to hanzi)', :lang => 'cn', :country=> 'cn', :shared => true)
+  reverse_deck = Deck.new(:name => 'ACCS - Twers (writing practice)', :lang => 'cn', :country=> 'cn', :shared => true)
   reverse_deck.user = user
   reverse_deck.save!
 else
@@ -221,14 +221,14 @@ cards = [
   {"front" => "白", "back" => "clear (bái)"},
   {"front" => "明白", "back" => "understand (míng bái)"},
   {"front" => "晶", "back" => "crystal (jīng)"},
-  {"front" => "但", "back" => "dawn (dàn)"},
+  {"front" => "但", "back" => "dawn (dàn)"},    #旦
   {"front" => "字", "back" => "word (zì)"},
   {"front" => "早", "back" => "early (zăo)"},
   {"front" => "百", "back" => "hundred (băi)"},
   {"front" => "千", "back" => "thousand (qiān)"},
   {"front" => "万", "back" => "ten thousand (wàn)"},
   {"front" => "亿", "back" => "hundred million (yì)"},
-  {"front" => "奴", "back" => "woman (nǚ rén)"},
+  {"front" => "奴", "back" => "woman (nǚ rén)"},        # add 人
   {"front" => "早安", "back" => "good morning (zăo ān)"},
   {"front" => "大人", "back" => "adult / big man (dà rén)"},
   {"front" => "太太", "back" => "Mrs (tài tài)"},

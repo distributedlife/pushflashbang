@@ -79,3 +79,4 @@ Feature: sessions
     Given there are cards due
     When I go to the deck session page
     Then I should see "Card Review"
+    

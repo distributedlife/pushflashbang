@@ -15,29 +15,22 @@ Feature: Graduated Response
     Then I should see "I was shaky but I got it"
     Then I should see "I knew the answer"
 
-  Scenario: green button indicator (1/4)
+  Scenario: new card green button indicator
     When I have reviewed a card with an interval of 0
     Then the "first" button is "positive"
     And the "second" button is "neutral"
     And the "third" button is "neutral"
     And the "fourth" button is "neutral"
 
-  Scenario: green button indicator (3/4)
-    When I have reviewed a card with an interval of 5
+  Scenario: existing card green button indicator
+    When I take 2 seconds to review a card with an interval that is not 0
     Then the "first" button is "neutral"
     And the "second" button is "neutral"
     And the "third" button is "positive"
     And the "fourth" button is "neutral"
 
-  Scenario: green button indicator (3/4)
-    When I have reviewed a card with an interval of 25
-    Then the "first" button is "neutral"
-    And the "second" button is "neutral"
-    And the "third" button is "positive"
-    And the "fourth" button is "neutral"
-
-  Scenario: green button indicator (4/4)
-    When I have reviewed a card with an interval of 120
+  Scenario: perfect card green button indicator
+    When I take 0 seconds to review a card with an interval that is not 0
     Then the "first" button is "neutral"
     And the "second" button is "neutral"
     And the "third" button is "neutral"
@@ -69,4 +62,5 @@ Feature: Graduated Response
     When I click on the "fourth" button
     Then I should be redirected to the deck session page
     And the card should be rescheduled
-    And the card interval should be increased
+    And the card interval should be increased by two
+    

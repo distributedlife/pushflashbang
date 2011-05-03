@@ -126,8 +126,8 @@ en:
       title: "Add Card"
       subtitle: "a flash card contains what you want to remember"
       labels:
-        front: "the question"
-        back: "the answer"
+        front: "target language"
+        back: "native language"
         save: "Add"
     edit:
       title: "Edit Card"

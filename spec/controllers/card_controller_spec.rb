@@ -241,11 +241,11 @@ describe CardController do
     end
 
     it 'should return the passed in review_start date' do
-      review_start = Time.now - 20
+      review_start = Time.now
       get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
 
       assigns[:card].should == @card
-      assigns[:review_start].should == review_start
+      assigns[:review_start].to_s.should == review_start.to_s
     end
 
     it 'should set review start to now if not supplied' do
@@ -254,6 +254,20 @@ describe CardController do
       assigns[:card].should == @card
       assigns[:review_start].should >= Time.now - 5
       assigns[:review_start].should <= Time.now
+    end
+
+    it 'should quick_response if the difference between review_start and reveal was less than 2 seconds' do
+      review_start = Time.now
+      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
+      assigns[:quick_response].should == true
+
+      review_start = Time.now - 2.00
+      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
+      assigns[:quick_response].should == true
+
+      review_start = Time.now - 5
+      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
+      assigns[:quick_response].should == false
     end
   end
 
@@ -271,6 +285,7 @@ describe CardController do
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
+      CardTiming.create(:seconds => 600)
     end
 
     it 'should redirect to deck session if answer is not in results' do
@@ -289,13 +304,6 @@ describe CardController do
         response.should be_redirect
         response.should redirect_to(learn_deck_path)
       end
-#      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'yes'
-#      response.should be_redirect
-#      response.should redirect_to(learn_deck_path)
-#
-#      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'no'
-#      response.should be_redirect
-#      response.should redirect_to(learn_deck_path)
     end
 
     it 'should reschedule the card for the next interval if it was correct' do
@@ -309,11 +317,31 @@ describe CardController do
       @scheduled_card.due.should <= stop_time + @scheduled_card.interval
 
       start_time = Time.now
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'shaky_good'
+      stop_time = Time.now
+
+      @scheduled_card.reload
+      @scheduled_card.interval.should == 25
+      @scheduled_card.due.should >= start_time + @scheduled_card.interval
+      @scheduled_card.due.should <= stop_time + @scheduled_card.interval
+    end
+
+    it 'should reschedule the card ahead an extra interval if the good response was recieved' do
+      start_time = Time.now
       post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good'
       stop_time = Time.now
 
       @scheduled_card.reload
       @scheduled_card.interval.should == 25
+      @scheduled_card.due.should >= start_time + @scheduled_card.interval
+      @scheduled_card.due.should <= stop_time + @scheduled_card.interval
+
+      start_time = Time.now
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good'
+      stop_time = Time.now
+
+      @scheduled_card.reload
+      @scheduled_card.interval.should == 600
       @scheduled_card.due.should >= start_time + @scheduled_card.interval
       @scheduled_card.due.should <= stop_time + @scheduled_card.interval
     end

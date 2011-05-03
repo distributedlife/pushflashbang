@@ -134,7 +134,6 @@ end
 Then /^the card should be rescheduled$/ do
   scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
   scheduled_card.due.should >= Time.now
-  scheduled_card.interval.should == 5
 end
 
 Then /^the card interval should be increased$/ do
@@ -258,4 +257,19 @@ Then /^the "([^"]*)" button is "([^"]*)"$/ do |button_number, style|
   elsif button_number == "fourth"
     find_link("I knew the answer")[:class].should == style
   end
+end
+
+
+When /^I take (\d+) seconds to review a card with an interval that is not (\d+)$/ do |seconds, interval|
+  Given %{there are cards due}
+  And %{the card interval is #{interval.to_i + 1}}
+  And %{I go to the deck session page}
+  sleep seconds.to_i
+  And %{I click on "Reveal"}
+end
+
+
+Then /^the card interval should be increased by two$/ do
+  scheduled_card = UserCardSchedule.where(:card_id => @first_due_card.id, :user_id => @current_user[0].id).first
+  scheduled_card.interval.should == 25
 end
