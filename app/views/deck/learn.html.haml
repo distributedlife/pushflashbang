@@ -92,7 +92,49 @@
   $('html').keypress(function(event) {
     if (event.which == '32') 
     {
-      $('#do_reveal').click();
+      if ($('#do_reveal').is(":visible"))
+      {
+        $('#do_reveal').click();
+      }
+      else
+      {
+        //click on button with highlight
+        if ($('#do_dont_know').attr('class') == 'positive')
+        {
+          $('#do_dont_know').click();
+        }
+        else if ($('#do_partial_answer').attr('class') == 'positive')
+        {
+          $('#do_partial_answer').click();
+        }
+        else if ($('#do_shaky_good').attr('class') == 'positive')
+        {
+          $('#do_shaky_good').click();
+        }
+        else if ($('#do_good').attr('class') == 'positive')
+        {
+          $('#do_good').click();
+        }
+      }
+    }
+    if ($('#do_reveal').is(":hidden"))
+    {
+      if (event.which == '49')
+      {
+        $('#do_dont_know').click();
+      }
+      if (event.which == '50')
+      {
+        $('#do_partial_answer').click();
+      }
+      if (event.which == '51')
+      {
+        $('#do_shaky_good').click();
+      }
+      if (event.which == '52')
+      {
+        $('#do_good').click();
+      }
     }
   });
 
