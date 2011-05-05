@@ -58,7 +58,7 @@ class DeckController < ApplicationController
         redirect_to user_index_path
       end
 
-      @cards = Card.where(:deck_id => params[:id])
+      @cards = Card.order(:created_at => :asc).where(:deck_id => params[:id])
     rescue
       flash[:failure] = "Could not find deck."
       redirect_to user_index_path
@@ -71,6 +71,16 @@ class DeckController < ApplicationController
 
       if deck.user == current_user
         Deck.delete(params[:id])
+
+        Card.where(:deck_id => params[:id]).each do |card|
+          UserCardSchedule.where(:card_id => card.id).each do |card_schedule|
+            card_schedule.delete
+          end
+
+          card.delete
+        end
+
+
         flash[:success] = "Deck successfully deleted"
       else
         flash[:failure] = "Unable to delete deck as it does not belong to the user that is currently logged in on this machine."
@@ -97,7 +107,6 @@ class DeckController < ApplicationController
       #get next scheduled card for user
       @scheduled_card = UserCardSchedule::get_next_due_for_user_for_deck(current_user.id, params[:id])
       @due_count = UserCardSchedule::get_due_count_for_user_for_deck(current_user.id, params[:id])
-#      @due_count = UserCardSchedule::get_due_count_for_user(current_user.id)
       @review_start = Time.now
       @new_card = false
 

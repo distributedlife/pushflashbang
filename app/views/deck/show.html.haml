@@ -1,15 +1,13 @@
 - if @deck.shared
-  //=render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "language code: #{@deck.lang}, country code: #{@deck.country} (shared)"}
   =render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "(shared)"}
 - else
-  //=render :partial => '/header', :locals => {:title => @deck.name, :subtitle => "language code: #{@deck.lang}, country code: #{@deck.country}"}
   =render :partial => '/header', :locals => {:title => @deck.name, :subtitle => ""}
 %nav{:class => ["right"], :style => "width: 25%"}
   - unless @deck.description.nil? || @deck.description == ""
     .panel
       %p.description= @deck.description
   .panel
-    %p.description= link_to "Review", learn_deck_path(@deck.id)
+    %p.description= link_to "Review", learn_deck_path(@deck.id), :class => "focus"
     .pad_from_top
     - if @deck.user_id == current_user.id
       %p.description= link_to "Add Card", new_deck_card_path(@deck.id)
@@ -28,5 +26,55 @@
   - else
     - @cards.each do |card|
       .div{:class => "card_panel left", :style => ""}
-        %p.centre= link_to card.front, deck_card_path(card.deck_id, card.id)
+        - if @deck.user_id == current_user.id
+          %p{:class => "tiny_option text_right"}
+            = link_to "edit", edit_deck_card_path(card.deck_id, card.id)
+        %p.centre= link_to card.front, "#?w=750", :rel => "popup_name_#{card.id}", :class => "poplight"
+      #popup_name{:id => "#{card.id}", :class => "popup_block"}
+        %p.giant= card.front
+        .section_break
+        .pad_from_top
+        %p.giant= card.back
   .pad
+
+
+:javascript
+  $(document).ready(function() {
+    $('a.poplight[href^=#]').click(function() {
+      var popID = $(this).attr('rel'); //Get Popup Name
+      var popURL = $(this).attr('href'); //Get Popup href to define size
+
+      //Pull Query & Variables from href URL
+      var query= popURL.split('?');
+      var dim= query[1].split('&');
+      var popWidth = dim[0].split('=')[1]; //Gets the first query string value
+
+      //Fade in the Popup and add close button
+      $('#' + popID).fadeIn().css({ 'width': Number( popWidth ) }); 
+      //.prepend('<a href="#" class="close"><img src="close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
+
+      //Define margin for center alignment (vertical   horizontal) - we add 80px to the height/width to accomodate for the padding  and border width defined in the css
+      var popMargTop = ($('#' + popID).height() + 80) / 2;
+      var popMargLeft = ($('#' + popID).width() + 80) / 2;
+
+      //Apply Margin to Popup
+      $('#' + popID).css({
+          'margin-top' : -popMargTop,
+          'margin-left' : -popMargLeft
+      });
+
+      //Fade in Background
+      $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
+      $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer - .css({'filter' : 'alpha(opacity=80)'}) is used to fix the IE Bug on fading transparencies
+
+      return false;
+    });
+  });
+
+  //Close Popups and Fade Layer
+  $('.popup_block, #fade').live('click', function() {
+      $('#fade , .popup_block').fadeOut(function() {
+          $('#fade').remove();  
+      });
+      return false;
+  });

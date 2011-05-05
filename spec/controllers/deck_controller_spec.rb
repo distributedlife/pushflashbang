@@ -63,8 +63,6 @@ describe DeckController do
       post :create, :deck => {}
 
       assigns[:deck].errors[:name].should == ["can't be blank"]
-#      assigns[:deck].errors[:lang].should == ["can't be blank"]
-#      assigns[:deck].errors[:country].should == ["can't be blank"]
     end
   end
 
@@ -212,10 +210,23 @@ describe DeckController do
       deck.user = @user
       deck.save!
 
+      card1 = Card.new(:front => "vvv", :back => "dgfsdfsd")
+      card1.deck = deck
+      card1.save!
+
+      card2 = Card.new(:front => "aaa", :back => "sdfgsdfgsdfg")
+      card2.deck = deck
+      card2.save!
+
+      card1.front = 'zzz'
+      card1.save!
+
       get :show, :id => deck.id
 
       assigns[:deck].should == deck
-      assigns[:cards].should == Card.where(:deck_id => deck.id)
+      assigns[:cards].should == Card.order(:created_at => :asc).where(:deck_id => deck.id)
+      assigns[:cards][0].front.should == "zzz"
+      assigns[:cards][1].front.should == "aaa"
     end
 
     it 'should redirect to user home if the id does not belong to the user' do
@@ -241,7 +252,7 @@ describe DeckController do
       get :show, :id => deck.id
 
       assigns[:deck].should == deck
-      assigns[:cards].should == Card.where(:deck_id => deck.id)
+      assigns[:cards].should == Card.order(:created_at => :asc).where(:deck_id => deck.id)
     end
 
     it 'should redirect to user home if the id does not exist' do
@@ -289,6 +300,32 @@ describe DeckController do
 
       response.should be_redirect
       response.should redirect_to(user_index_path)
+    end
+
+    it 'should delete all cards and card schedule' do
+      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
+      deck.user = @user
+      deck.save!
+
+      card1 = Card.new(:front => "vvv", :back => "dgfsdfsd")
+      card1.deck = deck
+      card1.save!
+
+      card2 = Card.new(:front => "aaa", :back => "sdfgsdfgsdfg")
+      card2.deck = deck
+      card2.save!
+
+      card_schedule = UserCardSchedule.new(:card_id => card1.id, :user_id => @user.id, :due => Time.now, :interval => 0)
+      card_schedule.save!
+
+
+      delete :destroy, :id => deck.id
+
+      response.should be_redirect
+      response.should redirect_to(user_index_path)
+      Deck.count.should == 0
+      Card.count.should == 0
+      UserCardSchedule.count.should == 0
     end
   end
 
