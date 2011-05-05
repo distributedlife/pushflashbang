@@ -58,7 +58,7 @@ class DeckController < ApplicationController
         redirect_to user_index_path
       end
 
-      @cards = Card.order(:created_at => :asc).where(:deck_id => params[:id])
+      @cards = Card.order(:created_at).where(:deck_id => params[:id])
     rescue
       flash[:failure] = "Could not find deck."
       redirect_to user_index_path
