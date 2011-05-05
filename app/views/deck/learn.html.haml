@@ -1,3 +1,6 @@
+= hidden_field_tag "start_time", 0
+= hidden_field_tag "duration", 0
+
 -if @new_card
   =render :partial => '/header', :locals => {:title => t('deck.learn.title.new'), :subtitle => t('deck.learn.subtitle', :count => @due_count)}
 -else
@@ -21,17 +24,107 @@
 - else
   %section{:class => ["panel"]}
     %p.giant= @card.front
+    - unless @card.back == ""
+      #back_of_card{:class => "hidden"}
+        .section_break
+        %p.giant= @card.back
 .pad
 .pad_from_top
 - unless @card.nil?
-  %section{:class=> "panel"}
-    .button{:class => "centre big_button"}
-      = link_to "Reveal", reveal_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :review_start => @review_start), :class => 'positive'
-    .pad_from_top
+  #reveal_button
+    .panel
+      .button{:class => "centre big_button"}
+        = link_to "Reveal", '#', :class => 'positive', :id => "do_reveal"
+      .pad_from_top
+  #review_buttons{:class => "hidden"}
+    .panel
+      .button{:class => "centre large_button"}
+        %ul
+          %li.inline
+            - if @scheduled_card.interval == 0
+              = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'positive', :method => :post, :id => "do_dont_know"
+            - else
+              = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral', :method => :post, :id => "do_dont_know"
+            :javascript
+              $('#do_dont_know').click(function(event) {
+                var duration = document.getElementById("duration") ;
+
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know', :review_start => @review_start.to_s)}";
+                link = link + "&duration=" + duration.value;
+
+                $('#do_dont_know').attr('href', link);
+              });
+          %li.inline
+            = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral', :method => :post, :id => "do_partial_answer"
+            :javascript
+              $('#do_partial_answer').click(function(event) {
+                var duration = document.getElementById("duration") ;
+
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'partial_correct', :review_start => @review_start.to_s)}";
+                link = link + "&duration=" + duration.value;
+
+                $('#do_partial_answer').attr('href', link);
+              });
+          %li.inline
+            = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post, :id => "do_shaky_good"
+            :javascript
+              $('#do_shaky_good').click(function(event) {
+                var duration = document.getElementById("duration") ;
+
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s)}";
+                link = link + "&duration=" + duration.value;
+
+                $('#do_shaky_good').attr('href', link);
+              });
+          %li.inline
+            = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post, :id => "do_good"
+            :javascript
+              $('#do_good').click(function(event) {
+                var duration = document.getElementById("duration") ;
+
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s)}";
+                link = link + "&duration=" + duration.value;
+
+                $('#do_good').attr('href', link);
+              });
+    .pad
 :javascript
   $('html').keypress(function(event) {
     if (event.which == '32') 
     {
-        document.location = $(".big_button a").attr('href');
+      $('#do_reveal').click();
     }
+  });
+
+  //start timer when document is ready
+  $(document).ready(function() {
+    var start_time = document.getElementById("start_time") ;
+    start_time.value = new Date ().getTime() ;
+  });
+
+  //perform the reveal action
+  $('#do_reveal').click(function(event) {
+    var end = new Date();
+    var start_time = document.getElementById("start_time") ;
+    var duration = document.getElementById("duration") ;
+
+    duration.value = end - start_time.value;
+
+    //don't highlight buttons based on time if first button is positive (i.e. first reveal)
+    if ($('#do_dont_know').attr('class') != 'positive')
+    {
+      if (duration.value <= 2000)
+      {
+        $('#do_good').attr('class', 'positive')
+      }
+      else
+      {
+        $('#do_shaky_good').attr('class', 'positive')
+      }
+    }
+
+
+    $("#back_of_card").show();
+    $("#reveal_button").hide();
+    $("#review_buttons").show();
   });

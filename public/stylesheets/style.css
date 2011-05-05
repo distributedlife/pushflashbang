@@ -105,6 +105,9 @@ legend.label {
   .definition p {
     font-size: 0.6em !important; }
 
+.hidden {
+  display: none; }
+
 .pending {
   background-color: #ffffdd; }
 

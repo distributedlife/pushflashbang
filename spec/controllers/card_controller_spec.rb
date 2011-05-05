@@ -220,57 +220,6 @@ describe CardController do
     end
   end
 
-  context "'GET' reveal" do
-    it_should_behave_like "all operations"
-    it_should_behave_like "all operations that require a card"
-
-    before(:each) do
-      @card = Card.new(:front => 'front')
-      @card.deck = @deck
-      @card.save!
-    end
-
-    it 'should return the card for the given id' do
-      review_start = Time.now - 20
-      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
-
-      assigns[:card].should == @card
-      assigns[:reveal].should >= Time.now - 5
-      assigns[:reveal].should <= Time.now
-      assigns[:card_schedule].should == UserCardSchedule.where(:card_id => @card.id, :user_id => @user.id).first
-    end
-
-    it 'should return the passed in review_start date' do
-      review_start = Time.now
-      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
-
-      assigns[:card].should == @card
-      assigns[:review_start].to_s.should == review_start.to_s
-    end
-
-    it 'should set review start to now if not supplied' do
-      get :reveal, :deck_id => @deck.id, :id => @card.id
-
-      assigns[:card].should == @card
-      assigns[:review_start].should >= Time.now - 5
-      assigns[:review_start].should <= Time.now
-    end
-
-    it 'should quick_response if the difference between review_start and reveal was less than 2 seconds' do
-      review_start = Time.now
-      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
-      assigns[:quick_response].should == true
-
-      review_start = Time.now - 1.00
-      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
-      assigns[:quick_response].should == true
-
-      review_start = Time.now - 5
-      get :reveal, :deck_id => @deck.id, :id => @card.id, :review_start => review_start
-      assigns[:quick_response].should == false
-    end
-  end
-
   context "'POST' review" do
     it_should_behave_like "all operations"
     it_should_behave_like "all operations that require a card"
@@ -373,10 +322,10 @@ describe CardController do
       start_interval = @scheduled_card.interval
       card_due_date = @scheduled_card.due
       review_start = Time.now - 20
-      reveal_date = Time.now - 10
+      duration_in_ms = 2000
 
       start_time = Time.now
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good', :review_start => review_start, :reveal => reveal_date
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good', :review_start => review_start.to_s, :duration => duration_in_ms
       stop_time = Time.now
 
       user_card_review = UserCardReview.first
@@ -384,8 +333,8 @@ describe CardController do
       user_card_review.card_id.should == @card.id
       user_card_review.user_id.should == @user.id
       user_card_review.due.should == card_due_date
-      user_card_review.review_start.should == review_start
-      user_card_review.reveal.utc.should == reveal_date.utc
+      user_card_review.review_start.utc.to_s.should == review_start.utc.to_s
+      user_card_review.reveal.utc.to_s.should == (review_start + (duration_in_ms / 1000)).to_s
       user_card_review.result_recorded.should >= start_time
       user_card_review.result_recorded.should <= stop_time
       user_card_review.result_success.should == "good"
@@ -394,17 +343,17 @@ describe CardController do
 
 
       UserCardReview.delete_all
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'didnt_know', :review_start => review_start, :reveal => reveal_date
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'didnt_know'#, :review_start => review_start, :reveal => reveal_date
       user_card_review = UserCardReview.first
       user_card_review.result_success.should == "didnt_know"
 
       UserCardReview.delete_all
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'partial_correct', :review_start => review_start, :reveal => reveal_date
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'partial_correct'#, :review_start => review_start, :reveal => reveal_date
       user_card_review = UserCardReview.first
       user_card_review.result_success.should == "partial_correct"
 
       UserCardReview.delete_all
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'shaky_good', :review_start => review_start, :reveal => reveal_date
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'shaky_good'#, :review_start => review_start, :reveal => reveal_date
       user_card_review = UserCardReview.first
       user_card_review.result_success.should == "shaky_good"
     end

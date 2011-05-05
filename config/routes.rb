@@ -18,7 +18,6 @@ PushFlashBang::Application.routes.draw do
     
     resources :card do
       member do
-        get 'reveal'
         post 'review'
       end
     end

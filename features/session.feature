@@ -63,6 +63,7 @@ Feature: sessions
     And the card should be rescheduled
     And the card interval should be increased
 
+  @javascript
   Scenario: review card as a failure
     Given I have reviewed a card
     When I click on the "first" button

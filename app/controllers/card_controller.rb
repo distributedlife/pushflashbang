@@ -78,40 +78,26 @@ class CardController < ApplicationController
     end
   end
 
-  def reveal
-    begin
-      is_deck_and_card_valid
-
-      @card = Card.find(params[:id])
-
-      if params[:review_start].nil?
-        @review_start = Time.now
-      else
-        @review_start = Time.parse(params[:review_start].to_s)
-      end
-
-
-      @reveal = Time.now
-      @quick_response = @reveal - @review_start <= 2.5
-      @card_schedule = UserCardSchedule.where(:card_id => params[:id], :user_id => current_user.id).first
-    rescue
-    end
-  end
-
   def review
     begin
       is_deck_and_card_valid
 
       answer = params[:answer]
 
-      params[:review_start] ||= Time.now
-      params[:reveal] ||= Time.now
+      if params[:review_start].nil?
+        params[:review_start] = Time.now
+      else
+        params[:review_start] = Time.parse(params[:review_start])
+      end
+
+      params[:duration] ||= 0
+      duration_in_seconds = params[:duration].to_i / 1000
 
       user_card_review = UserCardReview.new(
         :card_id => params[:id],
         :user_id => current_user.id,
         :review_start => params[:review_start],
-        :reveal => params[:reveal],
+        :reveal => params[:review_start] + duration_in_seconds,
         :result_recorded => Time.now,
         :result_success => answer
         )
