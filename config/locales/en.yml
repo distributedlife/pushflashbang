@@ -98,8 +98,7 @@ en:
       labels:
         name: "a name"
         description: "a brief description"
-        lang: "the language code"
-        country: "the country code"
+        pronunciation_side: "where the pronunciation is shown"
         save: "Save Changes"
         delete: "Delete Deck"
         delete_confirm: "Are you sure?"
@@ -121,13 +120,17 @@ en:
       country:
         title: "country code"
         description: ""
+      pronunciation:
+        title: "pronunciation side"
+        description: "The pronunciation side indicates on each card where the pronunciation information, if supplied, is shown. For speaking practice you would put it on the back of the card. This helps you know whether you were pronuncing the words correctly."
   card:
     create:
       title: "Add Card"
       subtitle: "a flash card contains what you want to remember"
       labels:
-        front: "target language"
-        back: "native language"
+        front: "the question"
+        back: "the answer"
+        pronunciation: "the pronunciation"
         save: "Add"
     edit:
       title: "Edit Card"
@@ -135,6 +138,7 @@ en:
       labels:
         front: "the question"
         back: "the answer"
+        pronunciation: "the pronunciation"
         save: "Save Changes"
         delete: "Delete Card"
         delete_confirm: "Are you sure?"
@@ -157,4 +161,7 @@ en:
       back:
         title: "answer"
         description: "The back of the card has the correct answer; you're trying to remember this using only the front"
+      pronunciation:
+        title: "pronunciation"
+        description: "The pronunciation key for this card. This is shown on the front or the back of the card depending on the deck settings. It is optional useful when how to pronounce the word is not expressed easily in the source lanuage i.e. mandarin"
 

@@ -2,24 +2,17 @@ require 'spec_helper'
 
 describe CardController do
   before(:each) do
-    @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
+    @user = User.make
     sign_in :user, @user
-    @deck = Deck.new(:name => "my deck", :lang => 'en', :country => 'us')
-    @deck.user = @user
-    @deck.save!
+
+    @deck = Deck.make(:user_id => @user.id)
   end
   
-  shared_examples_for "all operations" do
+  shared_examples_for "all card operations" do
     it 'should redirect to user home if the deck does not belong to the user' do
-      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
-
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = user2
-      deck.save!
-
-      card = Card.new(:front => 'front')
-      card.deck = deck
-      card.save!
+      user2 = User.make
+      deck = Deck.make(:user_id => user2.id)
+      card = Card.make(:deck_id => deck.id)
 
       get :show, :deck_id => deck.id, :id => card.id
 
@@ -28,15 +21,9 @@ describe CardController do
     end
     
     it 'should not redirect to user home if the deck does not belong to the user but is shared' do
-      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
-
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au', :shared => true)
-      deck.user = user2
-      deck.save!
-
-      card = Card.new(:front => 'front')
-      card.deck = deck
-      card.save!
+      user2 = User.make
+      deck = Deck.make(:user_id => user2.id, :shared => true)
+      card = Card.make(:deck_id => deck.id)
 
       get :show, :deck_id => deck.id, :id => card.id
 
@@ -44,9 +31,7 @@ describe CardController do
     end
 
     it 'should redirect to user home if the deck does not exist' do
-      card = Card.new(:front => 'front')
-      card.deck = @deck
-      card.save!
+      card = Card.make(:deck_id => @deck.id)
 
       get :show, :deck_id => 100, :id => card.id
       response.should be_redirect
@@ -54,11 +39,9 @@ describe CardController do
     end
   end
 
-  shared_examples_for "all operations that require a card" do
+  shared_examples_for "all card operations that require a card" do
     it 'should redirect to the show deck page if the card does not exist' do
-      card = Card.new(:front => 'front')
-      card.deck = @deck
-      card.save!
+      card = Card.make(:deck_id => @deck.id)
 
       get :show, :deck_id => @deck.id, :id => 100
       response.should be_redirect
@@ -66,13 +49,8 @@ describe CardController do
     end
     
     it 'should redirect to the show deck page if the card does not belong to the deck' do
-      deck2 = Deck.new(:name => "my deck", :lang => 'en', :country => 'us')
-      deck2.user = @user
-      deck2.save!
-
-      card = Card.new(:front => 'front')
-      card.deck = deck2
-      card.save!
+      deck2 = Deck.make(:user_id => @user.id)
+      card = Card.make(:deck_id => deck2.id)
 
       get :show, :deck_id => @deck.id, :id => card.id
       response.should be_redirect
@@ -81,7 +59,7 @@ describe CardController do
   end
 
   context "'GET' new" do
-    it_should_behave_like "all operations"
+    it_should_behave_like "all card operations"
 
     it 'should return an empty card' do
       get :new, :deck_id => @deck.id
@@ -93,7 +71,7 @@ describe CardController do
   end
 
   context "'POST' create" do
-    it_should_behave_like "all operations"
+    it_should_behave_like "all card operations"
 
     it 'should create a new card' do
       post :create, :deck_id => @deck.id, :card => {:front => "front", :back => "back", :deck_id => @deck.id}
@@ -125,13 +103,11 @@ describe CardController do
   end
 
   context "'GET' edit" do
-    it_should_behave_like "all operations"
-    it_should_behave_like "all operations that require a card"
+    it_should_behave_like "all card operations"
+    it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @card = Card.new(:front => 'front')
-      @card.deck = @deck
-      @card.save!
+      @card = Card.make(:deck_id => @deck.id)
     end
 
     it 'should return the card to be edited' do
@@ -142,13 +118,11 @@ describe CardController do
   end
 
   context "'PUT' update" do
-    it_should_behave_like "all operations"
-    it_should_behave_like "all operations that require a card"
+    it_should_behave_like "all card operations"
+    it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @card = Card.new(:front => 'front')
-      @card.deck = @deck
-      @card.save!
+      @card = Card.make(:deck_id => @deck.id, :front => 'front', :back => nil)
     end
 
     it 'should update the card' do
@@ -180,13 +154,11 @@ describe CardController do
   end
 
   context "'DELETE' destroy" do
-    it_should_behave_like "all operations"
-    it_should_behave_like "all operations that require a card"
+    it_should_behave_like "all card operations"
+    it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @card = Card.new(:front => 'front')
-      @card.deck = @deck
-      @card.save!
+      @card = Card.make(:deck_id => @deck.id)
     end
 
     it 'should delete the card' do
@@ -201,16 +173,25 @@ describe CardController do
       response.should be_redirect
       response.should redirect_to(show_deck_path(@deck.id))
     end
+
+    it 'should delete the card schedule and not delete the revierws' do
+      UserCardSchedule.make(:card_id => @card.id, :user_id => @user.id)
+      UserCardReview.make(:card_id => @card.id, :user_id => @user.id)
+
+      delete :destroy, :deck_id => @deck.id, :id => @card.id
+
+      Card.count.should == 0
+      UserCardSchedule.count.should == 0
+      UserCardReview.count.should == 1
+    end
   end
 
   context "'GET' show" do
-    it_should_behave_like "all operations"
-    it_should_behave_like "all operations that require a card"
+    it_should_behave_like "all card operations"
+    it_should_behave_like "all card operations that require a card"
     
     before(:each) do
-      @card = Card.new(:front => 'front')
-      @card.deck = @deck
-      @card.save!
+      @card = Card.make(:deck_id => @deck.id)
     end
 
     it 'should return the card for the given id' do
@@ -221,15 +202,12 @@ describe CardController do
   end
 
   context "'POST' review" do
-    it_should_behave_like "all operations"
-    it_should_behave_like "all operations that require a card"
+    it_should_behave_like "all card operations"
+    it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @card = Card.new(:front => 'front')
-      @card.deck = @deck
-      @card.save!
-
-      @scheduled_card = UserCardSchedule.create(:card_id => @card.id, :user_id => @user.id, :due => 1.day.ago, :interval => 0)
+      @card = Card.make(:deck_id => @deck.id)
+      @scheduled_card = UserCardSchedule.make(:due, :card_id => @card.id, :user_id => @user.id)
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -343,17 +321,17 @@ describe CardController do
 
 
       UserCardReview.delete_all
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'didnt_know'#, :review_start => review_start, :reveal => reveal_date
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'didnt_know'
       user_card_review = UserCardReview.first
       user_card_review.result_success.should == "didnt_know"
 
       UserCardReview.delete_all
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'partial_correct'#, :review_start => review_start, :reveal => reveal_date
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'partial_correct'
       user_card_review = UserCardReview.first
       user_card_review.result_success.should == "partial_correct"
 
       UserCardReview.delete_all
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'shaky_good'#, :review_start => review_start, :reveal => reveal_date
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'shaky_good'
       user_card_review = UserCardReview.first
       user_card_review.result_success.should == "shaky_good"
     end

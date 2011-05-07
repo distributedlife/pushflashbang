@@ -7,5 +7,10 @@
   - unless @card.back == ""
     .section_break
     %p.giant= @card.back
+  - unless @card.pronunciation == ""
+    .section_break
+    .pad_from_top
+    %p.centre pronunciation
+    %p.giant= @card.pronunciation
   .pad
 

@@ -18,12 +18,4 @@ module EditDeckPage
   def description= value
     @session.fill_in('deck_description', :with => value)
   end
-
-#  def lang= value
-#    @session.fill_in('deck_lang', :with => value)
-#  end
-
-#  def country= value
-#    @session.fill_in('deck_country', :with => value)
-#  end
 end

@@ -1,62 +1,82 @@
 require 'spec_helper'
 
 describe DeckController do
-  context '"GET" create' do
+  before(:each) do
+    @user = User.make
+    sign_in :user, @user
+  end
+
+  shared_examples_for "all deck operations" do
     it 'should redirect to the login page if user is not logged in' do
-      get :create
+      sign_out @user
+
+      deck = Deck.make(:user_id => @user.id)
+
+      get :show, :id => deck.id
       response.should be_redirect
       response.should redirect_to(new_user_session_path)
 
-      user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
-      sign_in :user, user
-      get :create
+      sign_in :user, @user
+      get :show, :id => deck.id
       response.should be_success
     end
   end
+  
+  shared_examples_for "all deck operations that require a deck" do
+
+    it 'should redirect to user home if the deck does not belong to the user' do
+      user2 = User.make
+      deck = Deck.make(:user_id => user2.id)
+
+      get :show, :id => deck.id
+
+      response.should be_redirect
+      response.should redirect_to(user_index_path)
+    end
+
+    it 'should not redirect to user home if the deck does not belong to the user but is shared' do
+      user2 = User.make
+      deck = Deck.make(:user_id => user2.id, :shared => true)
+
+      get :show, :id => deck.id
+
+      response.should_not be_redirect
+    end
+
+    it 'should redirect to user home if the deck does not exist' do
+      get :show, :id => 100
+
+      response.should be_redirect
+      response.should redirect_to(user_index_path)
+    end
+  end
+
+  context '"GET" create' do
+    it_should_behave_like "all deck operations"
+  end
 
   context '"POST" create' do
-    before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
-      sign_in :user, @user
-    end
-
-    it 'should redirect to the login page if user is not logged in' do
-      sign_out @user
-      get :create
-      response.should be_redirect
-      response.should redirect_to(new_user_session_path)
-
-      sign_in :user, @user
-      get :create
-      response.should be_success
-    end
+    it_should_behave_like "all deck operations"
 
     it 'should return a newly created object' do
-      post :create, :deck => {:name => "My new deck", :lang => "en", :country => "au"}
+      post :create, :deck => {:name => "My new deck"}
 
       assigns[:deck].name.should == "My new deck"
-      assigns[:deck].lang.should == "en"
-      assigns[:deck].country.should == "au"
       assigns[:deck].user.should == @user
+      assigns[:deck].pronunciation_side.should == 'front'
     end
 
     it 'should redirect to the deck page' do
-      post :create, :deck => {:name => "My new deck", :lang => "en", :country => "au"}
+      post :create, :deck => {:name => "My new deck"}
 
       response.should be_redirect
       response.should redirect_to(show_deck_path(Deck.last.id))
     end
 
     it 'should have flash message indicating successful deck creation' do
-      post :create, :deck => {:name => "My new deck", :lang => "en", :country => "au"}
+      post :create, :deck => {:name => "My new deck"}
 
       flash[:info].should ~ /^Deck successfully created!/
-    end
-
-    it 'should have an undo text to remove the deck' do
-      post :create, :deck => {:name => "My new deck", :lang => "en", :country => "au"}
-      
-      flash[:info].should ~ /Click here to undo./
     end
 
     it 'should require all mandatory fields' do
@@ -67,138 +87,66 @@ describe DeckController do
   end
 
   context '"GET" edit' do
-    before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
-      sign_in :user, @user
-    end
+    it_should_behave_like "all deck operations that require a deck"
 
     it 'should return the deck for the given id' do
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+      deck = Deck.make(:user_id => @user.id)
 
       get :edit, :id => deck.id
 
       assigns[:deck].should == deck
     end
-
-    it 'should redirect to user home if the id does not belong to the user' do
-      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
-
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = user2
-      deck.save!
-
-      get :edit, :id => deck.id
-
-      response.should be_redirect
-      response.should redirect_to(user_index_path)
-    end
-
-    it 'should redirect to user home if the id does not exist' do
-      get :edit, :id => 1
-
-      response.should be_redirect
-      response.should redirect_to(user_index_path)
-    end
   end
 
   context '"PUT" update' do
-    before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
-      sign_in :user, @user
-    end
+    it_should_behave_like "all deck operations that require a deck"
 
     it 'should update the deck for the given id' do
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+      deck = Deck.make(:user_id => @user.id)
 
-      put :update, :id => deck.id, :deck => {:id => deck.id, :name => "edited name", :description => 'edited description', :lang => 'cn', :country => 'es'}
+      put :update, :id => deck.id, :deck => {:id => deck.id, :name => "edited name", :description => 'edited description'}
 
       deck.reload
       deck.name.should == "edited name"
       deck.description.should == "edited description"
-      deck.lang.should == "cn"
-      deck.country.should == "es"
 
       response.should redirect_to(show_deck_path(deck.id))
     end
 
-    it 'should redirect to user home if the id does not belong to the user' do
-      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
-
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = user2
-      deck.save!
-
-      put :update, :id => deck.id, :deck => {:name => "edited name", :description => 'edited description', :lang => 'cn', :country => 'es'}
-
-      response.should be_redirect
-      response.should redirect_to(user_index_path)
-      deck.reload
-      deck.name.should == "my deck"
-      deck.description.should == nil
-      deck.lang.should == "en"
-      deck.country.should == "au"
-    end
-
-    it 'should redirect to user home if the id does not exist' do
-      put :update, :id => 1, :deck => {:name => "edited name", :description => 'edited description', :lang => 'cn', :country => 'es'}
-
-      response.should be_redirect
-      response.should redirect_to(user_index_path)
-    end
-
     it 'should not update the user attribute' do
-      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
+      user2 = User.make
 
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+      deck = Deck.make(:user_id => @user.id)
 
-      put :update, :id => deck.id, :deck => {:user => user2, :name => "edited name", :description => 'edited description', :lang => 'cn', :country => 'es'}
+      put :update, :id => deck.id, :deck => {:user => user2, :name => "edited name", :description => 'edited description'}
 
       response.should be_redirect
       deck.reload
       deck.name.should == "edited name"
       deck.description.should == "edited description"
-      deck.lang.should == "cn"
-      deck.country.should == "es"
       deck.user.should == @user
     end
 
     it 'should not update if the deck is made invalid' do
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+      deck = Deck.make(:user_id => @user.id, :name => 'my deck', :description => nil)
 
-      put :update, :id => deck.id, :deck => {:id => deck.id, :name => "", :description => 'edited description', :lang => 'cn', :country => 'es'}
+      put :update, :id => deck.id, :deck => {:id => deck.id, :name => "", :description => 'edited description'}
 
       deck.reload
       deck.name.should == "my deck"
       deck.description.should == nil
-      deck.lang.should == "en"
-      deck.country.should == "au"
 
       assigns[:deck].name.should == ""
       assigns[:deck].description.should == "edited description"
-      assigns[:deck].lang.should == "cn"
-      assigns[:deck].country.should == "es"
       assigns[:deck].user.should == @user
     end
   end
 
   context '"GET" show' do
-    before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
-      sign_in :user, @user
-    end
-    
+    it_should_behave_like "all deck operations that require a deck"
+
     it 'should return the deck for the given id' do
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+      deck = Deck.make(:user_id => @user.id)
 
       get :show, :id => deck.id
 
@@ -206,17 +154,10 @@ describe DeckController do
     end
 
     it 'should return the cards for the given deck' do
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+      deck = Deck.make(:user_id => @user.id)
 
-      card1 = Card.new(:front => "vvv", :back => "dgfsdfsd")
-      card1.deck = deck
-      card1.save!
-
-      card2 = Card.new(:front => "aaa", :back => "sdfgsdfgsdfg")
-      card2.deck = deck
-      card2.save!
+      card1 = Card.make(:deck_id => deck.id, :front => 'vvv')
+      Card.make(:deck_id => deck.id, :front => 'aaa')
 
       card1.front = 'zzz'
       card1.save!
@@ -224,55 +165,28 @@ describe DeckController do
       get :show, :id => deck.id
 
       assigns[:deck].should == deck
-      assigns[:cards].should == Card.order(:created_at => :asc).where(:deck_id => deck.id)
+      assigns[:cards].should == Card.order(:created_at).where(:deck_id => deck.id)
       assigns[:cards][0].front.should == "zzz"
       assigns[:cards][1].front.should == "aaa"
     end
 
-    it 'should redirect to user home if the id does not belong to the user' do
-      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
-
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = user2
-      deck.save!
-
-      get :show, :id => deck.id
-
-      response.should be_redirect
-      response.should redirect_to(user_index_path)
-    end
-
     it 'should return a shared deck beloning to another user' do
-      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
+      user2 = User.make
 
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au', :shared => true)
-      deck.user = user2
-      deck.save!
+      deck = Deck.make(:user_id => user2.id, :shared => true)
 
       get :show, :id => deck.id
 
       assigns[:deck].should == deck
-      assigns[:cards].should == Card.order(:created_at => :asc).where(:deck_id => deck.id)
-    end
-
-    it 'should redirect to user home if the id does not exist' do
-      get :show, :id => 1
-
-      response.should be_redirect
-      response.should redirect_to(user_index_path)
+      assigns[:cards].should == Card.order(:created_at).where(:deck_id => deck.id)
     end
   end
 
   context '"DELETE" destroy' do
-    before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
-      sign_in :user, @user
-    end
+    it_should_behave_like "all deck operations that require a deck"
 
     it 'should delete the deck for the given id' do
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+      deck = Deck.make(:user_id => @user.id)
 
       delete :destroy, :id => deck.id
 
@@ -282,11 +196,9 @@ describe DeckController do
     end
 
     it 'should not delete the deck if the id does not belong to the user' do
-      user2 = User.create(:email => 'testing2@testing.com', :password => 'password', :confirm_password => 'password')
+      user2 = User.make
 
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = user2
-      deck.save!
+      deck = Deck.make(:user_id => user2.id)
 
       delete :destroy, :id => deck.id
 
@@ -302,22 +214,15 @@ describe DeckController do
       response.should redirect_to(user_index_path)
     end
 
-    it 'should delete all cards and card schedule' do
-      deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+    it 'should delete all cards and card schedule and not delete the reviews' do
+      deck = Deck.make(:user_id => @user.id)
 
-      card1 = Card.new(:front => "vvv", :back => "dgfsdfsd")
-      card1.deck = deck
-      card1.save!
-
-      card2 = Card.new(:front => "aaa", :back => "sdfgsdfgsdfg")
-      card2.deck = deck
-      card2.save!
-
-      card_schedule = UserCardSchedule.new(:card_id => card1.id, :user_id => @user.id, :due => Time.now, :interval => 0)
-      card_schedule.save!
-
+      card1 = Card.make(:deck_id => deck.id)
+      card2 = Card.make(:deck_id => deck.id)
+      UserCardSchedule.make(:card_id => card1.id, :user_id => @user.id)
+      UserCardSchedule.make(:card_id => card2.id, :user_id => @user.id)
+      UserCardReview.make(:card_id => card1.id, :user_id => @user.id)
+      UserCardReview.make(:card_id => card2.id, :user_id => @user.id)
 
       delete :destroy, :id => deck.id
 
@@ -326,29 +231,19 @@ describe DeckController do
       Deck.count.should == 0
       Card.count.should == 0
       UserCardSchedule.count.should == 0
+      UserCardReview.count.should == 2
     end
   end
 
   context "'GET' learn" do
+    it_should_behave_like "all deck operations that require a deck"
+
     before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
-      sign_in :user, @user
+      @deck = Deck.make(:user_id => @user.id)
 
-      @deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      @deck.user = @user
-      @deck.save!
-
-      @card1 = Card.new(:front => 'first card', :back => 'back of first')
-      @card1.deck = @deck
-      @card1.save!
-
-      @card2 = Card.new(:front => 'second card', :back => 'back of second')
-      @card2.deck = @deck
-      @card2.save!
-
-      @card3 = Card.new(:front => 'third card', :back => 'back of third')
-      @card3.deck = @deck
-      @card3.save!
+      @card1 = Card.make(:deck_id => @deck.id)
+      @card2 = Card.make(:deck_id => @deck.id)
+      @card3 = Card.make(:deck_id => @deck.id)
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -389,9 +284,9 @@ describe DeckController do
 
     context "user has cards due" do
       it 'should return the first card due' do
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago, :interval => 5)
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago, :interval => 5)
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago, :interval => 5)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago)
 
         get :learn, :id => @deck.id
 
@@ -406,9 +301,9 @@ describe DeckController do
       end
 
       it 'should return the due count' do
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago, :interval => 5)
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago, :interval => 5)
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago, :interval => 5)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago)
 
         get :learn, :id => @deck.id
 
@@ -418,8 +313,8 @@ describe DeckController do
 
     context "user has no cards due" do
       it 'should schedule the next card in the deck' do
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now, :interval => 5)
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 2.days.from_now, :interval => 5)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 2.days.from_now)
 
         get :learn, :id => @deck.id
 
@@ -434,9 +329,9 @@ describe DeckController do
       end
 
       it 'should return upcoming cards if there are no cards to schedule' do
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now, :interval => 5)
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card2.id, :due => 1.day.from_now, :interval => 5)
-        UserCardSchedule.create(:user_id => @user.id, :card_id => @card1.id, :due => 2.days.from_now, :interval => 5)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 1.day.from_now)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 2.days.from_now)
 
         get :learn, :id => @deck.id
 
@@ -458,13 +353,10 @@ describe DeckController do
   end
 
   context "'GET' toggle_share" do
-    before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
-      sign_in :user, @user
+    it_should_behave_like "all deck operations that require a deck"
 
-      @deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      @deck.user = @user
-      @deck.save!
+    before(:each) do
+      @deck = Deck.make(:user_id => @user.id)
     end
 
     it 'should redirect show deck' do

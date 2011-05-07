@@ -3,7 +3,7 @@ require 'spec_helper'
 describe UsersController do
   context 'index' do
     before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
+      @user = User.make
       sign_in :user, @user
     end
 
@@ -17,12 +17,8 @@ describe UsersController do
       get :index
       assigns[:decks].empty?.should == true
 
-      deck = Deck.new(:name => 'my first deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
-      deck = Deck.new(:name => 'a second deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
+      deck = Deck.make(:user_id => @user.id, :name => 'my first deck')
+      deck = Deck.make(:user_id => @user.id, :name => 'a second deck')
 
       get :index
       assigns[:decks].count.should == 2
@@ -31,15 +27,9 @@ describe UsersController do
     end
 
     it 'should return decks created by other users that are shared' do
-      deck = Deck.new(:name => 'my first deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
-      deck = Deck.new(:name => 'a second deck', :lang => "en", :country => 'au', :shared => true)
-      deck.user_id = @user.id + 1
-      deck.save!
-      deck = Deck.new(:name => 'a third deck', :lang => "en", :country => 'au', :shared => false)
-      deck.user_id = @user.id + 1
-      deck.save!
+      deck = Deck.make(:user_id => @user.id, :name => 'my first deck')
+      deck = Deck.make(:user_id => @user.id + 1, :name => 'a second deck', :shared => true)
+      deck = Deck.make(:user_id => @user.id + 1, :name => 'a third deck', :shared => false)
 
       get :index
       assigns[:decks].count.should == 2
@@ -48,13 +38,8 @@ describe UsersController do
     end
 
     it 'should return the card count for each deck' do
-      deck = Deck.new(:name => 'my first deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
-
-      card = Card.new(:front => "front", :back => "back")
-      card.deck = deck
-      card.save!
+      deck = Deck.make(:user_id => @user.id)
+      card = Card.make(:deck_id => deck.id)
 
       get :index
 
@@ -62,15 +47,9 @@ describe UsersController do
     end
 
     it 'should return the due card count for each deck' do
-      deck = Deck.new(:name => 'my first deck', :lang => "en", :country => 'au')
-      deck.user = @user
-      deck.save!
-
-      card = Card.new(:front => "front", :back => "back")
-      card.deck = deck
-      card.save!
-
-      scheduled_card = UserCardSchedule.create(:card_id => card.id, :user_id => @user.id, :due => 1.day.ago, :interval => 0)
+      deck = Deck.make(:user_id => @user.id)
+      card = Card.make(:deck_id => deck.id)
+      scheduled_card = UserCardSchedule.make(:due, :card_id => card.id, :user_id => @user.id)
 
       get :index
 

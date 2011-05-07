@@ -34,30 +34,22 @@ Then /^the first card in the deck is shown$/ do
 end
 
 Given /^there are cards due$/ do
-  card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
-  card.deck = @current_deck
-  card.save!
-  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 1.day.ago, :interval => 0)
+  card = Card.make(:deck_id => @current_deck.id)
+  UserCardSchedule.make(:due, :user_id => @current_user[0].id, :card_id => card.id)
 
-  card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
-  card.deck = @current_deck
-  card.save!
-  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.ago, :interval => 0)
+  card = Card.make(:deck_id => @current_deck.id)
+  UserCardSchedule.make(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.ago)
 
   @first_due_card = card
 end
 
 Given /^there are cards due later$/ do
-  card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
-  card.deck = @current_deck
-  card.save!
-  UserCardSchedule.create(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.from_now, :interval => 0)
+  card = Card.make(:deck_id => @current_deck.id)
+  UserCardSchedule.make(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.from_now)
 end
 
 Given /^there are unscheduled cards$/ do
-  card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
-  card.deck = @current_deck
-  card.save!
+  card = Card.make(:deck_id => @current_deck.id)
 end
 
 Then /^the first due card is shown$/ do

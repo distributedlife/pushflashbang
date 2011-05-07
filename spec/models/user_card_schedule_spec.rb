@@ -33,19 +33,11 @@ describe UserCardSchedule do
 
   context 'get_next_due_for_user' do
     before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
+      @user = User.make
+      @deck = Deck.make(:user_id => @user.id)
 
-      @deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      @deck.user = @user
-      @deck.save!
-
-      @card1 = Card.new(:front => 'first card', :back => 'back of first')
-      @card1.deck = @deck
-      @card1.save!
-
-      @card2 = Card.new(:front => 'second card', :back => 'back of second')
-      @card2.deck = @deck
-      @card2.save!
+      @card1 = Card.make(:deck_id => @deck.id);
+      @card2 = Card.make(:deck_id => @deck.id);
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -76,19 +68,11 @@ describe UserCardSchedule do
 
   context 'get_due_count_for_user' do
     before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
+      @user = User.make
+      @deck = Deck.make(:user_id => @user.id)
 
-      @deck = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      @deck.user = @user
-      @deck.save!
-
-      @card1 = Card.new(:front => 'first card', :back => 'back of first')
-      @card1.deck = @deck
-      @card1.save!
-
-      @card2 = Card.new(:front => 'second card', :back => 'back of second')
-      @card2.deck = @deck
-      @card2.save!
+      @card1 = Card.make(:deck_id => @deck.id);
+      @card2 = Card.make(:deck_id => @deck.id);
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -112,23 +96,13 @@ describe UserCardSchedule do
 
   context 'get_due_count_for_user_for_deck' do
     before(:each) do
-      @user = User.create(:email => 'testing@testing.com', :password => 'password', :confirm_password => 'password')
+      @user = User.make
 
-      @deck1 = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      @deck1.user = @user
-      @deck1.save!
+      @deck1 = Deck.make(:user_id => @user.id)
+      @deck2 = Deck.make(:user_id => @user.id)
 
-      @deck2 = Deck.new(:name => 'my deck', :lang => "en", :country => 'au')
-      @deck2.user = @user
-      @deck2.save!
-
-      @card1 = Card.new(:front => 'first card', :back => 'back of first')
-      @card1.deck = @deck1
-      @card1.save!
-
-      @card2 = Card.new(:front => 'second card', :back => 'back of second')
-      @card2.deck = @deck2
-      @card2.save!
+      @card1 = Card.make(:deck_id => @deck1.id);
+      @card2 = Card.make(:deck_id => @deck2.id);
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)

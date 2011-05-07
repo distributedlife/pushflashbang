@@ -53,7 +53,6 @@ describe CardTiming do
 
       CardTiming::get_next(120).seconds.should >= (600 - CardTiming::range)
       CardTiming::get_next(120).seconds.should <= (600 + CardTiming::range)
-      CardTiming::get_next(120).seconds.should_not == 600
     end
   end
 end

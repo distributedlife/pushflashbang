@@ -3,10 +3,8 @@ require 'spec_helper'
 describe Card do
   context 'to be valid' do
     before(:each) do
-      @user = User.create(:email => 'a@b.com', :password => 'password', :confirm_password => 'password')
-      @deck = Deck.new(:name => "my deck", :lang => 'en', :country => 'us')
-      @deck.user = @user
-      @deck.save!
+      @user = User.make
+      @deck = Deck.make(:user_id => @user.id)
     end
 
     it 'should be associated with a deck' do

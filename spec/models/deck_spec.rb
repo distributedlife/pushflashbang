@@ -7,7 +7,7 @@ describe Deck do
     end
 
     it 'should be associated with a user' do
-      deck = Deck.new(:name => 'name', :desc => 'something', :lang => 'en', :country => 'au')
+      deck = Deck.new(:name => 'name', :description => 'something', :pronunciation_side => Deck::SIDES[0])
 
       deck.valid?.should == false
       deck.user = @user
@@ -15,7 +15,7 @@ describe Deck do
     end
 
     it 'should require a name' do
-      deck = Deck.new(:desc => 'something', :lang => 'en', :country => 'au')
+      deck = Deck.new(:description => 'something', :pronunciation_side => Deck::SIDES[0])
       deck.user = @user
 
       deck.valid?.should == false
@@ -24,11 +24,36 @@ describe Deck do
     end
 
     it 'should default shared to false' do
-      deck = Deck.new(:name => 'name', :desc => 'something', :lang => 'en', :country => 'au')
+      deck = Deck.new(:name => 'name', :description => 'something', :pronunciation_side => Deck::SIDES[0])
       deck.user = @user
 
       deck.valid?.should == true
       deck.shared = false
+    end
+
+    it 'should require a pronunciation side' do
+      deck = Deck.new(:name => 'something')
+      deck.user = @user
+
+      deck.valid?.should == false
+      deck.pronunciation_side = 'front'
+      deck.valid?.should == true
+    end
+
+    it 'should be invalid if pronunciation_side is not in allowed list' do
+      deck = Deck.new(:name => 'something')
+      deck.user = @user
+
+      deck.valid?.should be false
+
+      Deck::SIDES.each do |side|
+        deck.pronunciation_side = side
+        deck.valid?.should == true
+        deck.errors.empty?.should == true
+      end
+
+      deck.pronunciation_side = 'banana'
+      deck.valid?.should == false
     end
   end
 end

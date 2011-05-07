@@ -60,6 +60,10 @@ class CardController < ApplicationController
     begin
       is_deck_and_card_valid
 
+      UserCardSchedule.where(:card_id => params[:id]).each do |card_schedule|
+        card_schedule.delete
+      end
+
       Card.delete(params[:id])
       flash[:failure] = "Deck successfully deleted"
     rescue

@@ -23,10 +23,8 @@ Then /^I should be redirected to the user home page$/ do
 end
 
 Given /^a deck created by another user$/ do
-  another_user = User.create(:email => "notme@somewhere-else.com", :password => "password", :confirm_password => "password")
-  @current_deck = Deck.new(:name => "SimpleDeck", :lang => "en", :country => "au")
-  @current_deck.user = another_user
-  @current_deck.save!
+  another_user = User.make
+  @current_deck = Deck.make(:name => "SimpleDeck", :user_id => another_user.id)
 end
 
 When /^I go to the show deck page$/ do
@@ -41,10 +39,18 @@ end
 
 
 Given /^I have created a deck$/ do
-  @current_deck = Deck.new(:name => "My Deck", :lang => "en", :country => "au")
-  @current_deck.user = @current_user.first
-  @current_deck.save!
+  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id)
 end
+
+Given /^I have a deck where the pronunciation is shown on front$/ do
+  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id, :pronunciation_side => 'front')
+end
+
+Given /^I have a deck where the pronunciation is shown on back$/ do
+  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id, :pronunciation_side => 'back')
+end
+
+
 
 Given /^I am on the edit deck page$/ do
   goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
@@ -56,8 +62,6 @@ Given /^I edit all deck properties$/ do
   goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
     page.name = "Edit deck name"
     page.description = "Edit deck description"
-#    page.lang = "zz"
-#    page.country = "aaa"
   end
 end
 
@@ -71,8 +75,6 @@ Then /^the deck should be updated$/ do
   on_page :ShowDeckPage, Capybara.current_session do |page|
     And %{I should see "Edit deck name"}
     And %{I should see "Edit deck description"}
-#    And %{I should see "zz"}
-#    And %{I should see "aaa"}
   end
 end
 
@@ -80,8 +82,6 @@ Given /^I edit all deck properties to be invalid$/ do
   goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
     page.name = ""
     page.description = "X" * 501
-#    page.lang = ""
-#    page.country = ""
   end
 end
 
@@ -90,8 +90,6 @@ Then /^the deck is not updated$/ do
 
   deck.name.should_not == ""
   deck.description.should_not == "X" * 501
-#  deck.lang.should_not == ""
-#  deck.country.should_not == ""
 end
 
 Then /^I should be on the edit deck page$/ do
@@ -120,8 +118,7 @@ Then /^I can see all of my decks$/ do
   decks.each do |deck|
     And %{I should see "#{deck.name}"}
     And %{I should see "#{deck.description}"}
-#    And %{I should see "#{deck.lang}"}
-#    And %{I should see "#{deck.country}"}
+    And %{I should see "#{deck.pronunciation_side}"}
   end
 end
 
@@ -131,8 +128,6 @@ Then /^I will not see decks created by other users$/ do
   decks.each do |deck|
     if deck.user_id != @current_user.first.id
       And %{I should not see "#{deck.name}"}
-#      And %{I should not see "#{deck.lang}"}
-#      And %{I should not see "#{deck.country}"}
 
       unless deck.description.nil?
         And %{I should not see "#{deck.description}"}
@@ -150,17 +145,15 @@ end
 
 Given /^I have created many items in the deck$/ do
   5.times do
-    card = Card.new(:front => Faker::Lorem.sentence(1), :back => Faker::Lorem.sentence(1))
+    card = Card.make
     card.deck = @current_deck
     card.save!
   end
 end
 
 Given /^a deck created by another user that is shared$/ do
-  another_user = User.create(:email => "notme@somewhere-else.com", :password => "password", :confirm_password => "password")
-  @current_deck = Deck.new(:name => "SimpleDeck", :lang => "en", :country => "au", :shared => true)
-  @current_deck.user = another_user
-  @current_deck.save!
+  another_user = User.make
+  @current_deck = Deck.make(:name => "SimpleDeck", :shared => true, :user_id => another_user.id)
 end
 
 Then /^I will see shared decks created by other users$/ do
@@ -170,16 +163,14 @@ Then /^I will see shared decks created by other users$/ do
     if deck.user_id != @current_user.first.id
       if deck.shared == true
         And %{I should see "#{deck.name}"}
-#        And %{I should see "#{deck.lang}"}
-#        And %{I should see "#{deck.country}"}
+        And %{I should see "#{deck.pronunciation_side}"}
 
         unless deck.description.nil?
           And %{I should see "#{deck.description}"}
         end
       else
         And %{I should not see "#{deck.name}"}
-#        And %{I should not see "#{deck.lang}"}
-#        And %{I should not see "#{deck.country}"}
+        And %{I should not see "#{deck.pronunciation_side}"}
 
         unless deck.description.nil?
           And %{I should not see "#{deck.description}"}
@@ -202,9 +193,7 @@ Then /^the deck will no longer be shared$/ do
 end
 
 Given /^I have created a shared deck$/ do
-  @current_deck = Deck.new(:name => "My Deck", :lang => "en", :country => "au", :shared => true)
-  @current_deck.user = @current_user.first
-  @current_deck.save!
+  @current_deck = Deck.make(:name => "My Deck", :shared => true, :user_id => @current_user.first.id)
 end
 
 Then /^I should see the card count$/ do

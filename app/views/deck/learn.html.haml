@@ -14,6 +14,8 @@
   - @upcoming_cards.each do |upcoming_card|
     .div{:class => "card_panel_full_page left centre"}
       %p#upcoming{:id => upcoming_card["id"]}= "#{upcoming_card["front"]}"
+      - if @deck.pronunciation_side == "front" && !upcoming_card["pronunciation"].nil? && upcoming_card["pronunciation"] != ""
+        %p{:class => "subtitle centre"}= "[#{upcoming_card["pronunciation"]}]"
       .pad_from_top
       .pad_from_top
       %p.subscript= "due in #{distance_of_time_in_words(Time.now, upcoming_card["due"], true)}"
@@ -24,10 +26,14 @@
 - else
   %section{:class => ["panel"]}
     %p.giant= @card.front
+    - if @deck.pronunciation_side == "front" && !@card.pronunciation.nil? && @card.pronunciation != ""
+      %p{:class => "subtitle centre"}= "[#{@card.pronunciation}]"
     - unless @card.back == ""
       #back_of_card{:class => "hidden"}
         .section_break
         %p.giant= @card.back
+        - if @deck.pronunciation_side == "back" && !@card.pronunciation.nil? && @card.pronunciation != ""
+          %p{:class => "subtitle centre"}= "[#{@card.pronunciation}]"
 .pad
 .pad_from_top
 - unless @card.nil?

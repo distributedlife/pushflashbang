@@ -4,6 +4,7 @@ class DeckController < ApplicationController
   def create
     @deck = Deck.new(params[:deck])
     @deck.user = current_user
+    @deck.pronunciation_side ||= 'front'
 
     if @deck.valid?
       @deck.save!
@@ -15,153 +16,150 @@ class DeckController < ApplicationController
 
   def edit
     begin
-      @deck = Deck.find(params[:id])
-
-      if @deck.user != current_user
-        flash[:failure] = "Unable to show deck as it does not belong to the user that is currently logged in on this machine."
-        redirect_to user_index_path
+      if deck_is_valid?
+        @deck = Deck.find(params[:id])
+        @pronunciation_side_values = Deck::SIDES
       end
     rescue
-      flash[:failure] = "Could not find deck."
-      redirect_to user_index_path
     end
   end
 
   def update
     begin
-      deck = Deck.find(params[:id])
+      if deck_is_valid?
 
-      if deck.user == current_user
+        deck = Deck.find(params[:id])
         deck.update_attributes(params[:deck])
 
         if deck.invalid?
-          @deck = deck          
+          @deck = deck
         else
           deck.save!
           redirect_to show_deck_path(@deck)
         end
-      else
-        flash[:failure] = "Unable to update deck as it does not belong to the user that is currently logged in on this machine."
-        redirect_to user_index_path
       end
     rescue
-      redirect_to user_index_path
     end
   end
 
   def show
     begin
-      @deck = Deck.find(params[:id])
-
-      if @deck.user != current_user && @deck.shared == false
-        flash[:failure] = "Unable to show deck as it does not belong to the user that is currently logged in on this machine."
-        redirect_to user_index_path
+      if deck_is_valid?
+        @deck = Deck.find(params[:id])
+        @cards = Card.order(:created_at).where(:deck_id => params[:id])
       end
-
-      @cards = Card.order(:created_at).where(:deck_id => params[:id])
     rescue
-      flash[:failure] = "Could not find deck."
-      redirect_to user_index_path
     end
   end
 
   def destroy
     begin
-      deck = Deck.find(params[:id])
+      if deck_is_valid?
 
-      if deck.user == current_user
-        Deck.delete(params[:id])
+        deck = Deck.find(params[:id])
 
-        Card.where(:deck_id => params[:id]).each do |card|
-          UserCardSchedule.where(:card_id => card.id).each do |card_schedule|
-            card_schedule.delete
+        if deck.user == current_user
+          Deck.delete(params[:id])
+
+          Card.where(:deck_id => params[:id]).each do |card|
+            UserCardSchedule.where(:card_id => card.id).each do |card_schedule|
+              card_schedule.delete
+            end
+
+            card.delete
           end
 
-          card.delete
+          flash[:success] = "Deck successfully deleted"
+        else
+          flash[:failure] = "Unable to delete deck as it does not belong to you."
         end
 
-
-        flash[:success] = "Deck successfully deleted"
-      else
-        flash[:failure] = "Unable to delete deck as it does not belong to the user that is currently logged in on this machine."
+        redirect_to user_index_path
       end
     rescue
       flash[:failure] = "Deck successfully deleted"
+      redirect_to user_index_path
     end
-    
-    redirect_to user_index_path
   end
 
   def learn
     begin
-      is_deck_valid
+      if deck_is_valid?
 
-      #if there are no cards in deck; we should not try and schedule any
-      cards = Card.order(:created_at).where(:deck_id => params[:id])
-      if cards.empty?
-        flash[:failure] = "You can't start a session until you have added cards to the deck."
-        redirect_to deck_path(params[:id])
-        return
-      end
-
-      #get next scheduled card for user
-      @scheduled_card = UserCardSchedule::get_next_due_for_user_for_deck(current_user.id, params[:id])
-      @due_count = UserCardSchedule::get_due_count_for_user_for_deck(current_user.id, params[:id])
-      @review_start = Time.now
-      @new_card = false
-
-      #if there are no scheduled cards for the user; get the first card in the deck that has not been scheduled and schedule it
-      if @scheduled_card.nil?
-        @scheduled_card = UserCardSchedule.new(:user_id => current_user.id, :due => Time.now, :interval => 0)
-
-        cards = Card.find_by_sql("SELECT * FROM cards where deck_id = #{params[:id]} and id not in (select card_id from user_card_schedules where user_id = #{current_user.id}) order by created_at asc")
-
+        #if there are no cards in deck; we should not try and schedule any
+        cards = Card.order(:created_at).where(:deck_id => params[:id])
         if cards.empty?
-          @card = nil
-          @scheduled_card = nil
-
-          @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
-        else
-          @card = cards[0]
-          @scheduled_card.card_id = @card.id
-          @scheduled_card.save!
-          @new_card = true
-          flash[:success] = "This is a new card. You will not have seen it before"
+          flash[:failure] = "You can't start a session until you have added cards to the deck."
+          redirect_to deck_path(params[:id])
+          return
         end
-      else
-        @card = Card.find(@scheduled_card.card_id)
+
+        @deck = Deck.find(params[:id])
+
+        #get next scheduled card for user
+        @scheduled_card = UserCardSchedule::get_next_due_for_user_for_deck(current_user.id, params[:id])
+        @due_count = UserCardSchedule::get_due_count_for_user_for_deck(current_user.id, params[:id])
+        @review_start = Time.now
+        @new_card = false
+
+        #if there are no scheduled cards for the user; get the first card in the deck that has not been scheduled and schedule it
+        if @scheduled_card.nil?
+          @scheduled_card = UserCardSchedule.new(:user_id => current_user.id, :due => Time.now, :interval => 0)
+
+          cards = Card.find_by_sql("SELECT * FROM cards where deck_id = #{params[:id]} and id not in (select card_id from user_card_schedules where user_id = #{current_user.id}) order by created_at asc")
+
+          if cards.empty?
+            @card = nil
+            @scheduled_card = nil
+
+            @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, cards.pronunciation, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
+          else
+            @card = cards[0]
+            @scheduled_card.card_id = @card.id
+            @scheduled_card.save!
+            @new_card = true
+            flash[:success] = "This is a new card. You will not have seen it before"
+          end
+        else
+          @card = Card.find(@scheduled_card.card_id)
+        end
       end
     rescue
     end
   end
 
   def toggle_share
-    is_deck_valid
+    if deck_is_valid?
+      deck = Deck.find(params[:id])
 
-    deck = Deck.find(params[:id])
+      if deck.user == current_user
+        deck.shared = !deck.shared
+        deck.save!
+      else
+        flash[:failure] = "Unable to change deck sharing as it does not belong to you"
+      end
 
-    if deck.user == current_user
-      deck.shared = !deck.shared
-      deck.save!
-    else
-      flash[:failure] = "Unable to change deck sharing as it does not belong to you"
+      redirect_to deck_path(params[:id])
     end
-
-    redirect_to deck_path(params[:id])
   end
 
   private
-  def is_deck_valid
+  def deck_is_valid?
     begin
       deck = Deck.find(params[:id])
 
       if deck.user != current_user && deck.shared == false
         flash[:failure] = "Unable to show deck as it does not belong to you and it has not been shared"
-        redirect_to user_index_path
+        redirect_to(user_index_path)
+
+        return false
       end
+
+      true
     rescue
       flash[:failure] = "The deck no longer exists"
-      redirect_to user_index_path
+      redirect_to(user_index_path)
+      return false
     end
   end
 end

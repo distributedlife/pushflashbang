@@ -38,9 +38,7 @@ Then /^the form is empty$/ do
 end
 
 Given /^I have created a card$/ do
-  @current_card = Card.new(:front => "front of my card", :back => "back of my card")
-  @current_card.deck = @current_deck
-  @current_card.save!
+  @current_card = Card.make(:deck_id => @current_deck.id, :front => "front of my card", :back => "back of my card")
 end
 
 Then /^I can see all cards in this deck$/ do
@@ -105,13 +103,8 @@ Then /^I should be on the show deck page$/ do
 end
 
 Given /^I have created multiple cards$/ do
-  card1 = Card.new(:front => "front of my card", :back => "back of my card")
-  card1.deck = @current_deck
-  card1.save!
-
-  card2 = Card.new(:front => "the quick brown fox jumps over the lazy dog", :back => "the time has come for all good men to attend the dance")
-  card2.deck = @current_deck
-  card2.save!
+  card1 = Card.make(:deck_id => @current_deck.id, :front => "front of my card", :back => "back of my card")
+  card2 = Card.make(:deck_id => @current_deck.id, :front => "the quick brown fox jumps over the lazy dog", :back => "the time has come for all good men to attend the dance")
 
   @current_card = card2
 end
@@ -122,3 +115,6 @@ Then /^I should see all cards in the deck$/ do
   end
 end
 
+Then /^I should see the pronunciation$/ do
+  And %{I should see "#{@first_due_card.pronunciation}"}
+end

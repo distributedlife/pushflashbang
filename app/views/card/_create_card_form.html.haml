@@ -9,5 +9,10 @@
   = f.input :back, :as => :text, :label => false, :hint => I18n.t('card.create.labels.back'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
+  #description_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.pronunciation.title'), :detail => I18n.t('card.terminology.pronunciation.description')}
+  = f.input :pronunciation, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
   - f.buttons do
     = f.submit I18n.t('card.create.labels.save'), :class => 'positive'
