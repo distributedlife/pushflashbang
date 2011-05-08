@@ -34,7 +34,7 @@ class DeckController < ApplicationController
 
         deck = Deck.find(params[:id])
         deck.update_attributes(params[:deck])
-ap deck
+
         if deck.invalid?
           @deck = deck
         else
