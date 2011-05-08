@@ -1,3 +1,5 @@
+include DeckHelper
+
 class DeckController < ApplicationController
   before_filter :authenticate_user!
   
@@ -5,6 +7,8 @@ class DeckController < ApplicationController
     @deck = Deck.new(params[:deck])
     @deck.user = current_user
     @deck.pronunciation_side ||= 'front'
+
+    @pronunciation_side_values = Deck::SIDES
 
     if @deck.valid?
       @deck.save!

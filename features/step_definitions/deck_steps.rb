@@ -50,7 +50,9 @@ Given /^I have a deck where the pronunciation is shown on back$/ do
   @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id, :pronunciation_side => 'back')
 end
 
-
+Given /^a deck that is configured for typed answers$/ do
+  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id, :supports_written_answer => true)
+end
 
 Given /^I am on the edit deck page$/ do
   goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
@@ -205,4 +207,20 @@ Then /^I should see the card due count$/ do
   due_count = UserCardSchedule.get_due_count_for_user_for_deck(@current_user[0].id, @current_deck.id)
 
   And %{I should see "#{due_count}"}
+end
+
+Then /^I should see an input field to type my answer$/ do
+  find_field('card_front')
+end
+
+When /^I type the answer correctly$/ do
+  fill_in('card_front', :with => @first_due_card.front)
+end
+
+Then /^I should see my answer was correct$/ do
+  And %{I should see "is correct"}
+end
+
+Then /^I should see my answer was incorrect$/ do
+  And %{I should see "is not correct"}
 end

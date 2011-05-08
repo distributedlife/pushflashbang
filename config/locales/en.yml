@@ -99,6 +99,7 @@ en:
         name: "a name"
         description: "a brief description"
         pronunciation_side: "where the pronunciation is shown"
+        supports_written_answer: "require typed answer?"
         save: "Save Changes"
         delete: "Delete Deck"
         delete_confirm: "Are you sure?"
@@ -107,6 +108,8 @@ en:
         new: "New Card"
         old: "Card Review"
       subtitle: "Cards due for review: %{count}"
+      labels:
+        answer: "your answer"
     terminology:
       name:
         title: "name"
@@ -123,6 +126,9 @@ en:
       pronunciation:
         title: "pronunciation side"
         description: "The pronunciation side indicates on each card where the pronunciation information, if supplied, is shown. For speaking practice you would put it on the back of the card. This helps you know whether you were pronuncing the words correctly."
+      supports_written_answer:
+        title: "require typed answer"
+        description: "When you require a typed answer the user has to type the answer and then sees how correct they were. At present it is up to the user to rate themselves."
   card:
     create:
       title: "Add Card"

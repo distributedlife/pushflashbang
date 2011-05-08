@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110505221931) do
+ActiveRecord::Schema.define(:version => 20110507102457) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -28,16 +28,17 @@ ActiveRecord::Schema.define(:version => 20110505221931) do
   end
 
   create_table "decks", :force => true do |t|
-    t.string   "name",               :limit => 40
+    t.string   "name",                    :limit => 40
     t.text     "description"
-    t.string   "lang",               :limit => 3
-    t.string   "country",            :limit => 3
+    t.string   "lang",                    :limit => 3
+    t.string   "country",                 :limit => 3
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "shared",                           :default => false
+    t.boolean  "shared",                                :default => false
     t.string   "target_side"
     t.string   "pronunciation_side"
+    t.boolean  "supports_written_answer"
   end
 
   create_table "user_card_reviews", :force => true do |t|

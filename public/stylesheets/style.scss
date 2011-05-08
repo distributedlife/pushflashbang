@@ -636,6 +636,10 @@ p.definition_text
   text-align: left;
 }
 
+p.contrast
+{
+  color: $contrast_link_colour;
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -785,6 +789,7 @@ img.btn_close {
 	float: right;
 	margin: -55px -55px 0 0;
 }
+
 /*--Making IE6 Understand Fixed Positioning--*/
 *html #fade {
 	position: absolute;

@@ -31,6 +31,14 @@ describe Deck do
       deck.shared = false
     end
 
+    it 'should default support written answer to false' do
+      deck = Deck.new(:name => 'name', :description => 'something', :pronunciation_side => Deck::SIDES[0])
+      deck.user = @user
+
+      deck.valid?.should == true
+      deck.supports_written_answer = false
+    end
+
     it 'should require a pronunciation side' do
       deck = Deck.new(:name => 'something')
       deck.user = @user

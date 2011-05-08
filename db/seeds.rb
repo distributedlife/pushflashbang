@@ -143,7 +143,7 @@ cards = [
   {"front" => "左", "back" => "left [n/adj]"},
   {"front" => "右", "back" => "right [n/adj]"},
   {"front" => "有", "back" => "possess"},
-  {"front" => "贿", "back" => "bribe [n] "},
+  {"front" => "贿", "back" => "bribe [n]"},
   {"front" => "贡", "back" => "tribute"},
   {"front" => "项", "back" => "item"},
   {"front" => "刀", "back" => "sword (dagger / saber)"},

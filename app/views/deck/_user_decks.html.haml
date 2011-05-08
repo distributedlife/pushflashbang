@@ -6,10 +6,7 @@
       %p{:class => ['subscript', 'right']}= "#{@card_counts[deck.id]} cards (#{@due_counts[deck.id]} due)"
     %p.minor_title
       = link_to deck.name, show_deck_path(deck.id)
-      - if deck.shared
-        %span#shared{:class => 'subscript'}= "(shared, pn. on #{deck.pronunciation_side})"
-      - else
-        %span#shared{:class => 'subscript'}= "(pn. on #{deck.pronunciation_side})"
+      %span#shared{:class => 'subscript'}= deck_subtitle(deck)
     %p.description= deck.description
     .pad_from_top
     .pad

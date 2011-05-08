@@ -356,6 +356,9 @@ p.definition_text {
 .text_left {
   text-align: left; }
 
+p.contrast {
+  color: orange; }
+
 .list_summary {
   clear: both;
   margin-bottom: 0.6em;
