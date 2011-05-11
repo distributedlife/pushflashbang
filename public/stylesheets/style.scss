@@ -45,7 +45,8 @@ $font_size_tiny: 0.4em;
 @font-face
 {
   font-family: "AR PL KaitiM GB";
-  src: local('AR PL KaitiM GB'), url('/fonts/embed/gkai00mp.ttf'), local('隶书') ;
+/*  src: local('AR PL KaitiM GB'), url('/fonts/embed/gkai00mp.ttf'), local('隶书') ;*/
+  src: local('隶书') ;
 }
 
 /*宋体, mostly used for large chunks of paragraphs in small font sizes.*/
