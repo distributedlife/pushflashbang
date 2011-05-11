@@ -1,7 +1,7 @@
 @font-face {
   font-family: "AR PL KaitiM GB";
   /*  font-family: "AR PL KaitiM GB";*/
-  /*  src: local('AR PL KaitiM GB'), url('/fonts/embed/gkai00mp.ttf'), local('隶书') ;*/
+  src: local("AR PL UKai CN");
   /*  src: local('AR PL KaitiM GB'), url('/fonts/embed/gkai00mp.ttf'), local('隶书') ;*/
   /*  src: local('AR PL KaitiM GB'), local('隶书') ;*/ }
 
@@ -319,11 +319,9 @@ p.title {
   font-size: 1.6em; }
 
 p.mandarin {
-  font-family: "AR PL KaitiM GB", 'gkai00mp.ttf', "隶书"; }
+  font-family: "AR PL KaitiM GB", sans-serif; }
 
 p.giant {
-  /*  font-family: "AR PL KaitiM GB";*/
-  /*  font-family: "隶书";*/
   font-weight: bold;
   font-size: 4em;
   text-align: center; }
