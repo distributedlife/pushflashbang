@@ -27,16 +27,16 @@
         - if @deck.user_id == current_user.id
           %p{:class => "tiny_option text_right"}
             = link_to "edit", edit_deck_card_path(card.deck_id, card.id)
-        %p.centre= link_to card.front, "#?w=750", :rel => "popup_name_#{card.id}", :class => "poplight"
+        %p{:class => "centre mandarin"}= link_to card.front, "#?w=750", :rel => "popup_name_#{card.id}", :class => "poplight"
         - if @deck.pronunciation_side == "front" && !card.pronunciation.nil? && card.pronunciation != ""
           %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
       #popup_name{:id => "#{card.id}", :class => "popup_block"}
-        %p.giant= card.front
+        %p{:class => "giant mandarin"}= card.front
         - if @deck.pronunciation_side == "front" && !card.pronunciation.nil? && card.pronunciation != ""
           %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
         .section_break
         .pad_from_top
-        %p.giant= card.back
+        %p{:class => "giant mandarin"}= card.back
         - if @deck.pronunciation_side == "back" && !card.pronunciation.nil? && card.pronunciation != ""
           %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
   .pad

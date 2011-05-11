@@ -42,11 +42,11 @@ $font_size_tiny: 0.4em;
 // FONTS
 ////////////////////////////////////////////////////////////////////////////////
 
-/*@font-face
+@font-face
 {
   font-family: "AR PL KaitiM GB";
   src: url('/fonts/gkai00mp.ttf') ;
-}*/
+}
 
 /*宋体, mostly used for large chunks of paragraphs in small font sizes.*/
 /*黑体, works out well in either headings or paragraphs.*/
@@ -578,9 +578,15 @@ p.title
   font-size: $font_size_large;
 }
 
+p.mandarin
+{
+  font-family: "AR PL KaitiM GB" !important;
+}
+
 p.giant
 {
-  font-family: "隶书";
+/*  font-family: "AR PL KaitiM GB";*/
+/*  font-family: "隶书";*/
   font-weight: bold;
   font-size: 4em;
   text-align: center;

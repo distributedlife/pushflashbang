@@ -29,7 +29,7 @@
 - else
   //SHOW current card (pull into partial)
   %section{:class => ["panel"]}
-    %p.giant= @card.front
+    %p{:class => "giant mandarin"}= @card.front
     - if @deck.pronunciation_side == "front" && !@card.pronunciation.nil? && @card.pronunciation != ""
       %p{:class => "subtitle centre"}= "[#{@card.pronunciation}]"
     - if @deck.supports_written_answer == true
@@ -39,7 +39,7 @@
       - answer = @card
       - answer.front = ""
       - semantic_form_for(answer, :url => '#', :method => :post) do |f|
-        = f.input :front, :as => :string, :label => false, :hint => I18n.t('deck.learn.labels.answer'), :required => false, :wrapper_html => {:class => 'width80 centre'}
+        = f.input :front, :as => :string, :label => false, :hint => I18n.t('deck.learn.labels.answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
       %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
       :javascript
         //override the enter button on the formsubmit
@@ -61,7 +61,7 @@
     - unless @card.back == ""
       #back_of_card{:class => "hidden"}
         .section_break
-        %p.giant{:id => "card_answer"}= @card.back
+        %p#card_answer{:class => "giant mandarin",}= @card.back
         - if @deck.pronunciation_side == "back" && !@card.pronunciation.nil? && @card.pronunciation != ""
           %p{:class => "subtitle centre"}= "[#{@card.pronunciation}]"
 
