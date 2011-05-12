@@ -1,0 +1,30 @@
+=render :partial => '/header', :locals => {:title => t('deck.chapter.title'), :subtitle => t('deck.chapter.subtitle', :count => @due_count)}
+
+#advance_button
+  .panel
+    .button{:class => "centre big_button"}
+      = link_to "Advance", advance_deck_chapter_path(@deck.id), :class => 'positive', :id => 'do_advance'
+    .pad_from_top
+
+//=render :partial => '/deck/upcoming_cards', :locals => {:upcoming_cards = @upcoming_cards}
+.cards
+- @upcoming_cards.each do |upcoming_card|
+  .div{:class => "card_panel_full_page left centre"}
+    %p#upcoming{:id => upcoming_card["id"]}= "#{upcoming_card["front"]}"
+    - if @deck.pronunciation_side == "front" && !upcoming_card["pronunciation"].nil? && upcoming_card["pronunciation"] != ""
+      %p{:class => "subtitle centre"}= "[#{upcoming_card["pronunciation"]}]"
+    .pad_from_top
+    .pad_from_top
+    %p.subscript= "due in #{distance_of_time_in_words(Time.now, upcoming_card["due"], true)}"
+  :javascript
+    $("html").everyTime(30000, function(i) {
+      location.reload();
+    }, 0);
+
+:javascript
+  $('html').keypress(function(event) {
+    if (event.which == '32')
+    {
+        $('#do_advance').click();
+    }
+  });

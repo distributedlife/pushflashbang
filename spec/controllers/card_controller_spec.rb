@@ -74,7 +74,7 @@ describe CardController do
     it_should_behave_like "all card operations"
 
     it 'should create a new card' do
-      post :create, :deck_id => @deck.id, :card => {:front => "front", :back => "back", :deck_id => @deck.id}
+      post :create, :deck_id => @deck.id, :card => {:front => "front", :back => "back", :deck_id => @deck.id, :chapter => 1}
 
       assigns[:card].front.should == "front"
       assigns[:card].back.should == "back"
@@ -84,18 +84,19 @@ describe CardController do
     end
 
     it 'should not create an invalid card' do
-      post :create, :deck_id => @deck.id, :card => {:front => "", :back => "back", :deck_id => @deck.id}
+      post :create, :deck_id => @deck.id, :card => {:front => "", :back => "back", :deck_id => @deck.id, :chapter => 1}
 
       assigns[:card].id.should == nil
       assigns[:card].front.should == ""
       assigns[:card].back.should == "back"
       assigns[:card].deck.should == @deck
+      assigns[:card].chapter.should == 1
 
       Card.count.should == 0
     end
 
     it 'should redirect to the new card page' do
-      post :create, :deck_id => @deck.id, :card => {:front => "front", :back => "back", :deck_id => @deck.id}
+      post :create, :deck_id => @deck.id, :card => {:front => "front", :back => "back", :deck_id => @deck.id, :chapter => 1}
 
       response.should be_redirect
       response.should redirect_to(new_deck_card_path(@deck.id))
@@ -126,15 +127,16 @@ describe CardController do
     end
 
     it 'should update the card' do
-      put :update, :deck_id => @deck.id, :id => @card.id, :card => {:front => "edited front", :back => 'edited back'}
+      put :update, :deck_id => @deck.id, :id => @card.id, :card => {:front => "edited front", :back => 'edited back', :chapter => 2}
 
       @card.reload
       @card.front.should == "edited front"
       @card.back.should == "edited back"
+      @card.chapter.should == 2
     end
 
     it 'should not allow updating of cards to an invalid state' do
-      put :update, :deck_id => @deck.id, :id => @card.id, :card => {:front => "", :back => 'edited back'}
+      put :update, :deck_id => @deck.id, :id => @card.id, :card => {:front => "", :back => 'edited back', :chapter => 0}
 
       @card.reload
       @card.front.should == "front"
@@ -143,6 +145,7 @@ describe CardController do
       assigns[:card].front.should == ""
       assigns[:card].back.should == "edited back"
       assigns[:card].deck.should == @deck
+      assigns[:card].chapter.should == 0
     end
 
     it 'should redirect to show card' do

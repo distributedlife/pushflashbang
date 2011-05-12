@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110507102457) do
+ActiveRecord::Schema.define(:version => 20110511090118) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20110507102457) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "pronunciation"
+    t.integer  "chapter"
   end
 
   create_table "decks", :force => true do |t|
@@ -59,6 +60,14 @@ ActiveRecord::Schema.define(:version => 20110507102457) do
     t.integer  "card_id"
     t.datetime "due"
     t.integer  "interval"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_deck_chapters", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "deck_id"
+    t.integer  "chapter"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

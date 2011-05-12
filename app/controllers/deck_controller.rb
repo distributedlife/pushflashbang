@@ -50,7 +50,7 @@ class DeckController < ApplicationController
     begin
       if deck_is_valid?
         @deck = Deck.find(params[:id])
-        @cards = Card.order(:created_at).where(:deck_id => params[:id])
+        @cards = Card.order(:chapter).order(:created_at).where(:deck_id => params[:id])
       end
     rescue
     end
@@ -64,6 +64,9 @@ class DeckController < ApplicationController
 
         if deck.user == current_user
           Deck.delete(params[:id])
+          UserDeckChapter.where(:deck_id => params[:id]).each do |deck_chapter|
+            deck_chapter.delete
+          end
 
           Card.where(:deck_id => params[:id]).each do |card|
             UserCardSchedule.where(:card_id => card.id).each do |card_schedule|
@@ -89,7 +92,6 @@ class DeckController < ApplicationController
   def learn
     begin
       if deck_is_valid?
-
         #if there are no cards in deck; we should not try and schedule any
         cards = Card.order(:created_at).where(:deck_id => params[:id])
         if cards.empty?
@@ -101,6 +103,13 @@ class DeckController < ApplicationController
         @deck = Deck.find(params[:id])
 
         #get next scheduled card for user
+        @deck_chapter = UserDeckChapter.where(:deck_id => params[:id], :user_id => current_user.id)
+        if @deck_chapter.empty?
+          @deck_chapter = UserDeckChapter.create(:deck_id => params[:id], :user_id => current_user.id, :chapter => 1)
+        else
+          @deck_chapter = @deck_chapter.first
+        end
+
         @scheduled_card = UserCardSchedule::get_next_due_for_user_for_deck(current_user.id, params[:id])
         @due_count = UserCardSchedule::get_due_count_for_user_for_deck(current_user.id, params[:id])
         @review_start = Time.now
@@ -119,10 +128,15 @@ class DeckController < ApplicationController
             @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, cards.pronunciation, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
           else
             @card = cards[0]
-            @scheduled_card.card_id = @card.id
-            @scheduled_card.save!
-            @new_card = true
-            flash[:success] = "This is a new card. You will not have seen it before"
+
+            if (@card.chapter > @deck_chapter.chapter)
+              redirect_to deck_chapter_path(params[:id])
+            else
+              @scheduled_card.card_id = @card.id
+              @scheduled_card.save!
+              @new_card = true
+              flash[:success] = "This is a new card. You will not have seen it before"
+            end
           end
         else
           @card = Card.find(@scheduled_card.card_id)

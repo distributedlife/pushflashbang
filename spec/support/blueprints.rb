@@ -45,6 +45,7 @@ Card.blueprint do
   front
   back
   pronunciation
+  chapter {1}
 end
 
 UserCardReview.blueprint do
@@ -70,4 +71,10 @@ UserCardSchedule.blueprint(:due) do
   card_id
   due {1.day.ago}
   interval
+end
+
+UserDeckChapter.blueprint do
+  user_id
+  deck_id
+  chapter {1}
 end

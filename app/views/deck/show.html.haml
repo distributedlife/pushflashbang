@@ -22,7 +22,12 @@
     .div{:class => "panel left", :style => ""}
       %p This deck has no cards; 
   - else
+    - current_chapter = 0
     - @cards.each do |card|
+      - if current_chapter < card.chapter
+        - current_chapter = card.chapter
+        %p.minor_title= "Chapter #{current_chapter}"
+
       .div{:class => "card_panel left", :style => ""}
         - if @deck.user_id == current_user.id
           %p{:class => "tiny_option text_right"}

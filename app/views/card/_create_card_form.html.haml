@@ -1,17 +1,22 @@
 - semantic_form_for(@card, :url => "/deck/#{@card.deck_id}/card", :method => :post) do |f|
-  #brief_definition
+  #front_definition
     =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.front.title'), :detail => I18n.t('card.terminology.front.description')}
   = f.input :front, :as => :text, :label => false, :hint => I18n.t('card.create.labels.front'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
-  #description_definition
+  #back_definition
     =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.back.title'), :detail => I18n.t('card.terminology.back.description')}
   = f.input :back, :as => :text, :label => false, :hint => I18n.t('card.create.labels.back'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
-  #description_definition
+  #pronunciation_definition
     =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.pronunciation.title'), :detail => I18n.t('card.terminology.pronunciation.description')}
   = f.input :pronunciation, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+  #chapter_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.chapter.title'), :detail => I18n.t('card.terminology.chapter.description')}
+  = f.input :chapter, :label => false, :hint => I18n.t('card.edit.labels.chapter'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   - f.buttons do

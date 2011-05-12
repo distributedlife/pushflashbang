@@ -110,6 +110,9 @@ en:
       subtitle: "Cards due for review: %{count}"
       labels:
         answer: "your answer"
+    chapter:
+      title: You've reached a new chapter
+      subtitle: is it time to progress further into the deck?
     terminology:
       name:
         title: "name"
@@ -145,6 +148,7 @@ en:
         front: "the question"
         back: "the answer"
         pronunciation: "the pronunciation"
+        chapter: "the deck chapter"
         save: "Save Changes"
         delete: "Delete Card"
         delete_confirm: "Are you sure?"
@@ -170,4 +174,7 @@ en:
       pronunciation:
         title: "pronunciation"
         description: "The pronunciation key for this card. This is shown on the front or the back of the card depending on the deck settings. It is optional useful when how to pronounce the word is not expressed easily in the source lanuage i.e. mandarin"
+      chapter:
+        title: "chapter"
+        description: "The deck chapter is where in the deck the card is located. This used to create levels of difficulty within a deck and to allow users to limit their progress to a single chapter"
 

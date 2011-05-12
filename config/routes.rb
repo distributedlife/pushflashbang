@@ -21,6 +21,13 @@ PushFlashBang::Application.routes.draw do
         post 'review'
       end
     end
+
+    resource :chapter do
+      member do
+        get 'show', :as => 'show'
+        get 'advance', :as => 'advance'
+      end
+    end
   end
 
   # The priority is based upon order of creation:

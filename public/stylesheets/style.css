@@ -1,9 +1,6 @@
 @font-face {
   font-family: "AR PL KaitiM GB";
-  /*  font-family: "AR PL KaitiM GB";*/
-  src: local("AR PL UKai CN");
-  /*  src: local('AR PL KaitiM GB'), url('/fonts/embed/gkai00mp.ttf'), local('隶书') ;*/
-  /*  src: local('AR PL KaitiM GB'), local('隶书') ;*/ }
+  src: local("AR PL UKai CN"); }
 
 /*宋体, mostly used for large chunks of paragraphs in small font sizes.*/
 /*黑体, works out well in either headings or paragraphs.*/
@@ -327,6 +324,7 @@ p.giant {
   text-align: center; }
 
 p.minor_title {
+  clear: left;
   font-family: "Consolas", sans-serif;
   font-weight: bold;
   font-size: 1em; }

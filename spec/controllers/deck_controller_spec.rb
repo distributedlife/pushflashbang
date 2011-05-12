@@ -23,7 +23,6 @@ describe DeckController do
   end
   
   shared_examples_for "all deck operations that require a deck" do
-
     it 'should redirect to user home if the deck does not belong to the user' do
       user2 = User.make
       deck = Deck.make(:user_id => user2.id)
@@ -156,8 +155,8 @@ describe DeckController do
     it 'should return the cards for the given deck' do
       deck = Deck.make(:user_id => @user.id)
 
-      card1 = Card.make(:deck_id => deck.id, :front => 'vvv')
-      Card.make(:deck_id => deck.id, :front => 'aaa')
+      card1 = Card.make(:deck_id => deck.id, :front => 'vvv', :chapter => 1)
+      Card.make(:deck_id => deck.id, :front => 'aaa', :chapter => 2)
 
       card1.front = 'zzz'
       card1.save!
@@ -165,7 +164,7 @@ describe DeckController do
       get :show, :id => deck.id
 
       assigns[:deck].should == deck
-      assigns[:cards].should == Card.order(:created_at).where(:deck_id => deck.id)
+      assigns[:cards].should == Card.order(:chapter).order(:created_at).where(:deck_id => deck.id)
       assigns[:cards][0].front.should == "zzz"
       assigns[:cards][1].front.should == "aaa"
     end
@@ -178,7 +177,7 @@ describe DeckController do
       get :show, :id => deck.id
 
       assigns[:deck].should == deck
-      assigns[:cards].should == Card.order(:created_at).where(:deck_id => deck.id)
+      assigns[:cards].should == Card.order(:chapter).order(:created_at).where(:deck_id => deck.id)
     end
   end
 
@@ -223,6 +222,7 @@ describe DeckController do
       UserCardSchedule.make(:card_id => card2.id, :user_id => @user.id)
       UserCardReview.make(:card_id => card1.id, :user_id => @user.id)
       UserCardReview.make(:card_id => card2.id, :user_id => @user.id)
+      UserDeckChapter.make(:deck_id => deck.id, :user_id => @user.id)
 
       delete :destroy, :id => deck.id
 
@@ -232,6 +232,7 @@ describe DeckController do
       Card.count.should == 0
       UserCardSchedule.count.should == 0
       UserCardReview.count.should == 2
+      UserDeckChapter.count.should == 0
     end
   end
 
@@ -241,9 +242,9 @@ describe DeckController do
     before(:each) do
       @deck = Deck.make(:user_id => @user.id)
 
-      @card1 = Card.make(:deck_id => @deck.id)
-      @card2 = Card.make(:deck_id => @deck.id)
-      @card3 = Card.make(:deck_id => @deck.id)
+      @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card2 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card3 = Card.make(:deck_id => @deck.id, :chapter => 1)
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -279,6 +280,12 @@ describe DeckController do
         assigns[:review_start].should <= Time.now
 
         UserCardSchedule.count.should == 1
+      end
+
+      it 'should create a user chapter mark at 1' do
+        get :learn, :id => @deck.id
+
+        UserDeckChapter.where(:deck_id => @deck.id, :user_id => @user.id, :chapter => 1).count.should == 1
       end
     end
 
@@ -326,6 +333,19 @@ describe DeckController do
         flash[:success].should == "This is a new card. You will not have seen it before"
 
         UserCardSchedule.count.should == 3
+      end
+
+      it 'should redirect to next_chapter if the scheduled card is the next chapter' do
+        @card2.chapter = 2
+        @card2.save!
+
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
+
+        get :learn, :id => @deck.id
+
+        response.should be_redirect
+        response.should redirect_to(deck_chapter_path(@deck.id))
       end
 
       it 'should return upcoming cards if there are no cards to schedule' do
