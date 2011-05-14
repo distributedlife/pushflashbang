@@ -9,8 +9,8 @@ Feature: chapters
     And reference data has been loaded
 
   Scenario: view deck with chapters
-    Given I have a deck with multiple chapters
-    When I am on the show deck page
+    Given I have a deck with 2 chapters
+    When I go to the show deck page
     Then I should see "Chapter 1"
     Then I should see "Chapter 2"
 
@@ -29,4 +29,4 @@ Feature: chapters
   Scenario: chapter page redirects to learn if there are due cards
     Given there are cards due
     When I go to the deck chapter page
-    Then I should be on the deck session page
+    Then I should be redirected to the deck session page

@@ -132,7 +132,8 @@
   $('html').keypress(function(event) {
     if (event.which == '32') 
     {
-      if ($('#do_reveal').is(":visible") && (#{@deck.supports_written_answer} == false))
+      //we are quoting the ruby variable resolution because the javascript test driver crashes doing it. wtf!
+      if ($('#do_reveal').is(":visible") && ("#{@deck.supports_written_answer}" == "false"))
       {
         $('#do_reveal').click();
       }

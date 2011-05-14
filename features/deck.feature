@@ -19,7 +19,7 @@ Feature: language decks
   Scenario: user can see  shared deck created by other user
     Given a deck created by another user that is shared
     When I go to the show deck page
-    Then I should see "(shared)"
+    Then I should see "shared"
     
   Scenario: user can edit deck
     Given I have created a deck
@@ -85,12 +85,12 @@ Feature: language decks
   Scenario: user can see if deck is shared on home page
     Given I have created a shared deck
     And I go to the user home page
-    Then I should see "(shared"
+    Then I should see "shared"
 
   Scenario: user can see if deck is shared on deck page
     Given I have created a shared deck
     When I am on the show deck page
-    Then I should see "(shared"
+    Then I should see "shared"
 
   Scenario: user home page shows card count
     Given I have created a deck

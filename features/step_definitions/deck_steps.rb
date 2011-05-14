@@ -54,6 +54,15 @@ Given /^a deck that is configured for typed answers$/ do
   @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id, :supports_written_answer => true)
 end
 
+Given /^I have a deck with (\d+) chapters$/ do |chapter_count|
+  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id)
+
+  chapter_count.to_i.times do |i|
+    Card.make(:deck_id => @current_deck.id, :chapter => i + 1)
+  end
+end
+
+
 Given /^I am on the edit deck page$/ do
   goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
     page.is_current_page?.should == true
@@ -99,6 +108,18 @@ Then /^I should be on the edit deck page$/ do
     page.is_current_page?.should == true
   end
 end
+
+Then /^I should be on the next chapter page$/ do
+  on_page :DeckChapterPage, Capybara.current_session do |page|
+    page.is_current_page?.should == true
+  end
+end
+
+When /^I go to the deck chapter page$/ do
+  goto_page :DeckChapterPage, Capybara.current_session, @current_deck.id do |page|
+  end
+end
+
 
 When /^I go to the edit deck page$/ do
   goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|

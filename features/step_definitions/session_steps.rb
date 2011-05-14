@@ -43,6 +43,31 @@ Given /^there are cards due$/ do
   @first_due_card = card
 end
 
+Given /^the next due card is in the current chapter$/ do
+  user_deck = UserDeckChapter.where(:user_id => @current_user.first.id, :deck_id => @current_deck.id)
+  user_deck = UserDeckChapter.make(:user_id => @current_user.first.id, :deck_id => @current_deck.id) unless user_deck.nil?
+
+  @first_due_card.chapter = user_deck.chapter
+  @first_due_card.save!
+end
+
+Given /^the next due card is in the next chapter$/ do
+  user_deck = UserDeckChapter.where(:user_id => @current_user.first.id, :deck_id => @current_deck.id)
+  user_deck = UserDeckChapter.make(:user_id => @current_user.first.id, :deck_id => @current_deck.id) unless user_deck.nil?
+
+  #all scheduled cards are made not due
+  And %{there are no cards due}
+
+  Card.all.each do |card|
+    next unless UserCardSchedule.where(:user_id => @current_user.first.id, :card_id => card.id).first.nil?
+
+    card.chapter = user_deck.chapter + 1
+    card.save!
+  end
+  
+  Card.make(:deck_id => @current_deck.id, :chapter => user_deck.chapter + 1)
+end
+
 Given /^there are cards due later$/ do
   card = Card.make(:deck_id => @current_deck.id)
   UserCardSchedule.make(:user_id => @current_user[0].id, :card_id => card.id, :due => 2.days.from_now)

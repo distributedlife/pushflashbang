@@ -564,6 +564,14 @@ cards = [
   {"front" => "我叫。。。", "back" => "My name is...", "pronunciation" => "wǒ jiào...", "chapter" => "3", "new" => "update"},
   {"front" => "见到您， 我很高兴。", "back" => "I am pleased to meet you.", "pronunciation" => "jiàn dào nín, wǒ hěn gāo xìng", "chapter" => "3", "new" => "update"},
   {"front" => "见到您， 我也很高兴。", "back" => "I am also please to meet you.", "pronunciation" => "jiàn dào nín, wǒ yě hěn gāo xìng", "chapter" => "3", "new" => "update"}
+
+  #lesson 4
+  #lesson 5
+  #lesson 6
+  #lesson 7
+  #lesson 8
+  #lesson 9
+  #lesson 10
   ]
 
 

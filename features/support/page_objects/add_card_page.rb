@@ -19,6 +19,10 @@ module AddCardPage
     @session.fill_in('card_back', :with => value)
   end
 
+  def chapter= value
+    @session.fill_in('card_chapter', :with => value)
+  end
+
   def add_card
     @session.click_on('Add')
   end

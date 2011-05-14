@@ -18,6 +18,7 @@ When /^I create a card$/ do
   on_page :AddCardPage, Capybara.current_session do |page|
     page.front = "The front of the card"
     page.back = "The back of the card"
+    page.chapter = 1
     page.add_card
   end
 
