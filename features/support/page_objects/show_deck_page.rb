@@ -3,11 +3,11 @@ module ShowDeckPage
     true
   end
 
-  def url id
-    "/deck/#{id}"
+  def url sut
+    "/deck/#{sut.get(:deck_id)}"
   end
 
   def is_current_page?
-    @session.has_content?("Review")
+    @session.has_content?("Review").should == true
   end
 end

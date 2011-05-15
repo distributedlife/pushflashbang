@@ -9,6 +9,7 @@ describe ChaptersController do
 
     @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
     @card2 = Card.make(:deck_id => @deck.id, :chapter => 2)
+    @card3 = Card.make(:deck_id => @deck.id, :chapter => 3)
 
     @user_card_schedule = UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
 
@@ -85,15 +86,28 @@ describe ChaptersController do
       @user_deck_chapter.chapter.should == 2
     end
 
+    it 'should skip to the chapter of the next unscheduled card for the user and deck pair' do
+      @user_deck_chapter = UserDeckChapter.where(:user_id => @user.id, :deck_id => @deck.id).first
+      @user_deck_chapter.chapter.should == 1
+
+      UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 1.day.from_now)
+
+
+      get :advance, :deck_id => @deck.id
+
+      @user_deck_chapter.reload
+      @user_deck_chapter.chapter.should == 3
+    end
+
     it 'should not increment the chapter more than the highest chapter in the deck' do
       @user_deck_chapter = UserDeckChapter.where(:user_id => @user.id, :deck_id => @deck.id).first
-      @user_deck_chapter.chapter = 2
+      @user_deck_chapter.chapter = 3
       @user_deck_chapter.save!
 
       get :advance, :deck_id => @deck.id
 
       @user_deck_chapter.reload
-      @user_deck_chapter.chapter.should == 2
+      @user_deck_chapter.chapter.should == 3
     end
 
     it 'should redirect to deck/learn' do

@@ -5,27 +5,31 @@ Feature: typed answer feature
 
   Background:
     Given I am logged in and have created a deck
-    And I have created many items in the deck
+    And I have created many cards in the deck
     And reference data has been loaded
 
   Scenario: Deck is setup for typed answers
-    Given a deck that is configured for typed answers
+    Given I have created a deck
+    And the deck is configured for typed answers
     And there are cards due
-    When I go to the deck session page
+    When I go to the "deck session" page
     Then I should see an input field to type my answer
 
   Scenario: Typed answer matches back of card
-    Given a deck that is configured for typed answers
+    Given I have created a deck
+    And the deck is configured for typed answers
     And there are cards due
-    When I go to the deck session page
+    When I go to the "deck session" page
     When I type the answer correctly
     And I click on "Reveal"
     Then I should see my answer was correct
 
   Scenario: Typed answer does not match back of card
-    Given a deck that is configured for typed answers
+    Given I have created a deck
+    And the deck is configured for typed answers
     And there are cards due
-    When I go to the deck session page
+    When I go to the "deck session" page
     When I type the answer correctly
     And I click on "Reveal"
+And show me the page
     Then I should see my answer was incorrect

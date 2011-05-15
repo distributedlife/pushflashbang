@@ -3,11 +3,11 @@ module UserHomePage
     true
   end
 
-  def url *params
+  def url sut
     "/users"
   end
 
   def is_current_page?
-    @session.has_content?("Welcome")
+    @session.has_content?("Welcome").should == true
   end
 end

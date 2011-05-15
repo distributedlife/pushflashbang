@@ -1,142 +1,117 @@
-Given /^I am on the create deck page$/ do
-  goto_page :CreateDeckPage, Capybara.current_session do |page|
-    page.is_current_page?.should == true
-  end
-end
-
-When /^I create a deck$/ do
+And /^I create a deck$/ do
   on_page :CreateDeckPage, Capybara.current_session do |page|
-    page.create_deck "my deck", "this is my deck of stuff to learn"#, "en", "au"
+    page.create_deck "my deck", "this is my deck of stuff to learn"
   end
+
+  add(:deck, Deck.last)
+  add(:deck_id, get(:deck).id)
 end
 
-Then /^I should be redirected to the show deck page$/ do
-  on_page :ShowDeckPage, Capybara.current_session do |page|
-    page.is_current_page?.should == true
-  end
-end
-
-Then /^I should be redirected to the user home page$/ do
-  on_page :UserHomePage, Capybara.current_session do |page|
-    page.is_current_page?.should == true
-  end
-end
-
-Given /^a deck created by another user$/ do
+And /^a deck created by another user$/ do
   another_user = User.make
-  @current_deck = Deck.make(:name => "SimpleDeck", :user_id => another_user.id)
+
+  add(:deck, Deck.make(:name => "SimpleDeck", :user_id => another_user.id))
+  add(:deck_id, get(:deck).id)
 end
 
-When /^I go to the show deck page$/ do
-  goto_page :ShowDeckPage, Capybara.current_session, @current_deck.id do |page|
+And /^the deck is shared$/ do
+  deck = get(:deck)
+  deck.shared = true
+  deck.save!
+end
+
+And /^the deck is configured for typed answers$/ do
+  deck = get(:deck)
+  deck.supports_written_answer = true
+  deck.save!
+end
+
+And /^the deck is configured to show the pronunciation on the front$/ do
+  deck = get(:deck)
+  deck.pronunciation_side = 'front'
+  deck.save!
+end
+
+And /^the deck is configured to show the pronunciation on the back$/ do
+  deck = get(:deck)
+  deck.pronunciation_side = 'back'
+  deck.save!
+end
+
+And /^I have created a deck$/ do
+  add(:deck, Deck.make(:name => "My Deck", :user_id => get(:user_id)))
+  add(:deck_id, get(:deck).id)
+end
+
+And /^I have created many cards in the deck$/ do
+  5.times do
+    card = Card.make(:deck_id => get(:deck_id))
+
+    add(:card, card)
+    add(:card_id, card.id)
   end
 end
 
-Given /^I am on the show deck page$/ do
-  goto_page :ShowDeckPage, Capybara.current_session, @current_deck.id do |page|
-  end
-end
-
-
-Given /^I have created a deck$/ do
-  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id)
-end
-
-Given /^I have a deck where the pronunciation is shown on front$/ do
-  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id, :pronunciation_side => 'front')
-end
-
-Given /^I have a deck where the pronunciation is shown on back$/ do
-  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id, :pronunciation_side => 'back')
-end
-
-Given /^a deck that is configured for typed answers$/ do
-  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id, :supports_written_answer => true)
-end
-
-Given /^I have a deck with (\d+) chapters$/ do |chapter_count|
-  @current_deck = Deck.make(:name => "My Deck", :user_id => @current_user.first.id)
+And /^I have a deck with (\d+) chapters$/ do |chapter_count|
+  deck = Deck.make(:name => "My Deck", :user_id => get(:user_id))
+  add(:deck, deck)
+  add(:deck_id, deck.id)
 
   chapter_count.to_i.times do |i|
-    Card.make(:deck_id => @current_deck.id, :chapter => i + 1)
+    Card.make(:deck_id => deck.id, :chapter => i + 1)
   end
 end
 
+And /^I edit all deck properties$/ do
+  add(:original_deck, get(:deck).clone)
 
-Given /^I am on the edit deck page$/ do
-  goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
-    page.is_current_page?.should == true
+  new_name = "Edit deck name"
+  new_description = "Edit deck description"
+
+  on_page :EditDeckPage, Capybara.current_session do |page|
+    page.name = new_name
+    page.description = new_description
+  end  
+end
+
+And /^I edit all deck properties to be invalid$/ do
+  add(:edited_deck_name, "")
+  add(:edited_deck_description, "X" * 501)
+
+  on_page :EditDeckPage, Capybara.current_session do |page|
+    page.name = get(:edited_deck_name)
+    page.description = get(:edited_deck_description)
   end
 end
 
-Given /^I edit all deck properties$/ do
-  goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
-    page.name = "Edit deck name"
-    page.description = "Edit deck description"
-  end
-end
-
-Then /^I am redirected to the show deck page$/ do
+And /^the deck should be updated$/ do
+  get(:deck).reload
+  
   on_page :ShowDeckPage, Capybara.current_session do |page|
-    page.is_current_page?.should == true
+    And %{I should not see "#{get(:original_deck).name}"}
+    And %{I should not see "#{get(:original_deck).description}"}
+    And %{I should see "#{get(:deck).name}"}
+    And %{I should see "#{get(:deck).description}"}
   end
 end
 
-Then /^the deck should be updated$/ do
+And /^the deck is not updated$/ do
+  get(:deck).reload
+
   on_page :ShowDeckPage, Capybara.current_session do |page|
-    And %{I should see "Edit deck name"}
-    And %{I should see "Edit deck description"}
+    And %{I should not see "#{get(:deck).name}"}
+    And %{I should not see "#{get(:deck).description}"}
+    And %{I should see "#{get(:edited_deck_name)}"}
+    And %{I should see "#{get(:edited_deck_description)}"}
   end
 end
 
-Given /^I edit all deck properties to be invalid$/ do
-  goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
-    page.name = ""
-    page.description = "X" * 501
-  end
+And /^the deck should be deleted$/ do
+  lambda {Deck.find(get(:deck_id))}.should raise_exception
 end
 
-Then /^the deck is not updated$/ do
-  deck = Deck.first
-
-  deck.name.should_not == ""
-  deck.description.should_not == "X" * 501
-end
-
-Then /^I should be on the edit deck page$/ do
-  goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
-    page.is_current_page?.should == true
-  end
-end
-
-Then /^I should be on the next chapter page$/ do
-  on_page :DeckChapterPage, Capybara.current_session do |page|
-    page.is_current_page?.should == true
-  end
-end
-
-When /^I go to the deck chapter page$/ do
-  goto_page :DeckChapterPage, Capybara.current_session, @current_deck.id do |page|
-  end
-end
-
-
-When /^I go to the edit deck page$/ do
-  goto_page :EditDeckPage, Capybara.current_session, @current_deck.id do |page|
-  end
-end
-
-Then /^the deck should be deleted$/ do
-  lambda {Deck.find(@current_deck.id)}.should raise_exception
-end
-
-Given /^I go to the user home page$/ do
-  goto_page :UserHomePage, Capybara.current_session do |page|
-  end
-end
-
-Then /^I can see all of my decks$/ do
-  decks = Deck.where(:user_id => @current_user.first.id)
+And /^I can see all of my decks$/ do
+  decks = Deck.where(:user_id => get(:user_id))
 
   decks.each do |deck|
     And %{I should see "#{deck.name}"}
@@ -145,11 +120,11 @@ Then /^I can see all of my decks$/ do
   end
 end
 
-Then /^I will not see decks created by other users$/ do
+And /^I will not see decks created by other users$/ do
   decks = Deck.all
 
   decks.each do |deck|
-    if deck.user_id != @current_user.first.id
+    if deck.user_id != get(:user_id)
       And %{I should not see "#{deck.name}"}
 
       unless deck.description.nil?
@@ -159,31 +134,11 @@ Then /^I will not see decks created by other users$/ do
   end
 end
 
-
-Then /^I should be redirected to the edit deck page$/ do
-  on_page :EditDeckPage, Capybara.current_session do |page|
-    page.is_current_page?.should == true
-  end
-end
-
-Given /^I have created many items in the deck$/ do
-  5.times do
-    card = Card.make
-    card.deck = @current_deck
-    card.save!
-  end
-end
-
-Given /^a deck created by another user that is shared$/ do
-  another_user = User.make
-  @current_deck = Deck.make(:name => "SimpleDeck", :shared => true, :user_id => another_user.id)
-end
-
-Then /^I will see shared decks created by other users$/ do
+And /^I will see shared decks created by other users$/ do
   decks = Deck.all
-  
+
   decks.each do |deck|
-    if deck.user_id != @current_user.first.id
+    if deck.user_id != get(:user_id)
       if deck.shared == true
         And %{I should see "#{deck.name}"}
         And %{I should see "#{deck.pronunciation_side}"}
@@ -205,43 +160,47 @@ Then /^I will see shared decks created by other users$/ do
   Deck.where(:shared => true).count.should >= 1
 end
 
-Then /^the deck will be shared$/ do
-  @current_deck.reload
-  @current_deck.shared.should == true
+And /^the deck should be shared$/ do
+  get(:deck).reload
+  get(:deck).shared.should == true
 end
 
-Then /^the deck will no longer be shared$/ do
-  @current_deck.reload
-  @current_deck.shared.should == false
+Then /^the deck should not be shared$/ do
+  get(:deck).reload
+  get(:deck).shared.should == false
 end
 
-Given /^I have created a shared deck$/ do
-  @current_deck = Deck.make(:name => "My Deck", :shared => true, :user_id => @current_user.first.id)
+And /^I should see the card count$/ do
+  And %{I should see "#{Card.where(:deck_id => get(:deck_id)).count}"}
 end
 
-Then /^I should see the card count$/ do
-  card_count = Card.where(:deck_id => @current_deck.id).count
-  And %{I should see "#{card_count}"}
+And /^I should see the card due count$/ do
+  And %{I should see "#{UserCardSchedule.get_due_count_for_user_for_deck(get(:user_id), get(:deck_id))}"}
 end
 
-Then /^I should see the card due count$/ do
-  due_count = UserCardSchedule.get_due_count_for_user_for_deck(@current_user[0].id, @current_deck.id)
-
-  And %{I should see "#{due_count}"}
+And /^I should see an input field to type my answer$/ do
+  on_page :DeckSessionPage, Capybara.current_session do |page|
+    page.input_field_exists?.should == true
+  end
 end
 
-Then /^I should see an input field to type my answer$/ do
-  find_field('card_front')
+And /^I type the answer correctly$/ do
+  ap get(:card).front
+  on_page :DeckSessionPage, Capybara.current_session do |page|
+    page.type_answer get(:card).front
+  end
 end
 
-When /^I type the answer correctly$/ do
-  fill_in('card_front', :with => @first_due_card.front)
+And /^I type the answer incorrectly$/ do
+  on_page :DeckSessionPage, Capybara.current_session do |page|
+    page.type_answer "zz#{get(:card).front}zz"
+  end
 end
 
-Then /^I should see my answer was correct$/ do
+And /^I should see my answer was correct$/ do
   And %{I should see "is correct"}
 end
 
-Then /^I should see my answer was incorrect$/ do
+And /^I should see my answer was incorrect$/ do
   And %{I should see "is not correct"}
 end

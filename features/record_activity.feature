@@ -14,7 +14,7 @@ Feature: record activity
 
   Background:
     Given I am logged in and have created a deck
-    And I have created many items in the deck
+    And I have created many cards in the deck
     And reference data has been loaded
 
   Scenario: record time when card is added to schedule

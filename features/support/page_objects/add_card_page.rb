@@ -3,12 +3,12 @@ module AddCardPage
     true
   end
 
-  def url deck_id
-    "/deck/#{deck_id}/card/new"
+  def url sut
+    "/deck/#{sut.get(:deck_id)}/card/new"
   end
 
   def is_current_page?
-    @session.has_content?("Add Card")
+    @session.has_content?("Add Card").should == true
   end
 
   def front= value
@@ -17,6 +17,10 @@ module AddCardPage
 
   def back= value
     @session.fill_in('card_back', :with => value)
+  end
+
+  def pronunciation= value
+    @session.fill_in('card_pronunciation', :with => value)
   end
 
   def chapter= value
@@ -33,5 +37,9 @@ module AddCardPage
 
   def back
     @session.find_field('card_back').value
+  end
+
+  def pronunciation
+    @session.find_field('card_pronunciation').value
   end
 end

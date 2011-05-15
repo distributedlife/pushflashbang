@@ -5,7 +5,7 @@ Feature: Graduated Response
 
   Background:
     Given I am logged in and have created a deck
-    And I have created many items in the deck
+    And I have created many cards in the deck
     And reference data has been loaded
 
   Scenario: four options
@@ -43,7 +43,7 @@ Feature: Graduated Response
   Scenario: the first button counts as failed review
     Given I have reviewed a card
     When I click on the "first" button
-    Then I should be redirected to the deck session page
+    Then I should be on the "deck session" page
     And the card should be rescheduled
     And the card interval should be reset
 
@@ -51,7 +51,7 @@ Feature: Graduated Response
   Scenario: the second button counts as failed review
     Given I have reviewed a card
     When I click on the "second" button
-    Then I should be redirected to the deck session page
+    Then I should be on the "deck session" page
     And the card should be rescheduled
     And the card interval should be reset
 
@@ -59,7 +59,7 @@ Feature: Graduated Response
   Scenario: the third button counts as a successful review
     Given I have reviewed a card
     When I click on the "third" button
-    Then I should be redirected to the deck session page
+    Then I should be on the "deck session" page
     And the card should be rescheduled
     And the card interval should be increased
 
@@ -67,7 +67,7 @@ Feature: Graduated Response
   Scenario: the fourth button counts as a successful review
     Given I have reviewed a card
     When I click on the "fourth" button
-    Then I should be redirected to the deck session page
+    Then I should be on the "deck session" page
     And the card should be rescheduled
     And the card interval should be increased by two
     

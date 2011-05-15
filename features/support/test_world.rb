@@ -8,33 +8,13 @@ module TestWorld
     page
   end
 
-  def goto_page page_name, session, *params
-#    self.start unless @session
-
+  def goto_page page_name, session, sut
     page = on_page page_name, session
-
-#    session.visit page.url *params
-    page.visit params
+    page.visit sut
 
     yield page if block_given?
 
     page
-  end
-
-  def current_username= username
-    @current_username = username
-  end
-
-  def current_username
-    @current_username
-  end
-
-  def current_passsword= password
-    @current_password = password
-  end
-
-  def current_password
-    @current_password
   end
 end
 World(TestWorld)

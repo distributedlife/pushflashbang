@@ -3,8 +3,8 @@ module DeckChapterPage
     true
   end
 
-  def url id
-    "/deck/#{id}/chapter"
+  def url sut
+    "/deck/#{sut.get(:deck_id)}/chapter"
   end
 
   def is_current_page?

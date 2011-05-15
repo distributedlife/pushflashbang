@@ -9,7 +9,7 @@ module CreateDeckPage
   end
 
   def is_current_page?
-    @session.has_content?("Create new deck")
+    @session.has_content?("Create new deck").should == true
   end
 
   def create_deck name, description#, lang, country

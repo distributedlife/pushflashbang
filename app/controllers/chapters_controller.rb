@@ -29,7 +29,10 @@ class ChaptersController < ApplicationController
 
         max_chapter = Card.where(:deck_id => params[:deck_id]).maximum(:chapter)
 
-        user_deck_chapter.chapter = user_deck_chapter.chapter + 1 unless user_deck_chapter.chapter >= max_chapter
+        #get me a greater chapter from the deck that exists, but only consider cards that have not been scheduled
+        next_chapter = Card.where(["deck_id = ? and chapter > ? and id not in (select card_id from user_card_schedules where user_id = ?)", params[:deck_id], user_deck_chapter.chapter, current_user.id]).minimum("chapter")
+
+        user_deck_chapter.chapter = next_chapter unless user_deck_chapter.chapter >= max_chapter
         user_deck_chapter.save
 
         redirect_to learn_deck_path(params[:deck_id])

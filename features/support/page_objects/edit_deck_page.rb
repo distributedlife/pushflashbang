@@ -3,12 +3,12 @@ module EditDeckPage
     true
   end
 
-  def url id
-    "/deck/#{id}/edit"
+  def url sut
+    "/deck/#{sut.get(:deck_id)}/edit"
   end
 
   def is_current_page?
-    @session.has_content?("Edit Deck")
+    @session.has_content?("Edit Deck").should == true
   end
 
   def name= value

@@ -7,11 +7,13 @@ Background:
   Given I am logged in and have created a deck
 
 Scenario: pronunciation can be shown on front of card if set
-  Given I have a deck where the pronunciation is shown on front
+  Given I have created a deck
+  And the deck is configured to show the pronunciation on the front
   When I am reviewing a card
   Then I should see the pronunciation
 
 Scenario: pronunciation can be shown on back of card if set
-  Given I have a deck where the pronunciation is shown on back
+  Given I have created a deck
+  And the deck is configured to show the pronunciation on the front
   When I am reviewing a card
   Then I should see the pronunciation

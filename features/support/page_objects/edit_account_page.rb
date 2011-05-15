@@ -3,7 +3,7 @@ module EditAccountPage
     true
   end
   
-  def url *params
+  def url sut
     "/users/edit"
   end
 

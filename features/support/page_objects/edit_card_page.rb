@@ -3,8 +3,8 @@ module EditCardPage
     true
   end
 
-  def url *params
-    "/deck/#{params[0][0][0][:deck_id]}/card/#{params[0][0][0][:id]}/edit"
+  def url sut
+    "/deck/#{sut.get(:deck_id)}/card/#{sut.get(:card_id)}/edit"
   end
 
   def is_current_page?
@@ -17,6 +17,10 @@ module EditCardPage
 
   def back= value
     @session.fill_in('card_back', :with => value)
+  end
+
+  def pronunciation= value
+    @session.fill_in('card_pronunciation', :with => value)
   end
 
   def save_changes
@@ -33,5 +37,9 @@ module EditCardPage
 
   def back
     @session.find_field('card_back').value
+  end
+
+  def pronunciation
+    @session.find_field('card_pronunciation').value
   end
 end

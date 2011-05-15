@@ -3,8 +3,8 @@ module ShowCardPage
     true
   end
 
-  def url *params
-    "/deck/#{params[0][0][0][:deck_id]}/card/#{params[0][0][0][:id]}"
+  def url sut
+    "/deck/#{sut.get(:deck_id)}/card/#{sut.get(:card_id)}"
   end
 
   def is_current_page?

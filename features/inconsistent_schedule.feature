@@ -6,7 +6,7 @@ Feature: inconsistent schedule
 
   Background:
     Given I am logged in and have created a deck
-    And I have created many items in the deck
+    And I have created many cards in the deck
     And reference data has been loaded
 
   Scenario: interval is less than 2 minutes

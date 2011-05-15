@@ -3,9 +3,9 @@ class BasePage
     @session = session
   end
 
-  def visit *params
+  def visit sut
     if is_get?
-      @session.visit url params
+      @session.visit url sut
     else
       navigate_to
     end
@@ -15,7 +15,7 @@ class BasePage
     raise "You haven't implemented a quick check to make sure you are on the page you think you are"
   end
 
-  def url *params
+  def url sut
     raise "you haven't declared a url here"
   end
 
