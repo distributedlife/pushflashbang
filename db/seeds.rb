@@ -6,12 +6,20 @@ def add_cards_to_forward_deck deck, cards
     exists = Card.where(:front => card["front"], :deck_id => deck.id)
 
     if card["new"] == "yes"
+      unless exists.empty?
+        raise "card #{card["front"]} already exists in deck #{deck["name"]}"
+      end
+
       card = Card.new(:front => card["front"], :back => card["back"], :pronunciation => card["pronunciation"], :chapter => card["chapter"])
-      card.deck = forward_deck
+      card.deck = deck
       card.save!
 
       puts "#{card["front"]} created in deck #{deck["name"]}"
-    else
+    elsif card["new"] == "update"
+      if exists.empty?
+        raise "trying to update card  #{card["front"]} that does not exist in deck #{deck["name"]}"
+      end
+
       exists.first.back = card["back"]
       exists.first.pronunciation = card["pronunciation"]
       exists.first.chapter = card["chapter"]
@@ -30,18 +38,26 @@ def add_cards_to_reverse_deck deck, cards
     exists = Card.where(:front => card["back"], :deck_id => deck.id)
 
     if card["new"] == "yes"
+      unless exists.empty?
+        raise "card #{card["back"]} already exists in deck #{deck["name"]}"
+      end
+
       card = Card.new(:front => card["back"], :back => card["front"], :pronunciation => card["pronunciation"], :chapter => card["chapter"])
-      card.deck = reverse_deck
+      card.deck = deck
       card.save!
 
-      puts "#{card["front"]} created in deck #{deck["name"]}"
-    else
+      puts "#{card["back"]} created in deck #{deck["name"]}"
+    elsif card["new"] == "update"
+      if exists.empty?
+        raise "trying to update card  #{card["back"]} that does not exist in deck #{deck["name"]}"
+      end
+
       exists.first.back = card["front"]
       exists.first.pronunciation = card["pronunciation"]
       exists.first.chapter = card["chapter"]
       exists.first.save!
 
-      puts "#{card["front"]} updated in deck #{deck["name"]}"
+      puts "#{card["back"]} updated in deck #{deck["name"]}"
     end
   end
 end
@@ -555,14 +571,114 @@ cards = [
   {"front" => "您", "back" => "you(polite)", "pronunciation" => "nín", "chapter" => "3", "new" => "no"},
   {"front" => "高兴", "back" => "happy glad[adj]", "pronunciation" => "gāo xìng", "chapter" => "3", "new" => "no"},
   {"front" => "请问， 您贵姓", "back" => "Excuse me, may I know your surname?", "pronunciation" => "qǐng wèn, nín guì xìng", "chapter" => "3", "new" => "no"},
-  {"front" => "我姓...， 叫...", "back" => "My surname is ..., my given name is ...", "pronunciation" => "míng, wǒ xìng ?, jiào ?", "chapter" => "3", "new" => "no"},
+  {"front" => "我姓...， 叫...", "back" => "My surname is ..., my given name is ...", "pronunciation" => "wǒ xìng ?, jiào ?", "chapter" => "3", "new" => "no"},
   {"front" => "您叫什么名字", "back" => "What is your name?", "pronunciation" => "nín jiào shén me míng zi", "chapter" => "3", "new" => "no"},
   {"front" => "我叫。。。", "back" => "My name is...", "pronunciation" => "wǒ jiào...", "chapter" => "3", "new" => "no"},
   {"front" => "见到您， 我很高兴。", "back" => "I am pleased to meet you.", "pronunciation" => "jiàn dào nín, wǒ hěn gāo xìng", "chapter" => "3", "new" => "no"},
-  {"front" => "见到您， 我也很高兴。", "back" => "I am also please to meet you.", "pronunciation" => "jiàn dào nín, wǒ yě hěn gāo xìng", "chapter" => "3", "new" => "no"}
+  {"front" => "见到您， 我也很高兴。", "back" => "I am also please to meet you.", "pronunciation" => "jiàn dào nín, wǒ yě hěn gāo xìng", "chapter" => "3", "new" => "no"},
+
 
   #lesson 4
+  {"front" => "下", "back" => "down, below", "pronunciation" => "xià", "chapter" => "4", "new" => "yes"},
+  {"front" => "上", "back" => "up, above", "pronunciation" => "shàng", "chapter" => "4", "new" => "yes"},
+  {"front" => "是", "back" => "to be, yes, is", "pronunciation" => "shì", "chapter" => "4", "new" => "yes"},
+  {"front" => "土", "back" => "earth", "pronunciation" => "tŭ", "chapter" => "4", "new" => "yes"},
+  {"front" => "走", "back" => "walk", "pronunciation" => "zǒu", "chapter" => "4", "new" => "yes"},
+  {"front" => "尘", "back" => "dust", "pronunciation" => "chén", "chapter" => "4", "new" => "yes"},
+  {"front" => "坐", "back" => "sit", "pronunciation" => "zuò", "chapter" => "4", "new" => "yes"},
+  {"front" => "去", "back" => "go", "pronunciation" => "qù", "chapter" => "4", "new" => "yes"},
+  {"front" => "先", "back" => "first", "pronunciation" => "xiān", "chapter" => "4", "new" => "yes"},
+  {"front" => "生", "back" => "grow", "pronunciation" => "shēng", "chapter" => "4", "new" => "yes"},
+  {"front" => "夕", "back" => "evening", "pronunciation" => "xī", "chapter" => "4", "new" => "yes"},
+  {"front" => "多", "back" => "many", "pronunciation" => "duō", "chapter" => "4", "new" => "yes"},
+  {"front" => "名", "back" => "given name", "pronunciation" => "míng", "chapter" => "4", "new" => "yes"},
+  {"front" => "朋", "back" => "friend, companion", "pronunciation" => "péng", "chapter" => "4", "new" => "yes"},
+  {"front" => "友", "back" => "friend", "pronunciation" => "yǒu", "chapter" => "4", "new" => "yes"},
+  {"front" => "灰", "back" => "grey", "pronunciation" => "huī", "chapter" => "4", "new" => "yes"},
+  {"front" => "兴", "back" => "glad, pleased", "pronunciation" => "xìng", "chapter" => "4", "new" => "yes"},
+  {"front" => "请", "back" => "please; to invite", "pronunciation" => "qǐng", "chapter" => "4", "new" => "yes"},
+  {"front" => "这", "back" => "this", "pronunciation" => "zhè", "chapter" => "4", "new" => "yes"},
+  {"front" => "来", "back" => "to come", "pronunciation" => "lái", "chapter" => "4", "new" => "yes"},
+  {"front" => "早上", "back" => "in the morning", "pronunciation" => "zǎo shang", "chapter" => "4", "new" => "yes"},
+  {"front" => "早上好", "back" => "good morning (variation)", "pronunciation" => "zǎo shang hǎo", "chapter" => "4", "new" => "yes"},
+  {"front" => "坐下", "back" => "sit down", "pronunciation" => "zuò xià", "chapter" => "4", "new" => "yes"},
+  {"front" => "先生", "back" => "Mr", "pronunciation" => "xiān sheng", "chapter" => "4", "new" => "yes"},
+  {"front" => "生日", "back" => "birthday", "pronunciation" => "shēng rì", "chapter" => "4", "new" => "yes"},
+  {"front" => "名人", "back" => "celebrity", "pronunciation" => "míng rén", "chapter" => "4", "new" => "yes"},
+  {"front" => "这是", "back" => "this is", "pronunciation" => "zhè shì", "chapter" => "4", "new" => "yes"},
+  {"front" => "这不是", "back" => "this is not", "pronunciation" => "zhè bù shì", "chapter" => "4", "new" => "yes"},
+  {"front" => "那是", "back" => "that is", "pronunciation" => "nà shì", "chapter" => "4", "new" => "yes"},
+  {"front" => "那不是", "back" => "that is not", "pronunciation" => "nà bù shì", "chapter" => "4", "new" => "yes"},
+  {"front" => "我是", "back" => "I am", "pronunciation" => "wǒ shì", "chapter" => "4", "new" => "yes"},
+  {"front" => "我不是", "back" => "I am not", "pronunciation" => "wǒ bù shì", "chapter" => "4", "new" => "yes"},
+  {"front" => "灰尘", "back" => "dust (usage)", "pronunciation" => "huī chén", "chapter" => "4", "new" => "yes"},
+  {"front" => "朋友", "back" => "friend (usage)", "pronunciation" => "péng you", "chapter" => "4", "new" => "yes"},
+  {"front" => "友好", "back" => "friendly", "pronunciation" => "yǒu hǎo", "chapter" => "4", "new" => "yes"},
+  {"front" => "请坐", "back" => "Please be seated", "pronunciation" => "qǐng zuò", "chapter" => "4", "new" => "yes"},
+  {"front" => "介绍", "back" => "to introduce, introduction", "pronunciation" => "jiè shào", "chapter" => "4", "new" => "yes"},
+  {"front" => "小姐", "back" => "miss", "pronunciation" => "xiǎo jiě", "chapter" => "4", "new" => "yes"},
+  {"front" => "一下", "back" => "one time, once", "pronunciation" => "yí xià", "chapter" => "4", "new" => "yes"},
+  {"front" => "夫人", "back" => "wife", "pronunciation" => "fū ren", "chapter" => "4", "new" => "yes"},
+  {"front" => "我来介绍一下", "back" => "let me introduce you", "pronunciation" => "wǒ lái jiè shào yí xià", "chapter" => "4", "new" => "yes"},
+  {"front" => "这是我夫人,...", "back" => "this is my wife, ...", "pronunciation" => "zhè shì wǒ fū ren, ...", "chapter" => "4", "new" => "yes"},
+  {"front" => "他是我朋友", "back" => "He is my friend", "pronunciation" => "ta1 shì wǒ péng you", "chapter" => "4", "new" => "yes"},
+  {"front" => "她是我朋友", "back" => "She is my friend", "pronunciation" => "ta1 shì wǒ péng you", "chapter" => "4", "new" => "yes"},
+  {"front" => "见到您， 我很高兴", "back" => "I'm pleased to meet you", "pronunciation" => "jiàn dào nín, wǒ hěn gāo xìng", "chapter" => "4", "new" => "yes"},
+
   #lesson 5
+  {"front" => "工", "back" => "work", "pronunciation" => "gōng", "chapter" => "5", "new" => "yes"},
+  {"front" => "左", "back" => "left", "pronunciation" => "zuǒ", "chapter" => "5", "new" => "yes"},
+  {"front" => "右", "back" => "right", "pronunciation" => "yòu", "chapter" => "5", "new" => "yes"},
+  {"front" => "有", "back" => "have", "pronunciation" => "yǒu", "chapter" => "5", "new" => "yes"},
+  {"front" => "家", "back" => "family", "pronunciation" => "jiā", "chapter" => "5", "new" => "yes"},
+  {"front" => "嫁", "back" => "marry", "pronunciation" => "jià", "chapter" => "5", "new" => "yes"},
+  {"front" => "夫", "back" => "husband, distinguished person", "pronunciation" => "fū", "chapter" => "5", "new" => "yes"},
+  {"front" => "妻", "back" => "wife (variation)", "pronunciation" => "qī", "chapter" => "5", "new" => "yes"},
+  {"front" => "学", "back" => "study", "pronunciation" => "xué", "chapter" => "5", "new" => "yes"},
+  {"front" => "吧", "back" => "（a modal particle)", "pronunciation" => "ba", "chapter" => "5", "new" => "yes"},
+  {"front" => "那", "back" => "which", "pronunciation" => "nǎ", "chapter" => "5", "new" => "yes"},
+  {"front" => "国", "back" => "nation", "pronunciation" => "guó", "chapter" => "5", "new" => "yes"},
+  {"front" => "在", "back" => "to be, at", "pronunciation" => "zài", "chapter" => "5", "new" => "yes"},
+  {"front" => "年", "back" => "year", "pronunciation" => "nián", "chapter" => "5", "new" => "yes"},
+  {"front" => "的", "back" => "a structural particle", "pronunciation" => "de", "chapter" => "5", "new" => "yes"},
+  {"front" => "回", "back" => "to return", "pronunciation" => "huí", "chapter" => "5", "new" => "yes"},
+  {"front" => "工人", "back" => "worker", "pronunciation" => "gōng rén", "chapter" => "5", "new" => "yes"},
+  {"front" => "手工", "back" => "handiwork", "pronunciation" => "shǒu gōng", "chapter" => "5", "new" => "yes"},
+  {"front" => "开工", "back" => "go into operation", "pronunciation" => "kāi gōng", "chapter" => "5", "new" => "yes"},
+  {"front" => "左右", "back" => "about, approximately", "pronunciation" => "zǒu yòu", "chapter" => "5", "new" => "yes"},
+  {"front" => "有名", "back" => "famous", "pronunciation" => "yǒu míng", "chapter" => "5", "new" => "yes"},
+  {"front" => "大家", "back" => "all of us", "pronunciation" => "dà jiā", "chapter" => "5", "new" => "yes"},
+  {"front" => "家人", "back" => "family members", "pronunciation" => "jiā rén", "chapter" => "5", "new" => "yes"},
+  {"front" => "大夫", "back" => "doctor", "pronunciation" => "dài fu", "chapter" => "5", "new" => "yes"},
+  {"front" => "丈夫", "back" => "husband", "pronunciation" => "zhàng fu", "chapter" => "5", "new" => "yes"},
+  {"front" => "夫妻", "back" => "married couple", "pronunciation" => "fū qī", "chapter" => "5", "new" => "yes"},
+  {"front" => "妻子", "back" => "wife (variation 2)", "pronunciation" => "qī zi", "chapter" => "5", "new" => "yes"},
+  {"front" => "大学", "back" => "university", "pronunciation" => "dà xué", "chapter" => "5", "new" => "yes"},
+  {"front" => "中学", "back" => "middle school", "pronunciation" => "zhōng xué", "chapter" => "5", "new" => "yes"},
+  {"front" => "小学", "back" => "primary school", "pronunciation" => "xiǎo xué", "chapter" => "5", "new" => "yes"},
+  {"front" => "学生", "back" => "student", "pronunciation" => "xué sheng", "chapter" => "5", "new" => "yes"},
+  {"front" => "见谈", "back" => "to talk, small talk", "pronunciation" => "jiāo tán", "chapter" => "5", "new" => "yes"},
+  {"front" => "英文", "back" => "English Language", "pronunciation" => "yīng wén", "chapter" => "5", "new" => "yes"},
+  {"front" => "哪里", "back" => "where", "pronunciation" => "nǎ lǐ", "chapter" => "5", "new" => "yes"},
+  {"front" => "我的", "back" => "my", "pronunciation" => "wǒ de", "chapter" => "5", "new" => "yes"},
+  {"front" => "明年", "back" => "next year", "pronunciation" => "míng nián", "chapter" => "5", "new" => "yes"},
+  {"front" => "中国人", "back" => "Chinese", "pronunciation" => "zhōng guó rén", "chapter" => "5", "new" => "yes"},
+  {"front" => "新加坡人", "back" => "Singaporean", "pronunciation" => "xīn jiā pō rén", "chapter" => "5", "new" => "yes"},
+  {"front" => "澳大利亚", "back" => "Australia", "pronunciation" => "aò dà lì yà", "chapter" => "5", "new" => "yes"},
+  {"front" => "丁先生你是中国人吧", "back" => "Mr Ding you are from China, aren't you?", "pronunciation" => "dīng xiān sheng, nǐ shì zhōng guó rén ba?", "chapter" => "5", "new" => "yes"},
+  {"front" => "不实。我是新加坡人", "back" => "No, I'm not. I am Singaporean.", "pronunciation" => "bù shì. wǒ shì xīn jiā pō rén", "chapter" => "5", "new" => "yes"},
+  {"front" => "吗太太，你是那国人？", "back" => "Mrs Ma, where are you from?", "pronunciation" => "mǎ tài tai, nǐ shì nǎ guó rén", "chapter" => "5", "new" => "yes"},
+  {"front" => "我是澳大利亚人", "back" => "I am an Australian", "pronunciation" => "wǒ shì aò dà lì yà rén", "chapter" => "5", "new" => "yes"},
+  {"front" => "丁先生你是学生吗？", "back" => "Are you a student, Mr Ding?", "pronunciation" => "dīng xiān sheng nǐ shì xué sheng ma", "chapter" => "5", "new" => "yes"},
+  {"front" => "是的。 我在学英文", "back" => "Yes, I am studying English.", "pronunciation" => "shì de. wǒ zài xué yīng wén", "chapter" => "5", "new" => "yes"},
+  {"front" => "我在澳大利亚一年左右了。", "back" => "I've been in Australia for about one year", "pronunciation" => "wǒ zài aò dà lì yà yì nián zuǒ yòu le", "chapter" => "5", "new" => "yes"}
+
+#āáǎàa
+#ēéěèe
+#īíǐìi
+#ōóǒòo
+#ūúǔùu
+
   #lesson 6
   #lesson 7
   #lesson 8
