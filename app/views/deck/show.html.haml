@@ -29,9 +29,8 @@
         %p.minor_title= "Chapter #{current_chapter}"
 
       .div{:class => "card_panel left", :style => ""}
-        - if @deck.user_id == current_user.id
-          %p{:class => "tiny_option text_right"}
-            = link_to "edit", edit_deck_card_path(card.deck_id, card.id)
+        %p{:class => "tiny_option text_right"}
+          = link_to "edit", edit_deck_card_path(card.deck_id, card.id)
         %p{:class => "centre mandarin"}= link_to card.front, "#?w=750", :rel => "popup_name_#{card.id}", :class => "poplight"
         - if @deck.pronunciation_side == "front" && !card.pronunciation.nil? && card.pronunciation != ""
           %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
