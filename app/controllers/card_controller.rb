@@ -57,20 +57,21 @@ class CardController < ApplicationController
   end
 
   def destroy
-    begin
-      is_deck_and_card_valid
+#    begin
+      if is_deck_and_card_valid_and_user_is_owner?
+        UserCardSchedule.where(:card_id => params[:id]).each do |card_schedule|
+          card_schedule.delete
+        end
 
-      UserCardSchedule.where(:card_id => params[:id]).each do |card_schedule|
-        card_schedule.delete
+        Card.delete(params[:id])
+        flash[:failure] = "Deck successfully deleted"
+        redirect_to show_deck_path(params[:deck_id])
+#      else
+#        flash[:failure] = "Deck successfully deleted"
       end
+#    rescue
+#    end
 
-      Card.delete(params[:id])
-      flash[:failure] = "Deck successfully deleted"
-    rescue
-      flash[:failure] = "Deck successfully deleted"
-    end
-
-    redirect_to show_deck_path(params[:deck_id])
   end
   
   def show
@@ -160,6 +161,41 @@ class CardController < ApplicationController
       else
         flash[:failure] = "The deck no longer exists"
         redirect_to user_index_path
+      end
+    end
+  end
+
+  def is_deck_and_card_valid_and_user_is_owner?
+    begin
+      card = Card.find(params[:id])
+      deck = Deck.find(params[:deck_id])
+#ap card
+#ap deck
+      if deck.user != current_user
+        flash[:failure] = "Unable to complete action as this deck does not belong to you."
+        redirect_to user_index_path
+#ap 'is not owner'
+        return false
+      end
+      if card.deck != deck
+        flash[:failure] = "The card does not belong to this deck"
+        redirect_to show_deck_path(params[:deck_id])
+
+        return false
+      end
+
+      true
+    rescue
+      if card.nil?
+        flash[:failure] = "The card no longer exists"
+        redirect_to show_deck_path(params[:deck_id])
+
+        return false
+      else
+        flash[:failure] = "The deck no longer exists"
+        redirect_to user_index_path
+
+        return false
       end
     end
   end

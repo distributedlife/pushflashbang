@@ -8,7 +8,7 @@ describe CardController do
     @deck = Deck.make(:user_id => @user.id)
   end
   
-  shared_examples_for "all card operations" do
+  shared_examples_for "all shared card operations" do
     it 'should redirect to user home if the deck does not belong to the user' do
       user2 = User.make
       deck = Deck.make(:user_id => user2.id)
@@ -28,6 +28,40 @@ describe CardController do
       get :show, :deck_id => deck.id, :id => card.id
 
       response.should_not be_redirect
+    end
+
+    it 'should redirect to user home if the deck does not exist' do
+      card = Card.make(:deck_id => @deck.id)
+
+      get :show, :deck_id => 100, :id => card.id
+      response.should be_redirect
+      response.should redirect_to(user_index_path)
+    end
+  end
+
+  shared_examples_for "all card operations that require an owner" do
+    it 'should redirect to user home if the deck does not belong to the user' do
+      user2 = User.make
+      deck = Deck.make(:user_id => user2.id)
+      card = Card.make(:deck_id => deck.id)
+
+      get :show, :deck_id => deck.id, :id => card.id
+
+      response.should be_redirect
+      response.should redirect_to(user_index_path)
+    end
+
+    it 'should redirect to user home if the deck does not belong to the user even if shared' do
+      user2 = User.make
+      deck = Deck.make(:user_id => user2.id, :shared => true)
+      card = Card.make(:deck_id => deck.id)
+
+      get :show, :deck_id => deck.id, :id => card.id
+#      get :action.symbolize, :deck_id => deck.id, :id => card.id
+#      block.call(:deck_id => deck.id, :id => card.id)
+
+      response.should be_redirect
+      response.should redirect_to(user_index_path)
     end
 
     it 'should redirect to user home if the deck does not exist' do
@@ -59,7 +93,7 @@ describe CardController do
   end
 
   context "'GET' new" do
-    it_should_behave_like "all card operations"
+    it_should_behave_like "all shared card operations"
 
     it 'should return an empty card' do
       get :new, :deck_id => @deck.id
@@ -71,7 +105,7 @@ describe CardController do
   end
 
   context "'POST' create" do
-    it_should_behave_like "all card operations"
+    it_should_behave_like "all shared card operations"
 
     it 'should create a new card' do
       post :create, :deck_id => @deck.id, :card => {:front => "front", :back => "back", :deck_id => @deck.id, :chapter => 1}
@@ -104,7 +138,7 @@ describe CardController do
   end
 
   context "'GET' edit" do
-    it_should_behave_like "all card operations"
+    it_should_behave_like "all shared card operations"
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
@@ -119,7 +153,7 @@ describe CardController do
   end
 
   context "'PUT' update" do
-    it_should_behave_like "all card operations"
+    it_should_behave_like "all shared card operations"
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
@@ -157,7 +191,7 @@ describe CardController do
   end
 
   context "'DELETE' destroy" do
-    it_should_behave_like "all card operations"
+    it_should_behave_like "all card operations that require an owner" 
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
@@ -190,7 +224,7 @@ describe CardController do
   end
 
   context "'GET' show" do
-    it_should_behave_like "all card operations"
+    it_should_behave_like "all shared card operations"
     it_should_behave_like "all card operations that require a card"
     
     before(:each) do
@@ -205,7 +239,7 @@ describe CardController do
   end
 
   context "'POST' review" do
-    it_should_behave_like "all card operations"
+    it_should_behave_like "all shared card operations"
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do

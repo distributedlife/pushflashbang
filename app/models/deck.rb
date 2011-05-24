@@ -1,4 +1,6 @@
 class Deck < ActiveRecord::Base
+  has_paper_trail
+  
   belongs_to :user
 
   attr_accessible :name, :description, :shared, :pronunciation_side, :supports_written_answer

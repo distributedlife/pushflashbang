@@ -31,5 +31,4 @@ Feature: typed answer feature
     When I go to the "deck session" page
     When I type the answer correctly
     And I click on "Reveal"
-And show me the page
     Then I should see my answer was incorrect
