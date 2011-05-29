@@ -29,7 +29,7 @@ module SystemUnderTest
     end
   end
 
-  #get top of stack and remove
+  #get top of stack
   def get name
     init
 
