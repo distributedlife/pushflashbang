@@ -186,7 +186,7 @@ describe CardController do
       put :update, :deck_id => @deck.id, :id => @card.id, :card => {:front => "edited front", :back => 'edited back'}
       
       response.should be_redirect
-      response.should redirect_to(deck_card_path(@card.id))
+      response.should redirect_to(deck_card_path(@deck.id, @card.id))
     end
   end
 
@@ -255,18 +255,18 @@ describe CardController do
     it 'should redirect to deck session if answer is not in results' do
       post :review, :deck_id => @deck.id, :id => @card.id, :answer => ''
       response.should be_redirect
-      response.should redirect_to(learn_deck_path)
+      response.should redirect_to(learn_deck_path(@deck.id))
 
       post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'adlksfhjjas'
       response.should be_redirect
-      response.should redirect_to(learn_deck_path)
+      response.should redirect_to(learn_deck_path(@deck.id))
     end
 
     it 'should redirect to deck session path in positive case' do
       UserCardReview::RESULTS.each do |result|
         post :review, :deck_id => @deck.id, :id => @card.id, :answer => result
         response.should be_redirect
-        response.should redirect_to(learn_deck_path)
+        response.should redirect_to(learn_deck_path(@deck.id))
       end
     end
 
@@ -336,11 +336,11 @@ describe CardController do
     it 'should record a user card review' do
       start_interval = @scheduled_card.interval
       card_due_date = @scheduled_card.due
-      review_start = Time.now - 20
       duration_in_ms = 2000
+      elapsed_in_ms = 4000
 
       start_time = Time.now
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good', :review_start => review_start.to_s, :duration => duration_in_ms
+      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good', :duration => duration_in_ms, :elapsed => elapsed_in_ms
       stop_time = Time.now
 
       user_card_review = UserCardReview.first
@@ -348,8 +348,9 @@ describe CardController do
       user_card_review.card_id.should == @card.id
       user_card_review.user_id.should == @user.id
       user_card_review.due.should == card_due_date
-      user_card_review.review_start.utc.to_s.should == review_start.utc.to_s
-      user_card_review.reveal.utc.to_s.should == (review_start + (duration_in_ms / 1000)).to_s
+      user_card_review.review_start.should >= card_due_date
+      user_card_review.review_start.should <= Time.now - (elapsed_in_ms / 1000)
+      user_card_review.reveal.utc.to_s.should == (user_card_review.review_start + (duration_in_ms / 1000)).utc.to_s
       user_card_review.result_recorded.should >= start_time
       user_card_review.result_recorded.should <= stop_time
       user_card_review.result_success.should == "good"
@@ -372,15 +373,47 @@ describe CardController do
       user_card_review = UserCardReview.first
       user_card_review.result_success.should == "shaky_good"
     end
+  end
 
-    it 'should set review_start and reveal to now if not supplied' do
-      post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'didnt_know'
+  context '"GET" learn' do
+    it_should_behave_like "all shared card operations"
+    it_should_behave_like "all card operations that require a card"
 
-      user_card_review = UserCardReview.first
-      user_card_review.review_start.should >= Time.now - 5
-      user_card_review.review_start.should <= Time.now
-      user_card_review.reveal.should >= Time.now - 5
-      user_card_review.reveal.should <= Time.now
+    before(:each) do
+      @deck = Deck.make(:user_id => @user.id)
+
+      @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card2 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card3 = Card.make(:deck_id => @deck.id, :chapter => 1)
+
+      UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+    end
+
+    it 'should return the card' do
+      get :learn, :deck_id => @deck.id, :id => @card1.id
+
+      assigns[:card].should == @card1
+      UserCardSchedule.where(:user_id => @user.id, :card_id => @card1.id).count.should == 1
+    end
+
+    it 'should schedule the card if it is not already scheduled' do
+      get :learn, :deck_id => @deck.id, :id => @card2.id
+
+      assigns[:card].should == @card2
+      UserCardSchedule.where(:user_id => @user.id, :card_id => @card1.id).count.should == 1
+    end
+
+    it 'should store the review start time in the session' do
+      start_time = Time.now
+      get :learn, :deck_id => @deck.id, :id => @card2.id
+      end_time = Time.now
+
+      session[:review_start].should >= start_time
+      session[:review_start].should <= end_time
     end
   end
 end

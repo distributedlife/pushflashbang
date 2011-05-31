@@ -1,0 +1,276 @@
+= hidden_field_tag "start_time", 0
+= hidden_field_tag "duration", 0
+= hidden_field_tag "is_new", 0
+
+=render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => ''}
+=render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => 'This is a new card. You will not have seen it before', :with_group => true}
+
+//SHOW current card (pull into partial)
+//=render :partial => '/card/show', :locals => {:front => @card.front, :pronunciation_side => @deck.pronunciation_side}
+%section{:class => ["panel"]}
+  %p{:class => "giant mandarin"}= @card.front
+  - if @deck.pronunciation_side == "front" && !@card.pronunciation.nil? && @card.pronunciation != ""
+    %p{:class => "subtitle centre"}= "[#{@card.pronunciation}]"
+  - if @deck.supports_written_answer == true
+    .pad_from_top
+    .section_break
+    .pad_from_top
+    - answer = @card
+    - answer.front = ""
+    - semantic_form_for(answer, :url => '#', :method => :post) do |f|
+      = f.input :front, :as => :string, :label => false, :hint => I18n.t('deck.learn.labels.answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
+    %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
+    :javascript
+      //override the enter button on the formsubmit
+      $("#edit_card_#{answer.id}").submit(function(event) {
+        event.preventDefault();
+
+
+        //only support the enter button once
+        if ($("#card_front").attr('disabled') == true)
+        {
+          return false ;
+        }
+
+
+        $('#do_reveal').click();
+
+        $("#card_front").attr('disabled', true);
+      });
+  - unless @card.back == ""
+    #back_of_card{:class => "hidden"}
+      .section_break
+      %p#card_answer{:class => "giant mandarin",}= @card.back
+      - if @deck.pronunciation_side == "back" && !@card.pronunciation.nil? && @card.pronunciation != ""
+        %p{:class => "subtitle centre"}= "[#{@card.pronunciation}]"
+
+.pad
+.pad_from_top
+
+- unless @card.nil?
+
+  #reveal_button
+    .panel
+      .button{:class => "centre big_button"}
+        = link_to "Reveal", '#', :class => 'positive', :id => "do_reveal"
+      .pad_from_top
+
+  #review_buttons{:class => "hidden"}
+    .panel
+      .button{:class => "centre large_button"}
+        %ul
+          %li.inline
+            = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral', :method => :post, :id => "do_dont_know"
+            :javascript
+              $('#do_dont_know').click(function(event) {
+                var end = new Date();
+                var start_time = document.getElementById("start_time") ;
+                var duration = document.getElementById("duration") ;
+                elapsed = end - start_time.value;
+
+
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know', :review_start => @review_start.to_s)}";
+                link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
+
+                $('#do_dont_know').attr('href', link);
+              });
+          %li.inline
+            = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral', :method => :post, :id => "do_partial_answer"
+            :javascript
+              $('#do_partial_answer').click(function(event) {
+                var end = new Date();
+                var start_time = document.getElementById("start_time") ;
+                var duration = document.getElementById("duration") ;
+                elapsed = end - start_time.value;
+
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'partial_correct', :review_start => @review_start.to_s)}";
+                link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
+
+                $('#do_partial_answer').attr('href', link);
+              });
+          %li.inline
+            = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post, :id => "do_shaky_good"
+            :javascript
+              $('#do_shaky_good').click(function(event) {
+                var end = new Date();
+                var start_time = document.getElementById("start_time") ;
+                var duration = document.getElementById("duration") ;
+                elapsed = end - start_time.value;
+
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s)}";
+                link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
+
+                $('#do_shaky_good').attr('href', link);
+              });
+          %li.inline
+            = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post, :id => "do_good"
+            :javascript
+              $('#do_good').click(function(event) {
+                var end = new Date();
+                var start_time = document.getElementById("start_time") ;
+                var duration = document.getElementById("duration") ;
+                elapsed = end - start_time.value;
+
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s)}";
+                link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
+
+                $('#do_good').attr('href', link);
+              });
+    .pad
+
+:javascript
+  $('html').keypress(function(event) {
+    if (event.which == '32') 
+    {
+      //we are quoting the ruby variable resolution because the javascript test driver crashes doing it. wtf!
+      if ($('#do_reveal').is(":visible") && ("#{@deck.supports_written_answer}" == "false"))
+      {
+        $('#do_reveal').click();
+      }
+      else
+      {
+        //click on button with highlight
+        if ($('#do_dont_know').attr('class') == 'positive')
+        {
+          $('#do_dont_know').click();
+        }
+        else if ($('#do_partial_answer').attr('class') == 'positive')
+        {
+          $('#do_partial_answer').click();
+        }
+        else if ($('#do_shaky_good').attr('class') == 'positive')
+        {
+          $('#do_shaky_good').click();
+        }
+        else if ($('#do_good').attr('class') == 'positive')
+        {
+          $('#do_good').click();
+        }
+      }
+    }
+    if ($('#do_reveal').is(":hidden"))
+    {
+      if (event.which == '49')
+      {
+        $('#do_dont_know').click();
+      }
+      if (event.which == '50')
+      {
+        $('#do_partial_answer').click();
+      }
+      if (event.which == '51')
+      {
+        $('#do_shaky_good').click();
+      }
+      if (event.which == '52')
+      {
+        $('#do_good').click();
+      }
+    }
+  });
+
+  //start timer when document is ready
+  $(document).ready(function() {
+    $("#card_front").focus();
+
+    var start_time = document.getElementById("start_time") ;
+    start_time.value = new Date ().getTime() ;
+
+    $.ajax({
+      url: "/deck/#{@deck.id}/card/#{@card.id}/is_new",
+      success: function(data){
+        //if we have a new card then we show the new card notice
+        if (data == true)
+        {
+          $("#new_card_notice").show();
+        }
+
+        var is_new = document.getElementById("is_new") ;
+        is_new.value = data ;
+      }
+    });
+  });
+
+  //perform the reveal action
+  $('#do_reveal').click(function(event) {
+    var end = new Date();
+    var start_time = document.getElementById("start_time") ;
+    var duration = document.getElementById("duration") ;
+    var card_answer = document.getElementById("card_answer") ;
+    var user_answer = document.getElementById("card_front") ;
+    var is_new = document.getElementById("is_new") ;
+
+    duration.value = end - start_time.value;
+
+
+    //don't highlight buttons based on time if first button is positive (i.e. first reveal)
+    if (is_new.value == "false")
+    {
+      //highlight buttons based on speed of answer
+      if (duration.value <= 2000)
+      {
+        //highlight buttons based on typed answer
+        if (user_answer)
+        {
+          if (card_answer.innerHTML == user_answer.value)
+          {
+            $('#do_good').attr('class', 'positive')
+            $("#do_good").focus();
+          }
+          else
+          {
+            $('#do_partial_answer').attr('class', 'positive')
+            $("#do_partial_answer").focus();
+
+            //tell the user their answer didn't match
+            $("#answer_result").text("is not correct");
+          }
+
+          $("#answer_result").show();
+        }
+        else
+        {
+          $('#do_good').attr('class', 'positive')
+          $("#do_good").focus();
+        }
+      }
+      else
+      {
+        //highlight buttons based on typed answer
+        if (user_answer)
+        {
+          if (card_answer.innerHTML == user_answer.value)
+          {
+            $('#do_shaky_good').attr('class', 'positive')
+            $("#do_shaky_good").focus();
+          }
+          else
+          {
+            $('#do_partial_answer').attr('class', 'positive')
+            $("#do_partial_answer").focus();
+
+            //tell the user their answer didn't match
+            $("#answer_result").text("is not correct");
+          }
+
+          $("#answer_result").show();
+        }
+        else
+        {
+          $('#do_shaky_good').attr('class', 'positive')
+          $("#do_shaky_good").focus();
+        }
+      }
+    }
+    else
+    {
+      $('#do_dont_know').attr('class', 'positive')
+      $("#do_dont_know").focus();
+    }
+
+
+
+    $("#back_of_card").show();
+    $("#reveal_button").hide();
+    $("#review_buttons").show();
+  });

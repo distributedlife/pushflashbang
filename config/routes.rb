@@ -19,6 +19,8 @@ PushFlashBang::Application.routes.draw do
     resources :card do
       member do
         post 'review'
+        get 'learn'
+        get 'is_new'
       end
     end
 

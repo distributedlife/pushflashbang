@@ -17,7 +17,7 @@ Feature: Graduated Response
 
   @javascript
   Scenario: new card green button indicator
-    When I have reviewed a card with an interval of 0
+    When I have reviewed a new card
     Then the "first" button is "positive"
     And the "second" button is "neutral"
     And the "third" button is "neutral"
@@ -25,7 +25,7 @@ Feature: Graduated Response
 
   @javascript
   Scenario: existing card green button indicator
-    When I take 2 seconds to review a card with an interval that is not 0
+    When I take 2 seconds to review a card that is not new
     Then the "first" button is "neutral"
     And the "second" button is "neutral"
     And the "third" button is "positive"
@@ -33,7 +33,7 @@ Feature: Graduated Response
 
   @javascript
   Scenario: perfect card green button indicator
-    When I take 0 seconds to review a card with an interval that is not 0
+    When I take 0 seconds to review a card that is not new
     Then the "first" button is "neutral"
     And the "second" button is "neutral"
     And the "third" button is "neutral"

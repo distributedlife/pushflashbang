@@ -1,6 +1,8 @@
 class CardController < ApplicationController
   before_filter :authenticate_user!
 
+  caches_page :learn
+
   def new
     begin
       is_deck_valid
@@ -35,6 +37,8 @@ class CardController < ApplicationController
       is_deck_and_card_valid
 
       @card = Card.find(params[:id])
+
+      expire_page(:controller => 'card', :action => 'learn', :id => params[:id])
     rescue
     end
   end
@@ -89,26 +93,35 @@ class CardController < ApplicationController
 
       answer = params[:answer]
 
-      if params[:review_start].nil?
-        params[:review_start] = Time.now
-      else
-        params[:review_start] = Time.parse(params[:review_start])
-      end
+#      if params[:review_start].nil?
+#        params[:review_start] = Time.now
+#      else
+#        params[:review_start] = Time.parse(params[:review_start])
+#      end
 
       params[:duration] ||= 0
+      params[:elapsed] ||= 0
       duration_in_seconds = params[:duration].to_i / 1000
+      elapsed_in_seconds = params[:elapsed].to_i / 1000
+
+
+      card_schedule = UserCardSchedule.where(:card_id => params[:id], :user_id => current_user.id)
+      card_schedule = card_schedule.first
+
+      #review start time is now - elapsed where it can't be less than the due time
+      review_start_time = Time.now - elapsed_in_seconds < card_schedule.due ? card_schedule.due : Time.now - elapsed_in_seconds
+
 
       user_card_review = UserCardReview.new(
         :card_id => params[:id],
         :user_id => current_user.id,
-        :review_start => params[:review_start],
-        :reveal => params[:review_start] + duration_in_seconds,
+#        :review_start => params[:review_start],
+        :review_start => review_start_time,
+        :reveal => review_start_time + duration_in_seconds,
         :result_recorded => Time.now,
         :result_success => answer
         )
 
-      card_schedule = UserCardSchedule.where(:card_id => params[:id], :user_id => current_user.id)
-      card_schedule = card_schedule.first
 
       user_card_review.due = card_schedule.due
       user_card_review.interval = card_schedule.interval
@@ -137,6 +150,34 @@ class CardController < ApplicationController
 
       redirect_to learn_deck_path(params[:deck_id])
     rescue
+    end
+  end
+
+  def learn
+    begin
+      is_deck_and_card_valid
+
+      @deck = Deck.find(params[:deck_id])
+      @card = Card.find(params[:id])
+
+      #create a scheduled card entry if one does not exist
+      scheduled_card = UserCardSchedule::where(:user_id => current_user.id, :card_id => params[:id])
+      if scheduled_card.empty?
+        scheduled_card = UserCardSchedule.create(:user_id => current_user.id, :card_id => params[:id], :due => Time.now, :interval => 0)
+      end
+
+      session[:review_start] = Time.now
+    rescue
+    end
+  end
+
+  def is_new
+    reviews_of_card = UserCardReview::where(:user_id => current_user.id, :card_id => params[:id]).count
+
+    @is_new = reviews_of_card == 0
+
+    respond_to do |format|
+      format.json { render :json => @is_new}
     end
   end
 

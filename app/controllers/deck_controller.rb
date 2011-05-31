@@ -100,20 +100,17 @@ class DeckController < ApplicationController
           return
         end
 
-        @deck = Deck.find(params[:id])
-
         #get next scheduled card for user
-        @deck_chapter = UserDeckChapter.where(:deck_id => params[:id], :user_id => current_user.id)
-        if @deck_chapter.empty?
-          @deck_chapter = UserDeckChapter.create(:deck_id => params[:id], :user_id => current_user.id, :chapter => 1)
+        deck_chapter = UserDeckChapter.where(:deck_id => params[:id], :user_id => current_user.id)
+        if deck_chapter.empty?
+          deck_chapter = UserDeckChapter.create(:deck_id => params[:id], :user_id => current_user.id, :chapter => 1)
         else
-          @deck_chapter = @deck_chapter.first
+          deck_chapter = deck_chapter.first
         end
 
+        @deck = Deck.find(params[:id])
+
         @scheduled_card = UserCardSchedule::get_next_due_for_user_for_deck(current_user.id, params[:id])
-        @due_count = UserCardSchedule::get_due_count_for_user_for_deck(current_user.id, params[:id])
-        @review_start = Time.now
-        @new_card = false
 
         #if there are no scheduled cards for the user; get the first card in the deck that has not been scheduled and schedule it
         if @scheduled_card.nil?
@@ -121,24 +118,25 @@ class DeckController < ApplicationController
 
           cards = Card.find_by_sql("SELECT * FROM cards where deck_id = #{params[:id]} and id not in (select card_id from user_card_schedules where user_id = #{current_user.id}) order by created_at asc")
           if cards.empty?
+            #todo: remove these two
             @card = nil
             @scheduled_card = nil
 
             @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, cards.pronunciation, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
           else
-            @card = cards[0]
+            @card = cards.first
 
-            if (@card.chapter > @deck_chapter.chapter)
+            if (@card.chapter > deck_chapter.chapter)
               redirect_to deck_chapter_path(params[:id])
             else
               @scheduled_card.card_id = @card.id
               @scheduled_card.save!
-              @new_card = true
-              flash[:success] = "This is a new card. You will not have seen it before"
+
+              redirect_to learn_deck_card_path(params[:id], @scheduled_card.card_id)
             end
           end
         else
-          @card = Card.find(@scheduled_card.card_id)
+          redirect_to learn_deck_card_path(params[:id], @scheduled_card.card_id)
         end
       end
     rescue

@@ -1,0 +1,8 @@
+- id ||= nil
+- value ||= false
+- with_group ||= false
+
+- if with_group
+  .flash
+%p{:class => [keys], :id => id}
+  %span= "#{value}"

@@ -14,6 +14,18 @@ Feature: sessions
     Then the first card in the deck is scheduled
     And the first card in the deck is shown
 
+    @wip
+  Scenario: show deue cards first
+    Given I have the following carsd due:
+      | due date | card |
+      | 2 days ago | "A" |
+      | 1 day ago | "B" |
+      | today | "C" |
+      | tomorrow| "D" |
+      | not scheduled| "E" |
+    When I review the card
+    Then the card shown is "A"
+
   Scenario: a card is due and there are cards that have not been scheduled
     Given there are cards due
     And there are unscheduled cards
@@ -74,7 +86,6 @@ Feature: sessions
   Scenario: new card notification
     When a new card is scheduled
     Then I should see "This is a new card. You will not have seen it before"
-    Then I should see "New Card"
 
   Scenario: card review notification
     Given there are cards due

@@ -275,9 +275,9 @@ describe DeckController do
         assigns[:scheduled_card].due.should >= start_of_test
         assigns[:scheduled_card].due.should <= Time.now
         assigns[:scheduled_card].interval.should == 0 
-        assigns[:card].should == @card1
-        assigns[:review_start].should >= Time.now - 5
-        assigns[:review_start].should <= Time.now
+#        assigns[:card].should == @card1
+#        assigns[:review_start].should >= Time.now - 5
+#        assigns[:review_start].should <= Time.now
 
         UserCardSchedule.count.should == 1
       end
@@ -286,6 +286,13 @@ describe DeckController do
         get :learn, :id => @deck.id
 
         UserDeckChapter.where(:deck_id => @deck.id, :user_id => @user.id, :chapter => 1).count.should == 1
+      end
+
+      it 'should redirect to the character learn page' do
+        get :learn, :id => @deck.id
+
+        response.should be_redirect
+        response.should redirect_to(learn_deck_card_path(@deck.id, @card1.id))
       end
     end
 
@@ -298,24 +305,35 @@ describe DeckController do
         get :learn, :id => @deck.id
 
         assigns[:scheduled_card].card_id.should == @card3.id
-        assigns[:card].should == @card3
-        assigns[:review_start].should >= Time.now - 5
-        assigns[:review_start].should <= Time.now
-        assigns[:new_card].should == false
-        flash[:success].nil?.should == true
+#        assigns[:card].should == @card3
+#        assigns[:review_start].should >= Time.now - 5
+#        assigns[:review_start].should <= Time.now
+#        assigns[:new_card].should == false
+#        flash[:success].nil?.should == true
 
         UserCardSchedule.count.should == 3
       end
 
-      it 'should return the due count' do
+      it 'should redirect to the character learn page' do
         UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
         UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
         UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago)
 
         get :learn, :id => @deck.id
 
-        assigns[:due_count].should == 3
+        response.should be_redirect
+        response.should redirect_to(learn_deck_card_path(@deck.id, @card3.id))
       end
+
+#      it 'should return the due count' do
+#        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+#        UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
+#        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago)
+#
+#        get :learn, :id => @deck.id
+#
+#        assigns[:due_count].should == 3
+#      end
     end
 
     context "user has no cards due" do
@@ -326,13 +344,23 @@ describe DeckController do
         get :learn, :id => @deck.id
 
         assigns[:scheduled_card].card_id.should == @card2.id
-        assigns[:card].should == @card2
-        assigns[:review_start].should >= Time.now - 5
-        assigns[:review_start].should <= Time.now
-        assigns[:new_card].should == true
-        flash[:success].should == "This is a new card. You will not have seen it before"
+#        assigns[:card].should == @card2
+#        assigns[:review_start].should >= Time.now - 5
+#        assigns[:review_start].should <= Time.now
+#        assigns[:new_card].should == true
+#        flash[:success].should == "This is a new card. You will not have seen it before"
 
         UserCardSchedule.count.should == 3
+      end
+
+      it 'should redirect to the character learn page' do
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
+        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 2.days.from_now)
+
+        get :learn, :id => @deck.id
+
+        response.should be_redirect
+        response.should redirect_to(learn_deck_card_path(@deck.id, @card2.id))
       end
 
       it 'should redirect to next_chapter if the scheduled card is the next chapter' do
@@ -355,17 +383,17 @@ describe DeckController do
 
         get :learn, :id => @deck.id
 
-        assigns[:scheduled_card].should == nil
-        assigns[:card].should == nil
-        assigns[:upcoming_cards].count.should == UserCardSchedule.where(:user_id => @user.id).count
+#        assigns[:scheduled_card].should == nil
+#        assigns[:card].should == nil
+#        assigns[:upcoming_cards].count.should == UserCardSchedule.where(:user_id => @user.id).count
 
         assigns[:upcoming_cards].first["front"].nil?.should == false
         assigns[:upcoming_cards].first["back"].nil?.should == false
         assigns[:upcoming_cards].first["due"].nil?.should == false
         assigns[:upcoming_cards].first["id"].nil?.should == false
 
-        assigns[:review_start].should >= Time.now - 5
-        assigns[:review_start].should <= Time.now
+#        assigns[:review_start].should >= Time.now - 5
+#        assigns[:review_start].should <= Time.now
 
         UserCardSchedule.count.should == 3
       end

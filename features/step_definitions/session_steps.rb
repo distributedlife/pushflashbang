@@ -57,20 +57,31 @@ And /^the first due card is shown$/ do
   And %{I should see "#{scheduled_card.front}"}
 end
 
-And /^I have reviewed a card with an interval of (\d+)$/ do |interval|
+When /^I have reviewed a card with an interval of (\d+)$/ do |interval|
   Given %{there are cards due}
   And %{the card interval is #{interval}}
   And %{I go to the "deck session" page}
   And %{I click on "Reveal"}
 end
 
-And /^I take (\d+) seconds to review a card with an interval that is not (\d+)$/ do |seconds, interval|
+When /^I have reviewed a new card$/ do
+  Given %{there are cards due}
+  And %{I go to the "deck session" page}
+  And %{I click on "Reveal"}
+end
+
+And /^the card has been reviewed before$/ do
+  UserCardReview.make(:card_id => get(:card_id), :user_id => get(:user_id))
+end
+
+And /^I take (\d+) seconds to review a card that is not new$/ do |seconds|
   And %{there are cards due}
-  And %{the card interval is #{interval.to_i + 1}}
+  And %{the card has been reviewed before}
   And %{I go to the "deck session" page}
   sleep seconds.to_i
   And %{I click on "Reveal"}
 end
+
 
 And /^a new card is scheduled$/ do
   And %{there are no cards due}
