@@ -1,6 +1,6 @@
 class AddSharedToDeck < ActiveRecord::Migration
   def self.up
-    add_column :decks, :shared, :boolean, :default => 0
+    add_column :decks, :shared, :boolean, :default => false
   end
 
   def self.down
