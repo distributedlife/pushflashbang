@@ -176,19 +176,22 @@
     var start_time = document.getElementById("start_time") ;
     start_time.value = new Date ().getTime() ;
 
-    $.ajax({
-      url: "/deck/#{@deck.id}/card/#{@card.id}/is_new",
-      success: function(data){
-        //if we have a new card then we show the new card notice
-        if (data == true)
-        {
-          $("#new_card_notice").show();
-        }
+    //$.ajax({
+    //  url: "/deck/#{@deck.id}/card/#{@card.id}/is_new",
+    //  success: function(data){
+    //    //if we have a new card then we show the new card notice
+    //    if (data == true)
+    //    {
+    //      $("#new_card_notice").show();
+    //    }
+    //
+    //    var is_new = document.getElementById("is_new") ;
+    //    is_new.value = data ;
+    //  }
+    //});
 
-        var is_new = document.getElementById("is_new") ;
-        is_new.value = data ;
-      }
-    });
+    var is_new = document.getElementById("is_new") ;
+    is_new.value = false ;
   });
 
   //perform the reveal action
