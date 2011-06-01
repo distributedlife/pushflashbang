@@ -336,8 +336,8 @@ describe CardController do
     it 'should record a user card review' do
       start_interval = @scheduled_card.interval
       card_due_date = @scheduled_card.due
-      duration_in_ms = 2000
-      elapsed_in_ms = 4000
+      duration_in_ms = 9669
+      elapsed_in_ms = 12301
 
       start_time = Time.now
       post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good', :duration => duration_in_ms, :elapsed => elapsed_in_ms

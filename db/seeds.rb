@@ -65,15 +65,15 @@ end
 unless CardTiming.count > 0
   CardTiming.create(:seconds => 5)                                       # 5 seconds
   CardTiming.create(:seconds => 25)                                      # 25 seconds
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_MINUTE * 2)        # 2 minutes
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_MINUTE * 10)       # 10 minutes
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_HOUR)              # 1 hour
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_HOUR * 5)          # 5 hours
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_DAY)               # 1 day
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_DAY * 5)           # 5 days
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_DAY * 25)          # 25 days
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_MONTH * 4)         # 4 months
-  CardTiming.create(:seconds => CardTiming.SECONDS_IN_YEAR * 2)          # 2 years
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_MINUTE * 2)        # 2 minutes
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_MINUTE * 10)       # 10 minutes
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_HOUR)              # 1 hour
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_HOUR * 5)          # 5 hours
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_DAY)               # 1 day
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_DAY * 5)           # 5 days
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_DAY * 25)          # 25 days
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_MONTH * 4)         # 4 months
+  CardTiming.create(:seconds => CardTiming::SECONDS_IN_YEAR * 2)          # 2 years
 end
 
 
