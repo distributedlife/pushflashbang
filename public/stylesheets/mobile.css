@@ -1,0 +1,475 @@
+@font-face {
+  font-family: "AR PL KaitiM GB";
+  src: local("AR PL UKai CN"); }
+
+/*宋体, mostly used for large chunks of paragraphs in small font sizes.*/
+/*黑体, works out well in either headings or paragraphs.*/
+/*幼圆, slender touches and rounded corners, pearl’s way.*/
+/*隶书, renaissance of a rather traditional Chinese brush writing dating thousands of years back, generally modest and conservative with an ancient style yet powerful from within.*/
+/*微软雅黑, the new Chinese character font introduced in Vista and with IE7, though not that safe compared with the former 4 in that it’s not automatically included in the Chinese localized version of Windows XP, it’s generally accepted as the most elegant and beautiful of the Mandarin Chinese web safe fonts by Chinese web designers.*/
+body {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0em;
+  margin-bottom: 0em;
+  font-size: 1.6em;
+  background-color: #eeeeee;
+  font-family: 'Times New Roman', serif; }
+
+li {
+  list-style: none; }
+
+li.inline {
+  display: inline !important; }
+
+header {
+  clear: both;
+  margin-bottom: 0.6em;
+  margin-left: 0.6em;
+  margin-right: 0.6em;
+  padding: 0.6em; }
+
+.left {
+  float: left; }
+
+.right {
+  float: right; }
+
+.centre {
+  width: 100%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto; }
+
+.tiny_pad_from_top {
+  padding-top: 0.6em; }
+
+.pad_from_top {
+  padding-top: 1.0em; }
+
+.panel {
+  background-color: white;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  padding: 0.6em;
+  margin: 0.6em; }
+
+.top_menu_panel {
+  background-color: #dddddd;
+  border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  -webkit-border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  -moz-border-radius-bottomright: 10px;
+  -webkit-border-bottom-right-radius: 10px;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  text-align: center; }
+  .top_menu_panel span {
+    font-size: 0.6em; }
+
+.created_item {
+  background-color: #eeffee;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 0.6em;
+  margin: 0.6em; }
+
+.search {
+  padding-right: 0.6em;
+  float: right;
+  clear: both; }
+
+.strong {
+  font-weight: bold; }
+
+legend.label {
+  font-weight: bold; }
+
+.section_break {
+  padding-top: 0.6em;
+  border-bottom: 1px solid black; }
+
+.definition {
+  float: right;
+  clear: none;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center; }
+  .definition p {
+    font-size: 0.6em !important; }
+
+.hidden {
+  display: none; }
+
+.pending {
+  background-color: #ffffdd; }
+
+a {
+  text-decoration: none;
+  color: black; }
+
+a.contrast {
+  text-decoration: none;
+  color: orange; }
+
+a.contrast:visited {
+  text-decoration: none;
+  color: orange; }
+
+a:visited {
+  color: black; }
+
+a:hover {
+  color: orange; }
+
+a:hover {
+  text-decoration: none; }
+
+textarea {
+  width: 90%;
+  margin: auto;
+  font-size: 0.6em;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 2px solid #eeeeee;
+  height: 6em;
+  padding: 0.6em;
+  display: block; }
+
+input {
+  margin: auto;
+  font-size: 0.6em;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 2px solid #eeeeee;
+  padding: 0.6em;
+  display: block; }
+
+input[type="text"] {
+  width: 90%; }
+
+input[type="email"] {
+  width: 90%; }
+
+input[type="password"] {
+  width: 90%; }
+
+input[type="checkbox"] {
+  display: inline; }
+
+input[type="radio"] {
+  display: inline; }
+
+input[type="submit"] {
+  display: inline;
+  font-family: 'Times New Roman', serif;
+  color: black; }
+
+input[type="submit"]:hover {
+  color: white; }
+
+input[type="submit"].positive {
+  background: lightgreen;
+  border: 1px solid green; }
+
+input[type="submit"].positive:hover {
+  background: darkgreen; }
+
+input[type="submit"].negative {
+  background: indianred;
+  border: 1px solid red; }
+
+input[type="submit"].negative:hover {
+  background: red; }
+
+input[type="submit"].neutral {
+  background: white;
+  border: 1px solid black; }
+
+input[type="submit"].neutral:hover {
+  background: black; }
+
+select {
+  font-size: 0.6em;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  display: block; }
+
+.help {
+  font-style: italics;
+  color: #ffaaaa; }
+
+form {
+  width: 100% !important; }
+  form li {
+    list-style: none; }
+    form li p {
+      display: inline !important;
+      padding: 0 !important;
+      margin: 0 !important; }
+  form li.width60 {
+    width: 60%; }
+  form li.full_width {
+    width: 100%; }
+  form a {
+    margin: auto;
+    font-size: 0.6em;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 2px solid #eeeeee;
+    height: 6em;
+    padding: 0.6em;
+    color: black; }
+  form a:hover {
+    color: white; }
+  form a.positive {
+    background: lightgreen;
+    border: 1px solid green; }
+  form a.positive:hover {
+    background: darkgreen; }
+  form a.negative {
+    background: indianred;
+    border: 1px solid red; }
+  form a.negative:hover {
+    background: red; }
+  form a.neutral {
+    background: white;
+    border: 1px solid black; }
+  form a.neutral:hover {
+    background: black; }
+
+.button a {
+  margin: auto;
+  font-size: 0.6em;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 2px solid #eeeeee;
+  height: 6em;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 1.2em;
+  padding-right: 1.2em;
+  color: black; }
+.button a:hover {
+  color: white; }
+.button a.positive {
+  background: lightgreen;
+  border: 1px solid green; }
+.button a.positive:hover {
+  background: darkgreen; }
+.button a.negative {
+  background: indianred;
+  border: 1px solid red; }
+.button a.negative:hover {
+  background: red; }
+.button a.neutral {
+  background: white;
+  border: 1px solid black; }
+.button a.neutral:hover {
+  background: black; }
+
+.large_button {
+  font-weight: bold;
+  font-size: 1.2em; }
+
+.big_button {
+  font-weight: bold;
+  font-size: 2em; }
+
+nav span.include a {
+  color: black; }
+nav span.include a:visited {
+  color: black; }
+nav span.include a:hover {
+  color: red; }
+nav span.exclude a {
+  color: grey; }
+nav span.exclude a:visited {
+  color: grey; }
+nav span.exclude a:hover {
+  color: orange; }
+
+.width35 {
+  width: 35%; }
+
+a.focus {
+  color: orange; }
+
+a.focus:hover {
+  color: orange;
+  font-weight: bold; }
+
+p.title {
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: 1.6em; }
+
+p.mandarin {
+  font-family: "AR PL KaitiM GB", sans-serif; }
+
+p.giant {
+  font-weight: bold;
+  font-size: 4em;
+  text-align: center; }
+
+p.minor_title {
+  clear: left;
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: 1em; }
+
+p.description {
+  font-family: "Consolas", sans-serif;
+  font-style: italic;
+  font-size: 0.6em;
+  text-align: left; }
+
+p.subtitle {
+  font-family: "Book Antiqua", serif;
+  font-style: italic;
+  font-size: 0.6em; }
+
+p.definition_text {
+  font-family: "Book Antiqua", serif;
+  font-style: italic;
+  font-size: 1em;
+  text-align: left; }
+
+.tiny_option {
+  font-size: 0.4em; }
+
+.subscript {
+  font-size: 0.6em; }
+
+.text_right {
+  text-align: right; }
+
+.text_left {
+  text-align: left; }
+
+p.contrast {
+  color: orange; }
+
+.list_summary {
+  clear: both;
+  margin-bottom: 0.6em;
+  float: right;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+  min-height: 1.0em; }
+
+.pad {
+  clear: both; }
+
+nav.filter {
+  clear: right;
+  float: right;
+  width: 30%; }
+  nav.filter ul {
+    margin-top: 0.6em;
+    margin-bottom: 0.6em; }
+    nav.filter ul li {
+      font-size: 0.6em;
+      padding: 0;
+      margin: 0;
+      text-align: right; }
+
+.card_panel {
+  background-color: white;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  padding: 0.6em;
+  margin-top: 0.6em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  margin-bottom: 0.3em;
+  width: 100px;
+  height: 75px; }
+
+.card_panel_full_page {
+  background-color: white;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  padding: 0.6em;
+  margin-top: 0.6em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  margin-bottom: 0.3em;
+  width: 155px;
+  height: 100px; }
+
+.flash p {
+  font-size: 0.6em;
+  padding: 0.6em;
+  margin: 0.6em;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px; }
+.flash p.success {
+  background-color: #eeffee; }
+.flash p.failure {
+  background-color: #ffeeee; }
+.flash p.error {
+  background-color: #ffeeee; }
+.flash p.notice {
+  background-color: white; }
+.flash p.info {
+  background-color: white; }
+
+#fade {
+  /*--Transparent background layer--*/
+  display: none;
+  /*--hidden by default--*/
+  background: #000;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .80;
+  z-index: 9999; }
+
+.popup_block {
+  display: none;
+  /*--hidden by default--*/
+  background: #fff;
+  padding: 20px;
+  border: 20px solid #ddd;
+  float: left;
+  font-size: 1.2em;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 99999;
+  /*--CSS3 Box Shadows--*/
+  -webkit-box-shadow: 0px 0px 20px #000;
+  -moz-box-shadow: 0px 0px 20px #000;
+  box-shadow: 0px 0px 20px #000;
+  /*--CSS3 Rounded Corners--*/
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px; }
+
+img.btn_close {
+  float: right;
+  margin: -55px -55px 0 0; }
+
+/*--Making IE6 Understand Fixed Positioning--*/
+*html #fade {
+  position: absolute; }
+
+*html .popup_block {
+  position: absolute; }

@@ -1,0 +1,804 @@
+$table_row_base : #fff ;
+$table_row_vary : #eee ;
+$table_row_hover: #ffa ;
+
+$page_background: #eee ;
+$page_background_offset: #ddd ;
+$li_background:   #fff ;
+$pending_background: #ffd;
+$success_notice_color: #efe;
+$failure_notice_color: #fee;
+$info_notice_color: #fff;
+$help_notice_color: #faa;
+$selected_item_color: #0f0;
+
+$text_colour: black ;
+$add_filter_colour: orange ;
+$remove_filter_colour: red ;
+$included_filter_colour: black ;
+$excluded_filter_colour: grey;
+$contrast_link_colour: orange;
+
+$button_positive: lightgreen ;
+$button_positive_hover: darkgreen ;
+$button_positive_outline: green ;
+$button_negative: indianred;
+$button_negative_hover: red;
+$button_negative_outline: red;
+$button_neutral: white;
+$button_neutral_hover: black;
+$button_neutral_outline: black;
+
+$button_text: black;
+$button_text_hover: white;
+
+$font_size_letter: 3.0em;
+$font_size_large: 1.6em;
+$font_size_normal: 1.0em;
+$font_size_small: 0.6em;
+$font_size_tiny: 0.4em;
+
+////////////////////////////////////////////////////////////////////////////////
+// FONTS
+////////////////////////////////////////////////////////////////////////////////
+
+@font-face
+{
+  font-family: "AR PL KaitiM GB";
+  src: local('AR PL UKai CN');
+}
+
+/*宋体, mostly used for large chunks of paragraphs in small font sizes.*/
+/*黑体, works out well in either headings or paragraphs.*/
+/*幼圆, slender touches and rounded corners, pearl’s way.*/
+/*隶书, renaissance of a rather traditional Chinese brush writing dating thousands of years back, generally modest and conservative with an ancient style yet powerful from within.*/
+/*微软雅黑, the new Chinese character font introduced in Vista and with IE7, though not that safe compared with the former 4 in that it’s not automatically included in the Chinese localized version of Windows XP, it’s generally accepted as the most elegant and beautiful of the Mandarin Chinese web safe fonts by Chinese web designers.*/
+
+
+////////////////////////////////////////////////////////////////////////////////
+// LAYOUT
+////////////////////////////////////////////////////////////////////////////////
+
+body
+{
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0em;
+  margin-bottom: 0em;
+  font-size: $font_size_large ;
+  background-color: $page_background;
+
+  font-family: 'Times New Roman', serif;
+}
+
+li
+{
+  list-style: none;
+}
+
+li.inline
+{
+  display: inline !important;
+}
+
+header
+{
+  clear: both;
+  margin-bottom: 0.6em ;
+  margin-left: 0.6em ;
+  margin-right: 0.6em ;
+
+  padding: 0.6em;
+}
+
+.left
+{
+  float: left;
+}
+
+.right
+{
+  float: right;
+}
+
+.centre
+{
+  width: 100%;
+  text-align: center ;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tiny_pad_from_top
+{
+  padding-top: 0.6em;
+}
+
+.pad_from_top
+{
+  padding-top: 1.0em;
+}
+
+.panel
+{
+  background-color: $li_background;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  padding: 0.6em;
+  margin: 0.6em;
+}
+
+.top_menu_panel
+{
+  background-color: $page_background_offset;
+
+  border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  -webkit-border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  -moz-border-radius-bottomright: 10px;
+  -webkit-border-bottom-right-radius: 10px;
+
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+
+  text-align: center;
+
+    span
+  {
+    font-size: $font_size_small;
+  }
+}
+
+.created_item
+{
+  background-color: $success_notice_color;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 0.6em;
+  margin: 0.6em;
+}
+
+.search
+{
+  padding-right: 0.6em;
+
+  float: right;
+  clear: both;
+}
+
+.strong
+{
+  font-weight: bold;
+}
+
+legend.label
+{
+  font-weight: bold;
+}
+
+.section_break
+{
+  padding-top: 0.6em;
+  border-bottom: 1px solid black;
+}
+
+.definition
+{
+  p
+  {
+    font-size: $font_size_small !important;
+  }
+
+  float: right;
+  clear: none;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center ;
+}
+
+.hidden
+{
+  display: none;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// INTERACTIONS
+////////////////////////////////////////////////////////////////////////////////
+
+.pending
+{
+  background-color: $pending_background;
+}
+
+a
+{
+  text-decoration: none;
+  color: $included_filter_colour;
+}
+
+a.contrast
+{
+  text-decoration: none;
+  color: $contrast_link_colour;
+}
+
+a.contrast:visited
+{
+  text-decoration: none;
+  color: $contrast_link_colour;
+}
+
+a:visited
+{
+  color: $included_filter_colour;
+}
+
+a:hover
+{
+  color: $add_filter_colour;
+}
+
+a:visited
+{
+}
+
+a:hover
+{
+  text-decoration: none;
+}
+
+textarea
+{
+  width: 90%;
+  margin: auto;
+  font-size: $font_size_small;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 2px solid $page_background;
+  height: 6em;
+  padding: 0.6em;
+  display: block;
+}
+
+input
+{
+  margin: auto;
+  font-size: $font_size_small;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 2px solid $page_background;
+  padding: 0.6em;
+  display: block;
+}
+
+input[type="text"]
+{
+  width: 90%;
+}
+
+input[type="email"]
+{
+  width: 90%;
+}
+
+input[type="password"]
+{
+  width: 90%;
+}
+
+input[type="checkbox"]
+{
+  display: inline;
+}
+
+input[type="radio"]
+{
+  display: inline;
+}
+
+input[type="submit"]
+{
+  display: inline;
+  font-family: 'Times New Roman', serif;
+  color: $button_text;
+}
+
+input[type="submit"]:hover
+{
+  color: $button_text_hover;
+}
+
+input[type="submit"].positive
+{
+  background: $button_positive;
+  border: 1px solid $button_positive_outline;
+}
+
+input[type="submit"].positive:hover
+{
+  background: $button_positive_hover;
+}
+
+input[type="submit"].negative
+{
+  background: $button_negative;
+  border: 1px solid $button_negative_outline;
+}
+
+input[type="submit"].negative:hover
+{
+  background: $button_negative_hover;
+}
+
+input[type="submit"].neutral
+{
+  background: $button_neutral;
+  border: 1px solid $button_neutral_outline;
+}
+
+input[type="submit"].neutral:hover
+{
+  background: $button_neutral_hover;
+}
+
+select
+{
+  font-size: $font_size_small;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  display: block;
+}
+
+.help
+{
+  font-style: italics;
+  color: $help_notice_color;
+}
+
+form
+{
+  width: 100% !important;
+
+  li
+  {
+     list-style: none;
+
+    p
+    {
+      display: inline !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+  }
+
+  li.width60
+  {
+    width: 60%;
+  }
+
+  li.full_width
+  {
+    width: 100%;
+  }
+
+  a
+  {
+    margin: auto;
+    font-size: $font_size_small;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 2px solid $page_background;
+    height: 6em;
+    padding: 0.6em;
+    color: $button_text;
+  }
+
+  a:hover
+  {
+    color: $button_text_hover;
+  }
+
+  a.positive
+  {
+    background: $button_positive;
+    border: 1px solid $button_positive_outline;
+  }
+
+  a.positive:hover
+  {
+    background: $button_positive_hover;
+  }
+
+  a.negative
+  {
+    background: $button_negative;
+    border: 1px solid $button_negative_outline;
+  }
+
+  a.negative:hover
+  {
+    background: $button_negative_hover;
+  }
+
+  a.neutral
+  {
+    background: $button_neutral;
+    border: 1px solid $button_neutral_outline;
+  }
+
+  a.neutral:hover
+  {
+    background: $button_neutral_hover;
+  }
+}
+
+.button
+{
+  a
+  {
+    margin: auto;
+    font-size: $font_size_small;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 2px solid $page_background;
+    height: 6em;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
+    color: $button_text;
+  }
+
+  a:hover
+  {
+    color: $button_text_hover;
+  }
+
+  a.positive
+  {
+    background: $button_positive;
+    border: 1px solid $button_positive_outline;
+  }
+
+  a.positive:hover
+  {
+    background: $button_positive_hover;
+  }
+
+  a.negative
+  {
+    background: $button_negative;
+    border: 1px solid $button_negative_outline;
+  }
+
+  a.negative:hover
+  {
+    background: $button_negative_hover;
+  }
+
+  a.neutral
+  {
+    background: $button_neutral;
+    border: 1px solid $button_neutral_outline;
+  }
+
+  a.neutral:hover
+  {
+    background: $button_neutral_hover;
+  }
+}
+
+.large_button
+{
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.big_button
+{
+  font-weight: bold;
+  font-size: 2em;
+}
+
+nav
+{
+  span.include
+  {
+    a
+    {
+      color: $included_filter_colour;
+    }
+
+    a:visited
+    {
+      color: $included_filter_colour;
+    }
+
+    a:hover
+    {
+      color: $remove_filter_colour;
+    }
+  }
+
+  span.exclude
+  {
+    a
+    {
+      color: $excluded_filter_colour;
+    }
+
+    a:visited
+    {
+      color: $excluded_filter_colour;
+    }
+
+    a:hover
+    {
+      color: $add_filter_colour;
+    }
+  }
+}
+
+.width35
+{
+  width: 35%;
+}
+
+a.focus
+{
+  color: $contrast_link_colour;
+}
+
+a.focus:hover
+{
+  color: $contrast_link_colour;
+  font-weight: bold;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// STYLES
+////////////////////////////////////////////////////////////////////////////////
+
+p.title
+{
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: $font_size_large;
+}
+
+p.mandarin
+{
+  font-family: "AR PL KaitiM GB", sans-serif;
+}
+
+p.giant
+{
+  font-weight: bold;
+  font-size: 4em;
+  text-align: center;
+}
+
+p.minor_title
+{
+  clear: left;
+  font-family: "Consolas", sans-serif;
+  font-weight: bold;
+  font-size: $font_size_normal;
+}
+
+p.description
+{
+  font-family: "Consolas", sans-serif;
+  font-style: italic;
+  font-size: $font_size_small;
+  text-align: left;
+}
+
+p.subtitle
+{
+  font-family: "Book Antiqua", serif;
+  font-style: italic;
+  font-size: $font_size_small;
+}
+
+p.definition_text
+{
+  font-family: "Book Antiqua", serif;
+  font-style: italic;
+  font-size: $font_size_normal;
+  text-align: left;
+}
+
+.tiny_option
+{
+  font-size: $font_size_tiny;
+}
+
+.subscript
+{
+  font-size: $font_size_small;
+}
+
+.text_right
+{
+  text-align: right;
+}
+
+.text_left
+{
+  text-align: left;
+}
+
+p.contrast
+{
+  color: $contrast_link_colour;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// CUSTOMISED
+////////////////////////////////////////////////////////////////////////////////
+
+.list_summary
+{
+  clear: both;
+  margin-bottom: 0.6em;
+  float: right;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+
+  min-height: 1.0em;
+}
+
+.pad
+{
+  clear: both;
+}
+
+nav.filter
+{
+  clear: right;
+  float: right;
+  width: 30%;
+
+  ul
+  {
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+
+    li
+    {
+      font-size: $font_size_small ;
+      padding: 0;
+      margin: 0;
+      text-align: right;
+    } 
+  }
+}
+
+.card_panel
+{
+  background-color: $li_background;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  padding: 0.6em;
+  margin-top: 0.6em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  margin-bottom: 0.3em;
+  width: 100px;
+  height: 75px;
+}
+
+.card_panel_full_page
+{
+  background-color: $li_background;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  padding: 0.6em;
+  margin-top: 0.6em;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  margin-bottom: 0.3em;
+  width: 155px;
+  height: 100px;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Flash Notices
+////////////////////////////////////////////////////////////////////////////////
+.flash
+{
+  p
+  {
+    font-size: $font_size_small;
+    padding: 0.6em;
+    margin: 0.6em;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+  }
+  
+  p.success
+  {
+    background-color: $success_notice_color;
+  }
+
+  p.failure
+  {
+    background-color: $failure_notice_color;
+  }
+  
+  p.error
+  {
+    background-color: $failure_notice_color;
+  }
+
+  p.notice
+  {
+    background-color: $info_notice_color;
+  }
+
+  p.info
+  {
+    background-color: $info_notice_color;
+  }
+}
+
+
+
+
+
+#fade { /*--Transparent background layer--*/
+	display: none; /*--hidden by default--*/
+	background: #000;
+	position: fixed; left: 0; top: 0;
+	width: 100%; height: 100%;
+	opacity: .80;
+	z-index: 9999;
+}
+.popup_block{
+	display: none; /*--hidden by default--*/
+	background: #fff;
+	padding: 20px;
+	border: 20px solid #ddd;
+	float: left;
+	font-size: 1.2em;
+	position: fixed;
+	top: 50%; left: 50%;
+	z-index: 99999;
+	/*--CSS3 Box Shadows--*/
+	-webkit-box-shadow: 0px 0px 20px #000;
+	-moz-box-shadow: 0px 0px 20px #000;
+	box-shadow: 0px 0px 20px #000;
+	/*--CSS3 Rounded Corners--*/
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+img.btn_close {
+	float: right;
+	margin: -55px -55px 0 0;
+}
+
+/*--Making IE6 Understand Fixed Positioning--*/
+*html #fade {
+	position: absolute;
+}
+*html .popup_block {
+	position: absolute;
+}

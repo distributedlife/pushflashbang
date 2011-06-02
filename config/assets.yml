@@ -13,3 +13,6 @@ stylesheets:
   common:
     - public/stylesheets/reset.css
     - public/stylesheets/style.css
+  mobile:
+    - public/stylesheets/reset.css
+    - public/stylesheets/mobile.css
