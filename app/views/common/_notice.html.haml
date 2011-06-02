@@ -4,5 +4,8 @@
 
 - if with_group
   .flash
-%p{:class => [keys], :id => id}
-  %span= "#{value}"
+    %p{:class => [keys], :id => id}
+      %span= "#{value}"
+- else
+  %p{:class => [keys], :id => id}
+    %span= "#{value}"
