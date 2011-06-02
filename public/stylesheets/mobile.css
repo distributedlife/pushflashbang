@@ -9,8 +9,8 @@
 /*微软雅黑, the new Chinese character font introduced in Vista and with IE7, though not that safe compared with the former 4 in that it’s not automatically included in the Chinese localized version of Windows XP, it’s generally accepted as the most elegant and beautiful of the Mandarin Chinese web safe fonts by Chinese web designers.*/
 body {
   width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 0;
+  margin-right: 0;
   margin-top: 0em;
   margin-bottom: 0em;
   font-size: 1.6em;
