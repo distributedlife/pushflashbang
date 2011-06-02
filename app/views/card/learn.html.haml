@@ -2,7 +2,7 @@
 = hidden_field_tag "duration", 0
 = hidden_field_tag "is_new", 0
 
-=render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => ''}
+=render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => 'number of cards due: ...'}
 =render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => 'This is a new card. You will not have seen it before', :with_group => true}
 
 //SHOW current card (pull into partial)
@@ -192,6 +192,14 @@
 
     var is_new = document.getElementById("is_new") ;
     is_new.value = false ;
+
+
+    $.ajax({
+      url: "/deck/#{@deck.id}/due_count",
+      success: function(data){
+        $("header p.subtitle").text("number of cards due: " + (data - 1));
+      }
+    });
   });
 
   //perform the reveal action

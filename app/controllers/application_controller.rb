@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-#  helper :all
   protect_from_forgery
   layout :detect_browser
 
@@ -21,7 +20,6 @@ class ApplicationController < ActionController::Base
     end
 
     return 'application'
-#    return 'mobile_application'
   end
 
   def selected_layout
