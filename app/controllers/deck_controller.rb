@@ -158,6 +158,14 @@ class DeckController < ApplicationController
     end
   end
 
+  def due_count
+    @due_count = UserCardSchedule.get_due_count_for_user_for_deck(current_user.id, params[:id])
+
+    respond_to do |format|
+      format.json { render :json => @due_count}
+    end
+  end
+
   private
   def deck_is_valid?
     begin

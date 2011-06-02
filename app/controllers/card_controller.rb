@@ -93,12 +93,6 @@ class CardController < ApplicationController
 
       answer = params[:answer]
 
-#      if params[:review_start].nil?
-#        params[:review_start] = Time.now
-#      else
-#        params[:review_start] = Time.parse(params[:review_start])
-#      end
-
       params[:duration] ||= 0
       params[:elapsed] ||= 0
       duration_in_seconds = params[:duration].to_i / 1000
@@ -108,14 +102,12 @@ class CardController < ApplicationController
       card_schedule = UserCardSchedule.where(:card_id => params[:id], :user_id => current_user.id)
       card_schedule = card_schedule.first
 
-      #review start time is now - elapsed where it can't be less than the due time
       review_start_time = Time.now - elapsed_in_seconds < card_schedule.due ? card_schedule.due : Time.now - elapsed_in_seconds
 
 
       user_card_review = UserCardReview.new(
         :card_id => params[:id],
         :user_id => current_user.id,
-#        :review_start => params[:review_start],
         :review_start => review_start_time,
         :reveal => review_start_time + duration_in_seconds,
         :result_recorded => Time.now,

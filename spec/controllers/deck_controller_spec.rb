@@ -431,4 +431,30 @@ describe DeckController do
       @deck.shared.should == false
     end
   end
+
+    context '"GET" cards_due' do
+    before(:each) do
+      @deck = Deck.make(:user_id => @user.id)
+
+      @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card2 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card3 = Card.make(:deck_id => @deck.id, :chapter => 1)
+    end
+
+    it 'should return 0 if no cards are due' do
+      get :due_count, :id => @deck.id
+
+      assigns[:due_count].should == 0
+    end
+
+    it 'should return the number of cards due including the current card' do
+      UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+      UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
+      UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
+
+      get :due_count, :id => @deck.id
+
+      assigns[:due_count].should == 2
+    end
+  end
 end

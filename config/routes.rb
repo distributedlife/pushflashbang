@@ -14,6 +14,7 @@ PushFlashBang::Application.routes.draw do
       get 'show', :as => 'show'
       get 'learn', :as => 'learn'
       get 'toggle_share', :as => 'toggle_share'
+      get 'due_count'
     end
     
     resources :card do

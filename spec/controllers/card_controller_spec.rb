@@ -416,4 +416,32 @@ describe CardController do
       session[:review_start].should <= end_time
     end
   end
+
+  context '"GET" is_new' do
+    before(:each) do
+      @deck = Deck.make(:user_id => @user.id)
+
+      @card = Card.make(:deck_id => @deck.id, :chapter => 1)
+    end
+
+    it 'should return false is card does not exist' do
+      get :is_new, :deck_id => @deck.id, :id => 0
+
+      assigns[:is_new].should == true
+    end
+
+    it 'should return true if user has never reviewed the card before' do
+      get :is_new, :deck_id => @deck.id, :id => @card.id
+
+      assigns[:is_new].should == true
+    end
+
+    it 'should return false if user has reviewed card before' do
+      UserCardReview.make(:user_id => @user.id, :card_id => @card.id)
+
+      get :is_new, :deck_id => @deck.id, :id => @card.id
+
+      assigns[:is_new].should == false
+    end
+  end
 end
