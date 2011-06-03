@@ -23,7 +23,7 @@ li {
 li.inline {
   display: inline !important; }
 
-li.inline-block {
+.inline-block {
   display: inline-block !important; }
 
 header {
@@ -316,7 +316,7 @@ a.focus:hover {
   font-weight: bold; }
 
 a.large {
-  font-size: 1em; }
+  font-size: 0.8em; }
 
 p.title {
   font-family: "Consolas", sans-serif;
