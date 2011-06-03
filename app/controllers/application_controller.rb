@@ -3,7 +3,12 @@ class ApplicationController < ActionController::Base
   layout :detect_browser
 
   private
-  MOBILE_BROWSERS = ['android']
+  MOBILE_BROWSERS =
+  [
+    'android', "ipod", "opera mini", "blackberry", "palm","hiptop","avantgo","plucker", "xiino","blazer","elaine", "windows ce; ppc;",
+    "windows ce; smartphone;","windows ce; iemobile", "up.browser","up.link","mmp","symbian","smartphone", "midp","wap","vodafone","o2",
+    "pocket","kindle", "mobile","pda","psp","treo"
+  ]
 
   def after_sign_in_path_for(resource_or_scope)
     user_index_path
@@ -20,7 +25,6 @@ class ApplicationController < ActionController::Base
     end
 
     return 'application'
-#    return 'mobile_application'
   end
 
   def selected_layout

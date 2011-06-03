@@ -4,6 +4,7 @@ Feature: deck cards
   So that I can use flash card SRS learning
 
   Background:
+    And my user agent is "chrome"
     Given I am logged in and have created a deck
 
   Scenario: create card link is available from show deck page
