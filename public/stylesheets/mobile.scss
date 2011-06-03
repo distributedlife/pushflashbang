@@ -8,7 +8,6 @@ body
   margin-top: 0em;
   margin-bottom: 0em;
   font-size: $font_size_large ;
-/*  background-color: $page_background;*/
 
   font-family: 'Times New Roman', serif;
 }
@@ -22,5 +21,6 @@ body
 
 .review-button-right
 {
+  margin-top: 1em ;
   float: none !important ;
 }
