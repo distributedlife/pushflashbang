@@ -89,18 +89,38 @@ class DeckController < ApplicationController
     end
   end
 
-  def learn
+  def upcoming
     begin
       if deck_is_valid?
-        #if there are no cards in deck; we should not try and schedule any
-        cards = Card.order(:created_at).where(:deck_id => params[:id])
+        cards = Card.where(:deck_id => params[:id])
         if cards.empty?
           flash[:failure] = "You can't start a session until you have added cards to the deck."
           redirect_to deck_path(params[:id])
           return
         end
 
-        #get next scheduled card for user
+        if UserCardSchedule::get_due_count_for_user_for_deck(current_user.id, params[:id]) > 0
+          redirect_to learn_deck_path(params[:id])
+        else
+          @deck = Deck.find(params[:id])
+          @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, cards.pronunciation, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
+        end
+      end
+    rescue
+    end
+  end
+
+  def learn
+    begin
+      if deck_is_valid?
+        #if there are no cards in deck; we should not try and schedule any
+        if Card.where(:deck_id => params[:id]).count == 0
+          flash[:failure] = "You can't start a session until you have added cards to the deck."
+          redirect_to deck_path(params[:id])
+          return
+        end
+
+        #get user deck chapter
         deck_chapter = UserDeckChapter.where(:deck_id => params[:id], :user_id => current_user.id)
         if deck_chapter.empty?
           deck_chapter = UserDeckChapter.create(:deck_id => params[:id], :user_id => current_user.id, :chapter => 1)
@@ -108,35 +128,28 @@ class DeckController < ApplicationController
           deck_chapter = deck_chapter.first
         end
 
-        @deck = Deck.find(params[:id])
 
-        @scheduled_card = UserCardSchedule::get_next_due_for_user_for_deck(current_user.id, params[:id])
+        #get next scheduled card for user
+        scheduled_card = UserCardSchedule::get_next_due_for_user_for_deck(current_user.id, params[:id])
+        unless scheduled_card.nil?
+          redirect_to learn_deck_card_path(params[:id], scheduled_card.card_id)
+          return
+        end
+
 
         #if there are no scheduled cards for the user; get the first card in the deck that has not been scheduled and schedule it
-        if @scheduled_card.nil?
-          @scheduled_card = UserCardSchedule.new(:user_id => current_user.id, :due => Time.now, :interval => 0)
+        next_card = Card::get_first_unscheduled_card_for_deck_for_user(current_user.id, params[:id])
+        if next_card.nil?
+          redirect_to upcoming_deck_path(params[:id])
+          return
+        end
 
-          cards = Card.find_by_sql("SELECT * FROM cards where deck_id = #{params[:id]} and id not in (select card_id from user_card_schedules where user_id = #{current_user.id}) order by created_at asc")
-          if cards.empty?
-            #todo: remove these two
-            @card = nil
-            @scheduled_card = nil
 
-            @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, cards.pronunciation, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
-          else
-            @card = cards.first
-
-            if (@card.chapter > deck_chapter.chapter)
-              redirect_to deck_chapter_path(params[:id])
-            else
-              @scheduled_card.card_id = @card.id
-              @scheduled_card.save!
-
-              redirect_to learn_deck_card_path(params[:id], @scheduled_card.card_id)
-            end
-          end
+        if next_card.chapter > deck_chapter.chapter
+          redirect_to deck_chapter_path(params[:id])
         else
-          redirect_to learn_deck_card_path(params[:id], @scheduled_card.card_id)
+          scheduled_card = UserCardSchedule.create(:user_id => current_user.id, :due => Time.now, :interval => 0, :card_id => next_card.id)
+          redirect_to learn_deck_card_path(params[:id], scheduled_card.card_id)
         end
       end
     rescue

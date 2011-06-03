@@ -51,18 +51,18 @@ describe CardController do
       response.should redirect_to(user_index_path)
     end
 
-    it 'should redirect to user home if the deck does not belong to the user even if shared' do
-      user2 = User.make
-      deck = Deck.make(:user_id => user2.id, :shared => true)
-      card = Card.make(:deck_id => deck.id)
-
-      get :show, :deck_id => deck.id, :id => card.id
-#      get :action.symbolize, :deck_id => deck.id, :id => card.id
-#      block.call(:deck_id => deck.id, :id => card.id)
-
-      response.should be_redirect
-      response.should redirect_to(user_index_path)
-    end
+#    it 'should redirect to user home if the deck does not belong to the user even if shared' do
+#      user2 = User.make
+#      deck = Deck.make(:user_id => user2.id, :shared => true)
+#      card = Card.make(:deck_id => deck.id)
+#
+#      get :show, :deck_id => deck.id, :id => card.id
+##      get :action.symbolize, :deck_id => deck.id, :id => card.id
+##      block.call(:deck_id => deck.id, :id => card.id)
+#
+#      response.should be_redirect
+#      response.should redirect_to(user_index_path)
+#    end
 
     it 'should redirect to user home if the deck does not exist' do
       card = Card.make(:deck_id => @deck.id)

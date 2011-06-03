@@ -113,6 +113,9 @@ en:
     chapter:
       title: You've reached a new chapter
       subtitle: is it time to progress further into the deck?
+    upcoming:
+      title: No cards available for review
+      subtitle: leave this screen open and we'll send you back for a review when one becomes due
     terminology:
       name:
         title: "name"

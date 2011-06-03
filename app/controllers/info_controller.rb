@@ -5,6 +5,6 @@ class InfoController < ApplicationController
   end
 
   def about
-    
+    redirect_to user_index_path unless current_user.nil?
   end
 end

@@ -107,6 +107,9 @@ legend.label {
 .hidden {
   display: none; }
 
+.nowrap {
+  white-space: nowrap; }
+
 .pending {
   background-color: #ffffdd; }
 

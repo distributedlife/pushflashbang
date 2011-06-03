@@ -17,7 +17,7 @@
         %p.description= link_to "Share Deck", toggle_share_deck_path(@deck.id)
       .pad
 
-%section{:class => ["left"], :style => "width: 75%"}
+%section{:class => ["left"], :style => "width: 75%; height: 80%"}
   - if @cards.empty?
     .div{:class => "panel left", :style => ""}
       %p This deck has no cards; 
@@ -31,18 +31,21 @@
       .div{:class => "card_panel left", :style => ""}
         %p{:class => "tiny_option text_right"}
           = link_to "edit", edit_deck_card_path(card.deck_id, card.id)
-        %p{:class => "centre mandarin"}= link_to card.front, "#?w=750", :rel => "popup_name_#{card.id}", :class => "poplight"
-        - if @deck.pronunciation_side == "front" && !card.pronunciation.nil? && card.pronunciation != ""
-          %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
+        %p{:class => "centre mandarin"}= link_to card.front, "#?w=750&h=600", :rel => "popup_name_#{card.id}", :class => "poplight"
+        - if is_pronunciation_on_front? @deck.pronunciation_side
+          .pad_from_top
+          %p{:class => "minor_title centre"}= "[#{card.pronunciation}]"
       #popup_name{:id => "#{card.id}", :class => "popup_block"}
         %p{:class => "giant mandarin"}= card.front
-        - if @deck.pronunciation_side == "front" && !card.pronunciation.nil? && card.pronunciation != ""
-          %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
+        - if is_pronunciation_on_front? @deck.pronunciation_side
+          .pad_from_top
+          %p{:class => "minor_title centre"}= "[#{card.pronunciation}]"
         .section_break
         .pad_from_top
         %p{:class => "giant mandarin"}= card.back
-        - if @deck.pronunciation_side == "back" && !card.pronunciation.nil? && card.pronunciation != ""
-          %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
+        - if is_pronunciation_on_back? @deck.pronunciation_side
+          .pad_from_top
+          %p{:class => "minor_title centre"}= "[#{card.pronunciation}]"
   .pad
 
 
@@ -57,9 +60,11 @@
       var query= popURL.split('?');
       var dim= query[1].split('&');
       var popWidth = dim[0].split('=')[1]; //Gets the first query string value
+      var popHeight = dim[1].split('=')[1]; //Gets the second query string value
 
       //Fade in the Popup and add close button
-      $('#' + popID).fadeIn().css({ 'width': Number( popWidth ) }); 
+      //$('#' + popID).fadeIn().css({ 'width': Number( popWidth ) });
+      $('#' + popID).fadeIn().css({ 'width': Number( popWidth ), 'height' : Number (popHeight) }).prepend('<a href="#" class="close right"><p class="btn_close">close</p></a>');
       //.prepend('<a href="#" class="close"><img src="close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
 
       //Define margin for center alignment (vertical   horizontal) - we add 80px to the height/width to accomodate for the padding  and border width defined in the css
@@ -76,13 +81,16 @@
       $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
       $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer - .css({'filter' : 'alpha(opacity=80)'}) is used to fix the IE Bug on fading transparencies
 
+
+      $('.mandarin').textfill({ maxFontPixels: 36 });
+
       return false;
     });
   });
 
   //Close Popups and Fade Layer
-  $('.popup_block, #fade').live('click', function() {
-      $('#fade , .popup_block').fadeOut(function() {
+  $('.popup_block, a.close, #fade').live('click', function() {
+      $('#fade, a.close, .popup_block').fadeOut(function() {
           $('#fade').remove();  
       });
       return false;

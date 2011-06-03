@@ -5,45 +5,8 @@
 =render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => 'number of cards due: ...'}
 =render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => 'This is a new card. You will not have seen it before', :with_group => true}
 
-//SHOW current card (pull into partial)
-//=render :partial => '/card/show', :locals => {:front => @card.front, :pronunciation_side => @deck.pronunciation_side}
 %section{:class => ["panel"]}
-  %p{:class => "giant mandarin"}= @card.front
-  - if @deck.pronunciation_side == "front" && !@card.pronunciation.nil? && @card.pronunciation != ""
-    %p{:class => "subtitle centre"}= "[#{@card.pronunciation}]"
-  - if @deck.supports_written_answer == true
-    .pad_from_top
-    .section_break
-    .pad_from_top
-    - answer = @card
-    - answer.front = ""
-    - semantic_form_for(answer, :url => '#', :method => :post) do |f|
-      = f.input :front, :as => :string, :label => false, :hint => I18n.t('deck.learn.labels.answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
-    %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
-    :javascript
-      //override the enter button on the formsubmit
-      $("#edit_card_#{answer.id}").submit(function(event) {
-        event.preventDefault();
-
-
-        //only support the enter button once
-        if ($("#card_front").attr('disabled') == true)
-        {
-          return false ;
-        }
-
-
-        $('#do_reveal').click();
-
-        $("#card_front").attr('disabled', true);
-      });
-  - unless @card.back == ""
-    #back_of_card{:class => "hidden"}
-      .section_break
-      %p#card_answer{:class => "giant mandarin",}= @card.back
-      - if @deck.pronunciation_side == "back" && !@card.pronunciation.nil? && @card.pronunciation != ""
-        %p{:class => "subtitle centre"}= "[#{@card.pronunciation}]"
-
+  =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}
 .pad
 .pad_from_top
 
@@ -59,7 +22,7 @@
     .panel
       .button{:class => "centre large_button"}
         %ul
-          %li.inline
+          %li{:class => ['inline', 'nowrap']}
             = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral', :method => :post, :id => "do_dont_know"
             :javascript
               $('#do_dont_know').click(function(event) {
@@ -74,7 +37,7 @@
 
                 $('#do_dont_know').attr('href', link);
               });
-          %li.inline
+          %li{:class => ['inline', 'nowrap']}
             = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral', :method => :post, :id => "do_partial_answer"
             :javascript
               $('#do_partial_answer').click(function(event) {
@@ -88,7 +51,7 @@
 
                 $('#do_partial_answer').attr('href', link);
               });
-          %li.inline
+          %li{:class => ['inline', 'nowrap']}
             = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post, :id => "do_shaky_good"
             :javascript
               $('#do_shaky_good').click(function(event) {
@@ -102,7 +65,7 @@
 
                 $('#do_shaky_good').attr('href', link);
               });
-          %li.inline
+          %li{:class => ['inline', 'nowrap']}
             = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post, :id => "do_good"
             :javascript
               $('#do_good').click(function(event) {

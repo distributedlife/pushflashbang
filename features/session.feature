@@ -15,7 +15,7 @@ Feature: sessions
     And the first card in the deck is shown
 
     @wip
-  Scenario: show deue cards first
+  Scenario: show due cards first
     Given I have the following carsd due:
       | due date | card |
       | 2 days ago | "A" |
@@ -49,7 +49,7 @@ Feature: sessions
     Given there are no cards due
     And there are no unscheduled cards
     When I go to the "deck session" page
-    Then I should see "There are no cards due and all cards in the deck are scheduled"
+    Then I should see "No cards available for review"
     And I should see when each card is scheduled to be reviewed
 
   Scenario: no cards in deck

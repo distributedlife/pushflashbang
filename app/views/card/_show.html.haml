@@ -1,0 +1,40 @@
+%p{:class => "giant mandarin"}= card.front
+
+- if is_pronunciation_on_front? pronunciation_side
+  .pad_from_top
+  %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
+
+- if supports_typed_answer == true
+  .pad_from_top
+  .section_break
+  .pad_from_top
+  - answer = card
+  - answer.front = ""
+  - semantic_form_for(answer, :url => '#', :method => :post) do |f|
+    = f.input :front, :as => :string, :label => false, :hint => I18n.t('deck.learn.labels.answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
+  %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
+  :javascript
+    //override the enter button on the formsubmit
+    $("#edit_card_#{answer.id}").submit(function(event) {
+      event.preventDefault();
+
+
+      //only support the enter button once
+      if ($("#card_front").attr('disabled') == true)
+      {
+        return false ;
+      }
+
+
+      $('#do_reveal').click();
+
+      $("#card_front").attr('disabled', true);
+    });
+
+- unless card.back == ""
+  #back_of_card{:class => "hidden"}
+    .section_break
+    %p#card_answer{:class => "giant mandarin",}= card.back
+    - if is_pronunciation_on_back? pronunciation_side
+      .pad_from_top
+      %p{:class => "minor_title centre"}= "[#{card.pronunciation}]"

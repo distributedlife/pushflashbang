@@ -1,4 +1,12 @@
 module DeckHelper
+  def is_pronunciation_on_front? side
+    return side == 'front'
+  end
+
+  def is_pronunciation_on_back? side
+    return side == 'back'
+  end
+
   def deck_subtitle deck
     text = [] ;
 
