@@ -61,21 +61,15 @@ class CardController < ApplicationController
   end
 
   def destroy
-#    begin
-      if is_deck_and_card_valid_and_user_is_owner?
-        UserCardSchedule.where(:card_id => params[:id]).each do |card_schedule|
-          card_schedule.delete
-        end
-
-        Card.delete(params[:id])
-        flash[:failure] = "Deck successfully deleted"
-        redirect_to show_deck_path(params[:deck_id])
-#      else
-#        flash[:failure] = "Deck successfully deleted"
+    if is_deck_and_card_valid_and_user_is_owner?
+      UserCardSchedule.where(:card_id => params[:id]).each do |card_schedule|
+        card_schedule.delete
       end
-#    rescue
-#    end
 
+      Card.delete(params[:id])
+      flash[:failure] = "Deck successfully deleted"
+      redirect_to show_deck_path(params[:deck_id])
+    end
   end
   
   def show
@@ -159,6 +153,11 @@ class CardController < ApplicationController
       end
 
       session[:review_start] = Time.now
+
+
+      if detect_browser == "mobile_application"
+        render "learn.mobile"
+      end
     rescue
     end
   end

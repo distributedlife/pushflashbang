@@ -6,10 +6,3 @@ body {
   margin-bottom: 0em;
   font-size: 1em;
   font-family: 'Times New Roman', serif; }
-
-.review-button-left {
-  float: none !important; }
-
-.review-button-right {
-  margin-top: 1em;
-  float: none !important; }

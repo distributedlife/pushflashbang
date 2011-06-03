@@ -78,7 +78,7 @@ en:
       sign_in: "Login"
       sign_up: "Join"
       sign_out: "Logout"
-      edit_registration: "My Account"
+      edit_registration: "Account"
       search: "Search"
       home: "Home"
       create_deck: "Create Deck"

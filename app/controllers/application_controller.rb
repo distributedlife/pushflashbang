@@ -19,8 +19,8 @@ class ApplicationController < ActionController::Base
       return 'mobile_application' if agent.match(m)
     end
 
-#    return 'application'
-    return 'mobile_application'
+    return 'application'
+#    return 'mobile_application'
   end
 
   def selected_layout
