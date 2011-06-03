@@ -23,6 +23,9 @@ li {
 li.inline {
   display: inline !important; }
 
+li.inline-block {
+  display: inline-block !important; }
+
 header {
   clear: both;
   margin-bottom: 0.6em;
@@ -258,7 +261,6 @@ form {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border: 2px solid #eeeeee;
-  height: 6em;
   padding-top: 0.6em;
   padding-bottom: 0.6em;
   padding-left: 1.2em;
@@ -312,6 +314,9 @@ a.focus {
 a.focus:hover {
   color: orange;
   font-weight: bold; }
+
+a.large {
+  font-size: 1em; }
 
 p.title {
   font-family: "Consolas", sans-serif;

@@ -22,8 +22,9 @@
     .panel
       .button{:class => "centre large_button"}
         %ul
-          %li{:style => ['display:inline-block; float:left']}
-            = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral', :method => :post, :id => "do_dont_know"
+          .pad_from_top
+          %li{:class => 'left inline-block'}
+            = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral large', :method => :post, :id => "do_dont_know", :style => 'display:inline-block; width:12em;'
             :javascript
               $('#do_dont_know').click(function(event) {
                 var end = new Date();
@@ -37,8 +38,8 @@
 
                 $('#do_dont_know').attr('href', link);
               });
-          %li{:style => ['display:inline-block; float:right;']}
-            = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post, :id => "do_shaky_good"
+          %li{:class => 'right inline-block'}
+            = link_to t('card.reveal.labels.shaky_but_good'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral large', :method => :post, :id => "do_shaky_good", :style => 'display:inline-block; width:12em;'
             :javascript
               $('#do_shaky_good').click(function(event) {
                 var end = new Date();
@@ -53,8 +54,9 @@
               });
           .pad_from_top
           .pad_from_top
-          %li{:style => ['display:inline-block;float:left']}
-            = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral', :method => :post, :id => "do_partial_answer"
+          .pad_from_top
+          %li{:class => 'left inline-block'}
+            = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral large', :method => :post, :id => "do_partial_answer", :style => 'display:inline-block; width:12em;'
             :javascript
               $('#do_partial_answer').click(function(event) {
                 var end = new Date();
@@ -67,8 +69,8 @@
 
                 $('#do_partial_answer').attr('href', link);
               });
-          %li{:style => ['display:inline-block; float:right;']}
-            = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral nowrap', :method => :post, :id => "do_good"
+          %li{:class => 'right inline-block'}
+            = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral large', :method => :post, :id => "do_good", :style => 'display:inline-block; width:12em;'
             :javascript
               $('#do_good').click(function(event) {
                 var end = new Date();
@@ -81,6 +83,7 @@
 
                 $('#do_good').attr('href', link);
               });
+        .pad_from_top
         .pad_from_top
         .pad
 
@@ -191,12 +194,12 @@
         {
           if (card_answer.innerHTML == user_answer.value)
           {
-            $('#do_good').attr('class', 'positive')
+            $('#do_good').attr('class', 'positive large')
             $("#do_good").focus();
           }
           else
           {
-            $('#do_partial_answer').attr('class', 'positive')
+            $('#do_partial_answer').attr('class', 'positive large')
             $("#do_partial_answer").focus();
 
             //tell the user their answer didn't match
@@ -207,7 +210,7 @@
         }
         else
         {
-          $('#do_good').attr('class', 'positive')
+          $('#do_good').attr('class', 'positive large')
           $("#do_good").focus();
         }
       }
@@ -218,12 +221,12 @@
         {
           if (card_answer.innerHTML == user_answer.value)
           {
-            $('#do_shaky_good').attr('class', 'positive')
+            $('#do_shaky_good').attr('class', 'positive large')
             $("#do_shaky_good").focus();
           }
           else
           {
-            $('#do_partial_answer').attr('class', 'positive')
+            $('#do_partial_answer').attr('class', 'positive large')
             $("#do_partial_answer").focus();
 
             //tell the user their answer didn't match
@@ -234,14 +237,14 @@
         }
         else
         {
-          $('#do_shaky_good').attr('class', 'positive')
+          $('#do_shaky_good').attr('class', 'positive large')
           $("#do_shaky_good").focus();
         }
       }
     }
     else
     {
-      $('#do_dont_know').attr('class', 'positive')
+      $('#do_dont_know').attr('class', 'positive large')
       $("#do_dont_know").focus();
     }
 
