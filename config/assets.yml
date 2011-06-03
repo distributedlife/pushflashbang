@@ -15,4 +15,5 @@ stylesheets:
     - public/stylesheets/style.css
   mobile:
     - public/stylesheets/reset.css
+    - public/stylesheets/style.css
     - public/stylesheets/mobile.css
