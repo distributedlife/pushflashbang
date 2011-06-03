@@ -163,10 +163,10 @@ en:
       title:
       subtitle:
       labels:
-        didnt_know: "I didn't know the answer"
-        partial_answer: "I knew some of the answer"
-        shaky_but_good: "I was shaky but I got it"
-        confident: "I knew the answer"
+        didnt_know: I didn't know the answer
+        partial_answer: I knew some of the answer
+        shaky_but_good: I was shaky but I got it
+        confident: I knew the answer
     terminology:
       front:
         title: "question"
