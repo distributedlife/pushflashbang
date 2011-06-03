@@ -65,8 +65,8 @@
 
                 $('#do_shaky_good').attr('href', link);
               });
-          %li{:class => ['inline', 'nowrap']}
-            = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral', :method => :post, :id => "do_good"
+          %li{:class => ['inline']}
+            = link_to t('card.reveal.labels.confident'), review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s, :reveal => @reveal), :class => 'neutral nowrap', :method => :post, :id => "do_good"
             :javascript
               $('#do_good').click(function(event) {
                 var end = new Date();
