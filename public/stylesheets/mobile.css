@@ -1,20 +1,19 @@
 /*
-Syntax error: Undefined variable: "$font_size_large".
-        on line 8 of public/stylesheets/mobile.scss
+Syntax error: Undefined variable: "$page_background".
+        on line 11 of public/stylesheets/mobile.scss
 
-3:   width: 300px !important;
-4:   margin-left: 0;
-5:   margin-right: 0;
-6:   margin-top: 0em;
-7:   margin-bottom: 0em;
-8:   font-size: $font_size_large ;
-9:   background-color: $page_background;
-10: 
-11:   font-family: 'Times New Roman', serif;
-12: }
+6:   margin-left: 0;
+7:   margin-right: 0;
+8:   margin-top: 0em;
+9:   margin-bottom: 0em;
+10:   font-size: $font_size_large ;
+11:   background-color: $page_background;
+12: 
+13:   font-family: 'Times New Roman', serif;
+14: }
 
 Backtrace:
-public/stylesheets/mobile.scss:8
+public/stylesheets/mobile.scss:11
 /usr/lib/ruby/gems/1.8/gems/sass-3.1.2/bin/../lib/sass/../sass/script/variable.rb:45:in `_perform'
 /usr/lib/ruby/gems/1.8/gems/sass-3.1.2/bin/../lib/sass/../sass/script/node.rb:40:in `perform'
 /usr/lib/ruby/gems/1.8/gems/sass-3.1.2/bin/../lib/sass/../sass/tree/visitors/perform.rb:215:in `visit_prop'
@@ -84,4 +83,4 @@ public/stylesheets/mobile.scss:8
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Syntax error: Undefined variable: \"$font_size_large\".\A         on line 8 of public/stylesheets/mobile.scss\A \A 3:   width: 300px !important;\A 4:   margin-left: 0;\A 5:   margin-right: 0;\A 6:   margin-top: 0em;\A 7:   margin-bottom: 0em;\A 8:   font-size: $font_size_large ;\A 9:   background-color: $page_background;\A 10: \A 11:   font-family: 'Times New Roman', serif;\A 12: }"; }
+  content: "Syntax error: Undefined variable: \"$page_background\".\A         on line 11 of public/stylesheets/mobile.scss\A \A 6:   margin-left: 0;\A 7:   margin-right: 0;\A 8:   margin-top: 0em;\A 9:   margin-bottom: 0em;\A 10:   font-size: $font_size_large ;\A 11:   background-color: $page_background;\A 12: \A 13:   font-family: 'Times New Roman', serif;\A 14: }"; }
