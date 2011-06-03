@@ -10,9 +10,9 @@
     - unless params[:deck_id].nil?
       %span.top_menu_panel
         %span= link_to 'Deck Home', "/deck/#{params[:deck_id]}"
-      -if params[:controller] == "card"
-        %span.top_menu_panel
-          %span= link_to 'Card Home', "/deck/#{params[:deck_id]}/card/#{params[:id]}"
+        //-if params[:controller] == "card"
+        //  %span.top_menu_panel
+        //    %span= link_to 'Card Home', "/deck/#{params[:deck_id]}/card/#{params[:id]}"
     - else
       - unless @deck.nil?
         - unless @deck.id.nil?

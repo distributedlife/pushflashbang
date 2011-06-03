@@ -7,3 +7,9 @@ body {
   font-size: 1em;
   /*  background-color: $page_background;*/
   font-family: 'Times New Roman', serif; }
+
+.review-button-left {
+  float: none !important; }
+
+.review-button-right {
+  float: none !important; }
