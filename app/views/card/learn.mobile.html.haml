@@ -7,8 +7,6 @@
 
 %section{:class => ["panel"]}
   =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}
-.pad
-.pad_from_top
 
 - unless @card.nil?
 
