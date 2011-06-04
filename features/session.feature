@@ -68,6 +68,7 @@ Feature: sessions
     When I click on "Reveal"
     Then I should see the back of the card
 
+  @javascript
   Scenario: review card as a success
     Given I have reviewed a card
     When I click on the "third" button

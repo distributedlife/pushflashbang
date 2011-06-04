@@ -21,17 +21,20 @@ Feature: record activity
     When a card is scheduled
     Then the date the card is scheduled is recorded
 
+  @javascript
   Scenario: record time between due and reviewed
     Given I have reviewed a card
     When I record my result
     Then the review contains the time the card was due
     And the review contains the time the card was reviewed
 
+  @javascript
   Scenario: record time between review and reveal
     Given I have reviewed a card
     When I record my result
     Then the review contains the time the card was revealed
 
+  @javascript
   Scenario: record time between reveal and record
     Given I have reviewed a card
     When I record my result
@@ -39,6 +42,7 @@ Feature: record activity
     And the review contains the outcome of the result
     And the review contains the interval of the review
 
+  @javascript
   Scenario: record each and every review a user makes
     Given I have reviewed a card
     And I record my result

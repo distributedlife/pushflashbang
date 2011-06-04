@@ -275,15 +275,27 @@ And /^I click on the "([^"]*)" button$/ do |button_number|
   end
 end
 
-And /^the "([^"]*)" button is "([^"]*)"$/ do |button_number, style|
+And /^the "([^"]*)" button is normal/ do |button_number|
   if button_number == "first"
-    find_link("I didn't know the answer")[:class].should == style
+    find_link("I didn't know the answer")[:class].to_s["nuetral"] == "nuetral"
   elsif button_number == "second"
-    find_link("I knew some of the answer")[:class].should == style
+    find_link("I knew some of the answer")[:class].to_s["nuetral"] == "nuetral"
   elsif button_number == "third"
-    find_link("I was shaky but I got it")[:class].should == style
+    find_link("I was shaky but I got it")[:class].to_s["nuetral"] == "nuetral"
   elsif button_number == "fourth"
-    find_link("I knew the answer")[:class].should == style
+    find_link("I knew the answer")[:class].to_s["nuetral"] == "nuetral"
+  end
+end
+
+And /^the "([^"]*)" button is highlighted$/ do |button_number|
+  if button_number == "first"
+    find_link("I didn't know the answer")[:class].to_s["positive"] == "positive"
+  elsif button_number == "second"
+    find_link("I knew some of the answer")[:class].to_s["positive"] == "positive"
+  elsif button_number == "third"
+    find_link("I was shaky but I got it")[:class].to_s["positive"] == "positive"
+  elsif button_number == "fourth"
+    find_link("I knew the answer")[:class].to_s["positive"] == "positive"
   end
 end
 

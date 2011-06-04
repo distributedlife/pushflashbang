@@ -33,7 +33,7 @@
                 elapsed = end - start_time.value;
 
 
-                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know', :review_start => @review_start.to_s)}";
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know')}";
                 link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
 
                 $('#do_dont_know').attr('href', link);
@@ -47,7 +47,7 @@
                 var duration = document.getElementById("duration") ;
                 elapsed = end - start_time.value;
 
-                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good', :review_start => @review_start.to_s)}";
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good')}";
                 link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
 
                 $('#do_shaky_good').attr('href', link);
@@ -64,7 +64,7 @@
                 var duration = document.getElementById("duration") ;
                 elapsed = end - start_time.value;
 
-                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'partial_correct', :review_start => @review_start.to_s)}";
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'partial_correct')}";
                 link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
 
                 $('#do_partial_answer').attr('href', link);
@@ -78,7 +78,7 @@
                 var duration = document.getElementById("duration") ;
                 elapsed = end - start_time.value;
 
-                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good', :review_start => @review_start.to_s)}";
+                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good')}";
                 link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
 
                 $('#do_good').attr('href', link);

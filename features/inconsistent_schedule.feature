@@ -9,16 +9,19 @@ Feature: inconsistent schedule
     And I have created many cards in the deck
     And reference data has been loaded
 
+  @javascript
   Scenario: interval is less than 2 minutes
     When I have reviewed a card with an interval of 25
     When I click on the "third" button
     And the card interval should be 120
 
+  @javascript
   Scenario: interval is 10 minutes
     When I have reviewed a card with an interval of 600
     When I click on the "third" button
     Then the interval should be 3600 to the next plus or minus 60 seconds
 
+  @javascript
   Scenario: interval is > 10 minutes
     When I have reviewed a card with an interval of 601
     When I click on the "third" button

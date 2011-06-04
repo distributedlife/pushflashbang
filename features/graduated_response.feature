@@ -18,26 +18,26 @@ Feature: Graduated Response
   @javascript
   Scenario: new card green button indicator
     When I have reviewed a new card
-    Then the "first" button is "positive"
-    And the "second" button is "neutral"
-    And the "third" button is "neutral"
-    And the "fourth" button is "neutral"
+    Then the "first" button is highlighted
+    And the "second" button is normal
+    And the "third" button is normal
+    And the "fourth" button is normal
 
   @javascript
   Scenario: existing card green button indicator
     When I take 2 seconds to review a card that is not new
-    Then the "first" button is "neutral"
-    And the "second" button is "neutral"
-    And the "third" button is "positive"
-    And the "fourth" button is "neutral"
+    Then the "first" button is normal
+    And the "second" button is normal
+    And the "third" button is highlighted
+    And the "fourth" button is normal
 
   @javascript
   Scenario: perfect card green button indicator
     When I take 0 seconds to review a card that is not new
-    Then the "first" button is "neutral"
-    And the "second" button is "neutral"
-    And the "third" button is "neutral"
-    And the "fourth" button is "positive"
+    Then the "first" button is normal
+    And the "second" button is normal
+    And the "third" button is normal
+    And the "fourth" button is highlighted
 
   @javascript
   Scenario: the first button counts as failed review
