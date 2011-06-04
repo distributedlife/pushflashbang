@@ -22,7 +22,7 @@
         %ul
           .pad_from_top
           %li{:class => 'inline-block'}
-            = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_dont_know", :style => 'width:12em;'
+            = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_dont_know", :style => 'width:14em;'
             :javascript
               $('#do_dont_know').click(function(event) {
                 var end = new Date();
@@ -38,7 +38,7 @@
               });
           .pad_from_top
           %li{:class => 'inline-block'}
-            = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_partial_answer", :style => 'width:12em;'
+            = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_partial_answer", :style => 'width:14em;'
             :javascript
               $('#do_partial_answer').click(function(event) {
                 var end = new Date();
@@ -53,7 +53,7 @@
               });
           .pad_from_top
           %li{:class => 'inline-block'}
-            = link_to t('card.reveal.labels.shaky_but_good'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_shaky_good", :style => 'width:12em;'
+            = link_to t('card.reveal.labels.shaky_but_good'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_shaky_good", :style => 'width:14em;'
             :javascript
               $('#do_shaky_good').click(function(event) {
                 var end = new Date();
@@ -68,7 +68,7 @@
               });
           .pad_from_top
           %li{:class => 'inline-block'}
-            = link_to t('card.reveal.labels.confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_good", :style => 'width:12em;'
+            = link_to t('card.reveal.labels.confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_good", :style => 'width:14em;'
             :javascript
               $('#do_good').click(function(event) {
                 var end = new Date();
@@ -81,7 +81,6 @@
 
                 $('#do_good').attr('href', link);
               });
-        .pad_from_top
         .pad_from_top
         .pad
 
