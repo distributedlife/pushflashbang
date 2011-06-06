@@ -250,6 +250,10 @@ describe CardController do
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
       CardTiming.create(:seconds => 600)
+      CardTiming.create(:seconds => 60 * 60)          #1 hour
+      CardTiming.create(:seconds => 60 * 60 * 5)      #5 hours
+      CardTiming.create(:seconds => 60 * 60 * 24)     #1 day
+      CardTiming.create(:seconds => 60 * 60 * 24 * 5) #5 day
     end
 
     it 'should redirect to deck session if answer is not in results' do
@@ -296,19 +300,19 @@ describe CardController do
       stop_time = Time.now
 
       @scheduled_card.reload
-      @scheduled_card.interval.should == 25
+      @scheduled_card.interval.should == 3600
       @scheduled_card.due.should >= start_time + @scheduled_card.interval
       @scheduled_card.due.should <= stop_time + @scheduled_card.interval
+
 
       start_time = Time.now
       post :review, :deck_id => @deck.id, :id => @card.id, :answer => 'good'
       stop_time = Time.now
 
-
       @scheduled_card.reload
       #considering ranges for larger increments
-      @scheduled_card.interval.should >= 600 - CardTiming.range
-      @scheduled_card.interval.should <= 600 + CardTiming.range
+      @scheduled_card.interval.should >= (60 * 60 * 24) - CardTiming.range
+      @scheduled_card.interval.should <= (60 * 60 * 24) + CardTiming.range
       @scheduled_card.due.should >= start_time + @scheduled_card.interval
       @scheduled_card.due.should <= stop_time + @scheduled_card.interval
     end

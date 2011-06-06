@@ -120,7 +120,9 @@ class CardController < ApplicationController
         user_card_review.save!
       end
       if answer == "good"
-        card_schedule.interval = CardTiming.get_next(CardTiming.get_next(card_schedule.interval).seconds).seconds
+        skipped_interval = CardTiming.get_next_no_random(card_schedule.interval).seconds
+
+        card_schedule.interval = CardTiming.get_next_advance(skipped_interval).seconds
         card_schedule.due = Time.now + card_schedule.interval
         card_schedule.save!
 
@@ -201,12 +203,10 @@ class CardController < ApplicationController
     begin
       card = Card.find(params[:id])
       deck = Deck.find(params[:deck_id])
-#ap card
-#ap deck
+
       if deck.user != current_user
         flash[:failure] = "Unable to complete action as this deck does not belong to you."
         redirect_to user_index_path
-#ap 'is not owner'
         return false
       end
       if card.deck != deck

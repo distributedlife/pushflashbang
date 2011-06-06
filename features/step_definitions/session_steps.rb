@@ -149,9 +149,10 @@ And /^the card interval should be reset$/ do
   scheduled_card.interval.should == 5
 end
 
-And /^the card interval should be increased by two$/ do
+And /^the card interval should be increased to minimum$/ do
   scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user_id)).first
-  scheduled_card.interval.should == 25
+  scheduled_card.interval.should >= 3600 - CardTiming::RANGE
+  scheduled_card.interval.should <= 3600 + CardTiming::RANGE
 end
 
 And /^the date the card is scheduled is recorded$/ do

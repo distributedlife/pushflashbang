@@ -92,5 +92,7 @@ And /^I should see all cards in the deck$/ do
 end
 
 And /^I should see the pronunciation$/ do
-  And %{I should see "#{get(:card).pronunciation}"}
+  get(:card).pronunciation.split(" ").each do |word|
+    And %{I should see "#{word}"}
+  end
 end

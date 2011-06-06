@@ -70,7 +70,7 @@ li
   list-style: none;
 }
 
-li.inline
+.inline
 {
   display: inline !important;
 }
@@ -209,6 +209,11 @@ legend.label
 .nowrap
 {
   white-space: nowrap;
+}
+
+em
+{
+  color: $contrast_link_colour;  
 }
 
 ////////////////////////////////////////////////////////////////////////////////

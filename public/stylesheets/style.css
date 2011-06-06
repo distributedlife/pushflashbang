@@ -15,7 +15,7 @@ body {
 li {
   list-style: none; }
 
-li.inline {
+.inline {
   display: inline !important; }
 
 .inline-block {
@@ -107,6 +107,9 @@ legend.label {
 
 .nowrap {
   white-space: nowrap; }
+
+em {
+  color: orange; }
 
 .pending {
   background-color: #ffffdd; }

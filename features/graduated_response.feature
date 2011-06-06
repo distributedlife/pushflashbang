@@ -69,5 +69,5 @@ Feature: Graduated Response
     When I click on the "fourth" button
     Then I should be on the "deck session" page
     And the card should be rescheduled
-    And the card interval should be increased by two
+    And the card interval should be increased to minimum
     

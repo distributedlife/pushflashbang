@@ -56,20 +56,6 @@ describe CardTiming do
     end
   end
 
-  context 'is_at_non_perfect_limit' do
-    it 'should return true if the current interval is equal to the non_perfect_limit' do
-      (CardTiming::is_at_non_perfect_limit CardTiming::NON_PERFECT_LIMIT).should == true
-    end
-
-    it 'should return false if the current interval is greater than the non_perfect_limit' do
-      (CardTiming::is_at_non_perfect_limit CardTiming::NON_PERFECT_LIMIT + 1).should == false
-    end
-
-    it 'should return true if the current interval is less than the non_perfect_limit' do
-      (CardTiming::is_at_non_perfect_limit CardTiming::NON_PERFECT_LIMIT - 1).should == true
-    end
-  end
-
   context 'get_next_advance' do
     before(:each) do
       CardTiming.create(:seconds => 5)
@@ -86,11 +72,11 @@ describe CardTiming do
     end
 
     it 'should return the next row with the smallest value after the supplied value' do
-      CardTiming::get_next_advance(0).seconds.should == CardTiming::SECONDS_IN_DAY
-      CardTiming::get_next_advance(5).seconds.should == CardTiming::SECONDS_IN_DAY
-      CardTiming::get_next_advance(25).seconds.should == CardTiming::SECONDS_IN_DAY
-      CardTiming::get_next_advance(CardTiming::SECONDS_IN_HOUR).seconds.should >= CardTiming::SECONDS_IN_DAY - CardTiming::range
-      CardTiming::get_next_advance(CardTiming::SECONDS_IN_HOUR).seconds.should <= CardTiming::SECONDS_IN_DAY + CardTiming::range
+      CardTiming::get_next_advance(0).seconds.should == CardTiming::SECONDS_IN_HOUR
+      CardTiming::get_next_advance(5).seconds.should == CardTiming::SECONDS_IN_HOUR
+      CardTiming::get_next_advance(25).seconds.should == CardTiming::SECONDS_IN_HOUR
+      CardTiming::get_next_advance(CardTiming::SECONDS_IN_HOUR).seconds.should >= CardTiming::SECONDS_IN_HOUR * 5 - CardTiming::range
+      CardTiming::get_next_advance(CardTiming::SECONDS_IN_HOUR).seconds.should <= CardTiming::SECONDS_IN_HOUR * 5 + CardTiming::range
       CardTiming::get_next_advance(CardTiming::SECONDS_IN_DAY).seconds.should >= (CardTiming::SECONDS_IN_DAY * 5) - CardTiming::range
       CardTiming::get_next_advance(CardTiming::SECONDS_IN_DAY).seconds.should <= (CardTiming::SECONDS_IN_DAY * 5) + CardTiming::range
 
@@ -102,8 +88,8 @@ describe CardTiming do
     end
 
     it 'should not return a range if the current is equal to or above the threshold' do
-      CardTiming::get_next_advance(120).seconds.should >= (CardTiming::SECONDS_IN_DAY - CardTiming::range)
-      CardTiming::get_next_advance(120).seconds.should <= (CardTiming::SECONDS_IN_DAY + CardTiming::range)
+      CardTiming::get_next_advance(120).seconds.should >= (CardTiming::SECONDS_IN_HOUR - CardTiming::range)
+      CardTiming::get_next_advance(120).seconds.should <= (CardTiming::SECONDS_IN_HOUR + CardTiming::range)
     end
   end
 end

@@ -18,7 +18,7 @@ class CardTiming < ActiveRecord::Base
   SECONDS_IN_YEAR = SECONDS_IN_DAY * DAYS_IN_YEAR
 
   NON_PERFECT_LIMIT = SECONDS_IN_DAY * 5  #cap the advance of shaky answers to 5
-  ADVANCE_THRESHOLD = SECONDS_IN_DAY - 1  #if you know it jump to here then increment
+  ADVANCE_THRESHOLD = SECONDS_IN_HOUR - 1 #if you know it jump to here then increment
 
   def self.threshold
     RANGE_START_THRESHOLD
@@ -34,6 +34,18 @@ class CardTiming < ActiveRecord::Base
 
   def self.get_first
     self.order(:seconds).first
+  end
+
+  def self.get_next_no_random current
+    set = self.order(:seconds).find(:first, :conditions => ["seconds > ?", current])
+
+    if set.nil?
+      next_interval = self.order(:seconds).last
+    else
+      next_interval = set
+    end
+
+    next_interval
   end
 
   def self.get_next current
@@ -52,13 +64,9 @@ class CardTiming < ActiveRecord::Base
     next_interval
   end
 
-  def self.is_at_non_perfect_limit current
-    (current <= NON_PERFECT_LIMIT)
-  end
-
   def self.get_next_advance current
     set = self.order(:seconds).find(:first, :conditions => ["seconds > ? and seconds > ?", current, ADVANCE_THRESHOLD])
-
+    
     if set.nil?
       next_interval = self.order(:seconds).last
     else

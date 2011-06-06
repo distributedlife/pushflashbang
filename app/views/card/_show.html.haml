@@ -2,7 +2,13 @@
 
 - if is_pronunciation_on_front? pronunciation_side
   .pad_from_top
-  %p{:class => "subtitle centre"}= "[#{card.pronunciation}]"
+  - words = {}
+  %div{:class => "centre inline-block"}
+    - card.pronunciation.split(' ').each do |word|
+      %div{:class => "left", :style => "padding: 0.6em;"}
+        %p{:class => "minor_title"}= word
+        %p= (get_pronunciation_expansion word).html_safe
+    .pad
 
 - if supports_typed_answer == true
   .pad_from_top
@@ -37,4 +43,10 @@
     %p#card_answer{:class => "giant mandarin",}= card.back
     - if is_pronunciation_on_back? pronunciation_side
       .pad_from_top
-      %p{:class => "minor_title centre"}= "[#{card.pronunciation}]"
+      - words = {}
+      %div{:class => "centre inline-block"}
+        - card.pronunciation.split(' ').each do |word|
+          %div{:class => "left", :style => "padding: 0.6em;"}
+            %p{:class => "minor_title"}= word
+            %p= (get_pronunciation_expansion word).html_safe
+        .pad

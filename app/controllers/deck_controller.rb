@@ -104,6 +104,13 @@ class DeckController < ApplicationController
         else
           @deck = Deck.find(params[:id])
           @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, cards.pronunciation, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
+#          ap @upcoming_cards
+#          @time_chunks = [
+#            Time.now,
+#            Time.now + (CardTiming::SECONDS_IN_MINUTE * 15),
+#            Time.now + (CardTiming::SECONDS_IN_MINUTE * 65),
+#            Time.now + (CardTiming::SECONDS_IN_HOUR * 30)
+#          ]
         end
       end
     rescue

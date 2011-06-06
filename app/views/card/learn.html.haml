@@ -95,20 +95,22 @@
       }
       else
       {
+        var positive_style = 'positive large inline-block' ;
+
         //click on button with highlight
-        if ($('#do_dont_know').attr('class') == 'positive')
+        if ($('#do_dont_know').attr('class') == positive_style)
         {
           $('#do_dont_know').click();
         }
-        else if ($('#do_partial_answer').attr('class') == 'positive')
+        else if ($('#do_partial_answer').attr('class') == positive_style)
         {
           $('#do_partial_answer').click();
         }
-        else if ($('#do_shaky_good').attr('class') == 'positive')
+        else if ($('#do_shaky_good').attr('class') == positive_style)
         {
           $('#do_shaky_good').click();
         }
-        else if ($('#do_good').attr('class') == 'positive')
+        else if ($('#do_good').attr('class') == positive_style)
         {
           $('#do_good').click();
         }
