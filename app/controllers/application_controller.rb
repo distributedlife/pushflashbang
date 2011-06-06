@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-#  layout :detect_browser
+  layout :detect_browser
 
   private
   MOBILE_BROWSERS =
