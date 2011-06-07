@@ -28,7 +28,7 @@ module DeckHelper
     pronunciation_helper = {}
     #consonants
     pronunciation_helper["b"] = "<em>b</em>oy"
-    pronunciation_helper["c"] = "c like ea<em>ts</em>"
+    pronunciation_helper["c"] = "ea<em>ts</em>"
     pronunciation_helper["ch"] = "<em>ch</em>ildren"
     pronunciation_helper["d"] = "<em>d</em>ig"
     pronunciation_helper["f"] = "<em>f</em>ood"
@@ -41,16 +41,16 @@ module DeckHelper
     pronunciation_helper["n"] = "<em>n</em>imble"
     pronunciation_helper["ng"] = "so<em>ng</em>"
     pronunciation_helper["p"] = "<em>p</em>ine"
-    pronunciation_helper["q"] = "q like <em>ch</em>eat"
+    pronunciation_helper["q"] = "<em>ch</em>eat"
     pronunciation_helper["r"] = "<em>r</em>aw"
     pronunciation_helper["t"] = "<em>t</em>alk"
     pronunciation_helper["s"] = "<em>s</em>on"
     pronunciation_helper["sh"] = "<em>sh</em>ake"
     pronunciation_helper["w"] = "<em>w</em>e"
-    pronunciation_helper["x"] = "x like a sound between the “s” in see and the “sh” in she"
+    pronunciation_helper["x"] = "<em>s</em>ee/<em>sh</em>e"
     pronunciation_helper["y"] = "<em>y</em>ou"
-    pronunciation_helper["z"] = "z like wor<em>ds</em>"
-    pronunciation_helper["zh"] = "zh like slu<em>dg</em>e"
+    pronunciation_helper["z"] = "wor<em>ds</em>"
+    pronunciation_helper["zh"] = "slu<em>dg</em>e"
 
     #vowels
     pronunciation_helper["a"] = "has_rules"
