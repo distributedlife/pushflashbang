@@ -6,7 +6,7 @@
 #   config:
 #     - <Heroku config:var name>: <Heroku config:var value>
 #
-production: 
+prod: 
   app: pushflashbang
   config:
     BUNDLE_WITHOUT: "development:test"

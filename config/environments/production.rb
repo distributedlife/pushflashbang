@@ -25,7 +25,7 @@ PushFlashBang::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :dalli_store#, {:compress => true}
+  config.cache_store = :dalli_store, ENV['MEMCACHE_SERVERS']#, {:compress => true}
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
@@ -38,7 +38,7 @@ PushFlashBang::Application.configure do
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { :host => "unknown.heroku.com" }
+  config.action_mailer.default_url_options = { :host => "pushflashbang.heroku.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings =
   {

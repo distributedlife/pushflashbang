@@ -1,7 +1,7 @@
 class CardController < ApplicationController
   before_filter :authenticate_user!
 
-  caches_page :learn
+  caches_action :learn
 
   def new
     begin
@@ -37,8 +37,6 @@ class CardController < ApplicationController
       is_deck_and_card_valid
 
       @card = Card.find(params[:id])
-
-      expire_page(:controller => 'card', :action => 'learn', :id => params[:id])
     rescue
     end
   end
@@ -54,6 +52,9 @@ class CardController < ApplicationController
         @card = card
       else
         card.save!
+
+        expire_page(:controller => 'card', :action => 'learn', :id => params[:id])
+
         redirect_to deck_card_path(@deck)
       end
     rescue
@@ -154,7 +155,7 @@ class CardController < ApplicationController
         scheduled_card = UserCardSchedule.create(:user_id => current_user.id, :card_id => params[:id], :due => Time.now, :interval => 0)
       end
 
-      session[:review_start] = Time.now
+#      session[:review_start] = Time.now
 
 
       if detect_browser == "mobile_application"
