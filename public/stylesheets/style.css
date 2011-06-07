@@ -329,6 +329,11 @@ p.giant {
   font-size: 4em;
   text-align: center; }
 
+p.huge {
+  font-weight: bold;
+  font-size: 3em;
+  text-align: center; }
+
 p.minor_title {
   clear: left;
   font-family: "Consolas", sans-serif;

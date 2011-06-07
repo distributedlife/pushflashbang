@@ -217,14 +217,14 @@ module DeckHelper
                 if prev_char == "z" or prev_char == "c" or prev_char == "s" 
                   string << "<em>i</em> like a buzzing bee"
                 elsif prev_char == "r"
-                  string << "i like a vocalised <em>r</em>"
+                  string << "vocalised <em>r</em>"
                 else
                   string << "s<em>i</em>t"
                 end
               else
                 # could be zhi, chi, shi
                 if (prev_prev_char == "z" or prev_prev_char == "c" or prev_prev_char == "s") and prev_char == "h"
-                  string << "i like a vocalised <em>r</em>"
+                  string << "vocalised <em>r</em>"
                 else
                   string << "s<em>i</em>t"
                 end
