@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
 
     user_agent = request.headers["HTTP_USER_AGENT"].downcase
 
-    return resolve_layout_type user_agent
+    return ApplicationController::resolve_layout_type user_agent
   end
 
   def selected_layout
