@@ -1,7 +1,7 @@
 class CardController < ApplicationController
   before_filter :authenticate_user!
 
-  caches_action :learn
+  caches_page :learn
 
   def new
     begin
@@ -154,9 +154,6 @@ class CardController < ApplicationController
       if scheduled_card.empty?
         scheduled_card = UserCardSchedule.create(:user_id => current_user.id, :card_id => params[:id], :due => Time.now, :interval => 0)
       end
-
-#      session[:review_start] = Time.now
-
 
       if detect_browser == "mobile_application"
         render "learn.mobile"
