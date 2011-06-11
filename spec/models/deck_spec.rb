@@ -64,4 +64,34 @@ describe Deck do
       deck.valid?.should == false
     end
   end
+
+  context 'review types' do
+    it 'should allow no review type' do
+      deck = Deck.make
+      deck.review_types = 0
+      deck.save!
+      deck.reload
+
+      deck.review_types.should == 0
+    end
+
+    it 'should allow a single review type' do
+      deck = Deck.make
+      deck.review_types = Deck::READING
+      deck.save!
+      deck.reload
+
+      deck.review_types.should == Deck::READING
+    end
+
+    it 'should allow an array of review types' do
+      deck = Deck.make
+      deck.review_types = Deck::READING
+      deck.review_types = deck.review_types | Deck::WRITING
+      deck.save!
+      deck.reload
+      
+      deck.review_types.should == Deck::READING | Deck::WRITING
+    end
+  end
 end

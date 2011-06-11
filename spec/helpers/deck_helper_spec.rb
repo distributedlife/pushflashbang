@@ -146,30 +146,30 @@ describe DeckHelper do
     end
 
     it 'should handle a forward and back checks' do
-      get_pronunciation_expansion("iā").should == "s<em>i</em>t, m<em>a</em>"
-      get_pronunciation_expansion("iās").should == "s<em>i</em>t, m<em>a</em>, <em>s</em>on"
+      get_pronunciation_expansion("iā").should == "<em>ea</em>r"
+      get_pronunciation_expansion("iās").should == "<em>ea</em>r, <em>s</em>on"
       get_pronunciation_expansion("ān").should == "m<em>a</em>, <em>n</em>imble"
       get_pronunciation_expansion("jān").should == "<em>j</em>eep, m<em>a</em>, <em>n</em>imble"
-      get_pronunciation_expansion("iān").should == "s<em>i</em>t, c<em>a</em>sh, <em>n</em>imble"
+      get_pronunciation_expansion("iān").should == "<em>ea</em>r, <em>n</em>imble"
 
 
       get_pronunciation_expansion("én").should == "<em>e</em>arn, <em>n</em>imble"
       get_pronunciation_expansion("né").should == "<em>n</em>imble, <em>e</em>arn"
-      get_pronunciation_expansion("ié").should == "s<em>i</em>t, g<em>e</em>t"
+      get_pronunciation_expansion("ié").should == "<em>air</em>"
       get_pronunciation_expansion("ué").should == "l<em>oo</em>k, g<em>e</em>t"
 
-      get_pronunciation_expansion("zhi").should == "zh like slu<em>dg</em>e, i like a vocalised <em>r</em>"
-      get_pronunciation_expansion("zwi").should == "z like wor<em>ds</em>, <em>w</em>e, s<em>i</em>t"
-      get_pronunciation_expansion("chi").should == "<em>ch</em>ildren, i like a vocalised <em>r</em>"
-      get_pronunciation_expansion("cwi").should == "c like ea<em>ts</em>, <em>w</em>e, s<em>i</em>t"
-      get_pronunciation_expansion("shi").should == "<em>sh</em>ake, i like a vocalised <em>r</em>"
+      get_pronunciation_expansion("zhi").should == "slu<em>dg</em>e, vocalised <em>r</em>"
+      get_pronunciation_expansion("zwi").should == "wor<em>ds</em>, <em>w</em>e, s<em>i</em>t"
+      get_pronunciation_expansion("chi").should == "<em>ch</em>ildren, vocalised <em>r</em>"
+      get_pronunciation_expansion("cwi").should == "ea<em>ts</em>, <em>w</em>e, s<em>i</em>t"
+      get_pronunciation_expansion("shi").should == "<em>sh</em>ake, vocalised <em>r</em>"
       get_pronunciation_expansion("swi").should == "<em>s</em>on, <em>w</em>e, s<em>i</em>t"
-      get_pronunciation_expansion("ri").should == "<em>r</em>aw, i like a vocalised <em>r</em>"
+      get_pronunciation_expansion("ri").should == "<em>r</em>aw, vocalised <em>r</em>"
       get_pronunciation_expansion("di").should == "<em>d</em>ig, s<em>i</em>t"
       get_pronunciation_expansion("hi").should == "<em>h</em>ot, s<em>i</em>t"
 
-      get_pronunciation_expansion("zi").should == "z like wor<em>ds</em>, <em>i</em> like a buzzing bee"
-      get_pronunciation_expansion("ci").should == "c like ea<em>ts</em>, <em>i</em> like a buzzing bee"
+      get_pronunciation_expansion("zi").should == "wor<em>ds</em>, <em>i</em> like a buzzing bee"
+      get_pronunciation_expansion("ci").should == "ea<em>ts</em>, <em>i</em> like a buzzing bee"
       get_pronunciation_expansion("si").should == "<em>s</em>on, <em>i</em> like a buzzing bee"
 
       get_pronunciation_expansion("on").should == "dr<em>o</em>p, <em>n</em>imble"

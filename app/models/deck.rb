@@ -3,9 +3,15 @@ class Deck < ActiveRecord::Base
   
   belongs_to :user
 
-  attr_accessible :name, :description, :shared, :pronunciation_side, :supports_written_answer
+  attr_accessible :name, :description, :shared, :pronunciation_side, :supports_written_answer, :review_types
 
   SIDES = ['front', 'back']
+
+  READING = 1
+  WRITING = 2
+  TYPING = 4
+  HEARING = 8
+  SPEAKING = 16
 
   validates :name, :presence => true, :length => { :maximum => 40 }
   validates :user_id, :presence => true

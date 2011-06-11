@@ -410,15 +410,6 @@ describe CardController do
       assigns[:card].should == @card2
       UserCardSchedule.where(:user_id => @user.id, :card_id => @card1.id).count.should == 1
     end
-
-    it 'should store the review start time in the session' do
-      start_time = Time.now
-      get :learn, :deck_id => @deck.id, :id => @card2.id
-      end_time = Time.now
-
-      session[:review_start].should >= start_time
-      session[:review_start].should <= end_time
-    end
   end
 
   context '"GET" is_new' do

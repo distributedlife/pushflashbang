@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110524114838) do
+ActiveRecord::Schema.define(:version => 20110609112513) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20110524114838) do
     t.string   "target_side"
     t.string   "pronunciation_side"
     t.boolean  "supports_written_answer"
+    t.integer  "review_types"
   end
 
   create_table "user_card_reviews", :force => true do |t|
