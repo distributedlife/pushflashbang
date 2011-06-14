@@ -8,12 +8,6 @@
     .panel
       .button{:class => "centre big_button"}
         = link_to "Reveal", '#', :class => 'positive', :id => "do_reveal"
-        :javascript
-          $('#do_reveal').click(function(event) {
-            $("#back_of_card").show();
-            $("#reveal_button").hide();
-            $("#review_buttons").show();
-          });
       .pad_from_top
 
   #review_buttons{:class => "hidden"}
@@ -21,6 +15,26 @@
       .button{:class => "centre large_button"}
         %ul
           %li{:class => 'left inline-block centre'}
-            = link_to "Next", cram_deck_chapter_path(:deck_id => @deck.id, :id => @card.chapter, :card_id => @card.id), :class => 'large positive inline-block', :method => :get, :style => 'width:12em;'
+            = link_to "Next", cram_deck_chapter_path(:deck_id => @deck.id, :id => @card.chapter, :card_id => @card.id), :id => "do_next", :class => 'large positive inline-block', :method => :get, :style => 'width:12em;'
         .pad_from_top
         .pad
+
+:javascript
+  $('html').keypress(function(event) {
+    if (event.which == '32')
+    {
+      if ($('#do_reveal').is(":visible"))
+      {
+        $('#do_reveal').click();
+      }
+      else
+      {
+        $('#do_next').click();
+      }
+    }
+  });
+
+  $('#do_reveal').click(function(event) {
+    $("#reveal_button").hide();
+    $("#review_buttons").show();
+  });
