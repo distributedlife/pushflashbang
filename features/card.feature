@@ -4,7 +4,6 @@ Feature: deck cards
   So that I can use flash card SRS learning
 
   Background:
-#    And my user agent is "chrome"
     Given I am logged in and have created a deck
 
   Scenario: create card link is available from show deck page
@@ -18,9 +17,11 @@ Feature: deck cards
     Then I should be on the "add card" page
     And the form is empty
 
+@wip
   Scenario: created cards can be seen on deck page
     Given I have created a card
     And I go to the "show deck" page
+    And I click on "show" chapter 1
     Then I can see all cards in this deck
 
   Scenario: can't created card without front
@@ -49,8 +50,3 @@ Feature: deck cards
     When I click on "Delete Card"
     Then the card should be deleted
     And I should be on the "show deck" page
-
-  Scenario: show cards in deck
-    Given I have created multiple cards
-    When I go to the "show deck" page
-    Then I should see all cards in the deck

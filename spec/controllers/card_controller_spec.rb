@@ -51,19 +51,6 @@ describe CardController do
       response.should redirect_to(user_index_path)
     end
 
-#    it 'should redirect to user home if the deck does not belong to the user even if shared' do
-#      user2 = User.make
-#      deck = Deck.make(:user_id => user2.id, :shared => true)
-#      card = Card.make(:deck_id => deck.id)
-#
-#      get :show, :deck_id => deck.id, :id => card.id
-##      get :action.symbolize, :deck_id => deck.id, :id => card.id
-##      block.call(:deck_id => deck.id, :id => card.id)
-#
-#      response.should be_redirect
-#      response.should redirect_to(user_index_path)
-#    end
-
     it 'should redirect to user home if the deck does not exist' do
       card = Card.make(:deck_id => @deck.id)
 
@@ -377,6 +364,41 @@ describe CardController do
       user_card_review = UserCardReview.first
       user_card_review.result_success.should == "shaky_good"
     end
+
+    it 'should create multiple reviews if the deck supports multiple review types' do
+      deck2 = Deck.make(:user_id => @user.id, :review_types => Deck::READING | Deck::SPEAKING | Deck::TYPING)
+
+      card2 = Card.make(:deck_id => deck2.id)
+      scheduled_card2 = UserCardSchedule.make(:due, :card_id => card2.id, :user_id => @user.id)
+
+      start_interval = scheduled_card2.interval
+      card_due_date = scheduled_card2.due
+      duration_in_ms = 9669
+      elapsed_in_ms = 12301
+
+      start_time = Time.now
+      post :review, :deck_id => deck2.id, :id => card2.id, :answer => 'good', :duration => duration_in_ms, :elapsed => elapsed_in_ms
+      stop_time = Time.now
+
+      review_types_to_find = Deck::READING | Deck::SPEAKING | Deck::TYPING
+
+      UserCardReview.all.each do |user_card_review|
+        user_card_review.card_id.should == card2.id
+        user_card_review.user_id.should == @user.id
+        user_card_review.due.should == card_due_date
+        user_card_review.review_start.should >= card_due_date
+        user_card_review.review_start.should <= Time.now - (elapsed_in_ms / 1000)
+        user_card_review.reveal.utc.to_s.should == (user_card_review.review_start + (duration_in_ms / 1000)).utc.to_s
+        user_card_review.result_recorded.should >= start_time
+        user_card_review.result_recorded.should <= stop_time
+        user_card_review.result_success.should == "good"
+        user_card_review.interval.should == start_interval
+
+        review_types_to_find = review_types_to_find - user_card_review.review_type
+      end
+
+      review_types_to_find.should == 0
+    end
   end
 
   context '"GET" learn' do
@@ -408,6 +430,32 @@ describe CardController do
       get :learn, :deck_id => @deck.id, :id => @card2.id
 
       assigns[:card].should == @card2
+      UserCardSchedule.where(:user_id => @user.id, :card_id => @card1.id).count.should == 1
+    end
+  end
+
+  context '"GET" cram' do
+    it_should_behave_like "all shared card operations"
+    it_should_behave_like "all card operations that require a card"
+
+    before(:each) do
+      @deck = Deck.make(:user_id => @user.id)
+
+      @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card2 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card3 = Card.make(:deck_id => @deck.id, :chapter => 1)
+
+      UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+    end
+
+    it 'should return the card' do
+      get :learn, :deck_id => @deck.id, :id => @card1.id
+
+      assigns[:card].should == @card1
       UserCardSchedule.where(:user_id => @user.id, :card_id => @card1.id).count.should == 1
     end
   end

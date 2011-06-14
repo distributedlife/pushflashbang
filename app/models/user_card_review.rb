@@ -1,5 +1,5 @@
 class UserCardReview < ActiveRecord::Base
-  attr_accessible :user_id, :card_id, :due, :review_start, :reveal, :result_recorded, :result_success, :interval
+  attr_accessible :user_id, :card_id, :due, :review_start, :reveal, :result_recorded, :result_success, :interval, :review_type
 
   RESULTS = ['didnt_know', 'partial_correct', 'shaky_good', 'good']
 

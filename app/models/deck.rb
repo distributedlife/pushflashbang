@@ -13,6 +13,8 @@ class Deck < ActiveRecord::Base
   HEARING = 8
   SPEAKING = 16
 
+  REVIEW_TYPES = [READING, WRITING, TYPING, HEARING, SPEAKING]
+
   validates :name, :presence => true, :length => { :maximum => 40 }
   validates :user_id, :presence => true
   validates :pronunciation_side, :presence => true

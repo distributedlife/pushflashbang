@@ -38,7 +38,7 @@ Deck.blueprint do
   shared
   pronunciation_side
   user_id
-  review_types {Deck::READING & Deck::TYPING}
+  review_types {Deck::READING}
 end
 
 Card.blueprint do

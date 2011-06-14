@@ -50,6 +50,7 @@ class DeckController < ApplicationController
     begin
       if deck_is_valid?
         @deck = Deck.find(params[:id])
+        #TODO: replace with list of chapters
         @cards = Card.order(:chapter).order(:created_at).where(:deck_id => params[:id])
       end
     rescue
@@ -153,7 +154,7 @@ class DeckController < ApplicationController
 
 
         if next_card.chapter > deck_chapter.chapter
-          redirect_to deck_chapter_path(params[:id])
+          redirect_to deck_chapter_path(params[:id], next_card.chapter)
         else
           scheduled_card = UserCardSchedule.create(:user_id => current_user.id, :due => Time.now, :interval => 0, :card_id => next_card.id)
           redirect_to learn_deck_card_path(params[:id], scheduled_card.card_id)

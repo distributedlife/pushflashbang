@@ -137,6 +137,24 @@ class CardController < ApplicationController
         user_card_review.save!
       end
 
+
+      #for each review type that the deck supports; update the original and create new reviews
+      deck = Deck.find(params[:deck_id])
+      updated_first = false
+      Deck::REVIEW_TYPES.each do |review_type|
+        if deck.review_types & review_type == review_type
+          unless updated_first
+            user_card_review.review_type = review_type
+            user_card_review.save
+            updated_first = true
+          else
+            additional_review = user_card_review.clone
+            additional_review.review_type = review_type
+            additional_review.save
+          end
+        end
+      end
+
       redirect_to learn_deck_path(params[:deck_id])
     rescue
     end
@@ -158,6 +176,16 @@ class CardController < ApplicationController
       if detect_browser == "mobile_application"
         render "learn.mobile"
       end
+    rescue
+    end
+  end
+
+  def cram
+    begin
+      is_deck_and_card_valid
+
+      @deck = Deck.find(params[:deck_id])
+      @card = Card.find(params[:id])
     rescue
     end
   end

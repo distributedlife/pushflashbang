@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110609112513) do
+ActiveRecord::Schema.define(:version => 20110611155627) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20110609112513) do
     t.integer  "interval"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "review_type"
   end
 
   create_table "user_card_schedules", :force => true do |t|

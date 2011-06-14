@@ -5,6 +5,7 @@ And /^I create a deck$/ do
 
   add(:deck, Deck.last)
   add(:deck_id, get(:deck).id)
+  add(:chapter, 1)
 end
 
 And /^a deck created by another user$/ do
@@ -12,6 +13,7 @@ And /^a deck created by another user$/ do
 
   add(:deck, Deck.make(:name => "SimpleDeck", :user_id => another_user.id))
   add(:deck_id, get(:deck).id)
+  add(:chapter, 1)
 end
 
 And /^the deck is shared$/ do
@@ -41,6 +43,7 @@ end
 And /^I have created a deck$/ do
   add(:deck, Deck.make(:name => "My Deck", :user_id => get(:user_id)))
   add(:deck_id, get(:deck).id)
+  add(:chapter, 1)
 end
 
 And /^I have created many cards in the deck$/ do

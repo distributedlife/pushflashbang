@@ -30,3 +30,17 @@ Feature: chapters
     Given there are cards due
     When I go to the "deck chapter" page
     Then I should be on the "deck session" page
+
+@wip
+  Scenario: show cards in chapter
+    Given I have created multiple cards
+    When I go to the "show deck" page
+    And I click on "show" chapter 1
+    Then I should see all cards in the chapter
+
+@wip
+  Scenario: cram cards in chapter
+    Given I have created multiple cards
+    When I go to the "show deck" page
+    And I click on "cram" chapter 1
+    Then I can click through all cards in the chapter

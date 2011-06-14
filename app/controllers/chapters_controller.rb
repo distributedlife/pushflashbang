@@ -7,7 +7,7 @@ class ChaptersController < ApplicationController
         cards = Card.where(:deck_id => params[:deck_id])
         if cards.empty?
           flash[:failure] = "You can't start a session until you have added cards to the deck."
-          redirect_to deck_path(params[:id])
+          redirect_to deck_path(params[:deck_id])
           return
         end
 
@@ -39,6 +39,44 @@ class ChaptersController < ApplicationController
       end
     rescue
       redirect_to learn_deck_path(params[:deck_id])
+    end
+  end
+
+  def reveal
+    begin
+      if deck_is_valid?
+        @deck = Deck.find(params[:deck_id])
+        @cards = Card.order(:created_at).where(:deck_id => params[:deck_id], :chapter => params[:id])
+      end
+
+    rescue
+      redirect_to(user_index_path)
+    end
+  end
+
+  def cram
+    begin
+      if deck_is_valid?
+        if Card.where(:deck_id => params[:deck_id], :chapter => params[:id]).count == 0 
+          flash[:failure] = "You can't cram until you have added cards to the chapter."
+          redirect_to deck_path(params[:deck_id])
+          return
+        end
+
+        last_card = params[:card_id]
+        last_card ||= 0
+
+        #get next card in chapter
+        chapter_card = Card.order(:created_at).where(['deck_id = ? and chapter = ? and id > ?', params[:deck_id], params[:id], last_card]).first
+        if chapter_card.nil?
+          #finished cramming; return to deck_home
+          redirect_to deck_path(params[:deck_id])
+        else
+          redirect_to cram_deck_card_path(params[:deck_id], chapter_card.id)
+        end
+      end
+    rescue
+      redirect_to(user_index_path)
     end
   end
 

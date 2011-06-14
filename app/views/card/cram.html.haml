@@ -1,0 +1,26 @@
+=render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => ''}
+
+%section{:class => ["panel"]}
+  =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}
+  
+- unless @card.nil?
+  #reveal_button
+    .panel
+      .button{:class => "centre big_button"}
+        = link_to "Reveal", '#', :class => 'positive', :id => "do_reveal"
+        :javascript
+          $('#do_reveal').click(function(event) {
+            $("#back_of_card").show();
+            $("#reveal_button").hide();
+            $("#review_buttons").show();
+          });
+      .pad_from_top
+
+  #review_buttons{:class => "hidden"}
+    .panel
+      .button{:class => "centre large_button"}
+        %ul
+          %li{:class => 'left inline-block centre'}
+            = link_to "Next", cram_deck_chapter_path(:deck_id => @deck.id, :id => @card.chapter, :card_id => @card.id), :class => 'large positive inline-block', :method => :get, :style => 'width:12em;'
+        .pad_from_top
+        .pad

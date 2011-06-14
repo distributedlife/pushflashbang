@@ -23,13 +23,16 @@ PushFlashBang::Application.routes.draw do
         post 'review'
         get 'learn'
         get 'is_new'
+        get 'cram'
       end
     end
 
-    resource :chapter do
+    resources :chapters do
       member do
         get 'show', :as => 'show'
         get 'advance', :as => 'advance'
+        get 'reveal', :as => 'reveal'
+        get 'cram', :as => 'cram'
       end
     end
   end

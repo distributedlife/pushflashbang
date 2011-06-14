@@ -327,7 +327,7 @@ describe DeckController do
         get :learn, :id => @deck.id
 
         response.should be_redirect
-        response.should redirect_to(deck_chapter_path(@deck.id))
+        response.should redirect_to(deck_chapter_path(@deck.id, @card2.chapter))
       end
 
       it 'should redirect to upcoming cards view if there are no cards to schedule' do

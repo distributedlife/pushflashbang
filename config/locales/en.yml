@@ -111,7 +111,7 @@ en:
       labels:
         answer: "your answer"
     chapter:
-      title: You've reached a new chapter
+      title: You've reached chapter %{chapter}
       subtitle: is it time to progress further into the deck?
     upcoming:
       title: No cards available for review
