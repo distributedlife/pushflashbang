@@ -9,8 +9,12 @@ class MigrateUserCardReviews < ActiveRecord::Migration
       next unless user_card_review.review_type.nil?
 
       #get deck for user card review
-      card = Card.find user_card_review.card_id
-      deck = Deck.find card.deck_id
+      begin
+        card = Card.find user_card_review.card_id
+        deck = Deck.find card.deck_id
+      rescue
+        next
+      end
 
       #for each review type the deck supports; update the existing review and if
       # necessary create additional reviews with the same data except the review_type
