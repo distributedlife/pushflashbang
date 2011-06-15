@@ -16,14 +16,14 @@ Feature: sessions
 
     @wip
   Scenario: show due cards first
-    Given I have the following carsd due:
-      | due date | card |
-      | 2 days ago | "A" |
-      | 1 day ago | "B" |
-      | today | "C" |
-      | tomorrow| "D" |
-      | not scheduled| "E" |
-    When I review the card
+    Given I have the following cards due:
+      | due date      | card |
+      | 2 days ago    | "A"  |
+      | 1 day ago     | "B"  |
+      | today         | "C"  |
+      | tomorrow      | "D"  |
+      | not scheduled | "E"  |
+    When I review a deck
     Then the card shown is "A"
 
   Scenario: a card is due and there are cards that have not been scheduled

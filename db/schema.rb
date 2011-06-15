@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110611155627) do
+ActiveRecord::Schema.define(:version => 20110615024539) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20110611155627) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "review_type"
+    t.boolean  "gen_from_migrate", :default => false
   end
 
   create_table "user_card_schedules", :force => true do |t|
