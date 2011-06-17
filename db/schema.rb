@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(:version => 20110617090432) do
     t.datetime "updated_at"
     t.string   "pronunciation"
     t.integer  "chapter"
-    t.string   "audio_url"
+    t.string   "audio_file_name"
   end
 
   create_table "decks", :force => true do |t|

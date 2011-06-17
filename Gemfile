@@ -32,6 +32,7 @@ gem 'paper_trail'
 gem 'dalli'
 gem 'paperclip'
 gem 'validate_url'
+gem 'aws-s3'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

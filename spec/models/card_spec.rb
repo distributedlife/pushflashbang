@@ -44,18 +44,6 @@ describe Card do
       card.chapter = 'a'
       card.valid?.should == false
     end
-
-    it 'should require a valid url when supplied' do
-      card = Card.new(:front => "fdgdfg", :back => 'back', :chapter => 1)
-      card.deck = @deck
-      card.should be_valid
-
-      card.audio_url = "dsafkjhdfja"
-      card.should_not be_valid
-
-      card.audio_url = "http://distributedlife.com/resource/url.mpg"
-      card.should be_valid
-    end
   end
 
   context 'get_first_unscheduled_card_for_deck_for_user' do

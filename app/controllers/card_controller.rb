@@ -57,7 +57,8 @@ class CardController < ApplicationController
 
         redirect_to deck_card_path(@deck)
       end
-    rescue
+    rescue => e
+      ap e
     end
   end
 
