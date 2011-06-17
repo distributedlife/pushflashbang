@@ -29,7 +29,9 @@
       - if is_pronunciation_on_front? deck.pronunciation_side
         .pad_from_top
         %p{:class => "minor_title centre"}= "[#{card.pronunciation}]"
-
+      - unless card.audio_url.blank?
+        %audio{:src => card.audio_url}
+          Your browser does not support the audio element.
     #popup_name{:id => "#{card.id}", :class => "popup_block"}
       %p{:class => "giant mandarin"}= card.front
       - if is_pronunciation_on_front? deck.pronunciation_side

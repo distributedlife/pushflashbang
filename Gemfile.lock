@@ -160,6 +160,9 @@ GEM
     orm_adapter (0.0.4)
     paper_trail (2.2.3)
       rails (~> 3)
+    paperclip (2.3.11)
+      activerecord (>= 2.3.0)
+      activesupport (>= 2.3.2)
     polyglot (0.3.1)
     rack (1.2.2)
     rack-mount (0.6.14)
@@ -240,6 +243,8 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.27)
+    validate_url (0.2.0)
+      activemodel (>= 3.0.0)
     warden (1.0.3)
       rack (>= 1.0.0)
     xpath (0.1.4)
@@ -275,6 +280,7 @@ DEPENDENCIES
   metric_fu
   nokogiri
   paper_trail
+  paperclip
   rails (= 3.0.5)
   rspec-rails (= 2.6.0.rc.2)
   ruby-debug
@@ -282,3 +288,4 @@ DEPENDENCIES
   sqlite3
   sqlite3-ruby
   test_notifier
+  validate_url

@@ -4,11 +4,12 @@ class Card < ActiveRecord::Base
   belongs_to :deck
   has_many :user_card_schedule
 
-  attr_accessible :front, :back, :pronunciation, :chapter
+  attr_accessible :front, :back, :pronunciation, :chapter, :audio_url
 
   validates :front, :presence => true
   validates :deck_id, :presence => true
   validates :chapter, :presence => true, :numericality => { :greater_than => 0 }
+  validates :audio_url, :url => {:allow_blank => true, :allow_nil => true}
 
   def self.get_first_unscheduled_card_for_deck_for_user user_id, deck_id
     sql = <<-SQL

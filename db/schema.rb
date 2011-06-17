@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110615024539) do
+ActiveRecord::Schema.define(:version => 20110617090432) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20110615024539) do
     t.datetime "updated_at"
     t.string   "pronunciation"
     t.integer  "chapter"
+    t.string   "audio_url"
   end
 
   create_table "decks", :force => true do |t|

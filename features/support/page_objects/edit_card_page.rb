@@ -23,6 +23,10 @@ module EditCardPage
     @session.fill_in('card_pronunciation', :with => value)
   end
 
+  def audio_url= value
+    @session.fill_in('card_audio_url', :with => value)
+  end
+
   def save_changes
     @session.click_on('Save Changes')
   end
@@ -41,5 +45,9 @@ module EditCardPage
 
   def pronunciation
     @session.find_field('card_pronunciation').value
+  end
+
+  def audio_url
+    @session.find_field('card_audio_url').value
   end
 end

@@ -151,6 +151,7 @@ en:
         front: "the question"
         back: "the answer"
         pronunciation: "the pronunciation"
+        audio: "the url of sound file"
         chapter: "the deck chapter"
         save: "Save Changes"
         delete: "Delete Card"
@@ -177,6 +178,9 @@ en:
       pronunciation:
         title: "pronunciation"
         description: "The pronunciation key for this card. This is shown on the front or the back of the card depending on the deck settings. It is optional useful when how to pronounce the word is not expressed easily in the source lanuage i.e. mandarin"
+      audio:
+        title: "sound file"
+        description: "Supply the url of an audio file to be played when the card is shown to assist in learning."
       chapter:
         title: "chapter"
         description: "The deck chapter is where in the deck the card is located. This used to create levels of difficulty within a deck and to allow users to limit their progress to a single chapter"

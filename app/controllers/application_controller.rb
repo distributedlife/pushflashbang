@@ -36,6 +36,8 @@ class ApplicationController < ActionController::Base
     layout = selected_layout
     return layout if layout
 
+    return "application" if request.headers["HTTP_USER_AGENT"].nil?
+    
     user_agent = request.headers["HTTP_USER_AGENT"].downcase
 
     return ApplicationController::resolve_layout_type user_agent

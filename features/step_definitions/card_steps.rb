@@ -28,6 +28,15 @@ And /^I have created a card$/ do
   add(:card_id, get(:card).id)
 end
 
+And /^I have created a card with audio$/ do
+  add(:card, Card.make(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card", :audio_url => "http://foo.com/resource"))
+  add(:card_id, get(:card).id)
+end
+
+And /^I have created a card without audio$/ do
+  And %{I have created a card}
+end
+
 And /^I create a card without a front$/ do
   on_page :AddCardPage, Capybara.current_session do |page|
     page.front = ""
@@ -51,6 +60,7 @@ And /^I change all deck properties$/ do
     page.front = "This is really fun"
     page.back = "This is less fun"
     page.pronunciation = "cheese"
+    page.audio_url = "http://www.w3schools.com/html5/horse.ogg"
   end
 end
 
@@ -75,9 +85,12 @@ And /^I can see the card changes$/ do
     And %{I should not see "#{get(:original_card).front}"}
     And %{I should not see "#{get(:original_card).back}"}
     And %{I should not see "#{get(:original_card).pronunciation}"}
+
     And %{I should see "#{get(:card).front}"}
     And %{I should see "#{get(:card).back}"}
     And %{I should see "#{get(:card).pronunciation}"}
+
+    And %{I should see audio tags}
   end
 end
 
@@ -95,4 +108,14 @@ And /^I should see the pronunciation$/ do
   get(:card).pronunciation.split(" ").each do |word|
     And %{I should see "#{word}"}
   end
+end
+
+And /^I should see audio tags$/ do
+  audio = find('audio')
+
+  audio[:src].should == get(:card).audio_url
+end
+
+And /^I should not see audio tags$/ do
+  all('audio').should be_empty
 end
