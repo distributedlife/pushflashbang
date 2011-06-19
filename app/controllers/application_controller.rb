@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    return 'mobile_application'
     return 'application'
   end
 
