@@ -8,6 +8,7 @@ javascripts:
     - public/javascripts/jquery.timers.1.2.js
     - public/javascripts/application.js
     - public/javascripts/rails.js
+    - public/javascripts/jquery.jplayer.min.js
 
 stylesheets:
   common:

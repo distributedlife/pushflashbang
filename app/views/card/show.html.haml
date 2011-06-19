@@ -6,8 +6,30 @@
   %p.giant= @card.front
   - if @card.audio.file?
     .section_break
-    %audio{:src => @card.audio.url, :autoplay => "autoplay"}
-      Your browser does not support the audio element.
+    #audio
+    .jp-audio
+      .jp-type-single
+        #jp_interface_1{:class => "jp-interface"}
+          %ul.jp-controls
+            %li
+              = link_to "play", "#", :class => "jp-play", :tabindex => "1"
+            %li
+              = link_to "pause", "#", :class => "jp-pause", :tabindex => "1"
+            //%li
+            //  = link_to "stop", "#", :class => "jp-stop", :tabindex => "1"
+            %li
+              = link_to "mute", "#", :class => "jp-mute", :tabindex => "1"
+            %li
+              = link_to "unmute", "#", :class => "jp-unmute", :tabindex => "1"
+          .jp-progress
+            .jp-seek-bar
+              .jp-play-bar
+          .jp-volume-bar
+            .jp-volume-bar-value
+          .jp-current-time
+          .jp-duration
+    //%audio{:src => @card.audio.url, :controls => "controls", :style=>"text-align:center;"}
+    //Your browser does not support the audio element.
   - unless @card.back == ""
     .section_break
     %p.giant= @card.back
@@ -18,3 +40,14 @@
     %p.giant= @card.pronunciation
   .pad
 
+:javascript
+  $(document).ready(function() {
+    $("#audio").jPlayer( {
+      ready: function () {
+        $(this).jPlayer("setMedia", {
+          mp3: "#{@card.audio.url}"
+        });
+      },
+      solution: "html"
+    });
+  });
