@@ -3,7 +3,7 @@ class Card < ActiveRecord::Base
   has_attached_file :audio,
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
-    :bucket => "pushflashbang_test",
+#    :bucket => "pushflashbang_test",
     :path => "audio/:id/#{ActiveSupport::SecureRandom.hex.upcase}.:extension"
   
   belongs_to :deck
