@@ -40,9 +40,9 @@
       %p{:class => "huge mandarin"}= card.back
       - if is_pronunciation_on_back? deck.pronunciation_side
         .pad_from_top
-        - words = {}
-        %div{:class => "centre inline-block"}
-          - unless card.pronunciation.nil?
+        - unless card.pronunciation.nil?
+          - words = {}
+          %div{:class => "centre inline-block"}
             - card.pronunciation.split(' ').each do |word|
               %div{:class => "left", :style => "padding: 0.6em;"}
                 %p{:class => "minor_title"}= word
