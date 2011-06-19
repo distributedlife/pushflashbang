@@ -94,4 +94,75 @@ describe Deck do
       deck.review_types.should == Deck::READING | Deck::WRITING
     end
   end
+
+  context 'delete' do
+    before(:each) do
+      @user = User.create(:email => 'a@b.com', :password => 'password', :confirm_password => 'password')
+    end
+    
+    it 'should delete the deck' do
+      Deck.count.should be 0
+
+      deck = Deck.make(:user_id => @user.id)
+      Deck.count.should be 1
+
+      deck.delete
+
+      Deck.count.should be 0
+    end
+
+    it 'should delete any user deck chapters' do
+      UserDeckChapter.count.should be 0
+
+      deck = Deck.make(:user_id => @user.id)
+      UserDeckChapter.make(:deck_id => deck.id, :user_id => 1)
+      UserDeckChapter.make(:deck_id => deck.id, :user_id => 2)
+      UserDeckChapter.count.should be 2
+
+      deck.delete
+
+      UserDeckChapter.count.should be 0
+    end
+
+    it 'should delete the card' do
+      Card.count.should be 0
+
+      deck = Deck.make(:user_id => @user.id)
+      Card.make(:deck_id => deck.id)
+      Card.make(:deck_id => deck.id)
+      Card.make(:deck_id => deck.id)
+      Card.make(:deck_id => deck.id)
+      Card.count.should be 4
+
+      deck.delete
+
+      Card.count.should be 0
+    end
+  end
+
+  context 'getChapters' do
+    before(:each) do
+      @user = User.create(:email => 'a@b.com', :password => 'password', :confirm_password => 'password')
+      @deck = Deck.make(:user_id => @user.id)
+    end
+
+    it 'should return nil if there are no cards in the deck' do
+      @deck.get_chapters.empty?.should be true
+    end
+
+    it 'should return an array object for each chapter in the deck' do
+      Card.make(:deck_id => @deck.id, :chapter => 1)
+      Card.make(:deck_id => @deck.id, :chapter => 2)
+      Card.make(:deck_id => @deck.id, :chapter => 4)
+      Card.make(:deck_id => @deck.id, :chapter => 8)
+
+      chapters = @deck.get_chapters
+      chapters[0].chapter.should be 1
+      chapters[1].chapter.should be 2
+      chapters[2].chapter.should be 4
+      chapters[3].chapter.should be 8
+
+      chapters.count.should be 4
+    end
+  end
 end

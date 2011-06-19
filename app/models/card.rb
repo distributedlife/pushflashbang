@@ -4,8 +4,7 @@ class Card < ActiveRecord::Base
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
     :bucket => "pushflashbang_test",
-    :path => "audio/:id/:filename"
-#    :path => ":attachment/:id/:filename"
+    :path => "audio/:id/#{ActiveSupport::SecureRandom.hex.upcase}.:extension"
   
   belongs_to :deck
   has_many :user_card_schedule
@@ -15,6 +14,7 @@ class Card < ActiveRecord::Base
   validates :front, :presence => true
   validates :deck_id, :presence => true
   validates :chapter, :presence => true, :numericality => { :greater_than => 0 }
+#  validates :audio_url, 
 
   def self.get_first_unscheduled_card_for_deck_for_user user_id, deck_id
     sql = <<-SQL
@@ -37,5 +37,15 @@ class Card < ActiveRecord::Base
     else
       card.first
     end
+  end
+
+  def delete
+    UserCardSchedule.where(:card_id => self.id).each do |card_schedule|
+      card_schedule.delete
+    end
+
+    self.audio.destroy unless self.audio.file?
+
+    return super
   end
 end

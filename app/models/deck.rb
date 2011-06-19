@@ -19,4 +19,28 @@ class Deck < ActiveRecord::Base
   validates :user_id, :presence => true
   validates :pronunciation_side, :presence => true
   validates_inclusion_of :pronunciation_side, :in => SIDES
+
+  def delete
+    UserDeckChapter.where(:deck_id => self.id).each do |deck_chapter|
+      deck_chapter.delete
+    end
+
+    Card.where(:deck_id => self.id).each do |card|
+      card.delete
+    end
+
+    return super
+  end
+
+  def get_chapters
+    sql = <<-SQL
+      SELECT chapter
+      FROM cards
+      WHERE deck_id = #{self.id}
+      GROUP BY chapter
+      ORDER BY chapter ASC
+    SQL
+
+    Card.find_by_sql(sql)
+  end
 end

@@ -16,7 +16,6 @@
 
   #audio_definition
     =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.audio.title'), :detail => I18n.t('card.terminology.audio.description')}
-  //= f.input :audio_url, :as => :string, :label => false, :hint => I18n.t('card.edit.labels.audio'), :required => false, :wrapper_html => {:class => 'width60'}
   = f.file_field :audio
   .pad_from_top
 

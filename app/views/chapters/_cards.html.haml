@@ -1,7 +1,6 @@
 %p.minor_title
   = "Chapter #{chapter}"
   = link_to "[hide]", '#', :remote => true, :class=>"subscript", :id => "show_chapter_#{chapter}"
-  //= link_to "[show]", reveal_deck_chapter_path(card.deck_id, current_chapter), :class => "subscript", :remote => true
   :javascript
     $('#show_chapter_#{chapter}').click(function(event)
     {
@@ -19,7 +18,6 @@
       event.stopPropagation();
     });
   = link_to "[cram]", cram_deck_chapter_path(deck.id, chapter), :class=> "subscript"
-  //= link_to "[cram]", cram_chapter(card.deck_id, current_chapter)
 #cards_for_chapter{:id => "#{chapter}"}
   - @cards.each do |card|
     .div{:class => "card_panel left", :style => ""}
@@ -29,8 +27,8 @@
       - if is_pronunciation_on_front? deck.pronunciation_side
         .pad_from_top
         %p{:class => "minor_title centre"}= "[#{card.pronunciation}]"
-      - unless card.audio_url.blank?
-        %audio{:src => card.audio_url}
+      - unless card.audio.url.nil?
+        %audio{:src => card.audio.url}
           Your browser does not support the audio element.
     #popup_name{:id => "#{card.id}", :class => "popup_block"}
       %p{:class => "giant mandarin"}= card.front
@@ -81,9 +79,6 @@
       //Fade in Background
       $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
       $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer - .css({'filter' : 'alpha(opacity=80)'}) is used to fix the IE Bug on fading transparencies
-
-
-      $('.mandarin').textfill({ maxFontPixels: 36 });
 
       return false;
     });

@@ -50,8 +50,8 @@ class DeckController < ApplicationController
     begin
       if deck_is_valid?
         @deck = Deck.find(params[:id])
-        #TODO: replace with list of chapters
-        @cards = Card.order(:chapter).order(:created_at).where(:deck_id => params[:id])
+        @chapters = @deck.get_chapters
+#        @cards = Card.order(:chapter).order(:created_at).where(:deck_id => params[:id])
       end
     rescue
     end
@@ -64,18 +64,7 @@ class DeckController < ApplicationController
         deck = Deck.find(params[:id])
 
         if deck.user == current_user
-          Deck.delete(params[:id])
-          UserDeckChapter.where(:deck_id => params[:id]).each do |deck_chapter|
-            deck_chapter.delete
-          end
-
-          Card.where(:deck_id => params[:id]).each do |card|
-            UserCardSchedule.where(:card_id => card.id).each do |card_schedule|
-              card_schedule.delete
-            end
-
-            card.delete
-          end
+          deck.delete
 
           flash[:success] = "Deck successfully deleted"
         else
@@ -105,13 +94,6 @@ class DeckController < ApplicationController
         else
           @deck = Deck.find(params[:id])
           @upcoming_cards = ActiveRecord::Base.connection.execute("SELECT cards.id, cards.front, cards.back, cards.pronunciation, user_card_schedules.due FROM cards, user_card_schedules where deck_id = #{params[:id]} and cards.id = user_card_schedules.card_id and user_id = #{current_user.id} order by due asc")
-#          ap @upcoming_cards
-#          @time_chunks = [
-#            Time.now,
-#            Time.now + (CardTiming::SECONDS_IN_MINUTE * 15),
-#            Time.now + (CardTiming::SECONDS_IN_MINUTE * 65),
-#            Time.now + (CardTiming::SECONDS_IN_HOUR * 30)
-#          ]
         end
       end
     rescue

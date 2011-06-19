@@ -29,8 +29,11 @@ And /^I have created a card$/ do
 end
 
 And /^I have created a card with audio$/ do
-  add(:card, Card.make(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card", :audio_url => "http://foo.com/resource"))
+  add(:card, Card.make(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card"))
   add(:card_id, get(:card).id)
+
+  get(:card).audio_file_name = "myfile.mp3"
+  get(:card).save!
 end
 
 And /^I have created a card without audio$/ do
@@ -60,8 +63,16 @@ And /^I change all deck properties$/ do
     page.front = "This is really fun"
     page.back = "This is less fun"
     page.pronunciation = "cheese"
-    page.audio_url = "http://www.w3schools.com/html5/horse.ogg"
+#    attach_file('card_audio', 'features/support/paperclip/card/ash.jpg')
+
+    And %{I attach an "audio" "mp3" file to a "card" on S3}
   end
+end
+
+When /^I attach an? "([^\"]*)" "([^\"]*)" file to an? "([^\"]*)" on S3$/ do |attachment, extension, model|
+  stub_paperclip_s3(model, attachment, extension)
+  attach_file "#{model}_#{attachment}",
+              "features/support/paperclip/#{model.gsub(" ", "_").underscore}/#{attachment}.#{extension}"
 end
 
 And /^the form is empty$/ do
@@ -113,7 +124,7 @@ end
 And /^I should see audio tags$/ do
   audio = find('audio')
 
-  audio[:src].should == get(:card).audio_url
+  audio[:src].should == get(:card).audio.url
 end
 
 And /^I should not see audio tags$/ do

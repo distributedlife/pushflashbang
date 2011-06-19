@@ -4,8 +4,8 @@
   .pad
 %section{:class => ["left panel"], :style => "width: 60%"}
   %p.giant= @card.front
-  .section_break
-  - unless @card.audio.url.blank?
+  - if @card.audio.file?
+    .section_break
     %audio{:src => @card.audio.url, :autoplay => "autoplay"}
       Your browser does not support the audio element.
   - unless @card.back == ""

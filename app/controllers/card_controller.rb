@@ -18,7 +18,6 @@ class CardController < ApplicationController
   def create
     begin
       is_deck_valid
-
       @card = Card.new(params[:card])
       @card.deck = Deck.find(params[:deck_id])
 
@@ -57,18 +56,15 @@ class CardController < ApplicationController
 
         redirect_to deck_card_path(@deck)
       end
-    rescue => e
-      ap e
+    rescue
     end
   end
 
   def destroy
     if is_deck_and_card_valid_and_user_is_owner?
-      UserCardSchedule.where(:card_id => params[:id]).each do |card_schedule|
-        card_schedule.delete
-      end
+      card = Card.find(params[:id])
+      card.delete
 
-      Card.delete(params[:id])
       flash[:failure] = "Deck successfully deleted"
       redirect_to show_deck_path(params[:deck_id])
     end

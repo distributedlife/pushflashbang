@@ -56,5 +56,6 @@ group :development, :test do
   gem 'metric_fu'
   gem 'bermuda'
   gem 'blueprints'
+  gem 'fakeweb'
 #  gem 'capybara-webkit'
 end

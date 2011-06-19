@@ -152,7 +152,7 @@ describe DeckController do
       assigns[:deck].should == deck
     end
 
-    it 'should return the cards for the given deck' do
+    it 'should return the chapters for the given deck' do
       deck = Deck.make(:user_id => @user.id)
 
       card1 = Card.make(:deck_id => deck.id, :front => 'vvv', :chapter => 1)
@@ -164,9 +164,8 @@ describe DeckController do
       get :show, :id => deck.id
 
       assigns[:deck].should == deck
-      assigns[:cards].should == Card.order(:chapter).order(:created_at).where(:deck_id => deck.id)
-      assigns[:cards][0].front.should == "zzz"
-      assigns[:cards][1].front.should == "aaa"
+      assigns[:chapters][0].chapter.should == 1
+      assigns[:chapters][1].chapter.should == 2
     end
 
     it 'should return a shared deck beloning to another user' do
@@ -177,7 +176,6 @@ describe DeckController do
       get :show, :id => deck.id
 
       assigns[:deck].should == deck
-      assigns[:cards].should == Card.order(:chapter).order(:created_at).where(:deck_id => deck.id)
     end
   end
 

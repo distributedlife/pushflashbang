@@ -18,16 +18,16 @@
       .pad
 
 %section{:class => ["left"], :style => "width: 75%; height: 80%"}
-  - if @cards.empty?
+  - if @chapters.empty?
     .div{:class => "panel left", :style => ""}
       %p This deck has no cards; 
   - else
     - current_chapter = 0
-    - @cards.each do |card|
-      - if current_chapter < card.chapter
-        - current_chapter = card.chapter
+    - @chapters.each do |chapter|
+      - if current_chapter < chapter.chapter
+        - current_chapter = chapter.chapter
         #chapter{:id => "#{current_chapter}"}
           %p.minor_title
             = "Chapter #{current_chapter}"
-            = link_to "[show]", reveal_deck_chapter_path(card.deck_id, current_chapter), :class => "subscript", :remote => true
-            = link_to "[cram]", cram_deck_chapter_path(card.deck_id, current_chapter), :class=> "subscript"
+            = link_to "[show]", reveal_deck_chapter_path(@deck.id, current_chapter), :class => "subscript", :remote => true
+            = link_to "[cram]", cram_deck_chapter_path(@deck.id, current_chapter), :class=> "subscript"

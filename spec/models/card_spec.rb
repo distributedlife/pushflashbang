@@ -94,4 +94,42 @@ describe Card do
       next_card.id.should == card1.id
     end
   end
+
+  context 'delete card' do
+    it 'should delete the card' do
+      Card.count.should be 0
+
+      card = Card.make(:deck_id => @deck.id)
+      Card.count.should be 1
+
+
+      card.delete
+      Card.count.should be 0
+    end
+
+    it 'should delete any scheduled cards' do
+      UserCardSchedule.count.should be 0
+
+      card = Card.make(:deck_id => @deck.id)
+      UserCardSchedule.make(:card_id => card.id, :user_id => @user.id)
+      UserCardSchedule.count.should be 1
+
+
+      card.delete
+      UserCardSchedule.count.should be 0
+    end
+
+    it 'should not delete any user card reviews' do
+      UserCardReview.count.should be 0
+
+      card = Card.make(:deck_id => @deck.id)
+      UserCardReview.make(:card_id => card.id, :user_id => @user.id)
+      UserCardReview.make(:card_id => card.id, :user_id => @user.id)
+      UserCardReview.count.should be 2
+
+
+      card.delete
+      UserCardReview.count.should be 2
+    end
+  end
 end
