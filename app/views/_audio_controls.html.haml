@@ -1,0 +1,34 @@
+-id ||= 0
+#audio{:id => id}
+.jp-audio
+  .jp-type-single
+    #jp_interface{:id => id, :class => "jp-interface"}
+      %ul.jp-controls
+        %li
+          = link_to "play", '#', :class => "jp-play", :tabindex => "1"
+        %li
+          = link_to "pause", '#', :class => "jp-pause", :tabindex => "1"
+        %li
+          = link_to "mute", '#', :class => "jp-mute", :tabindex => "1"
+        %li
+          = link_to "unmute", '#', :class => "jp-unmute", :tabindex => "1"
+      .jp-progress
+        .jp-seek-bar
+          .jp-play-bar
+      .jp-volume-bar
+        .jp-volume-bar-value
+      .jp-current-time
+      .jp-duration
+
+:javascript
+  $(document).ready(function() {
+    $("#audio_#{id}").jPlayer( {
+      ready: function () {
+        $(this).jPlayer("setMedia", {
+          mp3: "#{audio_url}"
+        });
+      },
+      solution: "html",
+      cssSelectorAncestor: "#jp_interface_#{id}"
+    });
+  });

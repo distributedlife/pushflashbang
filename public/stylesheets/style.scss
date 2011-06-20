@@ -828,11 +828,39 @@ img.btn_close {
 .jp-audio
 {
   padding-top: 0.6em;
-  padding-left: 22%;
-  padding-right: 22%;
+
+
+  .jp-type-play-only
+  {
+    padding-left: 0% !important;
+    padding-right: 0% !important;
+
+    .jp-interface
+    {
+      border-radius: 5px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      height:36px;
+      border-bottom:none;
+    }
+
+    a.jp-play
+    {
+      top:7px;
+      left:7px;
+    }
+    a.jp-pause
+    {
+      top:7px;
+      left:7px;
+    }
+  }
 
   .jp-type-single
   {
+    padding-left: 22%;
+    padding-right: 22%;
+    
     .jp-interface
     {
       border-radius: 5px;

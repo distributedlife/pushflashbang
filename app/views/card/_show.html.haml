@@ -1,8 +1,6 @@
 %p{:class => "giant mandarin"}= card.front
 - if @card.audio.file?
-  .section_break
-  %audio{:src => @card.audio.url, :autoplay => "autoplay"}
-    Your browser does not support the audio element.
+  =render :partial => '/audio_controls', :locals => {:audio_url => @card.audio.url}
 - if is_pronunciation_on_front? pronunciation_side
   .pad_from_top
   - unless card.pronunciation.nil?

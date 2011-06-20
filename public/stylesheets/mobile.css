@@ -11,41 +11,54 @@ p.giant {
   font-size: 2.0em !important; }
 
 .jp-audio {
-  padding-top: 0.6em;
-  padding-left: 0%;
-  padding-right: 0%; }
-  .jp-audio .jp-type-single .jp-interface {
+  padding-top: 0.6em; }
+  .jp-audio .jp-type-play-only .jp-interface {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     height: 36px;
     border-bottom: none; }
-  .jp-audio .jp-type-single a.jp-play {
+  .jp-audio .jp-type-play-only a.jp-play {
     top: 7px;
-    left: 2px; }
-  .jp-audio .jp-type-single a.jp-pause {
+    left: 7px; }
+  .jp-audio .jp-type-play-only a.jp-pause {
     top: 7px;
-    left: 2px; }
-  .jp-audio .jp-type-single .jp-current-time {
-    top: 13px;
-    left: 24px; }
-  .jp-audio .jp-type-single .jp-progress {
-    top: 9px;
-    left: 52px;
-    width: 64px;
-    height: 18px; }
-  .jp-audio .jp-type-single .jp-duration {
-    top: 13px;
-    left: 120px; }
-  .jp-audio .jp-type-single a.jp-mute {
-    top: 7px;
-    left: 150px; }
-  .jp-audio .jp-type-single a.jp-unmute {
-    top: 7px;
-    left: 146px; }
-  .jp-audio .jp-type-single .jp-volume-bar {
-    top: 14px;
-    left: 174px; }
+    left: 7px; }
+  .jp-audio .jp-type-single {
+    padding-left: 0% !important;
+    padding-right: 0% !important; }
+    .jp-audio .jp-type-single .jp-interface {
+      border-radius: 5px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      height: 36px;
+      border-bottom: none; }
+    .jp-audio .jp-type-single a.jp-play {
+      top: 7px;
+      left: 2px; }
+    .jp-audio .jp-type-single a.jp-pause {
+      top: 7px;
+      left: 2px; }
+    .jp-audio .jp-type-single .jp-current-time {
+      top: 13px;
+      left: 24px; }
+    .jp-audio .jp-type-single .jp-progress {
+      top: 9px;
+      left: 56px;
+      width: 128px;
+      height: 18px; }
+    .jp-audio .jp-type-single .jp-duration {
+      top: 13px;
+      left: 192px; }
+    .jp-audio .jp-type-single a.jp-mute {
+      top: 7px;
+      left: 220px; }
+    .jp-audio .jp-type-single a.jp-unmute {
+      top: 7px;
+      left: 216px; }
+    .jp-audio .jp-type-single .jp-volume-bar {
+      top: 14px;
+      left: 248px; }
 
 div.jp-interface {
   position: relative;
@@ -132,7 +145,7 @@ div.jp-volume-bar {
   position: absolute;
   overflow: hidden;
   background-color: lightgrey;
-  width: 16px;
+  width: 32px;
   height: 8px;
   cursor: pointer; }
 

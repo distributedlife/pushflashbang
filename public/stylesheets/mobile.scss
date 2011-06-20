@@ -20,11 +20,35 @@ p.giant
 .jp-audio
 {
   padding-top: 0.6em;
-  padding-left: 0%;
-  padding-right: 0%;
 
+  .jp-type-play-only
+  {
+    .jp-interface
+    {
+      border-radius: 5px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      height:36px;
+      border-bottom:none;
+    }
+
+    a.jp-play
+    {
+      top:7px;
+      left:7px;
+    }
+    a.jp-pause
+    {
+      top:7px;
+      left:7px;
+    }
+  }
+  
   .jp-type-single
   {
+    padding-left: 0% !important;
+    padding-right: 0% !important;
+
     .jp-interface
     {
       border-radius: 5px;
@@ -51,27 +75,27 @@ p.giant
     }
     .jp-progress {
       top: 9px;
-      left:52px;
-      width:64px;
+      left:56px;
+      width:128px;
       height:18px;
     }
     .jp-duration
     {
       top:13px;
-      left:120px;
+      left:192px;
     }
     a.jp-mute
     {
       top:7px;
-      left:150px;
+      left:220px;
     }
     a.jp-unmute {
       top:7px;
-      left:146px;
+      left:216px;
     }
     .jp-volume-bar {
       top:14px;
-      left:174px;
+      left:248px;
     }
   }
 }
@@ -187,7 +211,7 @@ div.jp-volume-bar
   position: absolute;
   overflow:hidden;
   background-color: lightgrey;
-  width:16px;
+  width:32px;
   height:8px;
   cursor: pointer;
 }

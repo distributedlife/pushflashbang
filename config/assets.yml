@@ -1,6 +1,6 @@
-package_assets: off
-embed_assets: off
-gzip_assets: off
+package_assets: on
+embed_assets: on
+gzip_assets: on
 
 javascripts:
   production:
