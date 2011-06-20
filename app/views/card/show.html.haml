@@ -12,20 +12,21 @@
         #jp_interface_1{:class => "jp-interface"}
           %ul.jp-controls
             %li
-              = link_to image_tag("/images/play-icon.png"), "#", :class => "jp-play", :tabindex => "1"
+              = link_to "play", "#", :class => "jp-play", :tabindex => "1"
+              //= link_to image_tag("/images/play-icon.png"), "#", :class => "jp-play", :tabindex => "1"
               //= image_url "/images/play-icon.png"
               //%img{:src => "/images/play-icon.png", :alt => "Click here to play audio of pronunciation"}
             %li
-              = link_to image_tag("/images/pause-icon.png"), "#", :class => "jp-pause", :tabindex => "1"
-              //= link_to "pause", "#", :class => "jp-pause", :tabindex => "1"
+              //= link_to image_tag("/images/pause-icon.png"), "#", :class => "jp-pause", :tabindex => "1"
+              = link_to "pause", "#", :class => "jp-pause", :tabindex => "1"
             //%li
             //  = link_to "stop", "#", :class => "jp-stop", :tabindex => "1"
             %li
-              = link_to image_tag("/images/volume-mute-icon.png"), "#", :class => "jp-mute", :tabindex => "1"
-              //= link_to "mute", "#", :class => "jp-mute", :tabindex => "1"
+              //= link_to image_tag("/images/volume-mute-icon.png"), "#", :class => "jp-mute", :tabindex => "1"
+              = link_to "mute", "#", :class => "jp-mute", :tabindex => "1"
             %li
-              = link_to image_tag("/images/volume-full-icon.png"), "#", :class => "jp-unmute", :tabindex => "1"
-              //= link_to "unmute", "#", :class => "jp-unmute", :tabindex => "1"
+              //= link_to image_tag("/images/volume-full-icon.png"), "#", :class => "jp-unmute", :tabindex => "1"
+              = link_to "unmute", "#", :class => "jp-unmute", :tabindex => "1"
           .jp-progress
             .jp-seek-bar
               .jp-play-bar

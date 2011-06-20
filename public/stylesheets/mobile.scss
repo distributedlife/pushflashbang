@@ -77,23 +77,23 @@ p.giant
 }
 div.jp-interface
 {
-/*  position: relative;*/
+  position: relative;
   background-color:#777;
 
   ul.jp-controls
   {
     li
     {
-/*      position: absolute;*/
-      display:inline-block;
+      position: absolute;
+      display:inline;
     }
 
-/*    a
+    a
     {
       position: absolute;
       overflow:hidden;
       text-indent:-9999px;
-    }*/
+    }
 
     list-style-type:none;
     padding:0;
@@ -105,27 +105,27 @@ a.jp-play
   width:22px;
   height:22px;
   z-index:1;
-/*  background: url("/images/play-icon.png") 0 0 no-repeat;*/
+  background: url("/images/play-icon.png") 0 0 no-repeat;
 }
 a.jp-pause
 {
   width:22px;
   height:22px;
   z-index:1;
-/*  background: url("/images/pause-icon.png") 0 0 no-repeat;*/
+  background: url("/images/pause-icon.png") 0 0 no-repeat;
   display: none;
 }
 a.jp-play:hover
 {
-/*  background: url("/images/play-icon.png") 0 0 no-repeat;*/
+  background: url("/images/play-icon.png") 0 0 no-repeat;
 }
 a.jp-pause:hover
 {
-/*  background: url("/images/pause-icon.png") 0 0 no-repeat;*/
+  background: url("/images/pause-icon.png") 0 0 no-repeat;
 }
 div.jp-progress
 {
-/*  position: absolute;*/
+  position: absolute;
   overflow:hidden;
   background-color: #ddd;
   border-radius: 4px;
@@ -162,29 +162,29 @@ a.jp-mute
 {
   width:22px;
   height:22px;
-/*  background: url("/images/volume-full-icon.png") 0 0 no-repeat;*/
+  background: url("/images/volume-full-icon.png") 0 0 no-repeat;
 }
 a.jp-mute:hover
 {
-/*  background: url("/images/volume-full-icon.png") 0 0 no-repeat;*/
+  background: url("/images/volume-full-icon.png") 0 0 no-repeat;
 }
 a.jp-unmute
 {
   width:222px;
   height:22px;
-/*  background: url("/images/volume-mute-icon.png") 0 0 no-repeat;*/
+  background: url("/images/volume-mute-icon.png") 0 0 no-repeat;
   display: none;
 }
 a.jp-unmute:hover
 {
-/*  background: url("/images/volume-mute-icon.png") 0 0 no-repeat;*/
+  background: url("/images/volume-mute-icon.png") 0 0 no-repeat;
 }
 div.jp-volume-bar
 {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-/*  position: absolute;*/
+  position: absolute;
   overflow:hidden;
   background-color: lightgrey;
   width:16px;
@@ -205,13 +205,13 @@ div.jp-volume-bar-value
 
 div.jp-current-time
 {
-/*  position: absolute;*/
+  position: absolute;
   font-size:.64em;
   font-style:oblique;
 }
 div.jp-duration
 {
-/*  position: absolute;*/
+  position: absolute;
   font-size:.64em;
   font-style:oblique;
   text-align: right;
