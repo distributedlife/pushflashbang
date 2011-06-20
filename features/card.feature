@@ -30,12 +30,6 @@ Feature: deck cards
     And I click on "Add"
     Then I should see "can't be blank"
 
-  Scenario: edit card link is available from show deck page
-    Given I have created a card
-    And I go to the "show card" page
-    When I click on "Edit Card"
-    Then I should be on the "edit card" page
-
   Scenario: edit card on deck
     Given I have created a card
     And I go to the "edit card" page
@@ -51,12 +45,12 @@ Feature: deck cards
     Then the card should be deleted
     And I should be on the "show deck" page
 
-Scenario: card has audio
-    Given I have created a card with audio
-    When I go to the "show card" page
-    Then I should see audio tags
-
-  Scenario: card has audio
-    Given I have created a card without audio
-    When I go to the "show card" page
-    Then I should not see audio tags
+#Scenario: card has audio
+#    Given I have created a card with audio
+#    When I go to the "show card" page
+#    Then I should see audio tags
+#
+#  Scenario: card has audio
+#    Given I have created a card without audio
+#    When I go to the "show card" page
+#    Then I should not see audio tags
