@@ -39,10 +39,10 @@ p.giant {
     left: 120px; }
   .jp-audio .jp-type-single a.jp-mute {
     top: 7px;
-    left: 146px; }
+    left: 150px; }
   .jp-audio .jp-type-single a.jp-unmute {
     top: 7px;
-    left: 150px; }
+    left: 146px; }
   .jp-audio .jp-type-single .jp-volume-bar {
     top: 14px;
     left: 174px; }
@@ -111,19 +111,19 @@ div.jp-seeking-bg {
 a.jp-mute {
   width: 22px;
   height: 22px;
-  background: url("/images/volume-mute-icon.png") 0 0 no-repeat; }
+  background: url("/images/volume-full-icon.png") 0 0 no-repeat; }
 
 a.jp-mute:hover {
-  background: url("/images/volume-mute-icon.png") 0 0 no-repeat; }
+  background: url("/images/volume-full-icon.png") 0 0 no-repeat; }
 
 a.jp-unmute {
   width: 222px;
   height: 22px;
-  background: url("/images/volume-full-icon.png") 0 0 no-repeat;
+  background: url("/images/volume-mute-icon.png") 0 0 no-repeat;
   display: none; }
 
 a.jp-unmute:hover {
-  background: url("/images/volume-full-icon.png") 0 0 no-repeat; }
+  background: url("/images/volume-mute-icon.png") 0 0 no-repeat; }
 
 div.jp-volume-bar {
   border-radius: 2px;
