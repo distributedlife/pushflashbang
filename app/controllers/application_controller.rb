@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
       end
     end
 
-#    return 'mobile_application'
+#    return 'mobile_application'        # enable this for some mobile page testing
     return 'application'
   end
 
