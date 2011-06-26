@@ -14,4 +14,8 @@ module ShowLanguagesPage
   def learn_language language
     @session.find("#language_#{language.id}").click_link('start learning?')
   end
+
+  def stop_learning_language language
+    @session.find("#language_#{language.id}").click_link('stop learning?')
+  end
 end

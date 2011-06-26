@@ -261,15 +261,7 @@ a:visited
 a:hover
 {
   color: $add_filter_colour;
-}
-
-a:visited
-{
-}
-
-a:hover
-{
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 textarea

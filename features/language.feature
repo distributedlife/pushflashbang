@@ -20,6 +20,12 @@ Feature: language features
       | English           | Spanish              | Spanish              | English, Spanish                       |
       | English, Spanish  | Chinese (Simplified) | Chinese (Simplified) | English, Spanish, Chinese (Simplified) |
 
+  Scenario: a user can remove a language choice from the list
+    And I know the following languages: "English, Spanish"
+    When I go to the "show languages" page
+    And I select "Spanish" to stop learning
+    Then my set of languages is: "English"
+
   Scenario: a user can see their language choices on their home page
     Given I know the following languages: "English, Spanish"
     When I go to the "user home" page

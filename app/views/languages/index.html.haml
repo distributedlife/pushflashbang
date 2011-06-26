@@ -4,6 +4,10 @@
   - @user_languages.each do |user_language|
     #language{:id => user_language.language_id, :class => "panel"}
       %span= user_language.language.name
+      %span.subscript
+        (
+        = link_to t('user.actions.stop_learning_language'), unlearn_language_path(user_language.language_id), :method => :post
+        )
   .pad_from_top
 
   %p.minor_title Languages you can choose from:
@@ -15,4 +19,7 @@
     - unless already_shown
       #language{:id => language.id, :class => "panel"}
         %span= language.name
-        %span.subscript= link_to t('user.actions.learn_language'), learn_language_path(language.id), :method => :post
+        %span.subscript
+          (
+          = link_to t('user.actions.learn_language'), learn_language_path(language.id), :method => :post
+          )

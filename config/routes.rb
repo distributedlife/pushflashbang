@@ -40,6 +40,7 @@ PushFlashBang::Application.routes.draw do
   resources :languages do
     member do
       post 'learn'
+      post 'unlearn'
     end
   end
   

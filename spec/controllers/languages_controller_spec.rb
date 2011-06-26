@@ -65,4 +65,44 @@ describe LanguagesController do
       UserLanguages.all.count.should == 0
     end
   end
+
+  context '"POST" unlearn' do
+    before(:each) do
+      @user = User.make
+      sign_in :user, @user
+
+      @language = Language.make
+      @user_language = UserLanguages.make(:language_id => @language.id, :user_id => @user.id)
+    end
+
+    it 'should remove the language from the user languages' do
+      UserLanguages.all.count.should == 1
+
+      post :unlearn, :id => @language.id
+
+      UserLanguages.all.count.should == 0
+    end
+
+    it 'should not remove a language that is not there' do
+      UserLanguages.delete_all
+
+      post :unlearn, :id => @language.id
+
+      UserLanguages.all.count.should == 0
+    end
+
+    it 'should redirect to languages path' do
+      post :unlearn, :id => @language.id
+
+      response.should be_redirect
+    end
+
+    it 'should not remove languages that do not exist' do
+      UserLanguages.all.count.should == 1
+      
+      post :unlearn, :id => 100
+
+      UserLanguages.all.count.should == 1
+    end
+  end
 end

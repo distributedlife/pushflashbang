@@ -22,7 +22,16 @@ And /^I select "([^"]*)" to learn$/ do |language_name|
   end
 end
 
-Then /^my set of languages is: "([^"]*)"$/ do |languages|
+And /^I select "([^"]*)" to stop learning$/ do |language_name|
+  on_page :ShowLanguagesPage, Capybara.current_session do |page|
+    language = ensure_language_exists language_name
+
+    page.stop_learning_language language
+  end
+end
+
+
+And /^my set of languages is: "([^"]*)"$/ do |languages|
   languages.split(',').each do |language_name|
     language_name.strip!
 

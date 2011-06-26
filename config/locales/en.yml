@@ -82,10 +82,11 @@ en:
       search: "Search"
       home: "User Home"
       new_deck: "New Deck"
-      terms: "Translations"
+      terms: "Terms"
       create_deck: "Create Deck"
       find_new_language: "add"
       learn_language: "start learning?"
+      stop_learning_language: "stop learning?"
   deck:
     create:
       title: "Create new deck"
