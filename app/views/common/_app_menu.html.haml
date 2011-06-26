@@ -1,9 +1,9 @@
 - if user_signed_in?
   %nav.left
     %span.top_menu_panel
-      %span= link_to(I18n.t('user.actions.home'), user_index_path)
+      %span= link_to(t('user.actions.home'), user_index_path)
     %span.top_menu_panel
-      %span= link_to 'New Deck', '/deck/create', :method => :post
+      %span= link_to t('user.actions.terms'), '/terms'
 
     //attempt to display a deck home and then a card home depending on the current page.
     //#TODO: simplify this code using before filters

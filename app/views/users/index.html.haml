@@ -1,2 +1,17 @@
 =render :partial => '/header', :locals => {:title => t('user.home.title', :email => ""), :subtitle => t('user.home.subtitle')}
-=render :partial => '/deck/user_decks', :locals => {:decks => @decks}
+#languages{:class => "section_left", :style => "width: 50%;"}
+  %p.minor_title
+    %span Languages your learning
+    %span.subscript
+      [
+      =link_to t('user.actions.find_new_language'), languages_path, :class => 'contrast'
+      ]
+  =render :partial => '/languages/user_languages', :locals => {:languages => @languages}
+#decks{:class => "section_right", :style => "width: 50%;"}
+  %p.minor_title 
+    %span Things your learning
+    %span.subscript
+      [
+      =link_to t('user.actions.new_deck'), '/deck/create', :method => :post, :class => 'contrast'
+      ]
+  =render :partial => '/deck/user_decks', :locals => {:decks => @decks}

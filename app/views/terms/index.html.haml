@@ -1,0 +1,17 @@
+- current_idiom = 0
+
+=render :partial => '/header', :locals => {:title => t('term.index.title'), :subtitle => t('term.index.subtitle')}
+%section{:class => ["panel"]}
+  #translations
+    - @translations.each do |translation|
+      - if translation.idiom_id != current_idiom and !current_idiom.nil?
+        - current_idiom = translation.idiom_id
+        .pad_from_top
+        = link_to "add translation to group", new_term_path(current_idiom)
+      #translation
+        #translation{:id => translation.id}
+          %span#language{:style => "width: 10em; display: inline-block;"}= translation.language
+          %span#form{:style => "display: inline-block;"}= translation.form
+          %span#pronunciation{:class => "right", :style => "width: 10em; display: inline-block;"}= translation.pronunciation
+  - if @translations.empty?
+    %p There are currently no translations in the system

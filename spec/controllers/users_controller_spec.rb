@@ -55,5 +55,15 @@ describe UsersController do
 
       assigns[:due_counts][deck.id].should == 1
     end
+
+    it 'should return the languages being learnt by the user' do
+      2.times {Language.make}
+      UserLanguages.create(:user_id => @user.id, :language_id => Language.first.id)
+      UserLanguages.create(:user_id => 100, :language_id => Language.first.id)
+
+      get :index
+
+      assigns[:user_languages].count.should == 1
+    end
   end
 end

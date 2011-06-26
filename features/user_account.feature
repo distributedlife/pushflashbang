@@ -9,10 +9,6 @@ Scenario: user can register account and is automatically logged in
   Then I should be on the "user home" page
   And I should see "Welcome! You have signed up successfully."
 
-#Scenario: create account for the first time
-#  When I create a new push flash bang account
-#  Then I should be logged in and
-
   Scenario: user is redirect to site index on logout
   Given I am a new, authenticated user
   When I click on "Logout"

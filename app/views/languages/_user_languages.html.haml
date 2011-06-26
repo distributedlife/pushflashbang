@@ -1,0 +1,11 @@
+- if @user_languages.empty?
+  #language{:class => 'panel'}
+    %p You have not selected to learn any languages.
+    .pad_from_top
+    %p= link_to "Click here to start learning.", languages_path, :class => 'contrast'
+- @user_languages.each do |user_language|
+  #language{:id => user_language.language_id, :class => 'panel'}
+    %p.minor_title
+      = link_to user_language.language.name, language_path(user_language.language_id)
+    .pad_from_top
+    .pad

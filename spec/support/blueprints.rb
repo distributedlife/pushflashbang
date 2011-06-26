@@ -3,9 +3,11 @@ require 'sham'
 require 'faker'
 
 Sham.define do
+  #users
   email {Faker::Internet.email(Faker::Name.first_name)}
   password(:unique => false) {'password'}
 
+  #cards and decks
   name {Faker::Lorem.words(1)}
   description {Faker::Lorem.sentence(5)}
   shared(:unique => false) {false}
@@ -25,6 +27,10 @@ Sham.define do
   reveal(:unique => false) {Time.now}
   result_recorded(:unique => false) {Time.now}
   result_success(:unique => false) {'good'}
+
+  #terms and idioms
+  language(:unique => false) {'English'}
+  form(:unique => false) {Faker::Lorem.sentence(4)}
 end
 
 User.blueprint do
@@ -78,4 +84,23 @@ UserDeckChapter.blueprint do
   user_id
   deck_id
   chapter {1}
+end
+
+Idiom.blueprint do
+
+end
+
+Translation.blueprint do
+  language
+  form
+  pronunciation
+end
+
+Language.blueprint do
+  name {Faker::Lorem.sentence(2)}
+end
+
+UserLanguages.blueprint do
+  language_id
+  user_id
 end

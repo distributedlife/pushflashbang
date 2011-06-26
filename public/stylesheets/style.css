@@ -111,6 +111,12 @@ legend.label {
 em {
   color: orange; }
 
+.section_left {
+  float: left; }
+
+.section_right {
+  float: right; }
+
 .pending {
   background-color: #ffffdd; }
 

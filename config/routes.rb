@@ -36,4 +36,13 @@ PushFlashBang::Application.routes.draw do
       end
     end
   end
+
+  resources :languages do
+    member do
+      post 'learn'
+    end
+  end
+  
+  resources :terms
+
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110617090432) do
+ActiveRecord::Schema.define(:version => 20110625232509) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -44,6 +44,24 @@ ActiveRecord::Schema.define(:version => 20110617090432) do
     t.integer  "review_types"
   end
 
+  create_table "idioms", :force => true do |t|
+  end
+
+  create_table "languages", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "translations", :force => true do |t|
+    t.text     "language"
+    t.text     "form"
+    t.text     "pronunciation"
+    t.integer  "idiom_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_card_reviews", :force => true do |t|
     t.integer  "user_id"
     t.integer  "card_id"
@@ -72,6 +90,13 @@ ActiveRecord::Schema.define(:version => 20110617090432) do
     t.integer  "user_id"
     t.integer  "deck_id"
     t.integer  "chapter"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_languages", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "language_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -13,5 +13,8 @@ class UsersController < ApplicationController
     @decks.each do |deck|
       @due_counts[deck.id] = UserCardSchedule.get_due_count_for_user_for_deck current_user.id, deck.id
     end
+
+    #get user languages
+    @user_languages = UserLanguages.joins(:language).where(:user_id => current_user.id)
   end
 end

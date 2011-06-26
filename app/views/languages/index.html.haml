@@ -1,0 +1,18 @@
+=render :partial => '/header', :locals => {:title => "Languages we support", :subtitle => ""}
+#languages
+  %p.minor_title Languages you're learning:
+  - @user_languages.each do |user_language|
+    #language{:id => user_language.language_id, :class => "panel"}
+      %span= user_language.language.name
+  .pad_from_top
+
+  %p.minor_title Languages you can choose from:
+  - @languages.each do |language|
+    - already_shown = false
+    - @user_languages.each do |user_language|
+      - if user_language.language_id == language.id
+        - already_shown = true
+    - unless already_shown
+      #language{:id => language.id, :class => "panel"}
+        %span= language.name
+        %span.subscript= link_to t('user.actions.learn_language'), learn_language_path(language.id), :method => :post

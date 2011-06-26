@@ -80,8 +80,12 @@ en:
       sign_out: "Logout"
       edit_registration: "Account"
       search: "Search"
-      home: "Home"
+      home: "User Home"
+      new_deck: "New Deck"
+      terms: "Translations"
       create_deck: "Create Deck"
+      find_new_language: "add"
+      learn_language: "start learning?"
   deck:
     create:
       title: "Create new deck"
@@ -184,4 +188,7 @@ en:
       chapter:
         title: "chapter"
         description: "The deck chapter is where in the deck the card is located. This used to create levels of difficulty within a deck and to allow users to limit their progress to a single chapter"
-
+  term:
+    index:
+      title: "Showing all terms"
+      subtitle: "A term represents an idiom translated into a language"
