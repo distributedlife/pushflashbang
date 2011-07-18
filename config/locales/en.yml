@@ -25,6 +25,12 @@ en:
     labels:
       undo: "Click here to undo."
     terms:
+  common:
+    labels:
+      save: "Save"
+  labels:
+    sets:
+      add_set_name: "Add set name translation"
   user:
     home:
       title: "Welcome %{email}"
@@ -193,3 +199,26 @@ en:
     index:
       title: "Showing all terms"
       subtitle: "A term represents an idiom translated into a language"
+  translation:
+    create:
+      title: "Create a set of related translations"
+      subtitle: ""
+      labels:
+        save: "Create related translations"
+        add_translation: "Add a new translation"
+        language: "the language"
+        form: "the translation"
+        pronunciation: "the pronunciation"
+    edit:
+      labels:
+        save: "Save Changes"
+    terminology:
+      language:
+        title: "language"
+        description: "What language is this translation in? Each translation should be related to the other translations on the page."
+      form:
+        title: "form"
+        description: "The form is the representation of the word or concept in the language specified."
+      pronunciation:
+        title: "pronunciation"
+        description: "The pronunciation can be used for additional pronunciation content. An example is the pin yin system for Chinese."

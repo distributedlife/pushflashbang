@@ -1,0 +1,20 @@
+=render :partial => '/header', :locals => {:title => t('term.edit.title'), :subtitle => t('term.edit.subtitle')}
+#translations
+  %section{:class => ["panel"]}
+    - semantic_form_for("translations", :url => "/terms", :method => :put) do |form|
+      - @idiom_translations.each_with_index do |idiom_translation, i|
+        #translation{:id => i}
+          %p.minor_title= "Translation #{i + 1}"
+          %section{:class => ["panel"]}
+            = semantic_fields_for "translation[#{i}]", idiom_translation.translation do |f|
+              = render :partial => 'create_term_form', :locals => {:translation => idiom_translation.translation, :i => i, :f => f}
+              = link_to I18n.t('translation.edit.labels.move'), select_terms_path(:idiom_id => idiom_translation.idiom_id, :translation_id => idiom_translation.translation_id), :class => 'neutral', :method => :post, :id => "translation_#{i}_move"
+              = link_to I18n.t('translation.edit.labels.delete'), term_translation_path(idiom_translation.idiom_id, idiom_translation.translation_id), :class => 'negative', :method => :delete, :id => "translation_#{i}_delete"
+              .pad
+      #translation{:id => @idiom_translations.count}
+        = link_to I18n.t('translation.create.labels.add_translation'), add_translation_terms_path(:i => @idiom_translations.count), :class => 'neutral', :method => :post, :remote => :true
+        .pad_from_top
+        .pad_from_top
+
+      - form.buttons do
+        = form.submit I18n.t('translation.edit.labels.save'), :class => 'positive'

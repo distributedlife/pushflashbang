@@ -1,0 +1,18 @@
+=render :partial => '/header', :locals => {:title => t('translation.create.title'), :subtitle => t('translation.create.subtitle')}
+#translations
+  %section{:class => ["panel"]}
+    - semantic_form_for("translations", :url => "/terms", :method => :post) do |form|
+      - @translations.each_with_index do |translation, i|
+        #translation{:id => i}
+          %p.minor_title= "Translation #{i + 1}"
+          %section{:class => ["panel"]}
+            = semantic_fields_for "translation[#{i}]", translation do |f|
+              = render :partial => 'create_term_form', :locals => {:translation => translation, :i => i, :f => f}
+              .pad
+      #translation{:id => @translations.count}
+        = link_to I18n.t('translation.create.labels.add_translation'), add_translation_terms_path(:i => @translations.count), :class => 'neutral', :method => :post, :remote => :true
+        .pad_from_top
+        .pad_from_top
+
+      - form.buttons do
+        = form.submit I18n.t('translation.create.labels.save'), :class => 'positive'

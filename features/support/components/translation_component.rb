@@ -2,29 +2,33 @@ module TranslationComponent
   def create_translation hash
     verify_translation_prerequisites
 
-    translation = Translation.create hash
-    translation.idiom_id = get(:idiom).id
-    translation.save!
+    translation = Translation.make hash
+    idiom_translation = IdiomTranslation.create(:idiom_id => get(:idiom).id, :translation_id => translation.id)
 
     add(:translation, translation)
+    add(:idiom_translation, idiom_translation)
   end
 
   def create_translation_attached_to_idiom idiom, hash
     verify_translation_prerequisites
 
-    translation = Translation.new hash
-    translation.idiom_id = idiom.id
-    translation.save!
+    translation = Translation.make hash
+    idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
 
     add(:translation, translation)
+    add(:idiom_translation, idiom_translation)
   end
 
   def get_translation_using_form form
     return Translation.where(:form => form)
   end
 
-  def get_translations_using_idiom idiom
-    return Translation.where(:idiom_id => idiom.id)
+  def get_translation_group_using_form form
+    return IdiomTranslation.joins(:translation).where(:translations => {:form => form})
+  end
+
+  def get_translation_group_using_idiom idiom
+    return IdiomTranslation.joins(:translation).where(:idiom_id => idiom.id)
   end
 
   private

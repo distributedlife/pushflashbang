@@ -1,0 +1,10 @@
+=render :partial => '/header', :locals => {:title => t('set.show.title'), :subtitle => t('set.show.subtitle')}
+//%section{:class => ["panel right"]}
+//  = link_to "edit term", edit_term_path(params[:id]), :class => 'neutral'
+//  = link_to "link existing translation", select_term_translations_path(params[:id]), :class => 'neutral', :method => :post
+%section{:class => ["panel left"]}
+  #set_names
+    - @set_names.each do |set_name|
+      #set_name{:id => set_name.sets_id}
+        %span#name{:style => "width: 10em; display: inline-block;"}= set_name.name
+        %span#descriptipon{:style => "display: inline-block;"}= set_name.description

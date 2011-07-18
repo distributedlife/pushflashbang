@@ -1,0 +1,4 @@
+#translation{:id => @i.to_i + 1}
+  = link_to I18n.t('labels.sets.add_set_name'), add_set_name_set_path(:i => @i.to_i + 1), :class => 'neutral', :method => :post, :remote => :true
+  .pad_from_top
+  .pad_from_top

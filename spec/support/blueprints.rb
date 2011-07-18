@@ -96,6 +96,11 @@ Translation.blueprint do
   pronunciation
 end
 
+IdiomTranslation.blueprint do
+  idiom_id
+  translation_id
+end
+
 Language.blueprint do
   name {Faker::Lorem.sentence(2)}
 end

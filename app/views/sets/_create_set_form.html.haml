@@ -1,0 +1,12 @@
+- semantic_form_for(@set_name, :url => "/sets", :method => :post) do |f|
+  #name_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('set.terminology.front.title'), :detail => I18n.t('set.terminology.front.description')}
+  = f.input :name, :as => :string, :label => false, :hint => I18n.t('set.create.labels.front'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+  #description_definition
+    =render :partial => '/common/definitions', :locals => {:title => I18n.t('set.terminology.back.title'), :detail => I18n.t('set.terminology.back.description')}
+  = f.input :description, :as => :text, :label => false, :hint => I18n.t('set.create.labels.back'), :required => false, :wrapper_html => {:class => 'width60'}
+  .pad_from_top
+
+    = f.submit I18n.t('common.labels.save'), :class => 'positive'

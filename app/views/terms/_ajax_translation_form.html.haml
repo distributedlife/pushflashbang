@@ -1,0 +1,5 @@
+%p.minor_title= "Translation #{@i.to_i + 1}"
+%section{:class => ["panel"]}
+  = semantic_fields_for "translation[#{@i}]", @translation do |f|
+    = render :partial => 'create_term_form', :locals => {:translation => @translation, :i => @i, :f => f}
+    .pad

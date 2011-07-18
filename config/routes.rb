@@ -44,6 +44,26 @@ PushFlashBang::Application.routes.draw do
     end
   end
   
-  resources :terms
+  resources :terms do
+    collection do
+      post 'add_translation'
+      post 'select'
+    end
 
+    resources :translations do
+      member do
+        post 'attach_and_detach'
+        post 'attach'
+      end
+      collection do
+        post 'select'
+      end
+    end
+  end
+
+  resources :sets do
+    member do
+      post 'add_set_name'
+    end
+  end
 end

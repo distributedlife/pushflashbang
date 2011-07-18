@@ -1,0 +1,9 @@
+=render :partial => '/header', :locals => {:title => t('set.show.title'), :subtitle => t('set.show.subtitle')}
+%section{:class => ["panel left"]}
+  #set_names
+    - @sets.each do |set|
+      #set{:id => set.id}
+        - set.set_name.each do |set_name|
+          #set_name{:id => set_name.id}
+            %span#name{:style => "width: 10em; display: inline-block;"}= set_name.name
+            %span#descriptipon{:style => "display: inline-block;"}= set_name.description

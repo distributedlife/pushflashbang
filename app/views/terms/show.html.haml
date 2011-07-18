@@ -1,15 +1,10 @@
-- current_idiom = 0
-
-=render :partial => '/header', :locals => {:title => t('term.index.title'), :subtitle => t('term.index.subtitle')}
+=render :partial => '/header', :locals => {:title => t('term.show.title'), :subtitle => t('term.show.subtitle')}
 %section{:class => ["panel right"]}
-  = link_to "add new term", new_term_path, :class => 'neutral'
+  = link_to "edit term", edit_term_path(params[:id]), :class => 'neutral'
+  = link_to "link existing translation", select_term_translations_path(params[:id]), :class => 'neutral', :method => :post
 %section{:class => ["panel left"]}
   #translations
     - @idiom_translations.each do |idiom_translation|
-      - if idiom_translation.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = idiom_translation.idiom_id
-        .pad_from_top
-        = link_to "add translation to group", edit_term_path(current_idiom)
       #translation
         #translation{:id => idiom_translation.translation.id}
           %span#language{:style => "width: 10em; display: inline-block;"}= idiom_translation.translation.language

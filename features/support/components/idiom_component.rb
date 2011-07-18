@@ -2,7 +2,10 @@ module IdiomComponent
   def create_idiom
     verify_idiom_prerequisites
 
-    Idiom.create
+    idiom = Idiom.create
+    add(:idiom, idiom)
+
+    idiom
   end
 
   def ensure_idiom_exists
@@ -12,11 +15,11 @@ module IdiomComponent
   end
 
   def get_idiom_containing_form form
-    translation = get_translation_using_form form
+    idiom_translation = get_translation_group_using_form form
 
-    raise "no translation exists using form" if translation.empty?
+    raise "no translation exists using form" if idiom_translation.empty?
 
-    Idiom.find(translation.first.idiom_id)
+    Idiom.find(idiom_translation.first.idiom_id)
   end
 
   private

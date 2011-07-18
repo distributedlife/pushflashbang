@@ -5,7 +5,7 @@
 - if with_group
   .flash
     %p{:class => [keys], :id => id}
-      %span= "#{value}"
+      %span= "#{value}".html_safe
 - else
   %p{:class => [keys], :id => id}
-    %span= "#{value}"
+    %span= "#{value}".html_safe

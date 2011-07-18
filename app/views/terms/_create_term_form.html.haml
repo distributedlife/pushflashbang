@@ -1,0 +1,14 @@
+#language_definition
+  =render :partial => '/common/definitions', :locals => {:title => I18n.t('translation.terminology.language.title'), :detail => I18n.t('translation.terminology.language.description  ')}
+= f.input :language, :as => :string, :id => @i, :label => false, :hint => I18n.t('translation.create.labels.language'), :required => false, :wrapper_html => {:class => 'width60'}
+.pad_from_top
+
+#form_definition
+  =render :partial => '/common/definitions', :locals => {:title => I18n.t('translation.terminology.form.title'), :detail => I18n.t('translation.terminology.form.description')}
+= f.input :form, :as => :string, :label => false, :hint => I18n.t('translation.create.labels.form'), :required => false, :wrapper_html => {:class => 'width60'}
+.pad_from_top
+
+#pronunciation_definition
+  =render :partial => '/common/definitions', :locals => {:title => I18n.t('translation.terminology.pronunciation.title'), :detail => I18n.t('translation.terminology.pronunciation.description')}
+= f.input :pronunciation, :as => :string, :label => false, :hint => I18n.t('translation.create.labels.pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
+.pad_from_top

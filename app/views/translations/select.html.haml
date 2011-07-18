@@ -1,0 +1,17 @@
+- current_idiom = 0
+
+=render :partial => '/header', :locals => {:title => t('translation.select.title'), :subtitle => t('translation.select.subtitle')}
+%section{:class => ["panel right"]}
+  = link_to "cancel", terms_path(params[:term_id])
+%section{:class => ["panel left"]}
+  #translations
+    - @idiom_translations.each_with_index do |idiom_translation, i|
+      - if idiom_translation.idiom_id != current_idiom and !current_idiom.nil?
+        - current_idiom = idiom_translation.idiom_id
+        .pad_from_top
+      #translation{:id => i}
+        %span#language{:style => "width: 10em; display: inline-block;"}= idiom_translation.translation.language
+        %span#form{:style => "display: inline-block;"}= idiom_translation.translation.form
+        %span#pronunciation{:class => "right", :style => "width: 10em; display: inline-block;"}= idiom_translation.translation.pronunciation
+        = link_to I18n.t('translation.select.labels.select'), attach_term_translation_path(:term_id => params[:term_id], :id => idiom_translation.translation_id), :class => 'neutral', :method => :post, :id => "translation_#{idiom_translation.translation_id}_select"
+        = link_to I18n.t('translation.select.labels.select'), attach_and_detach_term_translation_path(:term_id => params[:term_id], :id => idiom_translation.translation_id, :remove_from_idiom_id => idiom_translation.idiom_id), :class => 'neutral', :method => :post, :id => "translation_#{idiom_translation.translation_id}_select_and_remove"

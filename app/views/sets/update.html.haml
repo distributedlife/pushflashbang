@@ -1,0 +1,20 @@
+=render :partial => '/header', :locals => {:title => t('set.edit.title'), :subtitle => t('set.edit.subtitle')}
+#set
+  %section{:class => ["panel"]}
+    - semantic_form_for("set", :url => "/sets", :method => :put) do |form|
+      - @set_names.each_with_index do |set_name, i|
+        #set_name{:id => i}
+          %p.minor_title= "Set name translation: #{i + 1}"
+          %section{:class => ["panel"]}
+            = semantic_fields_for "set_name[#{i}]", set_name do |f|
+              = render :partial => 'create_set_name_form', :locals => {:set_name => set_name, :i => i, :f => f}
+      //        //= link_to I18n.t('translation.edit.labels.move'), select_sets_path(:idiom_id => idiom_translation.idiom_id, :translation_id => idiom_translation.translation_id), :class => 'neutral', :method => :post, :id => "translation_#{i}_move"
+      //        //= link_to I18n.t('translation.edit.labels.delete'), set_translation_path(idiom_translation.idiom_id, idiom_translation.translation_id), :class => 'negative', :method => :delete, :id => "translation_#{i}_delete"
+      //        .pad
+      #set_name{:id => @set_names.count}
+        = link_to I18n.t('labels.sets.add_set_name'), add_set_name_set_path(:i => @set_names.count), :class => 'neutral', :method => :post, :remote => :true
+        .pad_from_top
+        .pad_from_top
+
+      - form.buttons do
+        = form.submit I18n.t('translation.edit.labels.save'), :class => 'positive'

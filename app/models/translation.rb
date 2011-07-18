@@ -5,5 +5,4 @@ class Translation < ActiveRecord::Base
 
   validates :language, :presence => true
   validates :form, :presence => true
-  validates :idiom_id, :presence => true
 end
