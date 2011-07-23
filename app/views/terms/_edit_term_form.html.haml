@@ -1,3 +1,4 @@
+= f.input :id, :as => :hidden
 #language_definition
   =render :partial => '/common/definitions', :locals => {:topic => "translation-language"}
 = f.input :language, :as => :string, :id => @i, :label => false, :hint => I18n.t('form.translation-language'), :required => false, :wrapper_html => {:class => 'width60'}

@@ -11,8 +11,33 @@ module ShowSetPage
     @session.has_content?("Set").should == true
   end
 
-  def is_on_page hash
+  def is_set_on_page hash
     @session.has_content?(hash[:name]).should == true
     @session.has_content?(hash[:description]).should == true
+  end
+
+  def is_term_on_page hash
+    @session.has_content?(hash[:form]).should == true
+    @session.has_content?(hash[:language]).should == true
+    @session.has_content?(hash[:pronunciation]).should == true
+  end
+
+  def is_term_not_on_page hash
+    @session.has_content?(hash[:form]).should == false
+    @session.has_content?(hash[:language]).should == false
+    @session.has_content?(hash[:pronunciation]).should == false unless hash[:pronunciation].empty?
+  end
+
+  def language_support_on_page hash
+    @session.has_content?(hash[:language]).should == true
+    @session.has_content?(hash[:count]).should == true
+  end
+
+  def remove_term id
+    @session.find_link("term_#{id}_remove_from_set").click
+  end
+
+  def add_term
+    @session.find_link("add_term").click
   end
 end

@@ -1,8 +1,8 @@
 - current_idiom = 0
 
-=render :partial => '/header', :locals => {:title => t('titles.term-select.title'), :subtitle => t('titles.term-select.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.term-select-for-set.title'), :subtitle => t('titles.term-select-for-set.subtitle')}
 %section{:class => ["panel right"], :style => "width: 15%"}
-  %span.menu= link_to t('actions.cancel'), terms_path
+  %span.menu= link_to t('actions.cancel'), sets_path
 %section{:class => ["panel left"], :style => "width: 70%"}
   #translations
     - @idiom_translations.each_with_index do |idiom_translation, i|
@@ -11,10 +11,13 @@
         .pad_from_top
         %span.subscript{:style => "float: right;"}
           [
-          = link_to t('actions.move-translation-here'), attach_and_detach_term_translation_path(:term_id => current_idiom, :id => params[:translation_id], :remove_from_idiom_id => params[:idiom_id]), :class => 'neutral', :method => :post, :id => "translation_#{current_idiom}_select"
+          = link_to t('actions.add-to-set'), add_term_set_path(:id => params[:set_id], :idiom_id => current_idiom), :class => 'neutral', :method => :put, :id => "term_#{current_idiom}_select"
           ]
       #translation{:id => i}
         %span#language.subscript.contrast_faint= idiom_translation.translation.language
         %span#form= idiom_translation.translation.form
         - unless idiom_translation.translation.pronunciation.empty?
           %span#pronunciation= "(#{idiom_translation.translation.pronunciation})"
+        //%span#language{:style => "width: 10em; display: inline-block;"}= idiom_translation.translation.language
+        //%span#form{:style => "display: inline-block;"}= idiom_translation.translation.form
+        //%span#pronunciation{:class => "right", :style => "width: 10em; display: inline-block;"}= idiom_translation.translation.pronunciation

@@ -1,14 +1,14 @@
-=render :partial => '/header', :locals => {:title => t('term.show.title'), :subtitle => t('term.show.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.show-term.title'), :subtitle => t('titles.show-term.subtitle')}
 %section{:class => ["panel right"]}
-  = link_to "edit term", edit_term_path(params[:id]), :class => 'neutral'
-  = link_to "link existing translation", select_term_translations_path(params[:id]), :class => 'neutral', :method => :post
+  = link_to t('actions.edit'), edit_term_path(params[:id]), :class => 'neutral'
+  = link_to t('actions.link-translation'), select_term_translations_path(params[:id]), :class => 'neutral', :method => :post
 %section{:class => ["panel left"]}
   #translations
+    - if @idiom_translations.empty?
+      %p There are currently no translations in the system
     - @idiom_translations.each do |idiom_translation|
       #translation
         #translation{:id => idiom_translation.translation.id}
           %span#language{:style => "width: 10em; display: inline-block;"}= idiom_translation.translation.language
           %span#form{:style => "display: inline-block;"}= idiom_translation.translation.form
           %span#pronunciation{:class => "right", :style => "width: 10em; display: inline-block;"}= idiom_translation.translation.pronunciation
-  - if @idiom_translations.empty?
-    %p There are currently no translations in the system

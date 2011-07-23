@@ -1,0 +1,15 @@
+=render :partial => '/header', :locals => {:title => t('titles.set-select.title'), :subtitle => t('titles.set-select.subtitle')}
+%section{:class => ["panel right"], :style => "width: 15%"}
+  %span.menu= link_to t('actions.cancel'), terms_path
+#set_names
+  - @sets.each do |set|
+    %section{:class => ["panel left"], :style => "width: 70%"}
+      #set{:id => set.id}
+        - set.set_name.each do |set_name|
+          #set_name{:id => set_name.id}
+            %span.subscript{:style => "float: right;"}
+              [
+              = link_to t('actions.select-set'), add_term_set_path(set.id, :idiom_id => @idiom_id), :id => "set_#{set.id}_add_term", :method => :put
+              ]
+            %span#name{:style => "display: inline-block;"}= set_name.name
+            %span#description{:class => "description", :style => "display: inline-block;"}= set_name.description

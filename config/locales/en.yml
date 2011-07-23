@@ -18,6 +18,109 @@ en:
             current_password:
               blank: "that can't be blank"
               invalid: "that must be correct :)"
+  actions:
+    add: "add"
+    add-translation: "Add translation"
+    add-to-set: "link to set"
+    cancel: "Cancel"
+    create: "Create"
+    create-set: "Create Set"
+    delete: "Delete"
+    delete-set: "Delete Set"
+    delete-set-name: "Delete Name"
+    delete-translation: "Delete Translation"
+    delink: "delink"
+    edit: "edit"
+    edit-set: "edit set"
+    edit-term: "edit group"
+    home: "Home"
+    languages: "Languages"
+    link-term: "link term to set"
+    move-translation-here: "Move translation here"
+    new-deck: "new deck"
+    new-term: "create new term"
+    new-set-name: "Add name"
+    save: "Save"
+    select-set: "Select set"
+    sets: "Sets"
+    stop-learning: "stop learning?"
+    start-learning: "start learning?"
+    terms: "Terms"
+  form:
+    set-name: "set name"
+    set-description: "brief description"
+    translation-language: "the language"
+    translation-form: "the translation"
+    translation-pronunciation: "the pronunciation"
+  terminology:
+    set-name:
+      label: "Name"
+      definition: "A set represents a collection of terms that can be used to for learning. The set name can exist multiple times for anygiven set allowing for translations"
+    set-name-description:
+      label: "Description"
+      definition: "The is where you briefly say what the learner can expect to know after completing this set"
+    translation-language:
+      label: "Language"
+      definition: "What language is this translation in? "
+    translation-form:
+      label: "Form"
+      definition: "The form is the representation of the word or concept in the language specified."
+    translation-pronunciation:
+      label: "Pronunciation"
+      definition: "The pronunciation can be used for additional pronunciation content. An example is the pin yin system for Chinese."
+  text:
+    header-languages: "Languages you're learning"
+    header-languages-options: "Languages you can choose from"
+    header-things: "Things your learning"
+    header-set-name-count: "Set Name"
+    header-translation-count: "Translation"
+    header-set-terms: "Terms in this set"
+    language-has-no-sets: "There are currently no sets associated with this language. Sets are automatically associated with a language when one of its translations specifies the language."
+    no-translations: "There are currently no translations in the system"
+    set-has-no-translations: "There are currently no translations in the set"
+  titles:
+    user-home:
+      title: "Welcome to PushFlashBang"
+      subtitle: ""
+    language-index:
+      title: "All Supported languages"
+      subtitle: ""
+    set-create:
+      title: "Create set"
+      subtitle: "A set represents a collection of related terms"
+    set-edit:
+      title: "Edit set"
+      subtitle: "Edit an existing set name or translate it into another language"
+    set-index:
+      title: "All sets"
+      subtitle: "A set represents a collection of related terms"
+    set-select:
+      title: "Select set"
+      subtitle: "The current term will be link to the selected set"
+    set-show:
+      title: "Set overview"
+      subtitle: "A set represents a collection of related terms"
+    term-edit:
+      title: "Edit term"
+      subtitle: "A term represents an idiom translated into multiple languages"
+    term-select:
+      title: "Select term"
+      subtitle: "Translation will be moved to the selected term"
+    term-select-for-set:
+      title: "Select term"
+      subtitle: "Term will associated with the current set"
+    translation-create:
+      title: "Create a new set of related translations"
+      subtitle: ""
+
+
+
+
+  labels:
+    sets:
+      add_set_name: "Add set name translation"
+  
+      
   about:
     title: "PushFlashBang"
     subtitle: "Language learning tools"
@@ -28,9 +131,7 @@ en:
   common:
     labels:
       save: "Save"
-  labels:
-    sets:
-      add_set_name: "Add set name translation"
+  
   user:
     home:
       title: "Welcome %{email}"
@@ -213,12 +314,4 @@ en:
       labels:
         save: "Save Changes"
     terminology:
-      language:
-        title: "language"
-        description: "What language is this translation in? Each translation should be related to the other translations on the page."
-      form:
-        title: "form"
-        description: "The form is the representation of the word or concept in the language specified."
-      pronunciation:
-        title: "pronunciation"
-        description: "The pronunciation can be used for additional pronunciation content. An example is the pin yin system for Chinese."
+      

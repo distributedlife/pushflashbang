@@ -38,3 +38,13 @@ And /^my set of languages is: "([^"]*)"$/ do |languages|
     user_is_learning_language?(language_name).should be true
   end
 end
+
+Then /^I should see the following sets on "([^"]*)" language page$/ do |language, table|
+  add(:language, get_language(language))
+
+  goto_page :ShowLanguagePage, Capybara.current_session, sut do |page|
+    table.hashes.each do |hash|
+      page.is_set_on_page hash
+    end
+  end
+end

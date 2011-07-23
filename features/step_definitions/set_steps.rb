@@ -1,21 +1,33 @@
 ################################################################################
 # Data Setup
 ################################################################################
-#And /^I create the following sets:$/ do |table|
-#  ensure_user_exists_and_is_logged_in
-#
-#  table.hashes.each do |hash|
-#    create_set(hash)
-#  end
-#end
+Given /^the following sets:$/ do |table|
+  table.hashes.each do |hash|
+    create_set(hash)
+  end
+end
 
+Given /^a set with the following names:$/ do |table|
+  table.hashes.each_with_index do |hash, i|
+     if i == 0
+       create_set hash
+     else
+      add_set_name hash
+     end
+  end
+end
 
+Given /^I am on viewing the set "([^"]*)"$/ do |set_name|
+  add(:set, get_set_from_name(set_name))
+  
+  goto_page :ShowSetPage, Capybara.current_session, sut
+end
 
 
 ################################################################################
 # AS USER
 ################################################################################
-And /^I create the following sets:$/ do |table|
+When /^I create the following sets:$/ do |table|
   table.hashes.each do |hash|
     user_create_set hash
   end
@@ -31,11 +43,108 @@ When /^I create a set with the following:$/ do |table|
   end
 end
 
+When /^I edit the set called "([^"]*)" to:$/ do |set_name, table|
+  add(:set, get_set_from_name(set_name))
+  
+  goto_page :EditSetPage, Capybara.current_session, sut do |page|
+    table.hashes.each do |hash|
+      page.fill_in page.get_index_where_set_name(set_name), hash
+    end
+    page.save_changes
+  end
+end
 
-And /^the following will be visible on the show sets page$/ do |table|
+When /^I delete the set name "([^"]*)"$/ do |set_name|
+  add(:set, get_set_from_name(set_name))
+
+  goto_page :EditSetPage, Capybara.current_session, sut do |page|
+    page.delete_set_name page.get_index_where_set_name set_name
+  end
+end
+
+When /^I delete the set called "([^"]*)"$/ do |set_name|
+  add(:set, get_set_from_name(set_name))
+
+  goto_page :EditSetPage, Capybara.current_session, sut do |page|
+    page.delete_set
+  end
+end
+
+When /^I add the group containing "([^"]*)" to the set "([^"]*)"$/ do |term_translation, set_name|
+  set = get_set_from_name set_name
+  idiom = get_idiom_containing_form term_translation
+
+  goto_page :ShowTermsPage, Capybara.current_session, sut do |page|
+    page.add_to_set idiom.id
+  end
+
+  on_page :SelectSetPage, Capybara.current_session do |page|
+    page.select_set set.id
+  end
+end
+
+When /^I add the group containing "([^"]*)" to the current set$/ do |containing_form|
+  idiom = get_idiom_containing_form containing_form
+
+  on_page :ShowSetPage, Capybara.current_session do |page|
+    page.add_term
+  end
+
+  on_page :SelectTermForSetPage, Capybara.current_session do |page|
+    page.select_term idiom.id
+  end
+end
+
+
+When /^I remove the group containing "([^"]*)" to the set "([^"]*)"$/ do |containing_form, set_name|
+  add(:set, get_set_from_name(set_name))
+  idiom = get_idiom_containing_form containing_form
+
   goto_page :ShowSetPage, Capybara.current_session, sut do |page|
+    page.remove_term idiom.id
+  end
+end
+
+
+
+
+Then /^the following will be visible on the show sets page$/ do |table|
+  goto_page :ShowSetsPage, Capybara.current_session, sut do |page|
     table.hashes.each do |hash|
       page.is_on_page hash
+    end
+  end
+end
+
+Then /^the following will not be visible on the show sets page$/ do |table|
+  goto_page :ShowSetsPage, Capybara.current_session, sut do |page|
+    table.hashes.each do |hash|
+      page.is_not_on_page hash
+    end
+  end
+end
+
+Then /^the following will be visible on the show set page$/ do |table|
+  goto_page :ShowSetPage, Capybara.current_session, sut do |page|
+    table.hashes.each do |hash|
+      page.is_term_on_page hash
+    end
+  end
+end
+
+Then /^the following will be not visible on the show set page$/ do |table|
+  goto_page :ShowSetPage, Capybara.current_session, sut do |page|
+    table.hashes.each do |hash|
+      page.is_term_not_on_page hash
+    end
+  end
+end
+
+Then /^I should see the following language support information:$/ do |table|
+  on_page :ShowSetPage, Capybara.current_session do |page|
+    And %{show me the page}
+    table.hashes.each do |hash|
+      page.language_support_on_page hash
     end
   end
 end

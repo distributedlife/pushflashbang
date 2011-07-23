@@ -54,6 +54,10 @@ header {
   padding: 0.6em;
   margin: 0.6em; }
 
+.panel-align {
+  padding: 0.6em;
+  margin: 0.6em; }
+
 .top_menu_panel {
   background-color: #dddddd;
   border-bottom-left-radius: 10px;
@@ -320,52 +324,55 @@ a.focus:hover {
 a.large {
   font-size: 0.8em; }
 
-p.title {
+.title {
   font-family: "Consolas", sans-serif;
   font-weight: bold;
   font-size: 1.6em; }
 
-p.mandarin {
-  font-family: "AR PL KaitiM GB", sans-serif; }
-
-p.giant {
-  font-weight: bold;
-  font-size: 4em;
-  text-align: center; }
-
-p.huge {
-  font-weight: bold;
-  font-size: 3em;
-  text-align: center; }
-
-p.minor_title {
+.minor_title {
   clear: left;
   font-family: "Consolas", sans-serif;
   font-weight: bold;
   font-size: 1em; }
 
-p.description {
+.mandarin {
+  font-family: "AR PL KaitiM GB", sans-serif; }
+
+.giant {
+  font-weight: bold;
+  font-size: 4em;
+  text-align: center; }
+
+.huge {
+  font-weight: bold;
+  font-size: 3em;
+  text-align: center; }
+
+.description {
   font-family: "Consolas", sans-serif;
   font-style: italic;
   font-size: 0.6em;
   text-align: left; }
 
-p.subtitle {
+.subtitle {
   font-family: "Book Antiqua", serif;
   font-style: italic;
   font-size: 0.6em; }
 
-p.definition_text {
+.definition_text {
   font-family: "Book Antiqua", serif;
   font-style: italic;
   font-size: 1em;
   text-align: left; }
 
-.tiny_option {
-  font-size: 0.4em; }
+.menu {
+  font-size: 0.8em; }
 
 .subscript {
   font-size: 0.6em; }
+
+.tiny_option {
+  font-size: 0.4em; }
 
 .text_right {
   text-align: right; }
@@ -373,8 +380,11 @@ p.definition_text {
 .text_left {
   text-align: left; }
 
-p.contrast {
+.contrast {
   color: orange; }
+
+.contrast_faint {
+  color: gray; }
 
 .list_summary {
   clear: both;

@@ -1,9 +1,13 @@
 - if user_signed_in?
   %nav.left
     %span.top_menu_panel
-      %span= link_to(t('user.actions.home'), user_index_path)
+      %span= link_to(t('actions.home'), user_index_path)
     %span.top_menu_panel
-      %span= link_to t('user.actions.terms'), '/terms'
+      %span= link_to t('actions.languages'), languages_path
+    %span.top_menu_panel
+      %span= link_to t('actions.sets'), sets_path
+    %span.top_menu_panel
+      %span= link_to t('actions.terms'), terms_path
 
     //attempt to display a deck home and then a card home depending on the current page.
     //#TODO: simplify this code using before filters

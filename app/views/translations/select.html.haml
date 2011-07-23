@@ -13,5 +13,6 @@
         %span#language{:style => "width: 10em; display: inline-block;"}= idiom_translation.translation.language
         %span#form{:style => "display: inline-block;"}= idiom_translation.translation.form
         %span#pronunciation{:class => "right", :style => "width: 10em; display: inline-block;"}= idiom_translation.translation.pronunciation
-        = link_to I18n.t('translation.select.labels.select'), attach_term_translation_path(:term_id => params[:term_id], :id => idiom_translation.translation_id), :class => 'neutral', :method => :post, :id => "translation_#{idiom_translation.translation_id}_select"
-        = link_to I18n.t('translation.select.labels.select'), attach_and_detach_term_translation_path(:term_id => params[:term_id], :id => idiom_translation.translation_id, :remove_from_idiom_id => idiom_translation.idiom_id), :class => 'neutral', :method => :post, :id => "translation_#{idiom_translation.translation_id}_select_and_remove"
+        = link_to 'attach translation', attach_term_translation_path(:term_id => params[:term_id], :id => idiom_translation.translation_id), :class => 'neutral', :method => :post, :id => "translation_#{idiom_translation.translation_id}_select"
+        = link_to 'move translation', attach_and_detach_term_translation_path(:term_id => params[:term_id], :id => idiom_translation.translation_id, :remove_from_idiom_id => idiom_translation.idiom_id), :class => 'neutral', :method => :post, :id => "translation_#{idiom_translation.translation_id}_select_and_remove"
+        .pad_from_top

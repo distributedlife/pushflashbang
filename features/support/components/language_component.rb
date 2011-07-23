@@ -16,6 +16,12 @@ module LanguageComponent
     end
   end
 
+  def get_language language_name
+    matches = Language.where(:name => language_name)
+
+    return matches.first
+  end
+
   def user_is_learning_language? language_name
     language = ensure_language_exists language_name
 

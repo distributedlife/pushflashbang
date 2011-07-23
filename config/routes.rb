@@ -38,6 +38,10 @@ PushFlashBang::Application.routes.draw do
   end
 
   resources :languages do
+    collection do
+      get 'user'
+    end
+    
     member do
       post 'learn'
       post 'unlearn'
@@ -48,6 +52,7 @@ PushFlashBang::Application.routes.draw do
     collection do
       post 'add_translation'
       post 'select'
+      get 'select_for_set'
     end
 
     resources :translations do
@@ -64,6 +69,13 @@ PushFlashBang::Application.routes.draw do
   resources :sets do
     member do
       post 'add_set_name'
+      delete 'delete_set_name'
+      put 'add_term'
+      put 'remove_term'
+    end
+
+    collection do
+      get 'select'
     end
   end
 end

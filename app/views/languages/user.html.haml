@@ -1,0 +1,25 @@
+=render :partial => '/header', :locals => {:title => t('titles.language-index.title'), :subtitle => t('titles.language-index.subtitle')}
+#languages
+  %p.minor_title= "#{t('text.header-languages')}:"
+  - @user_languages.each do |user_language|
+    #language{:id => user_language.language_id, :class => "panel"}
+      %span= link_to user_language.language.name, language_path(user_language.language.id)
+      %span.subscript
+        [
+        = link_to t('actions.stop-learning'), unlearn_language_path(user_language.language_id), :method => :post
+        ]
+  .pad_from_top
+
+  %p.minor_title= "#{t('text.header-languages-options')}:"
+  - @languages.each do |language|
+    - already_shown = false
+    - @user_languages.each do |user_language|
+      - if user_language.language_id == language.id
+        - already_shown = true
+    - unless already_shown
+      #language{:id => language.id, :class => "panel"}
+        %span= link_to language.name, language_path(language.id)
+        %span.subscript
+          [
+          = link_to t('actions.start-learning'), learn_language_path(language.id), :method => :post
+          ]

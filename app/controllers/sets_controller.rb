@@ -21,30 +21,41 @@ class SetsController < ApplicationController
   end
 
   def show
-    redirect_to sets_path and return if !set_exists?
-    
+    redirect_to sets_path and return if !set_exists? params[:id]
+
+    @set = Sets.find(params[:id])
     @set_names = SetName.order(:name).where(:sets_id => params[:id])
     redirect_to sets_path and return if @set_names.empty?
+
+    @idiom_translations = []
+    SetTerms.where(:set_id => params[:id]).each do |set|
+      IdiomTranslation.joins(:translation).order(:form).order(:language).where(:idiom_id => set.term_id).each do |idiom_translation|
+        @idiom_translations << idiom_translation
+      end
+    end
   end
 
   def index
-    @sets = Sets.joins(:set_name).order(:name)
+    @sets = Sets.all
     redirect_to user_index_path and return if @sets.empty?
   end
 
   def edit
-    redirect_to sets_path and return if !set_exists?
+    redirect_to sets_path and return if !set_exists? params[:id]
 
+    @set = Sets.find(params[:id])
     @set_names = SetName.order(:name).where(:sets_id => params[:id])
+    
     redirect_to sets_path and return if @set_names.empty?
   end
 
   def update
-    redirect_to sets_path and return if !set_exists?
-ap params[:sets]
+    redirect_to sets_path and return if !set_exists? params[:id]
+
+    @set = Sets.find(params[:id])
     @set_names = []
     valid_count = 0
-    params[:sets].each do |set_name|
+    params[:set_name].each do |set_name|
       set_name = set_name.last
       existing_set = nil
       begin
@@ -58,7 +69,8 @@ ap params[:sets]
         new_set_name = SetName.new(set_name)
         new_set_name.sets_id = params[:id]
 
-        valid_count = valid_count + 1 if new_set_name.valid?
+        # do not save if one of the names are invalid (ignoring completely empty names)
+        valid_count = valid_count + 1 if new_set_name.valid? or (new_set_name.name.blank? and new_set_name.description.blank?)
         @set_names << new_set_name
       else
         existing_set.update_attributes(set_name)
@@ -82,10 +94,87 @@ ap params[:sets]
     @i = params[:i]
   end
 
+  def delete_set_name
+    redirect_to sets_path and return if !set_exists? params[:id]
+    redirect_to sets_path and return if !set_name_exists? params[:id], params[:set_name_id]
+    if SetName.where(:sets_id => params[:id]).count == 1
+      flash[:failure] = "Can't delete last set name"
+
+      redirect_to :back
+      return
+    end
+
+    set_name = SetName.find params[:set_name_id]
+    set_name.delete
+
+    redirect_to :back
+  end
+
+  def destroy
+    redirect_to sets_path and return if !set_exists? params[:id]
+
+    set = Sets.find(params[:id])
+    set.delete
+
+    redirect_to :back
+  end
+
+  def select
+    @idiom_id = params[:idiom_id]
+    @sets = Sets.all
+
+    redirect_to user_index_path and return if @idiom_id.nil?
+    redirect_to user_index_path and return if @sets.empty?
+  end
+
+  def add_term
+    redirect_to user_index_path and return unless set_exists? params[:id]
+    redirect_to user_index_path and return unless idiom_exists? params[:idiom_id]
+
+    if (SetTerms.where(:set_id => params[:id], :term_id => params[:idiom_id]).empty?)
+      SetTerms.create(:set_id => params[:id], :term_id => params[:idiom_id])
+    end
+
+    redirect_to set_path(params[:id])
+  end
+
+  def remove_term
+    redirect_to user_index_path and return unless set_exists? params[:id]
+    redirect_to user_index_path and return unless idiom_exists? params[:idiom_id]
+    
+    SetTerms.where(:set_id => params[:id], :term_id => params[:idiom_id]).each do |set_term|
+      set_term.delete
+    end
+
+    redirect_to set_path(params[:id])
+  end
+
   private
-  def set_exists?
+  #TODO: move to domain specific helpers
+  def set_exists? set_id
     begin
-      Sets.find(params[:id])
+      Sets.find(set_id)
+      true
+    rescue
+      false
+    end
+  end
+
+  def set_name_exists? set_id, set_name_id
+    begin
+      # set name exists
+      set_name = SetName.find(set_name_id)
+
+      # and set name belongs to set
+      return set_name.sets_id == set_id.to_i
+    rescue
+      false
+    end
+  end
+
+  def idiom_exists? idiom_id
+    begin
+      Idiom.find(idiom_id)
       true
     rescue
       false

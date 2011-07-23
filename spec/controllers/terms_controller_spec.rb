@@ -279,7 +279,6 @@ describe TermsController do
       get :edit, :id => 100
 
       response.should be_redirect
-      flash[:failure].should == "The term you were looking for no longer exists"
     end
 
     it 'should redirect to the show all terms path if the idiom has no translations' do
@@ -321,6 +320,193 @@ describe TermsController do
       assigns[:idiom_translations][2].idiom_id.should == idiom1.id
       assigns[:idiom_translations][2].translation.language.should == "Spanish"
       assigns[:idiom_translations][2].translation.form.should == "Cabron"
+    end
+  end
+
+  context '"PUT" update' do
+    before(:each) do
+      @user = User.make
+      sign_in :user, @user
+    end
+
+    it 'should update the translations' do
+      idiom = Idiom.create
+      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+
+      put :update, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :language => "English Monkies",
+            :form => "blag",
+            :pronunciation => "wumpf"
+          },
+          "1" => {
+            :id => translation2.id,
+            :language => "Espanita",
+            :form => "blagitos",
+            :pronunciation => "wumpfitos"
+          }
+        }
+
+      Idiom.count.should == 1
+      Translation.count.should == 2
+      Translation.find(translation1.id).language.should == "English Monkies"
+      Translation.find(translation1.id).form.should == "blag"
+      Translation.find(translation1.id).pronunciation.should == "wumpf"
+      Translation.find(translation2.id).language.should == "Espanita"
+      Translation.find(translation2.id).form.should == "blagitos"
+      Translation.find(translation2.id).pronunciation.should == "wumpfitos"
+      IdiomTranslation.count.should == 2
+    end
+
+    it 'should notify user that two valid translations need to be provided' do
+      idiom = Idiom.create
+      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+
+      put :update, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :language => "English Monkies",
+            :form => "blag",
+            :pronunciation => "wumpf"
+          }
+        }
+
+
+      Idiom.count.should == 1
+      Translation.count.should == 2
+      Translation.find(translation1.id).should == translation1
+      Translation.find(translation2.id).should == translation2
+      IdiomTranslation.count.should == 2
+
+      flash[:failure].should == "At least two translations need to be supplied"
+    end
+
+    it 'should ignore completely empty objects' do
+      idiom = Idiom.create
+      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+
+      put :update, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :language => "English Monkies",
+            :form => "blag",
+            :pronunciation => "wumpf"
+          },
+          "1" => {
+            :id => translation2.id,
+            :language => "Espanita",
+            :form => "blagitos",
+            :pronunciation => "wumpfitos"
+          },
+          "2" => {
+            :language => "",
+            :form => "",
+            :pronunciation => ""
+          },
+          "3" => {
+            :language => nil,
+            :form => nil,
+            :pronunciation => nil
+          }
+        }
+
+      Idiom.count.should == 1
+      Translation.count.should == 2
+      Translation.find(translation1.id).language.should == "English Monkies"
+      Translation.find(translation1.id).form.should == "blag"
+      Translation.find(translation1.id).pronunciation.should == "wumpf"
+      Translation.find(translation2.id).language.should == "Espanita"
+      Translation.find(translation2.id).form.should == "blagitos"
+      Translation.find(translation2.id).pronunciation.should == "wumpfitos"
+      IdiomTranslation.count.should == 2
+    end
+
+    it 'should allow for the creation of new translations' do
+      idiom = Idiom.create
+      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+
+      put :update, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :language => "English Monkies",
+            :form => "blag",
+            :pronunciation => "wumpf"
+          },
+          "1" => {
+            :id => translation2.id,
+            :language => "Espanita",
+            :form => "blagitos",
+            :pronunciation => "wumpfitos"
+          },
+          "2" => {
+            :language => "Chinese",
+            :form => "ni hao",
+            :pronunciation => "hello"
+          }
+        }
+
+      Idiom.count.should == 1
+      Translation.count.should == 3
+      Translation.find(translation1.id).language.should == "English Monkies"
+      Translation.find(translation1.id).form.should == "blag"
+      Translation.find(translation1.id).pronunciation.should == "wumpf"
+      Translation.find(translation2.id).language.should == "Espanita"
+      Translation.find(translation2.id).form.should == "blagitos"
+      Translation.find(translation2.id).pronunciation.should == "wumpfitos"
+      Translation.last.language.should == "Chinese"
+      Translation.last.form.should == "ni hao"
+      Translation.last.pronunciation.should == "hello"
+      IdiomTranslation.count.should == 3
+    end
+
+    it 'should fail on any incomplete objects' do
+      idiom = Idiom.create
+      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+
+      put :update, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :language => "English Monkies",
+            :form => "blag",
+            :pronunciation => "wumpf"
+          },
+          "1" => {
+            :id => translation2.id,
+            :language => "Espanita",
+            :form => "",
+            :pronunciation => "wumpfitos"
+          }
+        }
+
+
+      Idiom.count.should == 1
+      Translation.count.should == 2
+      Translation.find(translation1.id).should == translation1
+      Translation.find(translation2.id).should == translation2
+      IdiomTranslation.count.should == 2
+
+      flash[:failure].should == "All translations need to be complete"
     end
   end
 
@@ -396,6 +582,58 @@ describe TermsController do
 
       response.should be_redirect
       response.should redirect_to terms_path
+    end
+  end
+
+  context '"GET" select_for_set' do
+    before(:each) do
+      @user = User.make
+      sign_in :user, @user
+    end
+
+    it 'should return all terms grouped by idiom and order by language and form except the specified set' do
+      idiom1 = Idiom.make
+      idiom2 = Idiom.make
+
+      term1 = Translation.make(:language => "English", :form => "Zebra")
+      term2 = Translation.make(:language => "Spanish", :form => "Allegra")
+      term3 = Translation.make(:language => "Chinese", :form => "ce")
+      term4 = Translation.make(:language => "English", :form => "Hobo")
+      term5 = Translation.make(:language => "Spanish", :form => "Cabron")
+      term6 = Translation.make(:language => "Spanish", :form => "Abanana")
+
+      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
+      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
+      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term3.id)
+      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term4.id)
+      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term5.id)
+      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term6.id)
+
+      set = Sets.create
+      set_name = SetName.create(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      set_term = SetTerms.create(:set_id => set.id, :term_id => idiom1.id)
+
+      get :select_for_set, :set_id => set.id
+
+
+      assigns[:idiom_translations][0].idiom_id.should == idiom2.id
+      assigns[:idiom_translations][0].translation.language.should == "English"
+      assigns[:idiom_translations][0].translation.form.should == "Hobo"
+
+      assigns[:idiom_translations][1].idiom_id.should == idiom2.id
+      assigns[:idiom_translations][1].translation.language.should == "Spanish"
+      assigns[:idiom_translations][1].translation.form.should == "Abanana"
+
+      assigns[:idiom_translations][2].idiom_id.should == idiom2.id
+      assigns[:idiom_translations][2].translation.language.should == "Spanish"
+      assigns[:idiom_translations][2].translation.form.should == "Allegra"
+    end
+
+    it 'should redirect to sets_path if the set does not exist' do
+      get :select_for_set, :set_id => 100
+
+      response.should be_redirect
+      response.should redirect_to sets_path
     end
   end
 end

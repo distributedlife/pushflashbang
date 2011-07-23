@@ -16,6 +16,18 @@ Given /^the following related translations:$/ do |table|
   end
 end
 
+Given /^the following related translations attached to the "([^"]*)" set:$/ do |set_name, table|
+  idiom = create_idiom
+
+  table.hashes.each do |hash|
+    translation = create_translation_attached_to_idiom idiom, hash
+  end
+
+  set = get_set_from_name set_name
+  attach_idiom_to_set idiom, set
+end
+
+
 ################################################################################
 
 And /^I create the following related terms:$/ do |table|

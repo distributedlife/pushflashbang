@@ -23,6 +23,30 @@ module EditSetPage
   def save_changes
     @session.click_on("Save")
   end
+  
+  def delete_set_name index
+    @session.find_link("set_name_#{index}_delete").click
+  end
+
+  def delete_set
+    @session.find_link("set_delete").click
+  end
+
+  def get_index_where_set_name set_name
+    i = 0
+
+    while true do
+      if @session.find_field("set_name_#{i}_name").nil?
+        raise "the form could not be found in the FORM field on this page"
+      end
+
+      if @session.find_field("set_name_#{i}_name").value == set_name
+        return i
+      end
+
+      i = i + 1
+    end
+  end
 
   def get_latest_slot_index
     i = 0

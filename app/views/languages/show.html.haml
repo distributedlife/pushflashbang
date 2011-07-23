@@ -1,0 +1,10 @@
+=render :partial => '/header', :locals => {:title => @language.name, :subtitle => ""}
+#set
+  - if @sets.empty?
+    %p= t('text.language-has-no-sets')
+  - @sets.each do |set|
+    #set{:id => set.id, :class => 'panel'}
+      - set.set_name.each do |set_name|
+        %p.minor_title= link_to set_name.name, set_path(set.id)
+        %span= set_name.description
+        .pad_from_top

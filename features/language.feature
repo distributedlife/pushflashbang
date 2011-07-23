@@ -9,7 +9,7 @@ Feature: language features
     Then I should see "You have not selected to learn any languages."
 
   Scenario Outline: a user can select a language choice from the list
-    And I know the following languages: "<current languages>"
+    Given I know the following languages: "<current languages>"
     And the following languages are available: "<available languages>"
     When I go to the "show languages" page
     And I select "<language to learn>" to learn
@@ -21,7 +21,7 @@ Feature: language features
       | English, Spanish  | Chinese (Simplified) | Chinese (Simplified) | English, Spanish, Chinese (Simplified) |
 
   Scenario: a user can remove a language choice from the list
-    And I know the following languages: "English, Spanish"
+    Given I know the following languages: "English, Spanish"
     When I go to the "show languages" page
     And I select "Spanish" to stop learning
     Then my set of languages is: "English"
@@ -31,3 +31,12 @@ Feature: language features
     When I go to the "user home" page
     Then I should see "English"
     And I should see "Spanish"
+
+  Scenario: language page shows all sets in the language
+    Given the following languages are available: "English"
+    And a set with the following names:
+      | name      | description                                    |
+      | greetings | learn how to greet someone in another language |
+    Then I should see the following sets on "English" language page
+      | name      | description                                    |
+      | greetings | learn how to greet someone in another language |

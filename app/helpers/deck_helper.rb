@@ -67,7 +67,7 @@ module DeckHelper
     pronunciation_helper["ia"] = "<em>ea</em>r"
     pronunciation_helper["ie"] = "<em>air</em>"
     pronunciation_helper["iu"] = "y<em>ou</em>"
-    pronunciation_helper["ou"] = "l<em>ow</em>"
+    pronunciation_helper["ou"] = "l<em>ow</em>er"
     pronunciation_helper["ua"] = "g<em>ua</em>va"
     pronunciation_helper["ui"] = "<em>way</em>"
     pronunciation_helper["un"] = "<em>wun</em>"
