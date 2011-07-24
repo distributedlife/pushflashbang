@@ -2,7 +2,7 @@ module IdiomComponent
   def create_idiom
     verify_idiom_prerequisites
 
-    idiom = Idiom.create
+    idiom = Idiom.make
     add(:idiom, idiom)
 
     idiom
@@ -10,7 +10,7 @@ module IdiomComponent
 
   def ensure_idiom_exists
     if does_not_exist(:idiom)
-      add(:idiom, Idiom.create)
+      add(:idiom, Idiom.make)
     end
   end
 

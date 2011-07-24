@@ -330,11 +330,11 @@ describe TermsController do
     end
 
     it 'should update the translations' do
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -364,11 +364,11 @@ describe TermsController do
     end
 
     it 'should notify user that two valid translations need to be provided' do
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -391,11 +391,11 @@ describe TermsController do
     end
 
     it 'should ignore completely empty objects' do
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -435,11 +435,11 @@ describe TermsController do
     end
 
     it 'should allow for the creation of new translations' do
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -477,11 +477,11 @@ describe TermsController do
     end
 
     it 'should fail on any incomplete objects' do
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -595,23 +595,24 @@ describe TermsController do
       idiom1 = Idiom.make
       idiom2 = Idiom.make
 
-      term1 = Translation.make(:language => "English", :form => "Zebra")
-      term2 = Translation.make(:language => "Spanish", :form => "Allegra")
-      term3 = Translation.make(:language => "Chinese", :form => "ce")
-      term4 = Translation.make(:language => "English", :form => "Hobo")
-      term5 = Translation.make(:language => "Spanish", :form => "Cabron")
-      term6 = Translation.make(:language => "Spanish", :form => "Abanana")
+      t1 = Translation.make(:language => "English", :form => "Zebra")
+      t2 = Translation.make(:language => "Spanish", :form => "Allegra")
+      t3 = Translation.make(:language => "Chinese", :form => "ce")
+      t4 = Translation.make(:language => "English", :form => "Hobo")
+      t5 = Translation.make(:language => "Spanish", :form => "Cabron")
+      t6 = Translation.make(:language => "Spanish", :form => "Abanana")
 
-      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
-      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
-      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term3.id)
-      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term4.id)
-      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term5.id)
-      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term6.id)
+      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t1.id)
+      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t3.id)
+      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t5.id)
 
-      set = Sets.create
-      set_name = SetName.create(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      set_term = SetTerms.create(:set_id => set.id, :term_id => idiom1.id)
+      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t2.id)
+      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t4.id)
+      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t6.id)
+
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom1.id)
 
       get :select_for_set, :set_id => set.id
 

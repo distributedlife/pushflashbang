@@ -94,7 +94,7 @@ Feature: Sets and Goals
       | a little bit | English              |               |
       | 一点儿          | Chinese (Simplified) | yì diǎnr      |
 
-  Scenario: remove a term to a set
+  Scenario: remove a term from a set
     Given the following sets:
       | name      | description                                    |
       | greetings | learn how to greet someone in another language |
@@ -116,6 +116,67 @@ Feature: Sets and Goals
       | a little bit | English              |               |
       | un poco de   | Spanish              |               |
 
+   Scenario: move a term to next chapter in set
+    Given the following sets:
+      | name      | description                                    |
+      | greetings | learn how to greet someone in another language |
+    And the following related translations attached to the "greetings" set:
+      | form         | language             | pronunciation |
+      | un poco de   | Spanish              |               |
+      | a little bit | English              |               |
+    And the following related translations attached to the "greetings" set:
+      | form  | language             | pronunciation |
+      | Hello | Gibberish              |               |
+      | 你好    | Chinese (Simplified) | nǐ hǎo        |
+    When I move the term containing "a little bit" to the next chapter in the "greetings" set
+    Then the term containing "a little bit" set should be in chapter "2" of the "greetings" set
+
+    Scenario: move a term to prev chapter in set
+    Given the following sets:
+      | name      | description                                    |
+      | greetings | learn how to greet someone in another language |
+    And the following related translations attached to chapter "2" the "greetings" set:
+      | form         | language             | pronunciation | 
+      | un poco de   | Spanish              |               | 
+      | a little bit | English              |               | 
+    And the following related translations attached to the "greetings" set:
+      | form  | language             | pronunciation | 
+      | Hello | Gibberish              |               |
+      | 你好    | Chinese (Simplified) | nǐ hǎo        |
+    When I move the term containing "a little bit" to the prev chapter in the "greetings" set
+    Then the term containing "a little bit" set should be in chapter "1" of the "greetings" set
+
+    Scenario: move a term forward within a chapter
+    Given the following sets:
+      | name      | description                                    |
+      | greetings | learn how to greet someone in another language |
+    And the following related translations attached to chapter "1" in position "1" of the "greetings" set:
+      | form         | language             | pronunciation |
+      | un poco de   | Spanish              |               |
+      | a little bit | English              |               |
+    And the following related translations attached to chapter "1" in position "2" of the "greetings" set:
+      | form  | language             | pronunciation | 
+      | Hello | Gibberish              |               |
+      | 你好    | Chinese (Simplified) | nǐ hǎo        |
+    When I move the term containing "a little bit" down a chapter in the "greetings" set
+    Then the term containing "a little bit" set should be in position "2" of the "greetings" set
+    And the term containing "Hello" set should be in position "1" of the "greetings" set
+
+    Scenario: move a term backward within a chapter
+    Given the following sets:
+      | name      | description                                    |
+      | greetings | learn how to greet someone in another language |
+    And the following related translations attached to chapter "1" in position "1" of the "greetings" set:
+      | form         | language             | pronunciation |
+      | un poco de   | Spanish              |               |
+      | a little bit | English              |               |
+    And the following related translations attached to chapter "1" in position "2" of the "greetings" set:
+      | form  | language             | pronunciation |
+      | Hello | Gibberish              |               |
+      | 你好    | Chinese (Simplified) | nǐ hǎo        |
+    When I move the term containing "Hello" up a position in the "greetings" set
+    Then the term containing "Hello" set should be in position "1" of the "greetings" set
+    And the term containing "a little bit" set should be in position "2" of the "greetings" set
 
 #  Scenario: user can specify set as a goal
 #  Scenario: user can see goal progress

@@ -3,14 +3,14 @@ module LanguageComponent
     user = ensure_user_exists_and_is_logged_in
     language = ensure_language_exists language_name
 
-    UserLanguages.create(:language_id => language.id, :user_id => user.id)
+    UserLanguages.make(:language_id => language.id, :user_id => user.id)
   end
 
   def ensure_language_exists language_name
     matches = Language.where(:name => language_name)
 
     if matches.empty?
-      Language.create(:name => language_name)
+      Language.make(:name => language_name)
     else
       matches.first
     end

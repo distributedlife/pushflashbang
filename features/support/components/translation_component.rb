@@ -3,7 +3,7 @@ module TranslationComponent
     verify_translation_prerequisites
 
     translation = Translation.make hash
-    idiom_translation = IdiomTranslation.create(:idiom_id => get(:idiom).id, :translation_id => translation.id)
+    idiom_translation = IdiomTranslation.make(:idiom_id => get(:idiom).id, :translation_id => translation.id)
 
     add(:translation, translation)
     add(:idiom_translation, idiom_translation)
@@ -13,7 +13,7 @@ module TranslationComponent
     verify_translation_prerequisites
 
     translation = Translation.make hash
-    idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+    idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation.id)
 
     add(:translation, translation)
     add(:idiom_translation, idiom_translation)

@@ -27,6 +27,18 @@
           [
           = link_to t('actions.delink'), remove_term_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_remove_from_set", :method => :put
           ]
+          [
+          = link_to t('actions.prev-chapter'), term_prev_chapter_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_prev_chapter", :method => :post
+          ]
+          [
+          = link_to t('actions.prev-position'), term_prev_position_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_prev_position", :method => :post
+          ]
+          [
+          = link_to t('actions.next-position'), term_next_position_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_next_position", :method => :post
+          ]
+          [
+          = link_to t('actions.next-chapter'), term_next_chapter_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_next_chapter", :method => :post
+          ]
       #translation{:id => idiom_translation.translation.id, :style => "display: inline"}
         %span#form= idiom_translation.translation.form
         - unless idiom_translation.translation.pronunciation.empty?

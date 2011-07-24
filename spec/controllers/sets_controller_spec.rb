@@ -28,9 +28,9 @@ describe SetsController do
 
   context '"GET" show' do
     it 'should return all set names for the specified set' do
-      set = Sets.create
-      sn1 = SetName.create(:name => 'set name a', :sets_id => set.id, :description => "desc a")
-      sn2 = SetName.create(:name => 'set name b', :sets_id => set.id, :description => "desc b")
+      set = Sets.make
+      sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
+      sn2 = SetName.make(:name => 'set name b', :sets_id => set.id, :description => "desc b")
 
       get :show, :id => set.id
 
@@ -46,8 +46,8 @@ describe SetsController do
     end
 
     it 'should return all terms and translations in the set' do
-      set = Sets.create
-      set_name = SetName.create(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
 
       idiom1 = Idiom.make
       idiom2 = Idiom.make
@@ -66,7 +66,7 @@ describe SetsController do
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term5.id)
       IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term6.id)
 
-      SetTerms.create(:set_id => set.id, :term_id => idiom1.id)
+      SetTerms.make(:set_id => set.id, :term_id => idiom1.id)
 
       get :show, :id => set.id
 
@@ -86,12 +86,12 @@ describe SetsController do
 
   context '"GET" index' do
     it 'should return all set names for all sets' do
-      set1 = Sets.create
-      sn11 = SetName.create(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
-      sn12 = SetName.create(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
-      set2 = Sets.create
-      sn21 = SetName.create(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
-      sn22 = SetName.create(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
+      set1 = Sets.make
+      sn11 = SetName.make(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
+      sn12 = SetName.make(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
+      set2 = Sets.make
+      sn21 = SetName.make(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
+      sn22 = SetName.make(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
 
 
       get :index
@@ -115,9 +115,9 @@ describe SetsController do
 
   context '"GET" edit' do
     it 'should return all set names for the specified set' do
-      set = Sets.create
-      sn1 = SetName.create(:name => 'set name a', :sets_id => set.id, :description => "desc a")
-      sn2 = SetName.create(:name => 'set name b', :sets_id => set.id, :description => "desc b")
+      set = Sets.make
+      sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
+      sn2 = SetName.make(:name => 'set name b', :sets_id => set.id, :description => "desc b")
 
       get :edit, :id => set.id
 
@@ -135,8 +135,8 @@ describe SetsController do
 
   context '"PUT" update' do
     before(:each) do
-      @set = Sets.create
-      @sn1 = SetName.create(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
+      @set = Sets.make
+      @sn1 = SetName.make(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
     end
     
     it 'should create new set names if they are supplied' do
@@ -227,11 +227,11 @@ describe SetsController do
 
   context '"DELETE" delete_set_name' do
     before(:each) do
-      @set = Sets.create
-      @sn1 = SetName.create(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
+      @set = Sets.make
+      @sn1 = SetName.make(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
 
-      @set2 = Sets.create
-      @sn2 = SetName.create(:name => 'w00t sauce', :sets_id => @set2.id, :description => "desc a")
+      @set2 = Sets.make
+      @sn2 = SetName.make(:name => 'w00t sauce', :sets_id => @set2.id, :description => "desc a")
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
@@ -276,7 +276,7 @@ describe SetsController do
     end
 
     it 'should delete the specified set name' do
-      @sn3 = SetName.create(:name => 'second set name', :sets_id => @set.id, :description => "desc a")
+      @sn3 = SetName.make(:name => 'second set name', :sets_id => @set.id, :description => "desc a")
 
 
       delete :delete_set_name, :id => @set.id, :set_name_id => @sn1.id
@@ -296,11 +296,11 @@ describe SetsController do
 
   context '"DELETE" destroy' do
     before(:each) do
-      @set = Sets.create
-      @sn1 = SetName.create(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
+      @set = Sets.make
+      @sn1 = SetName.make(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
 
-      @set2 = Sets.create
-      @sn2 = SetName.create(:name => 'w00t sauce', :sets_id => @set2.id, :description => "desc a")
+      @set2 = Sets.make
+      @sn2 = SetName.make(:name => 'w00t sauce', :sets_id => @set2.id, :description => "desc a")
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
@@ -332,12 +332,12 @@ describe SetsController do
 
   context '"GET" select' do
     it 'should return all set names for all sets' do
-      set1 = Sets.create
-      sn11 = SetName.create(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
-      sn12 = SetName.create(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
-      set2 = Sets.create
-      sn21 = SetName.create(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
-      sn22 = SetName.create(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
+      set1 = Sets.make
+      sn11 = SetName.make(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
+      sn12 = SetName.make(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
+      set2 = Sets.make
+      sn21 = SetName.make(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
+      sn22 = SetName.make(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
 
 
       get :select, :idiom_id => 1 
@@ -368,13 +368,13 @@ describe SetsController do
 
   context '"PUT" add_term' do
     it 'should link the term to the set' do
-      set = Sets.create
-      set_name = SetName.create(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
       put :add_term, :id => set.id, :idiom_id => idiom.id
 
@@ -384,7 +384,7 @@ describe SetsController do
     end
 
     it 'should return to user home if the set does not exist' do
-      idiom = Idiom.create
+      idiom = Idiom.make
 
       put :add_term, :id => 1, :idiom_id => idiom.id
 
@@ -393,7 +393,7 @@ describe SetsController do
     end
 
     it 'should return to the set home if the term does not exist' do
-      set = Sets.create
+      set = Sets.make
 
       put :add_term, :id => set.id, :idiom_id => 1
 
@@ -402,13 +402,13 @@ describe SetsController do
     end
 
     it 'should not add a term twice if it already exists' do
-      set = Sets.create
-      set_name = SetName.create(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
       put :add_term, :id => set.id, :idiom_id => idiom.id
       put :add_term, :id => set.id, :idiom_id => idiom.id
@@ -421,14 +421,14 @@ describe SetsController do
 
   context '"PUT" remove_term' do
     it 'should remove the term from the set' do
-      set = Sets.create
-      set_name = SetName.create(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
-      set_term = SetTerms.create(:set_id => set.id, :term_id => idiom.id)
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
 
       put :remove_term, :id => set.id, :idiom_id => idiom.id
 
@@ -436,7 +436,7 @@ describe SetsController do
     end
 
     it 'should return to user home if the set does not exist' do
-      idiom = Idiom.create
+      idiom = Idiom.make
 
       put :remove_term, :id => 1, :idiom_id => idiom.id
 
@@ -445,7 +445,7 @@ describe SetsController do
     end
 
     it 'should return to the set home if the term does not exist' do
-      set = Sets.create
+      set = Sets.make
 
       put :remove_term, :id => set.id, :idiom_id => 1
 
@@ -454,19 +454,325 @@ describe SetsController do
     end
 
     it 'should not error a term twice is not linked' do
-      set = Sets.create
-      set_name = SetName.create(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
-      set_term = SetTerms.create(:set_id => set.id, :term_id => idiom.id)
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
 
       put :remove_term, :id => set.id, :idiom_id => idiom.id
       put :remove_term, :id => set.id, :idiom_id => idiom.id
 
       SetTerms.count.should == 0
+    end
+  end
+
+  context '"POST" term_next_chapter' do
+    before(:each) do
+      @set = Sets.make
+      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+
+      @idiom1 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id)
+
+      @idiom2 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 2)
+
+      @idiom3 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1)
+
+      @idiom4 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 2)
+    end
+
+    it 'should move the term into the next chapter' do
+      SetTerms.where(:term_id => @idiom1.id).first.chapter.should be 1
+
+      post :term_next_chapter, :id => @set.id, :idiom_id => @idiom1.id
+
+      SetTerms.where(:term_id => @idiom1.id).first.chapter.should be 2
+    end
+
+    it 'should make a new chapter if the next does not exist' do
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 2
+
+      post :term_next_chapter, :id => @set.id, :idiom_id => @idiom2.id
+
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 3
+    end
+
+    it 'should redirect to sets index if set does not exist' do
+      post :term_next_chapter, :id => @set.id + 1, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to sets_path
+    end
+
+    it 'should redirect to set path if idiom does not exist' do
+      post :term_next_chapter, :id => @set.id, :idiom_id => @idiom1.id + 1
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should redirect to set path if idiom is not in set' do
+      SetTerms.delete_all
+      
+      post :term_next_chapter, :id => @set.id, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should redirect to set path on successful completion' do
+      post :term_next_chapter, :id => @set.id, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should renormalise the chapters if a chapter is left empty' do
+      SetTerms.delete_all
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 2)
+
+      post :term_next_chapter, :id => @set.id, :idiom_id => @idiom4.id
+
+      SetTerms.where(:term_id => @idiom1.id).first.chapter.should be 1
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 1
+      SetTerms.where(:term_id => @idiom3.id).first.chapter.should be 1
+      SetTerms.where(:term_id => @idiom4.id).first.chapter.should be 2
+    end
+  end
+
+  context '"POST" term_prev_chapter' do
+    before(:each) do
+      @set = Sets.make
+      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+
+      @idiom1 = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => translation1.id)
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => translation2.id)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id)
+
+
+      @idiom2 = Idiom.make
+      translation21 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation22 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => translation21.id)
+      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => translation22.id)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 2)
+    end
+
+    it 'should move the term into the next chapter' do
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 2
+
+      post :term_prev_chapter, :id => @set.id, :idiom_id => @idiom2.id
+
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 1
+    end
+
+    it 'should make a new chapter if the current chapter is 1 does not exist' do
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 2
+      post :term_prev_chapter, :id => @set.id, :idiom_id => @idiom2.id
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 1
+
+
+      post :term_prev_chapter, :id => @set.id, :idiom_id => @idiom2.id
+
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 1
+      SetTerms.where(:term_id => @idiom1.id).first.chapter.should be 2
+    end
+
+    it 'should redirect to sets index if set does not exist' do
+      post :term_prev_chapter, :id => @set.id + 1, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to sets_path
+    end
+
+    it 'should redirect to set path if idiom does not exist' do
+      post :term_prev_chapter, :id => @set.id, :idiom_id => @idiom1.id + 1
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should redirect to set path if idiom is not in set' do
+      SetTerms.delete_all
+
+      post :term_prev_chapter, :id => @set.id, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should redirect to set path on successful completion' do
+      post :term_prev_chapter, :id => @set.id, :idiom_id => @idiom2.id
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should renormalise the chapters if a chapter is left empty' do
+      SetTerms.delete_all
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1)
+
+      post :term_prev_chapter, :id => @set.id, :idiom_id => @idiom1.id
+
+      SetTerms.where(:term_id => @idiom1.id).first.chapter.should be 1
+      SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 2
+    end
+  end
+
+  context '"POST" term_next_position' do
+    before(:each) do
+      @set = Sets.make
+      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+
+      @idiom1 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
+
+      @idiom2 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1, :position => 2)
+
+      @idiom3 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1, :position => 3)
+
+      @idiom4 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 1, :position => 4)
+    end
+
+    it 'should move the term into the next position, swapping with whatever is there' do
+      SetTerms.where(:term_id => @idiom1.id).first.position.should be 1
+
+      post :term_next_position, :id => @set.id, :idiom_id => @idiom1.id
+
+      SetTerms.where(:term_id => @idiom1.id).first.position.should be 2
+      SetTerms.where(:term_id => @idiom2.id).first.position.should be 1
+      SetTerms.where(:term_id => @idiom3.id).first.position.should be 3
+      SetTerms.where(:term_id => @idiom4.id).first.position.should be 4
+    end
+
+    it 'should not move beyond the last position' do
+      SetTerms.where(:term_id => @idiom4.id).first.position.should be 4
+
+      post :term_next_position, :id => @set.id, :idiom_id => @idiom4.id
+
+      SetTerms.where(:term_id => @idiom1.id).first.position.should be 1
+      SetTerms.where(:term_id => @idiom2.id).first.position.should be 2
+      SetTerms.where(:term_id => @idiom3.id).first.position.should be 3
+      SetTerms.where(:term_id => @idiom4.id).first.position.should be 4
+    end
+
+    it 'should redirect to sets index if set does not exist' do
+      post :term_next_position, :id => @set.id + 1, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to sets_path
+    end
+
+    it 'should redirect to set path if idiom does not exist' do
+      post :term_next_position, :id => @set.id, :idiom_id => @idiom1.id + 1
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should redirect to set path if idiom is not in set' do
+      SetTerms.delete_all
+
+      post :term_next_position, :id => @set.id, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should redirect to set path on successful completion' do
+      post :term_next_position, :id => @set.id, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+  end
+
+  context '"POST" term_prev_position' do
+    before(:each) do
+      @set = Sets.make
+      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+
+      @idiom1 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
+
+      @idiom2 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1, :position => 2)
+
+      @idiom3 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1, :position => 3)
+
+      @idiom4 = Idiom.make
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 1, :position => 4)
+    end
+
+    it 'should move the term into the next position, swapping with whatever is there' do
+      SetTerms.where(:term_id => @idiom1.id).first.position.should be 1
+      SetTerms.where(:term_id => @idiom2.id).first.position.should be 2
+
+      post :term_prev_position, :id => @set.id, :idiom_id => @idiom2.id
+
+      SetTerms.where(:term_id => @idiom1.id).first.position.should be 2
+      SetTerms.where(:term_id => @idiom2.id).first.position.should be 1
+      SetTerms.where(:term_id => @idiom3.id).first.position.should be 3
+      SetTerms.where(:term_id => @idiom4.id).first.position.should be 4
+    end
+
+    it 'should not move beyond the first position' do
+      SetTerms.where(:term_id => @idiom1.id).first.position.should be 1
+
+      post :term_prev_position, :id => @set.id, :idiom_id => @idiom1.id
+
+      SetTerms.where(:term_id => @idiom1.id).first.position.should be 1
+      SetTerms.where(:term_id => @idiom2.id).first.position.should be 2
+      SetTerms.where(:term_id => @idiom3.id).first.position.should be 3
+      SetTerms.where(:term_id => @idiom4.id).first.position.should be 4
+    end
+
+    it 'should redirect to sets index if set does not exist' do
+      post :term_prev_position, :id => @set.id + 1, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to sets_path
+    end
+
+    it 'should redirect to set path if idiom does not exist' do
+      post :term_prev_position, :id => @set.id, :idiom_id => @idiom1.id + 1
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should redirect to set path if idiom is not in set' do
+      SetTerms.delete_all
+
+      post :term_prev_position, :id => @set.id, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should redirect to set path on successful completion' do
+      post :term_prev_position, :id => @set.id, :idiom_id => @idiom1.id
+
+      response.should be_redirect
+      response.should redirect_to set_path(@set.id)
     end
   end
 end

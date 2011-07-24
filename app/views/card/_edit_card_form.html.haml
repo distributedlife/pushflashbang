@@ -1,26 +1,26 @@
 - semantic_form_for(@card, :url => deck_card_path(@card.deck_id, @card.id), :html => {:multipart => true}, :method => :put) do |f|
   #front_definition
-    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.front.title'), :detail => I18n.t('card.terminology.front.description')}
+    =render :partial => '/common/definitions', :locals => {:topic => "card-front"}
   = f.input :front, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.front'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #back_definition
-    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.back.title'), :detail => I18n.t('card.terminology.back.description')}
+    =render :partial => '/common/definitions', :locals => {:topic => "card-back"}
   = f.input :back, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.back'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #pronunciation_definition
-    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.pronunciation.title'), :detail => I18n.t('card.terminology.pronunciation.description')}
+    =render :partial => '/common/definitions', :locals => {:topic => "card-pronunciation"}
   = f.input :pronunciation, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #audio_definition
-    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.audio.title'), :detail => I18n.t('card.terminology.audio.description')}
+    =render :partial => '/common/definitions', :locals => {:topic => "card-audio"}
   = f.file_field :audio
   .pad_from_top
 
   #chapter_definition
-    =render :partial => '/common/definitions', :locals => {:title => I18n.t('card.terminology.chapter.title'), :detail => I18n.t('card.terminology.chapter.description')}
+    =render :partial => '/common/definitions', :locals => {:topic => "card-chapter"}
   = f.input :chapter, :label => false, :hint => I18n.t('card.edit.labels.chapter'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 

@@ -113,21 +113,20 @@ describe LanguagesController do
 
   context '"GET" show' do
     it 'should return all sets associated with the language' do
-      set = Sets.create
-      set_name = SetName.create(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.create
-      translation1 = Translation.create(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.create(:language => "Spanish", :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation2.id)
-      set_term = SetTerms.create(:set_id => set.id, :term_id => idiom.id)
-      language = Language.create(:name => "English")
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
+      language = Language.make(:name => "English")
 
       get :show, :id => language.id
 
       assigns[:language].should == language
       assigns[:sets].count.should == 1
-      assigns[:set_names].count.should == 1
     end
 
     it 'should redirect to user home if the language does not exist' do

@@ -24,10 +24,10 @@ module AddTermPage
   end
 
   def add_translation_slot
-    @session.click_on("Add a new translation")
+    @session.click_on("add translation")
   end
 
   def add_translations
-    @session.click_on("Create related translations")
+    @session.click_on("Create")
   end
 end

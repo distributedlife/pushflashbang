@@ -109,3 +109,17 @@ UserLanguages.blueprint do
   language_id
   user_id
 end
+
+Sets.blueprint do
+
+end
+
+SetName.blueprint do
+  name {Faker::Lorem.sentence(2)}
+  description {Faker::Lorem.sentence(5)}
+end
+
+SetTerms.blueprint do
+  chapter {1}
+  position {1}
+end

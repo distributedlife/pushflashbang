@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110721033630) do
+ActiveRecord::Schema.define(:version => 20110724093102) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -73,6 +73,8 @@ ActiveRecord::Schema.define(:version => 20110721033630) do
     t.integer  "term_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "chapter"
+    t.integer  "position"
   end
 
   create_table "sets", :force => true do |t|

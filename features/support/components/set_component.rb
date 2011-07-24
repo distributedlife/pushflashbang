@@ -2,7 +2,7 @@ module SetComponent
   def create_set hash
     verify_set_prerequisites
 
-    set = Sets.create
+    set = Sets.make
     set_name = SetName.new hash
     set_name.sets_id = set.id
     set_name.save
@@ -42,14 +42,14 @@ module SetComponent
     end
   end
 
-  def get_set_from_name set_name
-    set_name = SetName.where(:name => set_name)
+  def get_set_from_name name
+    set_name = SetName.where(:name => name)
 
     return Sets.find(set_name.first.sets_id)
   end
 
-  def attach_idiom_to_set idiom, set
-    add(:set_term, SetTerms.create(:set_id => set.id, :term_id => idiom.id))
+  def attach_idiom_to_set idiom, set, chapter = 1, position = 1
+    add(:set_term, SetTerms.make(:set_id => set.id, :term_id => idiom.id, :chapter => chapter, :position => position))
   end
 
   private
@@ -59,7 +59,7 @@ module SetComponent
 
   def verify_set_name_prerequisites
     if does_not_exist(:set)
-      add(:set, Sets.create)
+      add(:set, Sets.make)
     end
   end
 end

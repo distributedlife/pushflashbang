@@ -70,8 +70,14 @@ PushFlashBang::Application.routes.draw do
     member do
       post 'add_set_name'
       delete 'delete_set_name'
+
       put 'add_term'
       put 'remove_term'
+
+      post 'term_next_chapter'
+      post 'term_prev_chapter'
+      post 'term_next_position'
+      post 'term_prev_position'
     end
 
     collection do

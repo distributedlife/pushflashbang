@@ -11,7 +11,7 @@ Feature: language features
   Scenario Outline: a user can select a language choice from the list
     Given I know the following languages: "<current languages>"
     And the following languages are available: "<available languages>"
-    When I go to the "show languages" page
+    When I go to the "user languages" page
     And I select "<language to learn>" to learn
     Then my set of languages is: "<set of languages>"
 
@@ -22,7 +22,7 @@ Feature: language features
 
   Scenario: a user can remove a language choice from the list
     Given I know the following languages: "English, Spanish"
-    When I go to the "show languages" page
+    When I go to the "user languages" page
     And I select "Spanish" to stop learning
     Then my set of languages is: "English"
 

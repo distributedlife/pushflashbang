@@ -40,4 +40,20 @@ module ShowSetPage
   def add_term
     @session.find_link("add_term").click
   end
+
+  def move_term_next_chapter id
+    @session.find_link("term_#{id}_next_chapter").click
+  end
+
+  def move_term_prev_chapter id
+    @session.find_link("term_#{id}_prev_chapter").click
+  end
+
+  def move_term_next_position id
+    @session.find_link("term_#{id}_next_position").click
+  end
+
+  def move_term_prev_position id
+    @session.find_link("term_#{id}_prev_position").click
+  end
 end

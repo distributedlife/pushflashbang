@@ -15,15 +15,14 @@ And /^the following languages are available: "([^"]*)"$/ do |languages|
 end
 
 And /^I select "([^"]*)" to learn$/ do |language_name|
-  on_page :ShowLanguagesPage, Capybara.current_session do |page|
+  on_page :UserLanguagesPage, Capybara.current_session do |page|
     language = ensure_language_exists language_name
-
     page.learn_language language
   end
 end
 
 And /^I select "([^"]*)" to stop learning$/ do |language_name|
-  on_page :ShowLanguagesPage, Capybara.current_session do |page|
+  on_page :UserLanguagesPage, Capybara.current_session do |page|
     language = ensure_language_exists language_name
 
     page.stop_learning_language language

@@ -27,6 +27,28 @@ Given /^the following related translations attached to the "([^"]*)" set:$/ do |
   attach_idiom_to_set idiom, set
 end
 
+Given /^the following related translations attached to chapter "([^"]*)" the "([^"]*)" set:$/ do |chapter, set_name, table|
+  idiom = create_idiom
+
+  table.hashes.each do |hash|
+    translation = create_translation_attached_to_idiom idiom, hash
+  end
+
+  set = get_set_from_name set_name
+  attach_idiom_to_set idiom, set, chapter.to_i
+end
+
+Given /^the following related translations attached to chapter "([^"]*)" in position "([^"]*)" of the "([^"]*)" set:$/ do |chapter, position, set_name, table|
+  idiom = create_idiom
+
+  table.hashes.each do |hash|
+    translation = create_translation_attached_to_idiom idiom, hash
+  end
+
+  set = get_set_from_name set_name
+  attach_idiom_to_set idiom, set, chapter.to_i, position.to_i
+end
+
 
 ################################################################################
 
@@ -77,7 +99,7 @@ And /^I view the following translations to the group containing "([^"]*)"$/ do |
 end
 
 And /^all translations are shown grouped and sorted alphabetically by language:$/ do |table|
-  on_page :ShowTermPage, Capybara.current_session do |page|
+  on_page :ShowTermsPage, Capybara.current_session do |page|
     translations = all('#translation')
     index = 0 ;
 

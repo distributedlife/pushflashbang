@@ -18,6 +18,6 @@ module ShowTermPage
   end
 
   def attach_translation
-    @session.click_on("link existing translation")
+    @session.click_on("link translation")
   end
 end

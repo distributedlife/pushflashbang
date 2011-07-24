@@ -29,7 +29,7 @@ class SetsController < ApplicationController
 
     @idiom_translations = []
     SetTerms.where(:set_id => params[:id]).each do |set|
-      IdiomTranslation.joins(:translation).order(:form).order(:language).where(:idiom_id => set.term_id).each do |idiom_translation|
+      IdiomTranslation.joins(:translation).order(:language).order(:form).where(:idiom_id => set.term_id).each do |idiom_translation|
         @idiom_translations << idiom_translation
       end
     end
@@ -132,7 +132,10 @@ class SetsController < ApplicationController
     redirect_to user_index_path and return unless idiom_exists? params[:idiom_id]
 
     if (SetTerms.where(:set_id => params[:id], :term_id => params[:idiom_id]).empty?)
-      SetTerms.create(:set_id => params[:id], :term_id => params[:idiom_id])
+      max_position = SetTerms.where(:set_id => params[:id]).maximum(:position)
+      max_position ||= 0
+
+      SetTerms.create(:set_id => params[:id], :term_id => params[:idiom_id], :chapter => 1, :position => max_position + 1)
     end
 
     redirect_to set_path(params[:id])
@@ -144,6 +147,85 @@ class SetsController < ApplicationController
     
     SetTerms.where(:set_id => params[:id], :term_id => params[:idiom_id]).each do |set_term|
       set_term.delete
+    end
+
+    redirect_to set_path(params[:id])
+  end
+
+  def term_next_chapter
+    redirect_to sets_path and return unless set_exists? params[:id]
+    redirect_to set_path(params[:id]) and return unless idiom_exists? params[:idiom_id]
+    
+    set_term = SetTerms.where(:set_id => params[:id], :term_id => params[:idiom_id])
+    redirect_to set_path(params[:id]) and return if set_term.empty?
+
+    existing_chapter = set_term.first.chapter
+    set_term.first.chapter = set_term.first.chapter + 1
+    set_term.first.save
+
+    if SetTerms.where(:set_id => params[:id], :chapter => existing_chapter).empty?
+      SetTerms::decrement_chapters_for_set_after_chapter params[:id], existing_chapter
+    end
+
+    redirect_to set_path(params[:id])
+  end
+
+  def term_prev_chapter
+    redirect_to sets_path and return unless set_exists? params[:id]
+    redirect_to set_path(params[:id]) and return unless idiom_exists? params[:idiom_id]
+
+    set_term = SetTerms.where(:set_id => params[:id], :term_id => params[:idiom_id])
+    redirect_to set_path(params[:id]) and return if set_term.empty?
+
+    set_term.first.chapter = set_term.first.chapter - 1
+    set_term.first.save
+    
+    if set_term.first.chapter == 0
+      SetTerms::increment_chapters_for_set params[:id]
+    end
+
+    redirect_to set_path(params[:id])
+  end
+
+  def term_next_position
+    redirect_to sets_path and return unless set_exists? params[:id]
+    redirect_to set_path(params[:id]) and return unless idiom_exists? params[:idiom_id]
+
+    set_term = SetTerms.where(:set_id => params[:id], :term_id => params[:idiom_id])
+    redirect_to set_path(params[:id]) and return if set_term.empty?
+
+
+    current_position = set_term.first.position
+    next_term = SetTerms.where(:set_id => params[:id], :chapter => set_term.first.chapter, :position => current_position + 1)
+
+    unless next_term.empty?
+      set_term.first.position = set_term.first.position + 1
+      next_term.first.position = next_term.first.position - 1
+
+      set_term.first.save
+      next_term.first.save
+    end
+
+    redirect_to set_path(params[:id])
+  end
+
+  def term_prev_position
+    redirect_to sets_path and return unless set_exists? params[:id]
+    redirect_to set_path(params[:id]) and return unless idiom_exists? params[:idiom_id]
+
+    set_term = SetTerms.where(:set_id => params[:id], :term_id => params[:idiom_id])
+    redirect_to set_path(params[:id]) and return if set_term.empty?
+
+
+    current_position = set_term.first.position
+    prev_term = SetTerms.where(:set_id => params[:id], :chapter => set_term.first.chapter, :position => current_position - 1)
+
+    unless prev_term.empty?
+      set_term.first.position = set_term.first.position - 1
+      prev_term.first.position = prev_term.first.position + 1
+
+      set_term.first.save
+      prev_term.first.save
     end
 
     redirect_to set_path(params[:id])
