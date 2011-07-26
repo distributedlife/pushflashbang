@@ -37,7 +37,6 @@ class SetsController < ApplicationController
 
   def index
     @sets = Sets.all
-    redirect_to user_index_path and return if @sets.empty?
   end
 
   def edit

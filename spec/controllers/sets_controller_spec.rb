@@ -104,13 +104,6 @@ describe SetsController do
 
       assigns[:sets].count.should == 2
     end
-
-    it 'should redirect to sets_path when there is an error' do
-      get :index
-
-      response.should be_redirect
-      response.should redirect_to user_index_path
-    end
   end
 
   context '"GET" edit' do
