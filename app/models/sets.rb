@@ -8,4 +8,32 @@ class Sets < ActiveRecord::Base
 
     return super
   end
+
+  def migrate_from_deck deck_id
+    deck = Deck.find deck_id
+
+    index = 1
+    current_chapter = 1
+    Card.order(:id).where(:deck_id => deck.id).each do |card|
+      if current_chapter != card.chapter
+        index = 1
+        current_chapter = current_chapter + 1
+      end
+
+      idiom = Idiom.create
+
+      chinese_translation = Translation.create(:idiom_id => idiom.id, :language => "Chinese (Simplified)", :form => card.front, :pronunciation => card.pronunciation)
+      IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => chinese_translation.id)
+
+      card.back.split(',').each do |form|
+        form.strip!
+
+        english_translation = Translation.create(:idiom_id => idiom.id, :language => "English", :form => form)
+        IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => english_translation.id)
+      end
+
+      SetTerms.create(:set_id => self.id, :term_id => idiom.id, :chapter => card.chapter, :position => index)
+      index = index + 1
+    end
+  end
 end
