@@ -30,10 +30,11 @@ Given /^the group containing "([^"]*)" is in the set "([^"]*)"$/ do |containing_
   SetTerms.create(:set_id => set.id, :term_id => idiom.id, :chapter => 1, :position => 1)
 end
 
-Given /^the user has the "([^"]*)" set as a goal$/ do |set_name|
+Given /^the user has the "([^"]*)" set as a goal for the "([^"]*)" language$/ do |set_name, language_name|
   set = get_set_from_name set_name
+  language = get_language language_name
 
-  UserSets.create(:user_id => get(:user).id, :set_id => set.id, :chapter => 1)
+  UserSets.create(:user_id => get(:user).id, :set_id => set.id, :language_id => language.id, :chapter => 1)
 end
 
 
@@ -154,15 +155,20 @@ When /^I move the term containing "([^"]*)" up a position in the "([^"]*)" set$/
   end
 end
 
-When /^I choose the set "([^"]*)" as a goal$/ do |set_name|
+When /^I choose the set "([^"]*)" for the "([^"]*)" language as a goal$/ do |set_name, language|
   add(:set, get_set_from_name(set_name))
+  language = get_language language
 
   goto_page :ShowSetPage, Capybara.current_session, sut do |page|
     page.set_as_goal
   end
+
+  on_page :SelectLanguagePage, Capybara.current_session do |page|
+    page.select_language language.id
+  end
 end
 
-When /^I choose to unset "([^"]*)" as a goal$/ do |set_name|
+When /^I choose to unset "([^"]*)" for the "([^"]*)" language as a goal$/ do |set_name, language|
   add(:set, get_set_from_name(set_name))
 
   goto_page :ShowSetPage, Capybara.current_session, sut do |page|

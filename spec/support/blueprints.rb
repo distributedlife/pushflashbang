@@ -21,6 +21,7 @@ Sham.define do
   deck_id(:unique => false) {1}
   card_id(:unique => false) {1}
   idiom_id(:unique => false) {1}
+  language_id(:unique => false) {1}
 
   due(:unique => false) {Time.now}
   interval(:unique => false) {0}
@@ -151,5 +152,6 @@ end
 UserSets.blueprint do
   user_id
   set_id
+  language_id
   chapter {1}
 end

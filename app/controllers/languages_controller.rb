@@ -53,6 +53,28 @@ class LanguagesController < ApplicationController
     end
   end
 
+  def select
+    @languages = []
+    languages = []
+    SetTerms.where(:set_id => params[:set_id]).each do |set_terms|
+      IdiomTranslation.joins(:translation).where(:idiom_id => set_terms.term_id).each do |idiom_translation|
+        language = Language.where(:name => idiom_translation.translation.language)
+        next if language.empty?
+          
+        language = language.first
+        if languages[language.id].nil?
+          languages[language.id] = language.id
+            
+          if UserSets.where(:set_id => params[:set_id], :user_id => current_user.id, :language_id => language.id).empty?
+            @languages << language
+          end
+        end
+      end
+    end
+
+    @set_id = params[:set_id]
+  end
+
   private
   def language_is_valid? id
     begin

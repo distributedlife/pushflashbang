@@ -236,18 +236,21 @@ class SetsController < ApplicationController
 
   def set_goal
     redirect_to sets_path and return unless set_exists? params[:id]
+    redirect_to sets_path and return unless language_exists? params[:language_id]
 
-    if UserSets.where(:set_id => params[:id], :user_id => current_user.id).empty?
-      UserSets.create(:set_id => params[:id], :user_id => current_user.id, :chapter => 1)
+    if UserSets.where(:set_id => params[:id], :user_id => current_user.id, :language_id => params[:language_id]).empty?
+      UserSets.create(:set_id => params[:id], :user_id => current_user.id, :language_id => params[:language_id], :chapter => 1)
     end
 
+    redirect_to set_path(params[:id]) and return if params[:redirect_to] == "sets"
     redirect_to :back
   end
 
   def unset_goal
     redirect_to sets_path and return unless set_exists? params[:id]
+    redirect_to sets_path and return unless language_exists? params[:language_id]
 
-    UserSets.where(:set_id => params[:id], :user_id => current_user.id).each do |user_set|
+    UserSets.where(:set_id => params[:id], :user_id => current_user.id, :language_id => params[:language_id]).each do |user_set|
       user_set.delete
     end
 
@@ -280,6 +283,15 @@ class SetsController < ApplicationController
   def idiom_exists? idiom_id
     begin
       Idiom.find(idiom_id)
+      true
+    rescue
+      false
+    end
+  end
+
+  def language_exists? id
+    begin
+      Language.find(id)
       true
     rescue
       false

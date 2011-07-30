@@ -788,11 +788,20 @@ describe SetsController do
       @set = Sets.make
       SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
 
+      @language = Language.make
+
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
 
-    it 'should redirect to sets_path if the set is does not exist' do
-      put :set_goal, :id => @set.id + 1
+    it 'should redirect to sets_path if the set does not exist' do
+      put :set_goal, :id => @set.id + 1, :language_id => @language.id
+
+      response.should be_redirect
+      response.should redirect_to sets_path
+    end
+
+    it 'should redirect to sets_path if the language does not exist' do
+      put :set_goal, :id => @set.id + 1, :language_id => @language.id + 1
 
       response.should be_redirect
       response.should redirect_to sets_path
@@ -801,24 +810,26 @@ describe SetsController do
     it 'should create a user set relationship if one does not already exists' do
       UserSets.count.should be 0
 
-      put :set_goal, :id => @set.id
+      put :set_goal, :id => @set.id, :language_id => @language.id
 
       response.should be_redirect
       response.should redirect_to :back
       UserSets.count.should be 1
       UserSets.first.set_id.should == @set.id
       UserSets.first.user_id.should == @user.id
+      UserSets.first.language_id.should == @language.id
     end
 
     it 'should do nothing if the user set relationship already exists' do
       UserSets.make(:set_id => @set.id, :user_id => @user.id)
       UserSets.count.should be 1
 
-      put :set_goal, :id => @set.id
+      put :set_goal, :id => @set.id, :language_id => @language.id
 
       UserSets.count.should be 1
       UserSets.first.set_id.should == @set.id
       UserSets.first.user_id.should == @user.id
+      UserSets.first.language_id.should == @language.id
     end
   end
 
@@ -827,11 +838,20 @@ describe SetsController do
       @set = Sets.make
       SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
 
+      @language = Language.make
+
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
 
     it 'should redirect to sets_path if the set is does not exist' do
-      put :unset_goal, :id => @set.id + 1
+      put :unset_goal, :id => @set.id + 1, :language_id => @language.id
+
+      response.should be_redirect
+      response.should redirect_to sets_path
+    end
+
+    it 'should redirect to sets_path if the set is does not exist' do
+      put :unset_goal, :id => @set.id, :language_id => @language.id + 1
 
       response.should be_redirect
       response.should redirect_to sets_path
@@ -840,7 +860,7 @@ describe SetsController do
     it 'should create a user set relationship if one does not already exists' do
       UserSets.make(:set_id => @set.id, :user_id => @user.id)
 
-      put :unset_goal, :id => @set.id
+      put :unset_goal, :id => @set.id, :language_id => @language.id
 
       response.should be_redirect
       response.should redirect_to :back
@@ -848,7 +868,7 @@ describe SetsController do
     end
 
     it 'should do nothing if the user set relationship does not exist' do
-      put :unset_goal, :id => @set.id
+      put :unset_goal, :id => @set.id, :language_id => @language.id
 
       UserSets.count.should be 0
     end

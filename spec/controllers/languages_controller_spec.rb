@@ -161,4 +161,31 @@ describe LanguagesController do
       response.should redirect_to user_index_path
     end
   end
+
+  context '"GET" select' do
+    it 'should return all languages that is available for the set that the user has not marked as a goal' do
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make
+      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+
+      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
+
+      language1 = Language.make(:name => "English")
+      language2 = Language.make(:name => "Spanish")
+      language3 = Language.make(:name => "Esperanto")
+
+      UserSets.make(:user_id => @user.id, :set_id => set.id, :language_id => language1)
+
+
+      get :select, :set_id => set.id
+
+      assigns[:languages].count.should == 1
+      assigns[:languages].first.should == language2
+      assigns[:set_id].should == set.id
+    end
+  end
 end

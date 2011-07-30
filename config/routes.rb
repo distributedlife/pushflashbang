@@ -40,6 +40,7 @@ PushFlashBang::Application.routes.draw do
   resources :languages do
     collection do
       get 'user'
+      get 'select'
     end
     
     member do
