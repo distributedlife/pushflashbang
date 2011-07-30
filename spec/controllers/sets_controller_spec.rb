@@ -768,4 +768,43 @@ describe SetsController do
       response.should redirect_to set_path(@set.id)
     end
   end
+
+  context '"PUT" make_goal' do
+    before(:each) do
+      @set = Sets.make
+      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+
+      request.env["HTTP_REFERER"] = "http://pushflashbang.com"
+    end
+
+    it 'should redirect to sets_path if the set is does not exist' do
+      put :make_goal, :id => @set.id + 1
+
+      response.should be_redirect
+      response.should redirect_to sets_path
+    end
+
+    it 'should create a user set relationship if one does not already exists' do
+      UserSets.count.should be 0
+
+      put :make_goal, :id => @set.id
+
+      response.should be_redirect
+      response.should redirect_to :back
+      UserSets.count.should be 1
+      UserSets.first.set_id.should == @set.id
+      UserSets.first.user_id.should == @user.id
+    end
+
+    it 'should do nothing if the user set relationship already exists' do
+      UserSets.make(:set_id => @set.id, :user_id => @user.id)
+      UserSets.count.should be 1
+
+      put :make_goal, :id => @set.id
+
+      UserSets.count.should be 1
+      UserSets.first.set_id.should == @set.id
+      UserSets.first.user_id.should == @user.id
+    end
+  end
 end

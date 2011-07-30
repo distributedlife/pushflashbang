@@ -32,6 +32,14 @@ class CardTiming < ActiveRecord::Base
     (RANGE / 2).to_i
   end
 
+  def self.variance_percent
+    10
+  end
+
+  def self.get_max_variance
+    1 + (variance_percent / 100)
+  end
+
   def self.get_first
     self.order(:seconds).first
   end
@@ -58,7 +66,8 @@ class CardTiming < ActiveRecord::Base
     end
 
     if current >= threshold
-      next_interval.seconds = next_interval.seconds - half_range + (rand range) + 1
+#      next_interval.seconds = next_interval.seconds + (rand half_range) + 1
+      next_interval.seconds = apply_random_variation next_interval.seconds
     end
 
     next_interval
@@ -74,9 +83,17 @@ class CardTiming < ActiveRecord::Base
     end
 
     if current >= threshold
-      next_interval.seconds = next_interval.seconds - half_range + (rand range) + 1
+#      next_interval.seconds = next_interval.seconds + (rand half_range) + 1
+      next_interval.seconds = apply_random_variation next_interval.seconds
     end
 
     next_interval
+  end
+
+  def self.apply_random_variation seconds
+    percent_offset = (rand variance_percent) / 100
+    percent_offset = percent_offset + 1
+
+    seconds * percent_offset
   end
 end

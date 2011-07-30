@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110724093102) do
+ActiveRecord::Schema.define(:version => 20110730054615) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -122,9 +122,47 @@ ActiveRecord::Schema.define(:version => 20110724093102) do
     t.datetime "updated_at"
   end
 
+  create_table "user_idiom_due_items", :force => true do |t|
+    t.integer  "user_idiom_schedule_id"
+    t.integer  "review_type"
+    t.integer  "interval"
+    t.datetime "due"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_idiom_reviews", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "idiom_id"
+    t.integer  "review_type"
+    t.datetime "due"
+    t.datetime "review_start"
+    t.datetime "reveal"
+    t.datetime "result_recorded"
+    t.string   "result_success"
+    t.integer  "interval"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_idiom_schedules", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "idiom_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_languages", :force => true do |t|
     t.integer  "user_id"
     t.integer  "language_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_sets", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "set_id"
+    t.integer  "chapter"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

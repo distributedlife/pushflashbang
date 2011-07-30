@@ -1,5 +1,6 @@
 class Sets < ActiveRecord::Base
   has_many :set_name
+  has_many :set_terms, :class_name => "SetTerms", :foreign_key => "set_id"
 
   def delete
     SetName.where(:sets_id => self.id).each do |set_name|
@@ -28,7 +29,7 @@ class Sets < ActiveRecord::Base
       card.back.split(',').each do |form|
         form.strip!
 
-        english_translation = Translation.create(:idiom_id => idiom.id, :language => "English", :form => form)
+        english_translation = Translation.create(:idiom_id => idiom.id, :language => "English", :form => form, :pronunciation => "")
         IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => english_translation.id)
       end
 

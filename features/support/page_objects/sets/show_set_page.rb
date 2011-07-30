@@ -56,4 +56,8 @@ module ShowSetPage
   def move_term_prev_position id
     @session.find_link("term_#{id}_prev_position").click
   end
+
+  def set_as_goal
+    @session.find_link("make_goal").click
+  end
 end

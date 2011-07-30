@@ -19,10 +19,10 @@ Feature: inconsistent schedule
   Scenario: interval is 10 minutes
     When I have reviewed a card with an interval of 600
     When I click on the "third" button
-    Then the interval should be 3600 to the next plus or minus 60 seconds
+    Then the interval should be 3600 to the next plus up to 10 percent
 
   @javascript
   Scenario: interval is > 10 minutes
     When I have reviewed a card with an interval of 601
     When I click on the "third" button
-    Then the interval should be 3600 to the next plus or minus 60 seconds
+    Then the interval should be 3600 to the next plus up to 10 percent

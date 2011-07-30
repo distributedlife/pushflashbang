@@ -1,0 +1,13 @@
+%p.minor_title= t('text.header-set-terms')
+#translations
+  - current_chapter = 0
+  - @set.set_terms.order(:chapter).order(:position).each do |set_term|
+    - if current_chapter != set_term.chapter
+      - current_chapter = set_term.chapter
+      - unless current_chapter == 1
+        .pad_from_top
+      %p{:style => "clear:left;"}= "Chapter #{current_chapter}"
+    - set_term.idioms.each do |idiom|
+      =render :partial => '/sets/set_idioms', :locals => {:set => @set, :idiom => idiom}
+  - if @set.set_terms.empty?
+    %p= t('text-set-has-no-translations')

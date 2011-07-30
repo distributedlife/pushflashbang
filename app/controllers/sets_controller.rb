@@ -28,8 +28,10 @@ class SetsController < ApplicationController
     redirect_to sets_path and return if @set_names.empty?
 
     @idiom_translations = []
-    SetTerms.where(:set_id => params[:id]).each do |set|
+    SetTerms.order(:chapter).order(:position).where(:set_id => params[:id]).each do |set|
       IdiomTranslation.joins(:translation).order(:language).order(:form).where(:idiom_id => set.term_id).each do |idiom_translation|
+        idiom_translation[:chapter] = set.chapter
+        idiom_translation[:position] = set.position
         @idiom_translations << idiom_translation
       end
     end
@@ -228,6 +230,16 @@ class SetsController < ApplicationController
     end
 
     redirect_to set_path(params[:id])
+  end
+
+  def make_goal
+    redirect_to sets_path and return unless set_exists? params[:id]
+
+    if UserSets.where(:set_id => params[:id], :user_id => current_user.id).empty?
+      UserSets.create(:set_id => params[:id], :user_id => current_user.id, :chapter => 1)
+    end
+
+    redirect_to :back
   end
 
   private

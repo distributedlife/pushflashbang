@@ -37,6 +37,7 @@ en:
     languages: "Languages"
     link-term: "link term to set"
     link-translation: "link translation"
+    make-goal: "Make Goal"
     move-translation-here: "Move translation here"
     new-deck: "new deck"
     new-term: "create new term"
@@ -80,7 +81,10 @@ en:
     header-set-name-count: "Set Name"
     header-translation-count: "Translation"
     header-set-terms: "Terms in this set"
+    header-user-sets: "Your Current Goals"
+    header-available-sets: "Available Sets"
     language-has-no-sets: "There are currently no sets associated with this language. Sets are automatically associated with a language when one of its translations specifies the language."
+    user-has-no-sets: "You have not set any goals for this language. Choose a set as a goal and start learning."
     no-translations: "There are currently no translations in the system"
     set-has-no-translations: "There are currently no translations in the set"
   titles:

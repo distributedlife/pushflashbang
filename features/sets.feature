@@ -61,6 +61,8 @@ Feature: Sets and Goals
 #   the following can't be done until the capybara/akephalos bug is fixed
 #  Scenario: edit and add a name
 
+
+
   Scenario: add a term to a set (from term)
     Given the following sets:
       | name      | description                                    |
@@ -115,6 +117,8 @@ Feature: Sets and Goals
       | form  | language             | pronunciation |
       | a little bit | English              |               |
       | un poco de   | Spanish              |               |
+
+
 
    Scenario: move a term to next chapter in set
     Given the following sets:
@@ -177,6 +181,3 @@ Feature: Sets and Goals
     When I move the term containing "Hello" up a position in the "greetings" set
     Then the term containing "Hello" set should be in position "1" of the "greetings" set
     And the term containing "a little bit" set should be in position "2" of the "greetings" set
-
-#  Scenario: user can specify set as a goal
-#  Scenario: user can see goal progress

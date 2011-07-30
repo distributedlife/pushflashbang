@@ -1,10 +1,28 @@
 =render :partial => '/header', :locals => {:title => @language.name, :subtitle => ""}
-#set
+#user_sets
+  %p.minor_title= "#{t('text.header-user-sets')}:"
+  - if @user_sets.empty?
+    #set{:class => 'panel'}
+      %p= t('text.user-has-no-sets')
+  - @user_sets.each do |set|
+    #set{:id => set.id, :class => 'panel'}
+      - set.set_name.each do |set_name|
+        %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, set_path(set.id)
+        %span{:id => "set_#{set.id}_description"}= set_name.description
+        .pad_from_top
+#available_sets
+  %p.minor_title= "#{t('text.header-available-sets')}:"
   - if @sets.empty?
-    %p= t('text.language-has-no-sets')
+    #set{:class => 'panel'}
+      %p= t('text.language-has-no-sets')
   - @sets.each do |set|
     #set{:id => set.id, :class => 'panel'}
       - set.set_name.each do |set_name|
-        %p.minor_title= link_to set_name.name, set_path(set.id)
-        %span= set_name.description
+        %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, set_path(set.id)
+        %span{:id => "set_#{set.id}_description"}= set_name.description
+        .pad_from_top
+        %span.subscript{:style => "float: right;"}
+          [
+          %span.menu= link_to t('actions.make-goal'), make_goal_set_path(params[:id]), :class => 'neutral', :id => "make_goal", :method => :put
+          ]
         .pad_from_top

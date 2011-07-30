@@ -20,6 +20,7 @@ Sham.define do
 
   deck_id(:unique => false) {1}
   card_id(:unique => false) {1}
+  idiom_id(:unique => false) {1}
 
   due(:unique => false) {Time.now}
   interval(:unique => false) {0}
@@ -122,4 +123,33 @@ end
 SetTerms.blueprint do
   chapter {1}
   position {1}
+end
+
+UserIdiomReview.blueprint do
+  user_id
+  idiom_id
+  review_type {1}
+  due
+  review_start
+  reveal
+  result_recorded
+  result_success
+  interval
+end
+
+UserIdiomSchedule.blueprint do
+  user_id
+  idiom_id
+end
+
+UserIdiomDueItems.blueprint do
+  review_type {1}
+  due
+  interval
+end
+
+UserSets.blueprint do
+  user_id
+  set_id
+  chapter {1}
 end

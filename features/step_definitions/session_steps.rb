@@ -124,14 +124,15 @@ And /^the card interval should be (\d+)$/ do |interval|
   scheduled_card.interval.to_s.should == interval
 end
 
-And /^the interval should be (\d+) to the next plus or minus (\d+) seconds$/ do |interval, range|
+And /^the interval should be (\d+) to the next plus up to (\d+) percent$/ do |interval, range|
+#And /^the interval should be (\d+) to the next plus or minus (\d+) seconds$/ do |interval, range|
   interval = interval.to_i
   range = range.to_i
+  range = (range / 100) + 1
 
   scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user_id)).first
-  scheduled_card.interval.should >= interval - range
-  scheduled_card.interval.should <= interval + range
-  scheduled_card.interval.should_not == interval
+  scheduled_card.interval.should >= interval
+  scheduled_card.interval.should <= (interval * range)
 end
 
 And /^the card should be rescheduled$/ do

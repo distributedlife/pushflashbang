@@ -45,14 +45,14 @@ describe CardTiming do
       CardTiming::get_next(25).seconds.should == 25
     end
 
-    it 'should not return a range if the current is equal to or above the threshold' do
+    it 'should return a range if the current is equal to or above the threshold' do
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
       CardTiming.create(:seconds => 600)
 
-      CardTiming::get_next(120).seconds.should >= (600 - CardTiming::range)
-      CardTiming::get_next(120).seconds.should <= (600 + CardTiming::range)
+      CardTiming::get_next(120).seconds.should >= (600)
+      CardTiming::get_next(120).seconds.should <= (660)
     end
   end
 
@@ -75,21 +75,21 @@ describe CardTiming do
       CardTiming::get_next_advance(0).seconds.should == CardTiming::SECONDS_IN_HOUR
       CardTiming::get_next_advance(5).seconds.should == CardTiming::SECONDS_IN_HOUR
       CardTiming::get_next_advance(25).seconds.should == CardTiming::SECONDS_IN_HOUR
-      CardTiming::get_next_advance(CardTiming::SECONDS_IN_HOUR).seconds.should >= CardTiming::SECONDS_IN_HOUR * 5 - CardTiming::range
-      CardTiming::get_next_advance(CardTiming::SECONDS_IN_HOUR).seconds.should <= CardTiming::SECONDS_IN_HOUR * 5 + CardTiming::range
-      CardTiming::get_next_advance(CardTiming::SECONDS_IN_DAY).seconds.should >= (CardTiming::SECONDS_IN_DAY * 5) - CardTiming::range
-      CardTiming::get_next_advance(CardTiming::SECONDS_IN_DAY).seconds.should <= (CardTiming::SECONDS_IN_DAY * 5) + CardTiming::range
+      CardTiming::get_next_advance(CardTiming::SECONDS_IN_HOUR).seconds.should >= CardTiming::SECONDS_IN_HOUR * 5
+      CardTiming::get_next_advance(CardTiming::SECONDS_IN_HOUR).seconds.should <= CardTiming::SECONDS_IN_HOUR * 5 * CardTiming::get_max_variance
+      CardTiming::get_next_advance(CardTiming::SECONDS_IN_DAY).seconds.should >= (CardTiming::SECONDS_IN_DAY * 5)
+      CardTiming::get_next_advance(CardTiming::SECONDS_IN_DAY).seconds.should <= (CardTiming::SECONDS_IN_DAY * 5) * CardTiming::get_max_variance
 
     end
 
     it 'should get the last row if there is no later' do
-      CardTiming::get_next_advance(CardTiming::SECONDS_IN_YEAR * 2).seconds.should >= (CardTiming::SECONDS_IN_YEAR * 2) - CardTiming::range
-      CardTiming::get_next_advance(CardTiming::SECONDS_IN_YEAR * 2).seconds.should <= (CardTiming::SECONDS_IN_YEAR * 2) + CardTiming::range
+      CardTiming::get_next_advance(CardTiming::SECONDS_IN_YEAR * 2).seconds.should >= (CardTiming::SECONDS_IN_YEAR * 2)
+      CardTiming::get_next_advance(CardTiming::SECONDS_IN_YEAR * 2).seconds.should <= (CardTiming::SECONDS_IN_YEAR * 2) * CardTiming::get_max_variance
     end
 
     it 'should not return a range if the current is equal to or above the threshold' do
-      CardTiming::get_next_advance(120).seconds.should >= (CardTiming::SECONDS_IN_HOUR - CardTiming::range)
-      CardTiming::get_next_advance(120).seconds.should <= (CardTiming::SECONDS_IN_HOUR + CardTiming::range)
+      CardTiming::get_next_advance(120).seconds.should >= CardTiming::SECONDS_IN_HOUR
+      CardTiming::get_next_advance(120).seconds.should <= CardTiming::SECONDS_IN_HOUR * CardTiming::get_max_variance
     end
   end
 end

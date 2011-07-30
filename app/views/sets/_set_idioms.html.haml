@@ -1,0 +1,21 @@
+%section{:class => ["panel left"], :style => "width: 70%"}
+  - idiom.translations.each do |translation|
+    =render :partial => '/translations/show', :locals => {:translation => translation}
+  .pad_from_top
+  .pad_from_top
+  %span.subscript{:style => "float: left;"}
+    [
+    = link_to t('actions.delink'), remove_term_set_path(set.id, :idiom_id => idiom.id), :id => "term_#{idiom.id}_remove_from_set", :method => :put
+    ]
+    [
+    = link_to t('actions.prev-chapter'), term_prev_chapter_set_path(set.id, :idiom_id => idiom.id), :id => "term_#{idiom.id}_prev_chapter", :method => :post
+    ]
+    [
+    = link_to t('actions.prev-position'), term_prev_position_set_path(set.id, :idiom_id => idiom.id), :id => "term_#{idiom.id}_prev_position", :method => :post
+    ]
+    [
+    = link_to t('actions.next-position'), term_next_position_set_path(set.id, :idiom_id => idiom.id), :id => "term_#{idiom.id}_next_position", :method => :post
+    ]
+    [
+    = link_to t('actions.next-chapter'), term_next_chapter_set_path(set.id, :idiom_id => idiom.id), :id => "term_#{idiom.id}_next_chapter", :method => :post
+    ]

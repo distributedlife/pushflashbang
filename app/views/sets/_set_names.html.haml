@@ -1,0 +1,12 @@
+- link_title ||= false
+
+#set_names
+  %section{:class => ["panel left"], :style => "width: 70%"}
+    - set.set_name.each do |set_name|
+      #set_name{:id => set_name.sets_id}
+        - if link_title
+          %span#name{:style => "display: inline-block;"}= link_to set_name.name, set_path(set.id)
+        - else
+          %span#name{:style => "display: inline-block;"}= set_name.name
+        %span#description{:class => "description", :style => "display: inline-block;"}= set_name.description
+        .pad_from_top

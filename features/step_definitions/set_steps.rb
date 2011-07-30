@@ -142,7 +142,13 @@ When /^I move the term containing "([^"]*)" up a position in the "([^"]*)" set$/
   end
 end
 
+When /^I choose the set "([^"]*)" as a goal$/ do |set_name|
+  add(:set, get_set_from_name(set_name))
 
+  goto_page :ShowSetPage, Capybara.current_session, sut do |page|
+    page.set_as_goal
+  end
+end
 
 
 
@@ -199,4 +205,24 @@ Then /^the term containing "([^"]*)" set should be in position "([^"]*)" of the 
   idiom = get_idiom_containing_form containing_form
 
   SetTerms.where(:set_id => set.id, :term_id => idiom.id, :position => position.to_i).count.should == 1
+end
+
+Then /^the following sets are listed as user goals on the "([^"]*)" language page:$/ do |language_name, table|
+  add(:language, get_language(language_name))
+
+  goto_page :ShowLanguagePage, Capybara.current_session, sut do |page|
+    table.hashes.each do |hash|
+      page.is_user_set hash
+    end
+  end
+end
+
+Then /^the following sets are listed as potential goals on the "([^"]*)" language page:$/ do |language_name, table|
+  add(:language, get_language(language_name))
+
+  goto_page :ShowLanguagePage, Capybara.current_session, sut do |page|
+    table.hashes.each do |hash|
+      page.is_available_set hash
+    end
+  end
 end

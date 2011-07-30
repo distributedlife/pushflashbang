@@ -32,6 +32,7 @@ class LanguagesController < ApplicationController
     redirect_to user_index_path and return unless language_is_valid? params[:id]
 
     @language = Language.find(params[:id])
+    @user_sets = []
     @sets = []
     set_ids = []
 
@@ -41,7 +42,11 @@ class LanguagesController < ApplicationController
           set_ids[set_terms.set_id] = set_terms.set_id
           
           Sets.where(:id => set_terms.set_id).each do |set|
-            @sets << set
+            if UserSets.where(:set_id => set.id, :user_id => current_user.id).empty?
+              @sets << set
+            else
+              @user_sets << set
+            end
           end
         end
       end

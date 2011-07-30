@@ -1,49 +1,11 @@
-- current_idiom = 0
 =render :partial => '/header', :locals => {:title => t('titles.set-show.title'), :subtitle => t('titles.set-show.subtitle')}
 %section{:class => ["panel right"], :style => "width: 15%"}
+  %span.menu= link_to t('actions.make-goal'), make_goal_set_path(params[:id]), :class => 'neutral', :id => "make_goal", :method => :put
+  .pad_from_top
   %span.menu= link_to t('actions.link-term'), select_for_set_terms_path(:set_id => params[:id]), :class => 'neutral', :id => "add_term"
   .pad_from_top
   %span.menu= link_to t('actions.new-term'), new_term_path, :class => 'neutral', :method => :get
   .pad_from_top
   %span.menu= link_to t('actions.edit-set'), edit_set_path(params[:id]), :class => 'neutral'
-%section{:class => ["panel left"], :style => "width: 70%"}
-  #set_names
-    - @set_names.each do |set_name|
-      #set_name{:id => set_name.sets_id}
-        %span#name{:style => "display: inline-block;"}= set_name.name
-        %span#description{:class => "description", :style => "display: inline-block;"}= set_name.description
-        .pad_from_top
-  .section_break
-  #translations
-    %p.minor_title= t('text.header-set-terms')
-    .pad_from_top
-    - @idiom_translations.each do |idiom_translation|
-      - if idiom_translation.idiom_id != current_idiom and !current_idiom.nil?
-        - unless current_idiom == 0
-          .pad_from_top
-        - current_idiom = idiom_translation.idiom_id
-        - idiom_count = 0
-        %span.subscript{:style => "float: right;"}
-          [
-          = link_to t('actions.delink'), remove_term_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_remove_from_set", :method => :put
-          ]
-          [
-          = link_to t('actions.prev-chapter'), term_prev_chapter_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_prev_chapter", :method => :post
-          ]
-          [
-          = link_to t('actions.prev-position'), term_prev_position_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_prev_position", :method => :post
-          ]
-          [
-          = link_to t('actions.next-position'), term_next_position_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_next_position", :method => :post
-          ]
-          [
-          = link_to t('actions.next-chapter'), term_next_chapter_set_path(@set.id, :idiom_id => current_idiom), :id => "term_#{current_idiom}_next_chapter", :method => :post
-          ]
-      #translation{:id => idiom_translation.translation.id, :style => "display: inline"}
-        %span#form= idiom_translation.translation.form
-        - unless idiom_translation.translation.pronunciation.empty?
-          %span#pronunciation= "(#{idiom_translation.translation.pronunciation})"
-        %span#language.subscript.contrast_faint= idiom_translation.translation.language
-        %span{:style => "min-width: 0.3em; display:inline-block"}
-    - if @idiom_translations.empty?
-      %p= t('text-set-has-no-translations')
+=render :partial => '/sets/set_names', :locals => {:set => @set}
+=render :partial => '/sets/set_terms', :locals => {:set => @set}

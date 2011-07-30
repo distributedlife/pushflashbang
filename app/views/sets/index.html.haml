@@ -3,10 +3,4 @@
   %span.menu= link_to t('actions.create-set'), new_set_path, :class => 'neutral'
 #set_names
   - @sets.each do |set|
-    %section{:class => ["panel left"], :style => "width: 70%"}
-      #set{:id => set.id}
-        - set.set_name.each do |set_name|
-          #set_name{:id => set_name.id}
-            %span#name{:style => "display: inline-block;"}= link_to set_name.name, set_path(set.id)
-            %span#description{:class => "description", :style => "display: inline-block;"}= set_name.description
-            .pad_from_top
+    =render :partial => '/sets/set_names', :locals => {:set => set, :link_title => true}

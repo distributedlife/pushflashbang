@@ -1,4 +1,6 @@
 class SetTerms < ActiveRecord::Base
+  has_many :idioms, :class_name => "Idiom", :primary_key => :term_id, :foreign_key => :id
+
   attr_accessible :set_id, :term_id, :chapter, :position
   
   validates :set_id, :presence => true
