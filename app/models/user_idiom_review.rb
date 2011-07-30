@@ -1,5 +1,5 @@
 class UserIdiomReview < ActiveRecord::Base
-  attr_accessible :user_id, :idiom_id, :review_type, :due, :review_start, :reveal, :result_recorded, :result_success, :interval
+  attr_accessible :user_id, :idiom_id, :language_id, :review_type, :due, :review_start, :reveal, :result_recorded, :result_success, :interval
 
   RESULTS = ['didnt_know', 'partial_correct', 'shaky_good', 'good']
 
@@ -13,6 +13,7 @@ class UserIdiomReview < ActiveRecord::Base
 
   validates :user_id, :presence => true
   validates :idiom_id, :presence => true
+  validates :language_id, :presence => true
   validates :review_type, :presence => true
   validates_inclusion_of :review_type, :in => REVIEW_TYPES
   validates :due, :presence => true

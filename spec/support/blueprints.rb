@@ -129,6 +129,7 @@ end
 UserIdiomReview.blueprint do
   user_id
   idiom_id
+  language_id
   review_type {1}
   due
   review_start
@@ -141,6 +142,7 @@ end
 UserIdiomSchedule.blueprint do
   user_id
   idiom_id
+  language_id
 end
 
 UserIdiomDueItems.blueprint do
