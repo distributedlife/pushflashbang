@@ -16,6 +16,7 @@ module ShowLanguagePage
 
     set_name = SetName.where(:name => hash[:name]).first
     sets.find("#set_#{set_name.sets_id}_name").text.should == set_name.name
+    sets.find("#set_#{set_name.sets_id}_description").text.should == set_name.description
   end
 
   def is_available_set hash
@@ -23,5 +24,13 @@ module ShowLanguagePage
 
     set_name = SetName.where(:name => hash[:name]).first
     sets.find("#set_#{set_name.sets_id}_name").text.should == set_name.name
+    sets.find("#set_#{set_name.sets_id}_description").text.should == set_name.description
+  end
+
+  def is_set_on_page hash
+    set_name = SetName.where(:name => hash[:name]).first
+
+    @session.find("#set_#{set_name.sets_id}_name").text.should == set_name.name
+    @session.find("#set_#{set_name.sets_id}_description").text.should == set_name.description
   end
 end

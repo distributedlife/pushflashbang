@@ -73,7 +73,8 @@ PushFlashBang::Application.routes.draw do
 
       put 'add_term'
       put 'remove_term'
-      put 'make_goal'
+      put 'set_goal'
+      put 'unset_goal'
 
       post 'term_next_chapter'
       post 'term_prev_chapter'

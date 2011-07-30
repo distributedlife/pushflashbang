@@ -1,6 +1,9 @@
 =render :partial => '/header', :locals => {:title => t('titles.set-show.title'), :subtitle => t('titles.set-show.subtitle')}
 %section{:class => ["panel right"], :style => "width: 15%"}
-  %span.menu= link_to t('actions.make-goal'), make_goal_set_path(params[:id]), :class => 'neutral', :id => "make_goal", :method => :put
+  - if @user_goal.empty?
+    %span.menu= link_to t('actions.set-goal'), set_goal_set_path(params[:id]), :class => 'neutral', :id => "set_goal", :method => :put
+  - else
+    %span.menu= link_to t('actions.unset-goal'), unset_goal_set_path(params[:id]), :class => 'neutral', :id => "unset_goal", :method => :put
   .pad_from_top
   %span.menu= link_to t('actions.link-term'), select_for_set_terms_path(:set_id => params[:id]), :class => 'neutral', :id => "add_term"
   .pad_from_top

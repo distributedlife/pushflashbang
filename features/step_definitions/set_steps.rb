@@ -23,6 +23,18 @@ Given /^I am on viewing the set "([^"]*)"$/ do |set_name|
   goto_page :ShowSetPage, Capybara.current_session, sut
 end
 
+Given /^the group containing "([^"]*)" is in the set "([^"]*)"$/ do |containing_form, set_name|
+  set = get_set_from_name set_name
+  idiom = get_idiom_containing_form containing_form
+
+  SetTerms.create(:set_id => set.id, :term_id => idiom.id, :chapter => 1, :position => 1)
+end
+
+Given /^the user has the "([^"]*)" set as a goal$/ do |set_name|
+  set = get_set_from_name set_name
+
+  UserSets.create(:user_id => get(:user).id, :set_id => set.id, :chapter => 1)
+end
 
 
 ################################################################################
@@ -147,6 +159,14 @@ When /^I choose the set "([^"]*)" as a goal$/ do |set_name|
 
   goto_page :ShowSetPage, Capybara.current_session, sut do |page|
     page.set_as_goal
+  end
+end
+
+When /^I choose to unset "([^"]*)" as a goal$/ do |set_name|
+  add(:set, get_set_from_name(set_name))
+
+  goto_page :ShowSetPage, Capybara.current_session, sut do |page|
+    page.unset_as_goal
   end
 end
 

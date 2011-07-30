@@ -10,6 +10,11 @@
         %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, set_path(set.id)
         %span{:id => "set_#{set.id}_description"}= set_name.description
         .pad_from_top
+        %span.subscript{:style => "float: right;"}
+          [
+          %span.menu= link_to t('actions.unset-goal'), unset_goal_set_path(set.id), :class => 'neutral', :id => "unset_#{set.id}_goal", :method => :put
+          ]
+        .pad_from_top
 #available_sets
   %p.minor_title= "#{t('text.header-available-sets')}:"
   - if @sets.empty?
@@ -23,6 +28,6 @@
         .pad_from_top
         %span.subscript{:style => "float: right;"}
           [
-          %span.menu= link_to t('actions.make-goal'), make_goal_set_path(params[:id]), :class => 'neutral', :id => "make_goal", :method => :put
+          %span.menu= link_to t('actions.set-goal'), set_goal_set_path(set.id), :class => 'neutral', :id => "set_#{set.id}_goal", :method => :put
           ]
         .pad_from_top

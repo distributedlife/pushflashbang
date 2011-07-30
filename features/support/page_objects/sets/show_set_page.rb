@@ -58,6 +58,10 @@ module ShowSetPage
   end
 
   def set_as_goal
-    @session.find_link("make_goal").click
+    @session.find_link("set_goal").click
+  end
+
+  def unset_as_goal
+    @session.find_link("unset_goal").click
   end
 end

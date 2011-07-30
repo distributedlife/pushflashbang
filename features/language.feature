@@ -37,6 +37,12 @@ Feature: language features
     And a set with the following names:
       | name      | description                                    |
       | greetings | learn how to greet someone in another language |
+    And the following related translations:
+      | form         | language             | pronunciation |
+      | un poco de   | Spanish              |               |
+      | a little bit | English              |               |
+      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
+    And the group containing "a little bit" is in the set "greetings"
     Then I should see the following sets on "English" language page
       | name      | description                                    |
       | greetings | learn how to greet someone in another language |

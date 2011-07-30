@@ -35,6 +35,8 @@ class SetsController < ApplicationController
         @idiom_translations << idiom_translation
       end
     end
+
+    @user_goal = UserSets.where(:set_id => @set.id, :user_id => current_user.id)
   end
 
   def index
@@ -232,11 +234,21 @@ class SetsController < ApplicationController
     redirect_to set_path(params[:id])
   end
 
-  def make_goal
+  def set_goal
     redirect_to sets_path and return unless set_exists? params[:id]
 
     if UserSets.where(:set_id => params[:id], :user_id => current_user.id).empty?
       UserSets.create(:set_id => params[:id], :user_id => current_user.id, :chapter => 1)
+    end
+
+    redirect_to :back
+  end
+
+  def unset_goal
+    redirect_to sets_path and return unless set_exists? params[:id]
+
+    UserSets.where(:set_id => params[:id], :user_id => current_user.id).each do |user_set|
+      user_set.delete
     end
 
     redirect_to :back
