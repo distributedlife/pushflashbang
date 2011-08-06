@@ -6,7 +6,16 @@ PushFlashBang::Application.routes.draw do
   match 'info/check_style' => 'info#check_style'
   match 'info/about' => 'info#about'
 
-  resources :users, :as => "user" 
+  resources :users, :as => "user" do
+    collection do
+      resources :languages, :as => "user_languages" do
+        member do
+          post 'learn'
+          post 'unlearn'
+        end
+      end
+    end
+  end
 
   resources :deck, :as => "deck" do
     member do
@@ -39,13 +48,8 @@ PushFlashBang::Application.routes.draw do
 
   resources :languages do
     collection do
-      get 'user'
+#      get 'user'
       get 'select'
-    end
-    
-    member do
-      post 'learn'
-      post 'unlearn'
     end
 
     resources :sets do

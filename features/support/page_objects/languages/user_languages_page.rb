@@ -4,7 +4,7 @@ module UserLanguagesPage
   end
 
   def url sut
-    "/languages/user"
+    "/users/languages/"
   end
 
   def is_current_page?
@@ -12,10 +12,10 @@ module UserLanguagesPage
   end
 
   def learn_language language
-    @session.find("#language_#{language.id}").click_link('start learning?')
+    @session.find_link("language_#{language.id}_start_learning").click
   end
 
   def stop_learning_language language
-    @session.find("#language_#{language.id}").click_link('stop learning?')
+    @session.find_link("language_#{language.id}_stop_learning").click
   end
 end

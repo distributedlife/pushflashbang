@@ -15,17 +15,6 @@ describe LanguagesController do
 
       assigns[:languages].count.should == 2
     end
-  end
-
-  context '"GET" user_languages' do
-    it 'should return all languages' do
-      Language.make
-      Language.make
-
-      get :user
-
-      assigns[:languages].count.should == 2
-    end
 
     it 'should return all language the user knows' do
       l1 = Language.make
@@ -33,7 +22,7 @@ describe LanguagesController do
       UserLanguages.make(:user_id => @user.id, :language_id => l1.id)
       UserLanguages.make(:user_id => 100, :language_id => l1.id)
 
-      get :user
+      get :index
 
       assigns[:user_languages].count.should == 1
     end

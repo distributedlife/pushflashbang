@@ -1,11 +1,11 @@
 - if @user_languages.empty?
   #language{:class => 'panel'}
-    %p You have not selected to learn any languages.
+    %p= t('text.user-has-no-languages')
     .pad_from_top
-    %p= link_to "Click here to start learning.", languages_path, :class => 'contrast'
+    %p= link_to t('actions.start-learning-emphatic'), user_languages_path, :class => 'contrast', :id => "add_language"
 - @user_languages.each do |user_language|
   #language{:id => user_language.language_id, :class => 'panel'}
     %p.minor_title
-      = link_to user_language.language.name, language_path(user_language.language_id)
+      =render :partial => '/languages/language', :locals => {:language => user_language.language}
     .pad_from_top
     .pad

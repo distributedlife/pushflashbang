@@ -1,21 +1,19 @@
+include LanguagesHelper
+
 class LanguagesController < ApplicationController
   before_filter :authenticate_user!
 
   def index
     @languages = Language.all
-  end
-
-  def user
-    @languages = Language.all
     @user_languages = UserLanguages.joins(:language).where(:user_id => current_user.id)
   end
 
   def learn
-    if language_is_valid_for_user? params[:id]
+    if language_is_valid_for_user? params[:id], current_user.id
       UserLanguages.create(:user_id => current_user.id, :language_id => params[:id])
     end
 
-    redirect_to languages_path
+    redirect_to user_languages_path
   end
 
   def unlearn
@@ -25,7 +23,7 @@ class LanguagesController < ApplicationController
       end
     end
 
-    redirect_to languages_path
+    redirect_to user_languages_path
   end
 
   def show
@@ -73,29 +71,5 @@ class LanguagesController < ApplicationController
     end
 
     @set_id = params[:set_id]
-  end
-
-  private
-  def language_is_valid? id
-    begin
-      Language.find(id)
-      true
-    rescue
-      return false
-    end
-
-    return true
-  end
-
-  def language_is_valid_for_user? id
-    return false if UserLanguages.where(:user_id => current_user.id, :language_id => id).count == 1
-
-    begin
-      Language.find(id) == false
-    rescue
-      return false
-    end
-
-    return true
   end
 end

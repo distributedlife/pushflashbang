@@ -4,7 +4,7 @@
     %span= t('text.header-languages')
     %span.subscript
       [
-      =link_to t('actions.add'), user_languages_path, :class => 'contrast'
+      =link_to t('actions.add'), user_languages_path, :class => 'contrast', :id => "add_language"
       ]
   =render :partial => '/languages/user_languages', :locals => {:languages => @languages}
 #user_decks{:class => "section_right", :style => "width: 50%;"}
@@ -12,6 +12,6 @@
     %span= t('text.header-things')
     %span.subscript
       [
-      =link_to t('actions.new-deck'), '/deck/create', :method => :post, :class => 'contrast'
+      =link_to t('actions.add'), '/deck', :method => :get, :class => 'contrast', :id => "add_deck"
       ]
   =render :partial => '/deck/user_decks', :locals => {:decks => @decks}

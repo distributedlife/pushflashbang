@@ -50,7 +50,8 @@ en:
     set-goal: "Add Goal"
     sets: "Sets"
     stop-learning: "stop learning?"
-    start-learning: "start learning?"
+    start-learning: "learn?"
+    start-learning-emphatic: "Click here to start learning!"
     terms: "Terms"
     unset-goal: "Remove Goal"
   form:
@@ -88,6 +89,7 @@ en:
     user-has-no-sets: "You have not set any goals for this language. Choose a set as a goal and start learning."
     no-translations: "There are currently no translations in the system"
     set-has-no-translations: "There are currently no translations in the set"
+    user-has-no-languages: "You have not selected to learn any languages."
   titles:
     user-home:
       title: "Welcome to PushFlashBang"
