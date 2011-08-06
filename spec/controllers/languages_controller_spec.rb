@@ -116,16 +116,17 @@ describe LanguagesController do
       set = Sets.make
       set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
       idiom = Idiom.make
-      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      english = Language.make(:name =>"English")
+      spanish = Language.make(:name =>"Spanish")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
       set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
-      language = Language.make(:name => "English")
 
-      get :show, :id => language.id
+      get :show, :id => english.id
 
-      assigns[:language].should == language
+      assigns[:language].should == english
       assigns[:sets].count.should == 1
     end
 
@@ -135,19 +136,21 @@ describe LanguagesController do
       set2 = Sets.make
       set2_name = SetName.make(:sets_id => set2.id, :name => "my set", :description => "learn some stuff")
       idiom = Idiom.make
-      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      english = Language.make(:name =>"English")
+      spanish = Language.make(:name =>"Spanish")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
       set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
       set_term2 = SetTerms.make(:set_id => set2.id, :term_id => idiom.id)
-      language = Language.make(:name => "English")
+     
 
       UserSets.make(:user_id => @user.id, :set_id => set.id)
 
-      get :show, :id => language.id
+      get :show, :id => english.id
 
-      assigns[:language].should == language
+      assigns[:language].should == english
       assigns[:sets].count.should == 1
       assigns[:user_sets].count.should == 1
       assigns[:sets].first.id.should == set2.id
@@ -167,24 +170,23 @@ describe LanguagesController do
       set = Sets.make
       set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
       idiom = Idiom.make
-      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      english = Language.make(:name =>"English")
+      spanish = Language.make(:name =>"Spanish")
+      esperanto = Language.make(:name => "Esperanto")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
       set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
 
-      language1 = Language.make(:name => "English")
-      language2 = Language.make(:name => "Spanish")
-      language3 = Language.make(:name => "Esperanto")
-
-      UserSets.make(:user_id => @user.id, :set_id => set.id, :language_id => language1)
+      UserSets.make(:user_id => @user.id, :set_id => set.id, :language_id => english.id)
 
 
       get :select, :set_id => set.id
 
       assigns[:languages].count.should == 1
-      assigns[:languages].first.should == language2
+      assigns[:languages].first.should == spanish
       assigns[:set_id].should == set.id
     end
   end

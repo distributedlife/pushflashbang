@@ -19,6 +19,9 @@ describe Sets do
     it 'should create two translations pre card and link as an idiom' do
       @set.migrate_from_deck(@deck.id)
 
+      chinese = Language.where(:name => "Chinese (Simplified)").first
+      english = Language.where(:name => "English").first
+
       Idiom.count.should == 5
       IdiomTranslation.count.should == 10
       Translation.count.should == 10
@@ -29,9 +32,9 @@ describe Sets do
         found_back = false
         Translation.all.each do |translation|
           if translation.form == card.front
-            found_front = true if translation.language = "Chinese (Simplified)" and translation.pronunciation = card.pronunciation
+            found_front = true if translation.language_id == chinese.id and translation.pronunciation == card.pronunciation
           else
-            found_back = true if translation.language = "English" and translation.pronunciation.blank?
+            found_back = true if translation.language_id == english.id and translation.pronunciation.blank?
           end
         end
 
@@ -50,18 +53,21 @@ describe Sets do
       IdiomTranslation.count.should == 4
       Translation.count.should == 4
 
+      chinese = Language.where(:name => "Chinese (Simplified)").first
+      english = Language.where(:name => "English").first
+
       found_chinese = false
       found_english1 = false
       found_english2 = false
       found_english3 = false
       Translation.all.each do |translation|
-
-        if translation.language == "Chinese (Simplified)"
+        if translation.language_id == chinese.id
           if translation.form == cards.front and translation.pronunciation == cards.pronunciation
             found_chinese = true
           end
         end
-        if translation.language == "English"
+
+        if translation.language_id == english.id
           if translation.form == "one" and translation.pronunciation.blank?
             found_english1 = true
           end

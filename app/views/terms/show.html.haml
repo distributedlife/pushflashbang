@@ -5,14 +5,14 @@
   %span.menu= link_to t('actions.link-translation'), select_term_translations_path(params[:id]), :class => 'neutral', :method => :post
 %section{:class => ["panel left"], :style => "width: 70%"}
   #translations
-    - if @idiom_translations.empty?
+    - if @translations.empty?
       %p There are currently no translations in the system
-    - @idiom_translations.each do |idiom_translation|
+    - @translations.each do |translation|
       #translation
-        #translation{:id => idiom_translation.translation.id}
-          %span#language.subscript.contrast_faint= idiom_translation.translation.language
-          %span#form= idiom_translation.translation.form
-          - unless idiom_translation.translation.pronunciation.empty?
-            %span#pronunciation= "(#{idiom_translation.translation.pronunciation})"
+        #translation{:id => translation.id}
+          %span#language.subscript.contrast_faint= translation.languages.name
+          %span#form= translation.form
+          - unless translation.pronunciation.empty?
+            %span#pronunciation= "(#{translation.pronunciation})"
           - else
             %span#pronunciation

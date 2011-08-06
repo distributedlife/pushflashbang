@@ -313,7 +313,7 @@ input[type="submit"].negative:hover { background: $button_negative_hover; }
 input[type="submit"].neutral { background: $button_neutral; border: 1px solid $button_neutral_outline; }
 input[type="submit"].neutral:hover { background: $button_neutral_hover; }
 
-select { font-size: $font_size_small; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; display: block; }
+select { font-size: $font_size_normal; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; display: block; }
 
 .help { font-style: italics; color: $help_notice_color; }
 

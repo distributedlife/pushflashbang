@@ -12,6 +12,18 @@ class Sets < ActiveRecord::Base
 
   def migrate_from_deck deck_id
     deck = Deck.find deck_id
+    chinese = Language.where(:name => "Chinese (Simplified)")
+    if chinese.empty?
+      chinese = Language.create(:name => "Chinese (Simplified)")
+    else
+      chinese = chinese.first
+    end
+    english = Language.where(:name => "English")
+    if english.empty?
+      english = Language.create(:name => "English")
+    else
+      english = english.first
+    end
 
     index = 1
     current_chapter = 1
@@ -23,13 +35,13 @@ class Sets < ActiveRecord::Base
 
       idiom = Idiom.create
 
-      chinese_translation = Translation.create(:idiom_id => idiom.id, :language => "Chinese (Simplified)", :form => card.front, :pronunciation => card.pronunciation)
+      chinese_translation = Translation.create(:idiom_id => idiom.id, :language_id => chinese.id, :form => card.front, :pronunciation => card.pronunciation)
       IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => chinese_translation.id)
 
       card.back.split(',').each do |form|
         form.strip!
 
-        english_translation = Translation.create(:idiom_id => idiom.id, :language => "English", :form => form, :pronunciation => "")
+        english_translation = Translation.create(:idiom_id => idiom.id, :language_id => english.id, :form => form, :pronunciation => "")
         IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => english_translation.id)
       end
 

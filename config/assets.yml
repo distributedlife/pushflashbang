@@ -9,11 +9,13 @@ javascripts:
     - public/javascripts/application.js
     - public/javascripts/rails.js
     - public/javascripts/jquery.jplayer.min.js
+    - public/javascripts/chosen.jquery.js
 
 stylesheets:
   common:
     - public/stylesheets/reset.css
     - public/stylesheets/style.css
+    - public/stylesheets/chosen.css
   mobile:
     - public/stylesheets/reset.css
     - public/stylesheets/style.css

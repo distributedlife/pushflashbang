@@ -94,11 +94,14 @@ describe TranslationsController do
 
       @idiom1 = Idiom.make
       @idiom2 = Idiom.make
-      @translation1 = Translation.make(:language => "English", :form => "Zebra")
-      @translation2 = Translation.make(:language => "Spanish", :form => "Allegra")
-      @translation3 = Translation.make(:language => "Chinese", :form => "ce")
-      @translation4 = Translation.make(:language => "English", :form => "Hobo")
-      @translation5 = Translation.make(:language => "Spanish", :form => "Cabron")
+      english = Language.make(:name => "English")
+      spanish = Language.make(:name => "Spanish")
+      chinese = Language.make(:name => "Chinese")
+      @translation1 = Translation.make(:language_id => english.id, :form => "Zebra")
+      @translation2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
+      @translation3 = Translation.make(:language_id => chinese.id, :form => "ce")
+      @translation4 = Translation.make(:language_id => english.id, :form => "Hobo")
+      @translation5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
       IdiomTranslation.create(:idiom_id => @idiom1.id, :translation_id => @translation1.id)
       IdiomTranslation.create(:idiom_id => @idiom1.id, :translation_id => @translation2.id)
       IdiomTranslation.create(:idiom_id => @idiom1.id, :translation_id => @translation3.id)
@@ -109,14 +112,14 @@ describe TranslationsController do
     it 'should not return translations in the specifid idiom' do
       get :select, :term_id => @idiom2.id
 
-      assigns[:idiom_translations][0].idiom_id.should == @idiom1.id
-      assigns[:idiom_translations][0].translation_id.should == @translation3.id
-      assigns[:idiom_translations][1].idiom_id.should == @idiom1.id
-      assigns[:idiom_translations][1].translation_id.should == @translation1.id
-      assigns[:idiom_translations][2].idiom_id.should == @idiom1.id
-      assigns[:idiom_translations][2].translation_id.should == @translation2.id
+      assigns[:translations][0].idiom_translations.idiom_id.should == @idiom1.id
+      assigns[:translations][0].id.should == @translation3.id
+      assigns[:translations][1].idiom_translations.idiom_id.should == @idiom1.id
+      assigns[:translations][1].id.should == @translation1.id
+      assigns[:translations][2].idiom_translations.idiom_id.should == @idiom1.id
+      assigns[:translations][2].id.should == @translation2.id
 
-      assigns[:idiom_translations].count.should == 3
+      assigns[:translations].count.should == 3
     end
   end
 

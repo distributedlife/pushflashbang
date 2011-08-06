@@ -21,7 +21,13 @@ end
 And /^I should be on the "([^"]*)" page$/ do |page_name|
   page_symbol = string_to_class_symbol "#{page_name}_page"
 
-  on_page page_symbol, Capybara.current_session
+  on_page page_symbol, Capybara.current_session do |page|
+    unless page.is_current_page?
+      And %{show me the page}
+    end
+
+    page.is_current_page?.should be true
+  end
   
   add(:page, page)
 end

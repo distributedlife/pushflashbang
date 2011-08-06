@@ -47,6 +47,21 @@ PushFlashBang::Application.routes.draw do
       post 'learn'
       post 'unlearn'
     end
+
+    resources :sets do
+      member do
+        get 'review'
+        get 'next_chapter'
+        get 'completed'
+      end
+
+      resources :terms do
+        member do
+          get 'review'
+        end
+      end
+    end
+
   end
   
   resources :terms do

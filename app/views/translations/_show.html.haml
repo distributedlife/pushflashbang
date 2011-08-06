@@ -2,5 +2,5 @@
   %span#form= translation.form
   - unless translation.pronunciation.empty?
     %span#pronunciation= "(#{translation.pronunciation})"
-  %span#language.subscript.contrast_faint= translation.language
+  %span#language.subscript.contrast_faint= translation.languages.name
   %span{:style => "min-width: 0.3em; display:inline-block"}

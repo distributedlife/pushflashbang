@@ -30,6 +30,13 @@ Given /^the group containing "([^"]*)" is in the set "([^"]*)"$/ do |containing_
   SetTerms.create(:set_id => set.id, :term_id => idiom.id, :chapter => 1, :position => 1)
 end
 
+Given /^the group containing "([^"]*)" is in the set "([^"]*)" in chapter "([^"]*)"$/ do |containing_form, set_name, chapter|
+  set = get_set_from_name set_name
+  idiom = get_idiom_containing_form containing_form
+
+  SetTerms.create(:set_id => set.id, :term_id => idiom.id, :chapter => chapter.to_i, :position => 1)
+end
+
 Given /^the user has the "([^"]*)" set as a goal for the "([^"]*)" language$/ do |set_name, language_name|
   set = get_set_from_name set_name
   language = get_language language_name

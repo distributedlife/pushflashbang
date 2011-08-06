@@ -95,6 +95,9 @@ en:
     language-index:
       title: "All Supported languages"
       subtitle: ""
+    set-completed:
+      title: "Set Complete!"
+      subtitle: ""
     set-create:
       title: "Create set"
       subtitle: "A set represents a collection of related terms"
@@ -104,6 +107,9 @@ en:
     set-index:
       title: "All sets"
       subtitle: "A set represents a collection of related terms"
+    set-next-chapter:
+      title: "You've reached chapter %{chapter}"
+      subtitle: "Is it time to advance?"
     set-select:
       title: "Select set"
       subtitle: "The current term will be link to the selected set"
@@ -116,11 +122,14 @@ en:
     term-select:
       title: "Select term"
       subtitle: "Translation will be moved to the selected term"
+    term-review:
+      title: "Review"
+      subtitle: ""
     term-select-for-set:
       title: "Select term"
       subtitle: "Term will associated with the current set"
     translation-create:
-      title: "Create a new set of related translations"
+      title: "Create a set of related translations"
       subtitle: ""
 
 

@@ -5,9 +5,9 @@
   %span.menu= link_to t('actions.new-term'), new_term_path, :class => 'neutral'
 %section{:class => ["panel left"], :style => "width: 70%"}
   #translations
-    - @idiom_translations.each do |idiom_translation|
-      - if idiom_translation.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = idiom_translation.idiom_id
+    - @translations.each do |translation|
+      - if translation.idiom_translations.idiom_id != current_idiom and !current_idiom.nil?
+        - current_idiom = translation.idiom_translations.idiom_id
         .pad_from_top
         %span.subscript{:style => "float: right;"}
           [
@@ -17,12 +17,12 @@
           = link_to t('actions.add-to-set'), select_sets_path(:idiom_id => current_idiom), :id => "term_#{current_idiom}_add_to_set"
           ]
       #translation
-        #translation{:id => idiom_translation.translation.id}
-          %span#language.subscript.contrast_faint= idiom_translation.translation.language
-          %span#form= idiom_translation.translation.form
-          - unless idiom_translation.translation.pronunciation.empty?
-            %span#pronunciation= "(#{idiom_translation.translation.pronunciation})"
+        #translation{:id => translation.id}
+          %span#language.subscript.contrast_faint= translation.languages.name
+          %span#form= translation.form
+          - unless translation.pronunciation.empty?
+            %span#pronunciation= "(#{translation.pronunciation})"
           - else
             %span#pronunciation
-    - if @idiom_translations.empty?
+    - if @translations.empty?
       %p= t('text-no-translations')

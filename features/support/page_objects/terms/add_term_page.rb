@@ -13,13 +13,13 @@ module AddTermPage
 
   def set_translation index, hash
     @session.fill_in("translation_#{index}_form", :with => hash[:form])
-    @session.fill_in("translation_#{index}_language", :with => hash[:language])
+    @session.select(hash[:language], :from => "translation_#{index}_language_id")
     @session.fill_in("translation_#{index}_pronunciation", :with => hash[:pronunciation])
   end
 
   def form_has_hash_contents index, hash
     @session.find_field("translation_#{index}_form").value.should == hash[:form]
-    @session.find_field("translation_#{index}_language").value.should == hash[:language]
+    @session.find_field("translation_#{index}_language_id").text.should == hash[:language] unless hash[:language].blank?
     @session.find_field("translation_#{index}_pronunciation").value.should == hash[:pronunciation]
   end
 

@@ -29,7 +29,7 @@ class SetsController < ApplicationController
 
     @idiom_translations = []
     SetTerms.order(:chapter).order(:position).where(:set_id => params[:id]).each do |set|
-      IdiomTranslation.joins(:translation).order(:language).order(:form).where(:idiom_id => set.term_id).each do |idiom_translation|
+      IdiomTranslation.joins(:translation).order(:language_id).order(:form).where(:idiom_id => set.term_id).each do |idiom_translation|
         idiom_translation[:chapter] = set.chapter
         idiom_translation[:position] = set.position
         @idiom_translations << idiom_translation
@@ -257,8 +257,96 @@ class SetsController < ApplicationController
     redirect_to :back
   end
 
+  def review
+    redirect_to languages_path and return unless language_exists? params[:language_id]
+    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:id]
+
+    review_types = parse_review_types params[:review_mode]
+    redirect_to language_set_path(params[:language_id], params[:id]) and return if review_types.empty?
+
+
+    #get user set
+    user_set = UserSets.where(:set_id => params[:id], :user_id => current_user.id, :language_id => params[:language_id])
+    if user_set.empty?
+      user_set = UserSets.create(:set_id => params[:id], :user_id => current_user.id, :language_id => params[:language_id], :chapter => 1)
+    else
+      user_set = user_set.first
+    end
+
+
+    #are there cards in the set for the language?
+    unless set_has_at_least_one_idiom_for_language? params[:language_id], params[:id]
+      flash[:failure] = "This set can't be reviewed in the specified language because it has not been translated into that language"
+      redirect_to language_set_path(params[:language_id], params[:id]) and return
+    end
+
+
+    #get next due card for user
+    due_item = UserIdiomSchedule::get_next_due_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
+    unless due_item.nil?
+      # do we need to create review_types for this card?
+      review_types.each do |review_type|
+        if UserIdiomDueItems.where(:user_idiom_schedule_id => due_item.user_idiom_schedule.id, :review_type => review_type).empty?
+          UserIdiomDueItems.create(:user_idiom_schedule_id => due_item.user_idiom_schedule.id, :due => Time.now, :interval => CardTiming.get_first.seconds, :review_type => review_type)
+        end
+      end
+      redirect_to review_language_set_term_path(params[:language_id], params[:id], due_item.user_idiom_schedule.idiom_id) and return
+    end
+
+
+    #there are no due cards; can we schedule one?
+    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
+    if next_term.nil?
+      redirect_to completed_language_set_path(params[:language_id], params[:id]) and return
+    end
+
+
+    # is the next card in the next chapter? We should ask the user if they want to progress
+    if next_term.chapter > user_set.chapter
+      redirect_to next_chapter_language_set_path(params[:language_id], params[:id]) and return
+    else
+      #show the card to the user
+      scheduled_term = UserIdiomSchedule.create(:user_id => current_user.id, :language_id => params[:language_id], :idiom_id => next_term.term_id)
+      review_types.each do |review_type|
+        if UserIdiomDueItems.where(:user_idiom_schedule_id => scheduled_term.id, :review_type => review_type).empty?
+          UserIdiomDueItems.create(:user_idiom_schedule_id => scheduled_term.id, :due => Time.now, :interval => CardTiming.get_first.seconds, :review_type => review_type)
+        end
+      end
+      redirect_to review_language_set_term_path(params[:language_id], params[:id], next_term.term_id) and return
+    end
+  end
+
+  def next_chapter
+
+  end
+  
+  def completed
+    
+  end
+  
   private
   #TODO: move to domain specific helpers
+  def set_has_at_least_one_idiom_for_language? language_id, set_id
+    language_id = language_id.to_i
+    set_id = set_id.to_i
+
+    SetTerms.where(:set_id => set_id).each do |set_terms|
+      IdiomTranslation.joins(:translation).where(:idiom_id => set_terms.term_id).each do |idiom_translation|
+        begin
+          language = Language.find(idiom_translation.translation.language_id)
+        rescue
+          next
+        end
+
+        if language.id == language_id
+          return true
+        end
+      end
+    end
+
+    false
+  end
+
   def set_exists? set_id
     begin
       Sets.find(set_id)
@@ -296,5 +384,38 @@ class SetsController < ApplicationController
     rescue
       false
     end
+  end
+
+  def parse_review_types review_types
+    return [] if review_types.nil?
+    
+    review_type_nums = []
+    review_types.split(',').each do |review_type|
+      review_type = review_type.downcase
+      review_type.strip!
+
+      if review_type == 'reading'
+        review_type_nums << 1
+        next
+      end
+      if review_type == 'writing'
+        review_type_nums << 2
+        next
+      end
+      if review_type == 'typing'
+        review_type_nums << 4
+        next
+      end
+      if review_type == 'listening'
+        review_type_nums << 8
+        next
+      end
+      if review_type == 'speaking'
+        review_type_nums << 16
+        next
+      end
+    end
+
+    return review_type_nums
   end
 end

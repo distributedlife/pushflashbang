@@ -11,12 +11,16 @@ describe TermsController do
       idiom1 = Idiom.make
       idiom2 = Idiom.make
 
-      term1 = Translation.make(:language => "English", :form => "Zebra")
-      term2 = Translation.make(:language => "Spanish", :form => "Allegra")
-      term3 = Translation.make(:language => "Chinese", :form => "ce")
-      term4 = Translation.make(:language => "English", :form => "Hobo")
-      term5 = Translation.make(:language => "Spanish", :form => "Cabron")
-      term6 = Translation.make(:language => "Spanish", :form => "Abanana")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
+      term2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
+      term4 = Translation.make(:language_id => english.id, :form => "Hobo")
+      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
 
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
       IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
@@ -27,30 +31,30 @@ describe TermsController do
 
       get :index
 
-      assigns[:idiom_translations][0].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][0].translation.language.should == "Chinese"
-      assigns[:idiom_translations][0].translation.form.should == "ce"
+      assigns[:translations][0].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][0].language_id.should == chinese.id
+      assigns[:translations][0].form.should == "ce"
 
-      assigns[:idiom_translations][1].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][1].translation.language.should == "English"
-      assigns[:idiom_translations][1].translation.form.should == "Zebra"
+      assigns[:translations][1].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][1].language_id.should == english.id
+      assigns[:translations][1].form.should == "Zebra"
 
-      assigns[:idiom_translations][2].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][2].translation.language.should == "Spanish"
-      assigns[:idiom_translations][2].translation.form.should == "Cabron"
+      assigns[:translations][2].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][2].language_id.should == spanish.id
+      assigns[:translations][2].form.should == "Cabron"
 
 
-      assigns[:idiom_translations][3].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][3].translation.language.should == "English"
-      assigns[:idiom_translations][3].translation.form.should == "Hobo"
+      assigns[:translations][3].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][3].language_id.should == english.id
+      assigns[:translations][3].form.should == "Hobo"
 
-      assigns[:idiom_translations][4].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][4].translation.language.should == "Spanish"
-      assigns[:idiom_translations][4].translation.form.should == "Abanana"
+      assigns[:translations][4].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][4].language_id.should == spanish.id
+      assigns[:translations][4].form.should == "Abanana"
 
-      assigns[:idiom_translations][5].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][5].translation.language.should == "Spanish"
-      assigns[:idiom_translations][5].translation.form.should == "Allegra"
+      assigns[:translations][5].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][5].language_id.should == spanish.id
+      assigns[:translations][5].form.should == "Allegra"
     end
   end
 
@@ -65,11 +69,11 @@ describe TermsController do
 
       assigns[:translations].count.should == 2
       assigns[:translations][0].id.nil?.should be true
-      assigns[:translations][0].language.nil?.should be true
+      assigns[:translations][0].language_id.nil?.should be true
       assigns[:translations][0].form.nil?.should be true
       assigns[:translations][0].pronunciation.nil?.should be true
       assigns[:translations][1].id.nil?.should be true
-      assigns[:translations][1].language.nil?.should be true
+      assigns[:translations][1].language_id.nil?.should be true
       assigns[:translations][1].form.nil?.should be true
       assigns[:translations][1].pronunciation.nil?.should be true
     end
@@ -86,11 +90,12 @@ describe TermsController do
       IdiomTranslation.count.should == 0
       Translation.count.should == 0
 
+      l = Language.make
 
       post :create, :translation =>
         {
           "0" => {
-            :language => "alang",
+            :language_id => l.id,
             :form => "atrans",
             :pronunciation => "apro"
           }
@@ -109,16 +114,17 @@ describe TermsController do
       IdiomTranslation.count.should == 0
       Translation.count.should == 0
 
+      l = Language.make
       
       post :create, :translation =>
         {
           "0" => {
-            :language => "alang",
+            :language_id => l.id,
             :form => "atrans",
             :pronunciation => "apro"
           },
           "1" => {
-            :language => "blang",
+            :language_id => l.id,
             :form => "btrans",
             :pronunciation => "bpro"
           }
@@ -129,16 +135,16 @@ describe TermsController do
       Idiom.count.should == 1
 
       idiom = Idiom.first
-      translations = IdiomTranslation.joins(:translation).order(:language, :form, :pronunciation).all
+      translations = Translation.joins(:languages, :idiom_translations).order(:name, :form, :pronunciation).all
 
-      translations[0].idiom_id.should == idiom.id
-      translations[0].translation.language.should == "alang"
-      translations[0].translation.form.should == "atrans"
-      translations[0].translation.pronunciation.should == "apro"
-      translations[1].idiom_id.should == idiom.id
-      translations[1].translation.language.should == "blang"
-      translations[1].translation.form.should == "btrans"
-      translations[1].translation.pronunciation.should == "bpro"
+      translations[0].idiom_translations.idiom_id.should == idiom.id
+      translations[0].language_id.should == l.id
+      translations[0].form.should == "atrans"
+      translations[0].pronunciation.should == "apro"
+      translations[1].idiom_translations.idiom_id.should == idiom.id
+      translations[1].language_id.should == l.id
+      translations[1].form.should == "btrans"
+      translations[1].pronunciation.should == "bpro"
     end
 
     it 'should ignore completely empty objects' do
@@ -146,25 +152,27 @@ describe TermsController do
       IdiomTranslation.count.should == 0
       Translation.count.should == 0
 
+      l = Language.make
+
       post :create, :translation =>
         {
           "0" => {
-            :language => "alang",
+            :language_id => l.id,
             :form => "atrans",
             :pronunciation => "apro"
           },
           "1" => {
-            :language => "blang",
+            :language_id => l.id,
             :form => "btrans",
             :pronunciation => "bpro"
           },
           "2" => {
-            :language => "",
+            :language_id => "",
             :form => "",
             :pronunciation => ""
           },
           "3" => {
-            :language => nil,
+            :language_id => nil,
             :form => nil,
             :pronunciation => nil
           }
@@ -175,16 +183,16 @@ describe TermsController do
       Idiom.count.should == 1
 
       idiom = Idiom.first
-      translations = IdiomTranslation.joins(:translation).order(:language, :form, :pronunciation).all
+      translations = Translation.joins(:languages, :idiom_translations).order(:name, :form, :pronunciation).all
 
-      translations[0].idiom_id.should == idiom.id
-      translations[0].translation.language.should == "alang"
-      translations[0].translation.form.should == "atrans"
-      translations[0].translation.pronunciation.should == "apro"
-      translations[1].idiom_id.should == idiom.id
-      translations[1].translation.language.should == "blang"
-      translations[1].translation.form.should == "btrans"
-      translations[1].translation.pronunciation.should == "bpro"
+      translations[0].idiom_translations.idiom_id.should == idiom.id
+      translations[0].language_id.should == l.id
+      translations[0].form.should == "atrans"
+      translations[0].pronunciation.should == "apro"
+      translations[1].idiom_translations.idiom_id.should == idiom.id
+      translations[1].language_id.should == l.id
+      translations[1].form.should == "btrans"
+      translations[1].pronunciation.should == "bpro"
     end
 
     it 'should fail on any incomplete objects' do
@@ -192,15 +200,17 @@ describe TermsController do
       IdiomTranslation.count.should == 0
       Translation.count.should == 0
 
+      l = Language.make
+
       post :create, :translation =>
         {
           "0" => {
-            :language => "alang",
+            :language_id => l.id,
             :form => "atrans",
             :pronunciation => "apro"
           },
           "1" => {
-            :language => "blang",
+            :language_id => l.id,
             :form => "",
             :pronunciation => "bpro"
           }
@@ -224,12 +234,16 @@ describe TermsController do
       idiom1 = Idiom.make
       idiom2 = Idiom.make
 
-      term1 = Translation.make(:language => "English", :form => "Zebra")
-      term2 = Translation.make(:language => "Spanish", :form => "Allegra")
-      term3 = Translation.make(:language => "Chinese", :form => "ce")
-      term4 = Translation.make(:language => "English", :form => "Hobo")
-      term5 = Translation.make(:language => "Spanish", :form => "Cabron")
-      term6 = Translation.make(:language => "Spanish", :form => "Abanana")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
+      term2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
+      term4 = Translation.make(:language_id => english.id, :form => "Hobo")
+      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
 
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
       IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
@@ -240,17 +254,17 @@ describe TermsController do
 
       get :show, :id => idiom1.id
 
-      assigns[:idiom_translations][0].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][0].translation.language.should == "Chinese"
-      assigns[:idiom_translations][0].translation.form.should == "ce"
+      assigns[:translations][0].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][0].language_id.should == chinese.id
+      assigns[:translations][0].form.should == "ce"
 
-      assigns[:idiom_translations][1].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][1].translation.language.should == "English"
-      assigns[:idiom_translations][1].translation.form.should == "Zebra"
+      assigns[:translations][1].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][1].language_id.should == english.id
+      assigns[:translations][1].form.should == "Zebra"
 
-      assigns[:idiom_translations][2].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][2].translation.language.should == "Spanish"
-      assigns[:idiom_translations][2].translation.form.should == "Cabron"
+      assigns[:translations][2].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][2].language_id.should == spanish.id
+      assigns[:translations][2].form.should == "Cabron"
     end
 
     it 'should redirect to the show all terms path if the idiom is not found' do
@@ -293,12 +307,16 @@ describe TermsController do
       idiom1 = Idiom.make
       idiom2 = Idiom.make
 
-      term1 = Translation.make(:language => "English", :form => "Zebra")
-      term2 = Translation.make(:language => "Spanish", :form => "Allegra")
-      term3 = Translation.make(:language => "Chinese", :form => "ce")
-      term4 = Translation.make(:language => "English", :form => "Hobo")
-      term5 = Translation.make(:language => "Spanish", :form => "Cabron")
-      term6 = Translation.make(:language => "Spanish", :form => "Abanana")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
+      term2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
+      term4 = Translation.make(:language_id => english.id, :form => "Hobo")
+      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
 
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
       IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
@@ -309,17 +327,17 @@ describe TermsController do
 
       get :edit, :id => idiom1.id
 
-      assigns[:idiom_translations][0].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][0].translation.language.should == "Chinese"
-      assigns[:idiom_translations][0].translation.form.should == "ce"
+      assigns[:translations][0].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][0].language_id.should == chinese.id
+      assigns[:translations][0].form.should == "ce"
 
-      assigns[:idiom_translations][1].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][1].translation.language.should == "English"
-      assigns[:idiom_translations][1].translation.form.should == "Zebra"
+      assigns[:translations][1].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][1].language_id.should == english.id
+      assigns[:translations][1].form.should == "Zebra"
 
-      assigns[:idiom_translations][2].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][2].translation.language.should == "Spanish"
-      assigns[:idiom_translations][2].translation.form.should == "Cabron"
+      assigns[:translations][2].idiom_translations.idiom_id.should == idiom1.id
+      assigns[:translations][2].language_id.should == spanish.id
+      assigns[:translations][2].form.should == "Cabron"
     end
   end
 
@@ -331,8 +349,10 @@ describe TermsController do
 
     it 'should update the translations' do
       idiom = Idiom.make
-      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
@@ -340,13 +360,13 @@ describe TermsController do
         {
           "0" => {
             :id => translation1.id,
-            :language => "English Monkies",
+            :language_id => english.id,
             :form => "blag",
             :pronunciation => "wumpf"
           },
           "1" => {
             :id => translation2.id,
-            :language => "Espanita",
+            :language_id => spanish.id,
             :form => "blagitos",
             :pronunciation => "wumpfitos"
           }
@@ -354,10 +374,10 @@ describe TermsController do
 
       Idiom.count.should == 1
       Translation.count.should == 2
-      Translation.find(translation1.id).language.should == "English Monkies"
+      Translation.find(translation1.id).language_id.should == english.id
       Translation.find(translation1.id).form.should == "blag"
       Translation.find(translation1.id).pronunciation.should == "wumpf"
-      Translation.find(translation2.id).language.should == "Espanita"
+      Translation.find(translation2.id).language_id.should == spanish.id
       Translation.find(translation2.id).form.should == "blagitos"
       Translation.find(translation2.id).pronunciation.should == "wumpfitos"
       IdiomTranslation.count.should == 2
@@ -365,8 +385,10 @@ describe TermsController do
 
     it 'should notify user that two valid translations need to be provided' do
       idiom = Idiom.make
-      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
@@ -374,7 +396,7 @@ describe TermsController do
         {
           "0" => {
             :id => translation1.id,
-            :language => "English Monkies",
+            :language_id => english.id,
             :form => "blag",
             :pronunciation => "wumpf"
           }
@@ -392,8 +414,10 @@ describe TermsController do
 
     it 'should ignore completely empty objects' do
       idiom = Idiom.make
-      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
@@ -401,23 +425,23 @@ describe TermsController do
         {
           "0" => {
             :id => translation1.id,
-            :language => "English Monkies",
+            :language_id => english.id,
             :form => "blag",
             :pronunciation => "wumpf"
           },
           "1" => {
             :id => translation2.id,
-            :language => "Espanita",
+            :language_id => spanish.id,
             :form => "blagitos",
             :pronunciation => "wumpfitos"
           },
           "2" => {
-            :language => "",
+            :language_id => "",
             :form => "",
             :pronunciation => ""
           },
           "3" => {
-            :language => nil,
+            :language_id => nil,
             :form => nil,
             :pronunciation => nil
           }
@@ -425,10 +449,10 @@ describe TermsController do
 
       Idiom.count.should == 1
       Translation.count.should == 2
-      Translation.find(translation1.id).language.should == "English Monkies"
+      Translation.find(translation1.id).language_id.should == english.id
       Translation.find(translation1.id).form.should == "blag"
       Translation.find(translation1.id).pronunciation.should == "wumpf"
-      Translation.find(translation2.id).language.should == "Espanita"
+      Translation.find(translation2.id).language_id.should == spanish.id
       Translation.find(translation2.id).form.should == "blagitos"
       Translation.find(translation2.id).pronunciation.should == "wumpfitos"
       IdiomTranslation.count.should == 2
@@ -436,8 +460,11 @@ describe TermsController do
 
     it 'should allow for the creation of new translations' do
       idiom = Idiom.make
-      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
@@ -445,18 +472,18 @@ describe TermsController do
         {
           "0" => {
             :id => translation1.id,
-            :language => "English Monkies",
+            :language_id => english.id,
             :form => "blag",
             :pronunciation => "wumpf"
           },
           "1" => {
             :id => translation2.id,
-            :language => "Espanita",
+            :language_id => spanish.id,
             :form => "blagitos",
             :pronunciation => "wumpfitos"
           },
           "2" => {
-            :language => "Chinese",
+            :language_id => chinese.id,
             :form => "ni hao",
             :pronunciation => "hello"
           }
@@ -464,13 +491,13 @@ describe TermsController do
 
       Idiom.count.should == 1
       Translation.count.should == 3
-      Translation.find(translation1.id).language.should == "English Monkies"
+      Translation.find(translation1.id).language_id.should == english.id
       Translation.find(translation1.id).form.should == "blag"
       Translation.find(translation1.id).pronunciation.should == "wumpf"
-      Translation.find(translation2.id).language.should == "Espanita"
+      Translation.find(translation2.id).language_id.should == spanish.id
       Translation.find(translation2.id).form.should == "blagitos"
       Translation.find(translation2.id).pronunciation.should == "wumpfitos"
-      Translation.last.language.should == "Chinese"
+      Translation.last.language_id.should == chinese.id
       Translation.last.form.should == "ni hao"
       Translation.last.pronunciation.should == "hello"
       IdiomTranslation.count.should == 3
@@ -478,8 +505,10 @@ describe TermsController do
 
     it 'should fail on any incomplete objects' do
       idiom = Idiom.make
-      translation1 = Translation.make(:language => "English", :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language => "Spanish", :form => "hola", :pronunciation => "")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
       idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
 
@@ -487,13 +516,13 @@ describe TermsController do
         {
           "0" => {
             :id => translation1.id,
-            :language => "English Monkies",
+            :language_id => english.id,
             :form => "blag",
             :pronunciation => "wumpf"
           },
           "1" => {
             :id => translation2.id,
-            :language => "Espanita",
+            :language_id => spanish.id,
             :form => "",
             :pronunciation => "wumpfitos"
           }
@@ -520,12 +549,16 @@ describe TermsController do
       idiom1 = Idiom.make
       idiom2 = Idiom.make
 
-      term1 = Translation.make(:language => "English", :form => "Zebra")
-      term2 = Translation.make(:language => "Spanish", :form => "Allegra")
-      term3 = Translation.make(:language => "Chinese", :form => "ce")
-      term4 = Translation.make(:language => "English", :form => "Hobo")
-      term5 = Translation.make(:language => "Spanish", :form => "Cabron")
-      term6 = Translation.make(:language => "Spanish", :form => "Abanana")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
+      term2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
+      term4 = Translation.make(:language_id => english.id, :form => "Hobo")
+      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
 
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
       IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
@@ -537,25 +570,29 @@ describe TermsController do
       get :select, :idiom_id => idiom1.id, :translation_id => term3.id
       
 
-      assigns[:idiom_translations][0].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][0].translation.language.should == "English"
-      assigns[:idiom_translations][0].translation.form.should == "Hobo"
+      assigns[:translations][0].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][0].language_id.should == english.id
+      assigns[:translations][0].form.should == "Hobo"
 
-      assigns[:idiom_translations][1].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][1].translation.language.should == "Spanish"
-      assigns[:idiom_translations][1].translation.form.should == "Abanana"
+      assigns[:translations][1].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][1].language_id.should == spanish.id
+      assigns[:translations][1].form.should == "Abanana"
 
-      assigns[:idiom_translations][2].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][2].translation.language.should == "Spanish"
-      assigns[:idiom_translations][2].translation.form.should == "Allegra"
+      assigns[:translations][2].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][2].language_id.should == spanish.id
+      assigns[:translations][2].form.should == "Allegra"
     end
 
     it 'should redirect to terms_path if the idiom does not exist' do
       idiom1 = Idiom.make
 
-      term1 = Translation.make(:language => "English", :form => "Zebra")
-      term3 = Translation.make(:language => "Chinese", :form => "ce")
-      term5 = Translation.make(:language => "Spanish", :form => "Cabron")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
+      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
+      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
 
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term3.id)
@@ -570,9 +607,13 @@ describe TermsController do
     it 'should redirect to terms_path if the translation does not exist' do
       idiom1 = Idiom.make
 
-      term1 = Translation.make(:language => "English", :form => "Zebra")
-      term3 = Translation.make(:language => "Chinese", :form => "ce")
-      term5 = Translation.make(:language => "Spanish", :form => "Cabron")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
+      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
+      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
 
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term3.id)
@@ -595,12 +636,16 @@ describe TermsController do
       idiom1 = Idiom.make
       idiom2 = Idiom.make
 
-      t1 = Translation.make(:language => "English", :form => "Zebra")
-      t2 = Translation.make(:language => "Spanish", :form => "Allegra")
-      t3 = Translation.make(:language => "Chinese", :form => "ce")
-      t4 = Translation.make(:language => "English", :form => "Hobo")
-      t5 = Translation.make(:language => "Spanish", :form => "Cabron")
-      t6 = Translation.make(:language => "Spanish", :form => "Abanana")
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      t1 = Translation.make(:language_id => english.id, :form => "Zebra")
+      t2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
+      t3 = Translation.make(:language_id => chinese.id, :form => "ce")
+      t4 = Translation.make(:language_id => english.id, :form => "Hobo")
+      t5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
+      t6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
 
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t1.id)
       IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t3.id)
@@ -617,17 +662,17 @@ describe TermsController do
       get :select_for_set, :set_id => set.id
 
 
-      assigns[:idiom_translations][0].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][0].translation.language.should == "English"
-      assigns[:idiom_translations][0].translation.form.should == "Hobo"
+      assigns[:translations][0].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][0].language_id.should == english.id
+      assigns[:translations][0].form.should == "Hobo"
 
-      assigns[:idiom_translations][1].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][1].translation.language.should == "Spanish"
-      assigns[:idiom_translations][1].translation.form.should == "Abanana"
+      assigns[:translations][1].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][1].language_id.should == spanish.id
+      assigns[:translations][1].form.should == "Abanana"
 
-      assigns[:idiom_translations][2].idiom_id.should == idiom2.id
-      assigns[:idiom_translations][2].translation.language.should == "Spanish"
-      assigns[:idiom_translations][2].translation.form.should == "Allegra"
+      assigns[:translations][2].idiom_translations.idiom_id.should == idiom2.id
+      assigns[:translations][2].language_id.should == spanish.id
+      assigns[:translations][2].form.should == "Allegra"
     end
 
     it 'should redirect to sets_path if the set does not exist' do

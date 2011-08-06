@@ -48,7 +48,7 @@ class TranslationsController < ApplicationController
   def select
     return redirect_to terms_path unless idiom_exists? params[:term_id]
     
-    @idiom_translations = IdiomTranslation.joins(:translation).order(:idiom_id).order(:language).order(:form).where(['idiom_id != ?', params[:term_id]])
+    @translations = Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(['idiom_translations.idiom_id != ?', params[:term_id]])
   end
 
   private

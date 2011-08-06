@@ -12,6 +12,10 @@
   %body
     = yield
 
+    :javascript
+      jQuery(function($){
+        $('.chzn-select').chosen();
+      });
     %script{:type => "text/javascript"}
       :plain
         var _gaq = _gaq || [];

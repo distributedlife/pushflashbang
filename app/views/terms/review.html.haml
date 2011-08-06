@@ -1,0 +1,9 @@
+//= hidden_field_tag "start_time", 0
+//= hidden_field_tag "duration", 0
+//= hidden_field_tag "is_new", 0
+
+=render :partial => '/header', :locals => {:title => t('titles.term-review.title'), :subtitle => 'number of terms due: ...'}
+//=render :partial => '/common/notice', :locals => {:id => 'new_term_notice', :keys => ['success', 'hidden'], :value => 'This is a new card. You will not have seen it before', :with_group => true}
+
+#term{:id => "#{@term.id}"}
+  %section{:class => ["panel"]}

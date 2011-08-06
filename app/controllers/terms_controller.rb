@@ -2,13 +2,15 @@ class TermsController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @idiom_translations = IdiomTranslation.joins(:translation).order(:idiom_id).order(:language).order(:form).all
+    @translations = all_translations_sorted_correctly
   end
 
   def new
     @translations = []
     @translations << Translation.new
     @translations << Translation.new
+
+    @languages = Language.all
   end
 
   def create
@@ -19,8 +21,8 @@ class TermsController < ApplicationController
     translation_params.each do |translation|
       t = Translation.new(translation[1])
 
-      unless t.language.nil? and t.form.nil? and t.pronunciation.nil?
-        unless t.language.empty? and t.form.empty? and t.pronunciation.empty?
+      unless t.language_id.nil? and t.form.nil? and t.pronunciation.nil?
+        unless t.form.empty? and t.pronunciation.empty?
           @translations << t
           if t.valid?
           else
@@ -53,6 +55,8 @@ class TermsController < ApplicationController
 
 
     flash[:failure] = "All translations need to be complete" if flash[:failure].nil?
+
+    @languages = Language.all
   end
 
   def update
@@ -69,8 +73,8 @@ class TermsController < ApplicationController
         t = Translation.new(translation[1])
       end
 
-      unless t.language.nil? and t.form.nil? and t.pronunciation.nil?
-        unless t.language.empty? and t.form.empty? and t.pronunciation.empty?
+      unless t.language_id.nil? and t.form.nil? and t.pronunciation.nil?
+        unless t.language_id == 0 and t.form.empty? and t.pronunciation.empty?
           @translations << t
           if t.valid?
           else
@@ -104,6 +108,8 @@ class TermsController < ApplicationController
 
 
     flash[:failure] = "All translations need to be complete" if flash[:failure].nil?
+
+    @languages = Language.all
   end
 
   def add_translation
@@ -120,32 +126,62 @@ class TermsController < ApplicationController
     
     @idiom = Idiom.find(params[:id])
     get_idiom_translations
+
+    @languages = Language.all
   end
 
   def select
     return redirect_to terms_path unless idiom_exists? params[:idiom_id]
     return redirect_to terms_path unless translation_exists? params[:translation_id]
 
-    @idiom_translations = IdiomTranslation.joins(:translation).order(:idiom_id).order(:language).order(:form).where(['idiom_id != ?', params[:idiom_id]])
+    @translations = Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(['idiom_translations.idiom_id != ?', params[:idiom_id]])
   end
 
   def select_for_set
     redirect_to sets_path and return unless set_exists? params[:set_id]
 
-    @idiom_translations = []
-    IdiomTranslation.joins(:translation).order(:idiom_id).order(:language).order(:form).all.each do |idiom_translation|
-      next if SetTerms.where(:set_id => params[:set_id], :term_id => idiom_translation.idiom_id).count > 0
+    @translations = []
+    all_translations_sorted_correctly.each do |translation|
+      next if SetTerms.where(:set_id => params[:set_id], :term_id => translation.idiom_translations.idiom_id).count > 0
 
-      @idiom_translations << idiom_translation
+      @translations << translation
+    end
+  end
+
+  def review
+    begin
+#      return redirect_to terms_path unless idiom_exists? params[:idiom_id]
+#      ap params[:language_id]
+#      ap params[:set_id]
+#      ap params[:id]
+      @term = Idiom.find(params[:id])
+
+#      @deck = Deck.find(params[:deck_id])
+#      @card = Card.find(params[:id])
+
+      #create a scheduled card entry if one does not exist
+#      scheduled_card = UserCardSchedule::where(:user_id => current_user.id, :card_id => params[:id])
+#      if scheduled_card.empty?
+#        scheduled_card = UserCardSchedule.create(:user_id => current_user.id, :card_id => params[:id], :due => Time.now, :interval => 0)
+#      end
+
+      if detect_browser == "mobile_application"
+        render "learn.mobile"
+      end
+    rescue
     end
   end
   
   private
+  def all_translations_sorted_correctly
+    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).all
+  end
+
   def get_idiom_translations
     if idiom_exists? params[:id]
-      @idiom_translations = IdiomTranslation.joins(:translation).order(:idiom_id).order(:language).order(:form).where(:idiom_id => params[:id])
+      @translations = Translation.joins(:languages, :idiom_translations).order(:name).order(:form).where(:idiom_translations => {:idiom_id => params[:id]})
 
-      if @idiom_translations.empty?
+      if @translations.empty?
         flash[:failure] = "The term you were looking has no translations"
         redirect_to terms_path
       end

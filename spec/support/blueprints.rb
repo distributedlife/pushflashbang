@@ -31,7 +31,6 @@ Sham.define do
   result_success(:unique => false) {'good'}
 
   #terms and idioms
-  language(:unique => false) {'English'}
   form(:unique => false) {Faker::Lorem.sentence(4)}
 end
 
@@ -93,7 +92,7 @@ Idiom.blueprint do
 end
 
 Translation.blueprint do
-  language
+  language_id
   form
   pronunciation
 end

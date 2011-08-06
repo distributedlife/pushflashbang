@@ -2,17 +2,17 @@
 #translations
   %section{:class => ["panel"]}
     = semantic_form_for(@idiom, :url => term_path(@idiom.id), :method => :put) do |form|
-      - @idiom_translations.each_with_index do |idiom_translation, i|
+      - @translations.each_with_index do |translation, i|
         #translation{:id => i}
           %p.minor_title= "#{t('text.header-translation-count')} #{i + 1}"
-          = semantic_fields_for "translation[#{i}]", idiom_translation.translation do |f|
-            = render :partial => 'edit_term_form', :locals => {:translation => idiom_translation.translation, :i => i, :f => f}
-            = link_to I18n.t('actions.move-translation'), select_terms_path(:idiom_id => idiom_translation.idiom_id, :translation_id => idiom_translation.translation_id), :class => 'neutral', :method => :post, :id => "translation_#{i}_move"
-            = link_to I18n.t('actions.delete-translation'), term_translation_path(idiom_translation.idiom_id, idiom_translation.translation_id), :class => 'negative', :method => :delete, :id => "translation_#{i}_delete"
+          = semantic_fields_for "translation[#{i}]", translation do |f|
+            = render :partial => 'edit_term_form', :locals => {:translation => translation, :i => i, :f => f}
+            = link_to I18n.t('actions.move-translation'), select_terms_path(:idiom_id => translation.idiom_translations.idiom_id, :translation_id => translation.id), :class => 'neutral', :method => :post, :id => "translation_#{i}_move"
+            = link_to I18n.t('actions.delete-translation'), term_translation_path(translation.idiom_translations.idiom_id, translation.id), :class => 'negative', :method => :delete, :id => "translation_#{i}_delete"
             .pad_from_top
             .pad_from_top
-      #translation{:id => @idiom_translations.count}
-        = link_to I18n.t('translation.create.labels.add_translation'), add_translation_terms_path(:i => @idiom_translations.count), :class => 'neutral', :method => :post, :remote => :true
+      #translation{:id => @translations.count}
+        = link_to I18n.t('translation.create.labels.add_translation'), add_translation_terms_path(:i => @translations.count), :class => 'neutral', :method => :post, :remote => :true
         .pad_from_top
         .pad_from_top
 

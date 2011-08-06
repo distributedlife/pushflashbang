@@ -15,3 +15,7 @@ World(IdiomComponent)
 World(TranslationComponent)
 World(LanguageComponent)
 World(SetComponent)
+
+
+Akephalos.filter(:get, "http://www.google-analytics.com")
+Akephalos.filter(:get, "https://ssl.google-analytics.com")

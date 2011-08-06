@@ -51,7 +51,6 @@ class DeckController < ApplicationController
       if deck_is_valid?
         @deck = Deck.find(params[:id])
         @chapters = @deck.get_chapters
-#        @cards = Card.order(:chapter).order(:created_at).where(:deck_id => params[:id])
       end
     rescue
     end
