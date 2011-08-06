@@ -12,6 +12,6 @@
     %span= t('text.header-things')
     %span.subscript
       [
-      =link_to t('actions.add'), '/deck', :method => :get, :class => 'contrast', :id => "add_deck"
+      =link_to t('actions.add'), new_deck_path, :method => :post, :class => 'contrast', :id => "add_deck"
       ]
   =render :partial => '/deck/user_decks', :locals => {:decks => @decks}

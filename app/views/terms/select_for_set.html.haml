@@ -2,7 +2,7 @@
 
 =render :partial => '/header', :locals => {:title => t('titles.term-select-for-set.title'), :subtitle => t('titles.term-select-for-set.subtitle')}
 %section{:class => ["panel right"], :style => "width: 15%"}
-  %span.menu= link_to t('actions.cancel'), sets_path
+  %span.menu= link_to t('actions.cancel'), set_path(params[:set_id])
 %section{:class => ["panel left"], :style => "width: 70%"}
   #translations
     - @translations.each_with_index do |translation, i|
@@ -11,7 +11,7 @@
         .pad_from_top
         %span.subscript{:style => "float: right;"}
           [
-          = link_to t('actions.add-to-set'), add_term_set_path(:id => params[:set_id], :idiom_id => current_idiom), :class => 'neutral', :method => :put, :id => "term_#{current_idiom}_select"
+          = link_to t('actions.add-to-set'), add_to_set_set_set_term_path(params[:set_id], current_idiom), :class => 'neutral', :method => :put, :id => "term_#{current_idiom}_select"
           ]
       #translation{:id => i}
         %span#language.subscript.contrast_faint= translation.languages.name

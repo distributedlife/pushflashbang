@@ -7,12 +7,15 @@
   - @user_sets.each do |set|
     #set{:id => set.id, :class => 'panel'}
       - set.set_name.each do |set_name|
-        %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, set_path(set.id)
+        %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, language_set_path(@language.id, set.id)
         %span{:id => "set_#{set.id}_description"}= set_name.description
         .pad_from_top
         %span.subscript{:style => "float: right;"}
+          //[
+          //%span.menu= link_to t('actions.review'), review_language_set_path(@language.id, set.id), :class => 'positive', :id => "review_#{set.id}", :method => :get
+          //]
           [
-          %span.menu= link_to t('actions.unset-goal'), unset_goal_set_path(set.id), :class => 'neutral', :id => "unset_#{set.id}_goal", :method => :put
+          %span.menu= link_to t('actions.unset-goal'), unset_goal_language_set_path(@language.id, set.id), :class => 'neutral', :id => "unset_#{set.id}_goal", :method => :put
           ]
         .pad_from_top
 #available_sets
@@ -23,11 +26,11 @@
   - @sets.each do |set|
     #set{:id => set.id, :class => 'panel'}
       - set.set_name.each do |set_name|
-        %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, set_path(set.id)
+        %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, language_set_path(@language.id, set.id)
         %span{:id => "set_#{set.id}_description"}= set_name.description
         .pad_from_top
         %span.subscript{:style => "float: right;"}
           [
-          %span.menu= link_to t('actions.set-goal'), set_goal_set_path(set.id), :class => 'neutral', :id => "set_#{set.id}_goal", :method => :put
+          %span.menu= link_to t('actions.set-goal'), set_goal_language_set_path(@language.id, set.id), :class => 'neutral', :id => "set_#{set.id}_goal", :method => :put
           ]
         .pad_from_top

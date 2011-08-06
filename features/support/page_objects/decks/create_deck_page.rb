@@ -5,7 +5,7 @@ module CreateDeckPage
 
   def navigate_to
     @session.visit "/users"
-    @session.click_on "new deck"
+    @session.find_link("add_deck").click
   end
 
   def is_current_page?

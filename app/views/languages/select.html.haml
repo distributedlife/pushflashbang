@@ -1,5 +1,6 @@
-=render :partial => '/header', :locals => {:title => t('titles.language-index.title'), :subtitle => t('titles.language-index.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.language-select.title'), :subtitle => t('titles.language-select.subtitle')}
 #languages
   - @languages.each do |language|
-    #language{:id => language.id, :class => "panel"}
-      %span= link_to language.name, set_goal_set_path(@set_id, :language_id => language.id, :redirect_to => "sets"), :id => "language_#{language.id}_select", :method => :put
+    #language{:id => language.id}
+      .panel
+        %span= link_to language.name, set_goal_language_set_path(language.id, @set_id, :redirect_to => "sets"), :id => "language_#{language.id}_select", :method => :put

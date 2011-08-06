@@ -58,5 +58,6 @@ group :development, :test do
   gem 'bermuda'
   gem 'blueprints'
   gem 'fakeweb'
+  gem 'silent-postgres'
 #  gem 'capybara-webkit'
 end

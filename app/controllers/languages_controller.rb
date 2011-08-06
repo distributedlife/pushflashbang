@@ -4,8 +4,8 @@ class LanguagesController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @languages = Language.all
-    @user_languages = UserLanguages.joins(:language).where(:user_id => current_user.id)
+    @languages = Language.order(:name).all
+    @user_languages = UserLanguages.order(:name).joins(:language).where(:user_id => current_user.id)
   end
 
   def learn
@@ -52,24 +52,29 @@ class LanguagesController < ApplicationController
   end
 
   def select
+    set_id = params[:set_id]
     @languages = []
     languages = []
-    SetTerms.where(:set_id => params[:set_id]).each do |set_terms|
+    SetTerms.where(:set_id => set_id).each do |set_terms|
+      ap set_terms
       IdiomTranslation.joins(:translation).where(:idiom_id => set_terms.term_id).each do |idiom_translation|
+        ap idiom_translation
+
         language = Language.where(:id => idiom_translation.translation.language_id)
         next if language.empty?
-          
+
+        ap language
         language = language.first
         if languages[language.id].nil?
           languages[language.id] = language.id
             
-          if UserSets.where(:set_id => params[:set_id], :user_id => current_user.id, :language_id => language.id).empty?
+          if UserSets.where(:set_id => set_id, :user_id => current_user.id, :language_id => language.id).empty?
             @languages << language
           end
         end
       end
     end
 
-    @set_id = params[:set_id]
+    @set_id = set_id
   end
 end

@@ -9,7 +9,7 @@
           #set_name{:id => set_name.id}
             %span.subscript{:style => "float: right;"}
               [
-              = link_to t('actions.select-set'), add_term_set_path(set.id, :idiom_id => @idiom_id), :id => "set_#{set.id}_add_term", :method => :put
+              = link_to t('actions.select-set'), add_to_set_set_set_term_path(set.id, @idiom_id), :id => "set_#{set.id}_add_term", :method => :put
               ]
             %span#name{:style => "display: inline-block;"}= set_name.name
             %span#description{:class => "description", :style => "display: inline-block;"}= set_name.description

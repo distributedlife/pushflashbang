@@ -14,7 +14,7 @@
           = link_to t('actions.edit-term'), edit_term_path(current_idiom)
           ]
           [
-          = link_to t('actions.add-to-set'), select_sets_path(:idiom_id => current_idiom), :id => "term_#{current_idiom}_add_to_set"
+          = link_to t('actions.add-to-set'), select_term_term_sets_path(current_idiom), :id => "term_#{current_idiom}_add_to_set"
           ]
       #translation
         #translation{:id => translation.id}

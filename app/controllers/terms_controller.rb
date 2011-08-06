@@ -43,9 +43,17 @@ class TermsController < ApplicationController
         IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => to.id)
       end
 
-      link = self.class.helpers.link_to('Click here to view.', edit_term_path(idiom.id))
+      link = self.class.helpers.link_to('Click here to edit.', edit_term_path(idiom.id))
       flash[:success] = "Related terms created. #{link}"
-      redirect_to new_term_path and return
+
+      #if we have a set_id. we should link the term to that set
+      if params[:set_id]
+        add_term_to_set params[:set_id], idiom.id
+        
+        redirect_to new_set_set_term_path(params[:set_id]) and return
+      else
+        redirect_to new_term_path and return
+      end
     end
 
     while @translations.count < 2
@@ -138,11 +146,12 @@ class TermsController < ApplicationController
   end
 
   def select_for_set
-    redirect_to sets_path and return unless set_exists? params[:set_id]
+    set_id = params[:set_id]
+    redirect_to sets_path and return unless set_exists? set_id
 
     @translations = []
     all_translations_sorted_correctly.each do |translation|
-      next if SetTerms.where(:set_id => params[:set_id], :term_id => translation.idiom_translations.idiom_id).count > 0
+      next if SetTerms.where(:set_id => set_id, :term_id => translation.idiom_translations.idiom_id).count > 0
 
       @translations << translation
     end
@@ -171,8 +180,130 @@ class TermsController < ApplicationController
     rescue
     end
   end
+
+  def add_to_set
+    set_id = params[:set_id]
+    term_id = params[:id]
+    redirect_to user_index_path and return unless set_exists? set_id
+    redirect_to user_index_path and return unless idiom_exists? term_id
+
+    add_term_to_set set_id, term_id
+
+    redirect_to set_path(set_id)
+  end
+
+  def remove_from_set
+    set_id = params[:set_id]
+    term_id = params[:id]
+    redirect_to user_index_path and return unless set_exists? set_id
+    redirect_to user_index_path and return unless idiom_exists? term_id
+
+    SetTerms.where(:set_id => set_id, :term_id => term_id).each do |set_term|
+      set_term.delete
+    end
+
+    redirect_to set_path(set_id)
+  end
+
+  def next_chapter
+    set_id = params[:set_id]
+    term_id = params[:id]
+    redirect_to sets_path and return unless set_exists? set_id
+    redirect_to set_path(set_id) and return unless idiom_exists? term_id
+
+    set_term = SetTerms.where(:set_id => set_id, :term_id => term_id)
+    redirect_to set_path(set_id) and return if set_term.empty?
+
+    existing_chapter = set_term.first.chapter
+    set_term.first.chapter = set_term.first.chapter + 1
+    set_term.first.save
+
+    if SetTerms.where(:set_id => set_id, :chapter => existing_chapter).empty?
+      SetTerms::decrement_chapters_for_set_after_chapter set_id, existing_chapter
+    end
+
+    redirect_to set_path(set_id)
+  end
+
+  def prev_chapter
+    set_id = params[:set_id]
+    term_id = params[:id]
+    redirect_to sets_path and return unless set_exists? set_id
+    redirect_to set_path(set_id) and return unless idiom_exists? term_id
+
+    set_term = SetTerms.where(:set_id => set_id, :term_id => term_id)
+    redirect_to set_path(set_id) and return if set_term.empty?
+
+    set_term.first.chapter = set_term.first.chapter - 1
+    set_term.first.save
+
+    if set_term.first.chapter == 0
+      SetTerms::increment_chapters_for_set set_id
+    end
+
+    redirect_to set_path(set_id)
+  end
+
+  def next_position
+    set_id = params[:set_id]
+    term_id = params[:id]
+    redirect_to sets_path and return unless set_exists? set_id
+    redirect_to set_path(set_id) and return unless idiom_exists? term_id
+
+    set_term = SetTerms.where(:set_id => set_id, :term_id => term_id)
+    redirect_to set_path(set_id) and return if set_term.empty?
+
+
+    current_position = set_term.first.position
+    next_term = SetTerms.where(:set_id => set_id, :chapter => set_term.first.chapter, :position => current_position + 1)
+
+    unless next_term.empty?
+      set_term.first.position = set_term.first.position + 1
+      next_term.first.position = next_term.first.position - 1
+
+      set_term.first.save
+      next_term.first.save
+    end
+
+    redirect_to set_path(set_id)
+  end
+
+  def prev_position
+    set_id = params[:set_id]
+    term_id = params[:id]
+    redirect_to sets_path and return unless set_exists? set_id
+    redirect_to set_path(set_id) and return unless idiom_exists? term_id
+
+    set_term = SetTerms.where(:set_id => set_id, :term_id => term_id)
+    redirect_to set_path(set_id) and return if set_term.empty?
+
+
+    current_position = set_term.first.position
+    prev_term = SetTerms.where(:set_id => set_id, :chapter => set_term.first.chapter, :position => current_position - 1)
+
+    unless prev_term.empty?
+      set_term.first.position = set_term.first.position - 1
+      prev_term.first.position = prev_term.first.position + 1
+
+      set_term.first.save
+      prev_term.first.save
+    end
+
+    redirect_to set_path(set_id)
+  end
   
   private
+  def add_term_to_set set_id, term_id
+    if SetTerms.where(:set_id => set_id, :term_id => term_id).empty?
+      max_position = SetTerms.where(:set_id => set_id).maximum(:position)
+      max_position ||= 0
+      max_chapter = SetTerms.where(:set_id => set_id).maximum(:chapter)
+      max_chapter ||= 1
+
+      SetTerms.create(:set_id => set_id, :term_id => term_id, :chapter => max_chapter, :position => max_position + 1)
+    end
+  end
+
   def all_translations_sorted_correctly
     Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).all
   end
