@@ -163,8 +163,8 @@
     //  }
     //});
 
-    //var is_new = document.getElementById("is_new") ;
-    //is_new.value = false ;
+    var is_new = document.getElementById("is_new") ;
+    is_new.value = false ;
 
 
     //$.ajax({
@@ -180,8 +180,9 @@
     var end = new Date();
     var start_time = document.getElementById("start_time") ;
     var duration = document.getElementById("duration") ;
-    var card_answer = document.getElementById("card_answer") ;
-    var user_answer = document.getElementById("card_front") ;
+    //var card_answer = document.getElementById("card_answer") ;
+    var card_answer = document.getElementById("term_typed_answer") ;
+    var user_answer = document.getElementById("translation_form") ;
     var is_new = document.getElementById("is_new") ;
 
     duration.value = end - start_time.value;
@@ -197,7 +198,7 @@
         //highlight buttons based on typed answer
         if (user_answer)
         {
-          if (card_answer.innerHTML == user_answer.value)
+          if (card_answer.value == user_answer.value)
           {
             $('#do_good').attr('class', positive_style)
             $("#do_good").focus();
@@ -224,7 +225,7 @@
         //highlight buttons based on typed answer
         if (user_answer)
         {
-          if (card_answer.innerHTML == user_answer.value)
+          if (card_answer.value == user_answer.value)
           {
             $('#do_shaky_good').attr('class', positive_style)
             $("#do_shaky_good").focus();

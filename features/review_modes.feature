@@ -17,7 +17,7 @@ Feature: review modes
     And the user has the "greetings" set as a goal for the "Spanish" language
 
   Scenario: selecting a review mode of "listening" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "listening" review mode
+    When I review the"greetings" set in "Spanish" using the "listening" review mode
     Then the before the reveal the audio is displayed
     And before the reveal the native language is not displayed
     And before the reveal the learned language is not displayed
@@ -26,7 +26,7 @@ Feature: review modes
     And after the reveal the learned language is displayed
 
   Scenario: selecting a review mode of "listen and write" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "listen and writing" review mode
+    When I review the"greetings" set in "Spanish" using the "listen and writing" review mode
     Then the before the reveal the audio is displayed
     And before the reveal the native language is not displayed
     And before the reveal the learned language is not displayed
@@ -35,7 +35,7 @@ Feature: review modes
     And after the reveal the learned language is displayed
 
   Scenario: selecting a review mode of "listen and type" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "listen and typing" review mode
+    When I review the"greetings" set in "Spanish" using the "listen and typing" review mode
     Then the before the reveal the audio is displayed
     And the text answer input control is shown
     And before the reveal the native language is not displayed
@@ -44,7 +44,7 @@ Feature: review modes
     And after the reveal the learned language is displayed
 
   Scenario: selecting a review mode of "reading" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "reading" review mode
+    When I review the"greetings" set in "Spanish" using the "reading" review mode
     Then before the reveal the learned language is displayed
     And before the reveal the audio is not displayed
     And before the reveal the native language is not displayed
@@ -53,7 +53,7 @@ Feature: review modes
     And after the reveal the audio is displayed
 
   Scenario: selecting a review mode of "read and speak" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "reading and speaking" review mode
+    When I review the"greetings" set in "Spanish" using the "reading and speaking" review mode
     Then before the reveal the learned language is displayed
     And before the reveal the audio is not displayed
     And before the reveal the native language is not displayed
@@ -62,7 +62,7 @@ Feature: review modes
     And after the reveal the audio is displayed
 
   Scenario: selecting a review mode of "read, speak and type" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "reading, speaking and typing" review mode
+    When I review the"greetings" set in "Spanish" using the "reading, speaking and typing" review mode
     Then before the reveal the learned language is displayed
     And before the reveal the audio is not displayed
     And before the reveal the native language is not displayed
@@ -71,7 +71,7 @@ Feature: review modes
     And after the reveal the audio is displayed
 
   Scenario: selecting a review mode of "speaking" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "speaking" review mode
+    When I review the"greetings" set in "Spanish" using the "speaking" review mode
     Then before the reveal the native language is displayed
     And before the reveal the audio is not displayed
     And before the reveal the learned language is not displayed
@@ -80,7 +80,7 @@ Feature: review modes
     And after the reveal the audio is displayed
 
   Scenario: selecting a review mode of "speak and write" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "speaking and writing" review mode
+    When I review the"greetings" set in "Spanish" using the "speaking and writing" review mode
     Then before the reveal the native language is displayed
     And before the reveal the audio is not displayed
     And before the reveal the learned language is not displayed
@@ -89,7 +89,7 @@ Feature: review modes
     And after the reveal the audio is displayed
 
   Scenario: selecting a review mode of "speak and type" sets the correct review types
-    When review the "greetings" set in "Spanish" using the "speaking and typing" review mode
+    When I review the"greetings" set in "Spanish" using the "speaking and typing" review mode
     Then before the reveal the native language is displayed
     And before the reveal the audio is not displayed
     And before the reveal the learned language is not displayed

@@ -22,6 +22,12 @@ Given /^the term containing "([^"]*)" in "([^"]*)" is scheduled but not due$/ do
   UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 16, :interval => CardTiming.first.seconds)
 end
 
+Given /^I typed "([^"]*)" in as the answer$/ do |answer|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.set_text_answer answer
+  end
+end
+
 
 ################################################################################
 ################################################################################
@@ -53,7 +59,7 @@ When /^I review the "([^"]*)" set in "([^"]*)" using the following proficiences:
   goto_page :ReviewSetPage, Capybara.current_session, sut
 end
 
-When /^review the "([^"]*)" set in "([^"]*)" using the "([^"]*)" review mode$/ do |set_name, language_name, review_mode|
+When /^I review the "([^"]*)" set in "([^"]*)" using the "([^"]*)" review mode$/ do |set_name, language_name, review_mode|
   add(:set, get_set_from_name(set_name))
   add(:language, get_language(language_name))
 
@@ -61,6 +67,22 @@ When /^review the "([^"]*)" set in "([^"]*)" using the "([^"]*)" review mode$/ d
     page.select_review_mode review_mode
   end
 end
+
+When /^I reveal the answer I will be told I am correct$/ do
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.reveal!
+    page.is_answer_correct?.should be true
+  end
+end
+
+When /^I reveal the answer I will be told I am incorrect$/ do
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.reveal!
+    page.is_answer_incorrect?.should be true
+  end
+end
+
+
 
 ################################################################################
 ################################################################################

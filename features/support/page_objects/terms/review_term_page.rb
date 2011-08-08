@@ -54,6 +54,18 @@ module ReviewTermPage
     does_one_element_of_set_contain '.learned_form', form
   end
 
+  def set_text_answer answer
+    @session.fill_in("translation_form", :with => answer)
+  end
+
+  def is_answer_correct?
+    @session.has_content? "is correct"
+  end
+
+  def is_answer_incorrect?
+    @session.has_content? "is not correct"
+  end
+
   private
   def does_one_element_of_set_contain element, set
     found = false

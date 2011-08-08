@@ -92,32 +92,13 @@ Feature: review terms
     Then I should be on the "completed set" page
 
 
-
-  #make sure the page is formatting correctly
-#  Scenario: front is audio when listening review type is set
-#
-#  Scenario: front is learning when reading review type is set
-#
-#  Scenario: front is native when neither reading nor listening review type is set
-#
-#  Scenario: back is native when review type is listening
-#
-#  Scenario: back is native when review type is reading
-#
-#  Scenario: back is learning when review type is writing
-#
-#  Scenario: back is learning when review type is typing
-
-  # handling audio edge cases
-#  Scenario: back is audio when review type is not listening and audio exists
-#
-#  Scenario: no audio on back is shown when type is not listening and no audio exists
-#
-#  Scenario: listening review without audio tells user and shows skip to next card
-
   # handling typing correctly
-#  Scenario: typing review shows typing answer space on front
-#
-#  Scenario: typing review handles correct answer and compares to native
-#
-#  Scenario: typing review handles incorrect answer and compares to native
+  Scenario: typing review handles correct answer and compares to native
+    Given I review the "greetings" set in "Spanish" using the "speaking and typing" review mode
+    And I typed "un poco de" in as the answer
+    When I reveal the answer I will be told I am correct
+
+  Scenario: typing review handles incorrect answer and compares to native
+    Given I review the "greetings" set in "Spanish" using the "speaking and typing" review mode
+    And I typed "bajo" in as the answer
+    When I reveal the answer I will be told I am incorrect
