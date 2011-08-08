@@ -47,10 +47,6 @@ PushFlashBang::Application.routes.draw do
   end
 
   resources :languages do
-#    collection do
-#      get 'select'
-#    end
-
     resources :sets do
       member do
         get 'review'

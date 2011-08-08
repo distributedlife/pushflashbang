@@ -186,7 +186,7 @@ class SetsController < ApplicationController
           UserIdiomDueItems.create(:user_idiom_schedule_id => due_item.user_idiom_schedule.id, :due => Time.now, :interval => CardTiming.get_first.seconds, :review_type => review_type)
         end
       end
-      redirect_to review_language_set_term_path(params[:language_id], params[:id], due_item.user_idiom_schedule.idiom_id) and return
+      redirect_to review_language_set_term_path(params[:language_id], params[:id], due_item.user_idiom_schedule.idiom_id, :review_mode => params[:review_mode]) and return
     end
 
 
@@ -208,7 +208,7 @@ class SetsController < ApplicationController
           UserIdiomDueItems.create(:user_idiom_schedule_id => scheduled_term.id, :due => Time.now, :interval => CardTiming.get_first.seconds, :review_type => review_type)
         end
       end
-      redirect_to review_language_set_term_path(params[:language_id], params[:id], next_term.term_id) and return
+      redirect_to review_language_set_term_path(params[:language_id], params[:id], next_term.term_id, :review_mode => params[:review_mode]) and return
     end
   end
 

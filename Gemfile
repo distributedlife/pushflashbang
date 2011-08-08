@@ -59,5 +59,5 @@ group :development, :test do
   gem 'blueprints'
   gem 'fakeweb'
   gem 'silent-postgres'
-#  gem 'capybara-webkit'
+  gem 'capybara-webkit'
 end

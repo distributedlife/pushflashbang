@@ -159,20 +159,41 @@ class TermsController < ApplicationController
 
   def review
     begin
-#      return redirect_to terms_path unless idiom_exists? params[:idiom_id]
-#      ap params[:language_id]
-#      ap params[:set_id]
-#      ap params[:id]
+      english = Language.where(:name => "English").first
+      ap english
+      
+      return language_set_path(params[:language_id], params[:set_id]) unless idiom_exists? params[:id]
+
       @term = Idiom.find(params[:id])
 
-#      @deck = Deck.find(params[:deck_id])
-#      @card = Card.find(params[:id])
+      # get all translations in the term, that match the learned language
+      @learned_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
 
-      #create a scheduled card entry if one does not exist
-#      scheduled_card = UserCardSchedule::where(:user_id => current_user.id, :card_id => params[:id])
-#      if scheduled_card.empty?
-#        scheduled_card = UserCardSchedule.create(:user_id => current_user.id, :card_id => params[:id], :due => Time.now, :interval => 0)
-#      end
+      # get all translations in the term, that match the users native language
+      @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => english.id, :idiom_translations => {:idiom_id => params[:id]})
+
+      @audio = "back"
+      @typed = false
+      @native = "not set"
+      @learned = "not set"
+      if params[:review_mode]["listening"]
+        @audio = "front"
+        @native = "back"
+        @learned = "back"
+      end
+      if params[:review_mode]["reading"]
+        @learned = "front"
+        @native = "back"
+      end
+      if params[:review_mode]["speaking"]
+        unless params[:review_mode]["listening"] and params[:review_mode]["reading"]
+          @learned = "back"
+          @native = "front"
+        end
+      end
+      if params[:review_mode]["typing"]
+        @typed = true
+      end
 
       if detect_browser == "mobile_application"
         render "learn.mobile"

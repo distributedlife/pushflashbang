@@ -551,7 +551,7 @@ describe SetsController do
       get :review, :language_id => @language.id, :id => @set.id, :review_mode => 'reading'
 
       response.should be_redirect
-      response.should redirect_to review_language_set_term_path(@language.id, @set.id, @idiom1.id)
+      response.should redirect_to review_language_set_term_path(@language.id, @set.id, @idiom1.id, :review_mode => "reading")
     end
 
     it 'should schedule the next unscheduled term for the specified review types when there are no due terms' do

@@ -10,13 +10,29 @@
         %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, language_set_path(@language.id, set.id)
         %span{:id => "set_#{set.id}_description"}= set_name.description
         .pad_from_top
-        %span.subscript{:style => "float: right;"}
-          //[
-          //%span.menu= link_to t('actions.review'), review_language_set_path(@language.id, set.id), :class => 'positive', :id => "review_#{set.id}", :method => :get
-          //]
-          [
-          %span.menu= link_to t('actions.unset-goal'), unset_goal_language_set_path(@language.id, set.id), :class => 'neutral', :id => "unset_#{set.id}_goal", :method => :put
-          ]
+        %p
+          Practice:
+          %span.menu= link_to t('actions.review-listening'), review_language_set_path(@language.id, set.id, :review_mode => 'listening'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
+          or
+          %span.menu= link_to t('actions.review-listen-write'), review_language_set_path(@language.id, set.id, :review_mode => 'listening, writing'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
+          or
+          %span.menu= link_to t('actions.review-listen-type'), review_language_set_path(@language.id, set.id, :review_mode => 'listening, typing'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
+        .pad_from_top
+        %p
+          Practice:
+          %span.menu= link_to t('actions.review-reading'), review_language_set_path(@language.id, set.id, :review_mode => 'reading'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
+          or
+          %span.menu= link_to t('actions.review-read-speak'), review_language_set_path(@language.id, set.id, :review_mode => 'reading, speaking'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
+          or
+          %span.menu= link_to t('actions.review-read-speak-type'), review_language_set_path(@language.id, set.id, :review_mode => 'reading, speaking, typing'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
+        %p
+        .pad_from_top
+          Practice:
+          %span.menu= link_to t('actions.review-speaking'), review_language_set_path(@language.id, set.id, :review_mode => 'speaking'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
+          or
+          %span.menu= link_to t('actions.review-speak-write'), review_language_set_path(@language.id, set.id, :review_mode => 'speaking, writing'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
+          or
+          %span.menu= link_to t('actions.review-speak-type'), review_language_set_path(@language.id, set.id, :review_mode => 'speaking, typing'), :class => 'contrast', :id => "review_#{set.id}", :method => :get
         .pad_from_top
 #available_sets
   %p.minor_title= "#{t('text.header-available-sets')}:"

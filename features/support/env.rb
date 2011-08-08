@@ -38,3 +38,4 @@ rescue NameError
 end
 
 Capybara.server_boot_timeout = 50
+Capybara.ignore_hidden_elements = true 
