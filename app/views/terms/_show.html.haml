@@ -7,7 +7,7 @@
 - @learned_translations.each do |learned_translation|
   - card_answer = "#{card_answer}, #{learned_translation.form}" unless card_answer.empty?
   - card_answer = learned_translation.form if card_answer.empty?
-  - answer = learned_translation
+  - answer = learned_translation.clone
   - answer.form = ""
 
 = hidden_field_tag "term_typed_answer", "#{card_answer}"

@@ -16,11 +16,11 @@ module ReviewTermPage
   end
 
   def text_input_is_visible?
-    div_is_visible '#answer_form'
+    div_is_visible '#new_translation'
   end
 
   def text_input_is_hidden?
-    div_is_hidden '#answer_form'
+    div_is_hidden '#new_translation'
   end
 
   def is_audio_visible?
