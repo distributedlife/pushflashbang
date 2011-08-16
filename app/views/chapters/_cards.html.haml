@@ -2,17 +2,17 @@
   = "Chapter #{chapter}"
   = link_to "[hide]", '#', :remote => true, :class=>"subscript", :id => "show_chapter_#{chapter}"
   :javascript
-    $('#show_chapter_#{chapter}').click(function(event)
+    $j('#show_chapter_#{chapter}').click(function(event)
     {
-      if ($('#show_chapter_#{chapter}').text() == "[hide]")
+      if ($j('#show_chapter_#{chapter}').text() == "[hide]")
       {
-        $('#cards_for_chapter_#{chapter}').hide();
-        $('#show_chapter_#{chapter}').text('[show]');
+        $j('#cards_for_chapter_#{chapter}').hide();
+        $j('#show_chapter_#{chapter}').text('[show]');
       }
       else
       {
-        $('#cards_for_chapter_#{chapter}').show();
-        $('#show_chapter_#{chapter}').text('[hide]');
+        $j('#cards_for_chapter_#{chapter}').show();
+        $j('#show_chapter_#{chapter}').text('[hide]');
       }
 
       event.stopPropagation();
@@ -51,10 +51,10 @@
 
 :javascript
   http://www.sohtanaka.com/web-design/inline-modal-window-w-css-and-jquery
-  $(document).ready(function() {
-    $('a.poplight[href^=#]').click(function() {
-      var popID = $(this).attr('rel'); //Get Popup Name
-      var popURL = $(this).attr('href'); //Get Popup href to define size
+  $j(document).ready(function() {
+    $j('a.poplight[href^=#]').click(function() {
+      var popID = $j(this).attr('rel'); //Get Popup Name
+      var popURL = $j(this).attr('href'); //Get Popup href to define size
 
       //Pull Query & Variables from href URL
       var query= popURL.split('?');
@@ -63,32 +63,32 @@
       var popHeight = dim[1].split('=')[1]; //Gets the second query string value
 
       //Fade in the Popup and add close button
-      //$('#' + popID).fadeIn().css({ 'width': Number( popWidth ) });
-      $('#' + popID).fadeIn().css({ 'width': Number( popWidth ), 'height' : Number (popHeight) }).prepend('<a href="#" class="close right"><p class="btn_close">close</p></a>');
+      //$j('#' + popID).fadeIn().css({ 'width': Number( popWidth ) });
+      $j('#' + popID).fadeIn().css({ 'width': Number( popWidth ), 'height' : Number (popHeight) }).prepend('<a href="#" class="close right"><p class="btn_close">close</p></a>');
       //.prepend('<a href="#" class="close"><img src="close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
 
       //Define margin for center alignment (vertical   horizontal) - we add 80px to the height/width to accomodate for the padding  and border width defined in the css
-      var popMargTop = ($('#' + popID).height() + 80) / 2;
-      var popMargLeft = ($('#' + popID).width() + 80) / 2;
+      var popMargTop = ($j('#' + popID).height() + 80) / 2;
+      var popMargLeft = ($j('#' + popID).width() + 80) / 2;
 
       //Apply Margin to Popup
-      $('#' + popID).css({
+      $j('#' + popID).css({
           'margin-top' : -popMargTop,
           'margin-left' : -popMargLeft
       });
 
       //Fade in Background
-      $('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
-      $('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer - .css({'filter' : 'alpha(opacity=80)'}) is used to fix the IE Bug on fading transparencies
+      $j('body').append('<div id="fade"></div>'); //Add the fade layer to bottom of the body tag.
+      $j('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer - .css({'filter' : 'alpha(opacity=80)'}) is used to fix the IE Bug on fading transparencies
 
       return false;
     });
   });
 
   //Close Popups and Fade Layer
-  $('.popup_block, a.close, #fade').live('click', function() {
-      $('#fade, a.close, .popup_block').fadeOut(function() {
-          $('#fade').remove();
+  $j('.popup_block, a.close, #fade').live('click', function() {
+      $j('#fade, a.close, .popup_block').fadeOut(function() {
+          $j('#fade').remove();
       });
       return false;
   });

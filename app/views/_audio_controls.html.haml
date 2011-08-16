@@ -21,10 +21,10 @@
       .jp-duration
 
 :javascript
-  $(document).ready(function() {
-    $("#audio_#{id}").jPlayer( {
+  $j(document).ready(function() {
+    $j("#audio_#{id}").jPlayer( {
       ready: function () {
-        $(this).jPlayer("setMedia", {
+        $j(this).jPlayer("setMedia", {
           mp3: "#{audio_url}"
         });
       },

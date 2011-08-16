@@ -1,1 +1,1 @@
-$("#chapter_#{params[:id]}").html("#{escape_javascript(render :partial => '/chapters/cards', :locals => {:deck => @deck, :chapter => params[:id], :card => @cards})}");
+$j("#chapter_#{params[:id]}").html("#{escape_javascript(render :partial => '/chapters/cards', :locals => {:deck => @deck, :chapter => params[:id], :card => @cards})}");

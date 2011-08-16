@@ -16,34 +16,34 @@ module ReviewTermPage
   end
 
   def text_input_is_visible?
-    div_is_visible '#new_translation'
+    element_is_visible '#answer'
   end
 
   def text_input_is_hidden?
-    div_is_hidden '#new_translation'
+    element_is_hidden '#answer'
   end
 
   def is_audio_visible?
-#    div_is_visible 'audio'
+#    element_is_visible 'audio'
     true
   end
 
   def is_audio_hidden?
-    div_is_hidden 'audio'
+    element_is_hidden 'audio'
   end
 
   def reveal!
-    if div_is_hidden("#back_of_card")
+    if element_is_hidden("#back_of_card")
       @session.click_on("Reveal")
     end
   end
 
   def native_language_is_hidden?
-    div_is_hidden 'native_form'
+    element_is_hidden 'native_form'
   end
 
   def learned_language_is_hidden?
-    div_is_hidden 'learned_form'
+    element_is_hidden 'learned_form'
   end
   
   def native_language_contains? form
@@ -55,7 +55,7 @@ module ReviewTermPage
   end
 
   def set_text_answer answer
-    @session.fill_in("translation_form", :with => answer)
+    @session.fill_in("answer_form", :with => answer)
   end
 
   def is_answer_correct?
@@ -64,6 +64,32 @@ module ReviewTermPage
 
   def is_answer_incorrect?
     @session.has_content? "is not correct"
+  end
+
+  def answer_control_is_set_as? review_type, value
+    element_is_visible("#review_result_#{review_type}").should == true
+
+    @session.find_field("review_result_#{review_type}")[:checked].should == value.to_s
+  end
+
+  def button_exists? button_name
+    @session.find_link(button_name).nil?.should == false
+  end
+
+  def set_check_box review_type, state
+    if state == "checked"
+      @session.check("review_result_#{review_type}")
+    else
+      @session.uncheck("review_result_#{review_type}")
+    end
+  end
+
+  def do_record_review
+    @session.click_on "do_results"
+  end
+
+  def do_record_review_perfect
+    @session.click_on "do_result_perfect"
   end
 
   private
@@ -79,7 +105,7 @@ module ReviewTermPage
     found
   end
 
-  def div_is_visible div_name
+  def element_is_visible div_name
     begin
       @session.find(div_name)
     rescue
@@ -89,7 +115,7 @@ module ReviewTermPage
     return true
   end
 
-  def div_is_hidden div_name
+  def element_is_hidden div_name
     begin
       @session.find(div_name)
     rescue

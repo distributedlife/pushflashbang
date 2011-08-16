@@ -82,6 +82,45 @@ When /^I reveal the answer I will be told I am incorrect$/ do
   end
 end
 
+When /^I reveal the answer$/ do
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.reveal!
+  end
+end
+
+When /^I reveal the answer after (\d+) seconds$/ do |seconds|
+  sleep seconds.to_i
+  
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.reveal!
+  end
+end
+
+When /^I reveal in under (\d+) seconds$/ do |seconds|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.reveal!
+  end
+end
+
+When /^I submit the following results$/ do |table|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    table.hashes.each do |hash|
+      page.set_check_box(hash["review type"], hash["result"])
+    end
+
+    page.do_record_review
+  end
+end
+
+When /^I submit the following results as perfect$/ do |table|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    table.hashes.each do |hash|
+      page.set_check_box(hash["review type"], hash["result"])
+    end
+
+    page.do_record_review_perfect
+  end
+end
 
 
 ################################################################################
@@ -248,7 +287,6 @@ Then /^after the reveal the learned language is displayed$/ do
 
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.reveal!
-
     idiom_translations.each do |idiom_translation|
       if idiom_translation.translation.language_id == language.id
         page.learned_language_contains?(idiom_translation.translation.form).should be true
@@ -267,4 +305,54 @@ Then /^the text answer input control is not shown$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.text_input_is_hidden?.should be true
   end
+end
+
+Then /^I will be told I am correct$/ do
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.is_answer_correct?.should be true
+  end
+end
+
+Then /^I will be told I am not correct$/ do
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.is_answer_incorrect?.should be true
+  end
+end
+
+Then /^I should see a "([^"]*)" checkbox and it is checked$/ do |review_type|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.answer_control_is_set_as?(review_type, true)
+  end
+end
+
+Then /^I should see a "([^"]*)" checkbox and it is not checked$/ do |review_type|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.answer_control_is_set_as?(review_type, false)
+  end
+end
+
+Then /^I should see the "([^"]*)" button$/ do |button_name|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.button_exists? button_name
+  end
+end
+
+Then /^I the term containing "([^"]*)" for language "([^"]*)" should have a successful "([^"]*)" review$/ do |containing_form, language_name, review_type|
+  sleep 0.25
+  
+  idiom = get_idiom_containing_form containing_form
+  language = get_language(language_name)
+
+  review = UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
+  review.first.success.should be true
+end
+
+Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an unsuccessful "([^"]*)" review$/ do |containing_form, language_name, review_type|
+  sleep 0.25
+
+  idiom = get_idiom_containing_form containing_form
+  language = get_language(language_name)
+
+  review = UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
+  review.first.success.should be false
 end

@@ -1,3 +1,5 @@
+include LanguagesHelper
+
 class TermsController < ApplicationController
   before_filter :authenticate_user!
 
@@ -160,7 +162,6 @@ class TermsController < ApplicationController
   def review
     begin
       english = Language.where(:name => "English").first
-      ap english
       
       return language_set_path(params[:language_id], params[:set_id]) unless idiom_exists? params[:id]
 
@@ -180,15 +181,15 @@ class TermsController < ApplicationController
         @audio = "front"
         @native = "back"
         @learned = "back"
-      end
-      if params[:review_mode]["reading"]
-        @learned = "front"
-        @native = "back"
-      end
-      if params[:review_mode]["speaking"]
-        unless params[:review_mode]["listening"] and params[:review_mode]["reading"]
-          @learned = "back"
-          @native = "front"
+      else
+        if params[:review_mode]["reading"]
+          @learned = "front"
+          @native = "back"
+        else
+          if params[:review_mode]["speaking"]
+            @learned = "back"
+            @native = "front"
+          end
         end
       end
       if params[:review_mode]["typing"]
@@ -312,8 +313,83 @@ class TermsController < ApplicationController
 
     redirect_to set_path(set_id)
   end
-  
+
+  def record_review
+    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return unless idiom_exists? params[:id]
+    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+    redirect_to user_index_path and return unless language_is_valid? params[:language_id]
+    redirect_to language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
+    redirect_to review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
+
+    
+    schedule = UserIdiomSchedule.where(:user_id => current_user.id, :idiom_id => params[:id], :language_id => params[:language_id])
+    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
+    schedule = schedule.first
+
+
+    params[:duration] ||= 0
+    params[:elapsed] ||= 0
+    duration_in_seconds = params[:duration].to_i / 1000
+    elapsed_in_seconds = params[:elapsed].to_i / 1000
+
+    now = Time.now
+    UserIdiomDueItems.where(:user_idiom_schedule_id => schedule.id).each do |due_item|
+      review_start_time = now - elapsed_in_seconds < due_item.due ? due_item.due : now - elapsed_in_seconds
+
+      review = UserIdiomReview.new
+      review.due = due_item.due
+      review.review_start = review_start_time
+      review.reveal = review_start_time + duration_in_seconds
+      review.user_id = current_user.id
+      review.idiom_id = params[:id]
+      review.language_id = params[:language_id]
+      review.result_recorded = now
+      review.interval = due_item.interval
+
+      if due_item.review_type == UserIdiomReview.to_review_type_int("reading")
+        next unless params[:review_mode]["reading"]
+        review.review_type = UserIdiomReview::READING
+        review.success = params[:skip].nil? ? to_boolean(params[:reading]) : true
+      end
+      if due_item.review_type == UserIdiomReview.to_review_type_int("typing")
+        next unless params[:review_mode]["typing"]
+        review.review_type = UserIdiomReview::TYPING
+        review.success = params[:skip].nil? ? to_boolean(params[:typing]) : true
+      end
+      if due_item.review_type == UserIdiomReview.to_review_type_int("speaking")
+        next unless params[:review_mode]["speaking"]
+        review.review_type = UserIdiomReview::SPEAKING
+        review.success = params[:skip].nil? ? to_boolean(params[:speaking]) : true
+      end
+      if due_item.review_type == UserIdiomReview.to_review_type_int("writing")
+        next unless params[:review_mode]["writing"]
+        review.review_type = UserIdiomReview::WRITING
+        review.success = params[:skip].nil? ? to_boolean(params[:writing]) : true
+      end
+      if due_item.review_type == UserIdiomReview.to_review_type_int("listening")
+        next unless params[:review_mode]["listening"]
+        review.review_type = UserIdiomReview::HEARING
+        review.success = params[:skip].nil? ? to_boolean(params[:listening]) : true
+      end
+
+      if review.success
+        due_item.interval = CardTiming.get_next(due_item.interval).seconds
+      else
+        due_item.interval = CardTiming.get_first.seconds
+      end
+
+      review.save!
+      due_item.save!
+    end
+
+    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode])
+  end
+
   private
+  def to_boolean value
+    return [true, "true", 1, "1", "T", "t"].include?(value.class == String ? value.downcase : value)
+  end
+
   def add_term_to_set set_id, term_id
     if SetTerms.where(:set_id => set_id, :term_id => term_id).empty?
       max_position = SetTerms.where(:set_id => set_id).maximum(:position)

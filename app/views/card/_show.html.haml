@@ -23,20 +23,20 @@
   %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
   :javascript
     //override the enter button on the formsubmit
-    $("#edit_card_#{answer.id}").submit(function(event) {
+    $j("#edit_card_#{answer.id}").submit(function(event) {
       event.preventDefault();
 
 
       //only support the enter button once
-      if ($("#card_front").attr('disabled') == true)
+      if ($j("#card_front").attr('disabled') == true)
       {
         return false ;
       }
 
 
-      $('#do_reveal').click();
+      $j('#do_reveal').click();
 
-      $("#card_front").attr('disabled', true);
+      $j("#card_front").attr('disabled', true);
     });
 
 - unless card.back == ""

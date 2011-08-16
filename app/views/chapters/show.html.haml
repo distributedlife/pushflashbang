@@ -17,14 +17,14 @@
     .pad_from_top
     %p.subscript= "due in #{distance_of_time_in_words(Time.now, upcoming_card["due"], true)}"
   :javascript
-    $("html").everyTime(30000, function(i) {
+    $j("html").everyTime(30000, function(i) {
       location.reload();
     }, 0);
 
 :javascript
-  $('html').keypress(function(event) {
+  $j('html').keypress(function(event) {
     if (event.which == '32')
     {
-        $('#do_advance').click();
+        $j('#do_advance').click();
     }
   });

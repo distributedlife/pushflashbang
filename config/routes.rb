@@ -59,6 +59,7 @@ PushFlashBang::Application.routes.draw do
       resources :terms do
         member do
           get 'review'
+          post 'record_review'
         end
       end
     end

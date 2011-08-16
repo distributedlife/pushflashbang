@@ -134,7 +134,7 @@ UserIdiomReview.blueprint do
   review_start
   reveal
   result_recorded
-  result_success
+  success
   interval
 end
 

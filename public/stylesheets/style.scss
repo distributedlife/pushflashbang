@@ -803,3 +803,23 @@ div.jp-duration
   font-style:oblique;
   text-align: right;
 }
+
+
+
+
+.checked
+{
+  background: url("/images/chk_on.png") no-repeat;
+}
+.unchecked
+{
+  background: url("/images/chk_off.png") no-repeat;
+}
+.selected
+{
+  background: url("/images/rdo_on.png") no-repeat;
+}
+.unselected
+{
+  background: url("/images/rdo_off.png") no-repeat;
+}

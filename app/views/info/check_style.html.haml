@@ -9,7 +9,9 @@
     .pad_from_top
     #category_definition
       //=render :partial => 'definitions', :locals => {:definitions => @category_definitions}
-    = f.input :category, :label => 'a question of choice?', :required => false, :as => :boolean, :wrapper_html => {:class => 'lo_propose'}
+    = f.input :category, :label => 'a question of choice?', :required => false, :as => :boolean, :wrapper_html => {:class => 'lo_propose'}, :id => "check_test"
+    :javascript
+      $J("#check_test").attr("checked", "checked")
     .pad_from_top
     - f.buttons do
       = f.submit 'do change', :class => 'positive'

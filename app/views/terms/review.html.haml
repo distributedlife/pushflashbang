@@ -26,125 +26,130 @@
     .button{:class => "centre large_button"}
       %ul
         %li{:class => 'left inline-block'}
-          = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_dont_know", :style => 'width:12em;'
+          = link_to t('actions.review-record-answer'), '#', :class => 'positive large inline-block', :method => :post, :id => "do_results", :style => 'width:12em;'
           :javascript
-            $('#do_dont_know').click(function(event) {
+            $j('#do_results').click(function(event) {
               var end = new Date();
               var start_time = document.getElementById("start_time") ;
               var duration = document.getElementById("duration") ;
               elapsed = end - start_time.value;
 
+              var link = "#{record_review_language_set_term_path()}";
+              link = link + "?duration=" + duration.value ;
+              link = link + "&elapsed=" + elapsed ;
+              link = link + "&review_mode=" + "#{params[:review_mode]}" ;
 
-              var link = "#{review_deck_card_path(:deck_id => 0, :id => 0, :answer => 'didnt_know')}";
-              link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
-
-              $('#do_dont_know').attr('href', link);
+              if ($j("#review_result_listening").length > 0)
+              {
+                link = link + "&listening=" + $j("#review_result_listening").attr('checked');
+              }
+              if ($j("#review_result_reading").length > 0)
+              {
+                link = link + "&reading=" + $j("#review_result_reading").attr('checked');
+              }
+              if ($j("#review_result_speaking").length > 0)
+              {
+                link = link + "&speaking=" + $j("#review_result_speaking").attr('checked');
+              }
+              if ($j("#review_result_writing").length > 0)
+              {
+                link = link + "&writing=" + $j("#review_result_writing").attr('checked');
+              }
+              if ($j("#review_result_typing").length > 0)
+              {
+                link = link + "&typing=" + $j("#review_result_typing").attr('checked');
+              }
+              
+              $j('#do_results').attr('href', link);
             });
         %li{:class => 'right inline-block'}
-          = link_to t('card.reveal.labels.shaky_but_good'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_shaky_good", :style => 'width:12em;'
+          = link_to t('actions.review-confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_result_perfect", :style => 'width:12em;'
           :javascript
-            $('#do_shaky_good').click(function(event) {
+            $j('#do_result_perfect').click(function(event) {
               var end = new Date();
               var start_time = document.getElementById("start_time") ;
               var duration = document.getElementById("duration") ;
               elapsed = end - start_time.value;
 
-              var link = "#{review_deck_card_path(:deck_id => 0, :id => 0, :answer => 'shaky_good')}";
-              link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
+              var link = "#{record_review_language_set_term_path()}";
+              link = link + "?duration=" + duration.value ;
+              link = link + "&elapsed=" + elapsed ;
+              link = link + "&review_mode=" + "#{params[:review_mode]}" ;
+              link = link + "&skip=true" ;
 
-              $('#do_shaky_good').attr('href', link);
+              if ($j("#review_result_listening").length > 0)
+              {
+                link = link + "&listening=" + $j("#review_result_listening").attr('checked');
+              }
+              if ($j("#review_result_reading").length > 0)
+              {
+                link = link + "&reading=" + $j("#review_result_reading").attr('checked');
+              }
+              if ($j("#review_result_speaking").length > 0)
+              {
+                link = link + "&speaking=" + $j("#review_result_speaking").attr('checked');
+              }
+              if ($j("#review_result_writing").length > 0)
+              {
+                link = link + "&writing=" + $j("#review_result_writing").attr('checked');
+              }
+              if ($j("#review_result_typing").length > 0)
+              {
+                link = link + "&typing=" + $j("#review_result_typing").attr('checked');
+              }
+
+              $j('#do_result_perfect').attr('href', link);
             });
-        .pad_from_top
-        .pad_from_top
-        .pad_from_top
-        %li{:class => 'left inline-block'}
-          = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_partial_answer", :style => 'width:12em;'
-          :javascript
-            $('#do_partial_answer').click(function(event) {
-              var end = new Date();
-              var start_time = document.getElementById("start_time") ;
-              var duration = document.getElementById("duration") ;
-              elapsed = end - start_time.value;
-
-              var link = "#{review_deck_card_path(:deck_id => 0, :id => 0, :answer => 'partial_correct')}";
-              link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
-
-              $('#do_partial_answer').attr('href', link);
-            });
-        %li{:class => 'right inline-block'}
-          = link_to t('card.reveal.labels.confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_good", :style => 'width:12em;'
-          :javascript
-            $('#do_good').click(function(event) {
-              var end = new Date();
-              var start_time = document.getElementById("start_time") ;
-              var duration = document.getElementById("duration") ;
-              elapsed = end - start_time.value;
-
-              var link = "#{review_deck_card_path(:deck_id => 0, :id => 0, :answer => 'good')}";
-              link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
-
-              $('#do_good').attr('href', link);
-            });
+      .pad_from_top
+      .pad_from_top
+      .pad_from_top
+      %li{:class => 'right inline-block'}
+        - semantic_form_for("review_result", :url => terms_path(:set_id => params[:set_id]), :method => :post) do |f|
+          - params[:review_mode].split(",").each do |review_type|
+            - review_type.strip!
+            - next if review_type.empty?
+            - if review_type == "typing"
+              = f.input review_type.to_sym, :label => "#{review_type}?", :required => false, :as => :boolean, :id => "#{review_type}_result", :input_html => { :checked => 'checked' }
+            - else
+              = f.input review_type.to_sym, :label => "#{review_type}?", :required => false, :as => :boolean, :id => "#{review_type}_result"
       .pad_from_top
       .pad_from_top
       .pad
 
 :javascript
-  $('html').keypress(function(event) {
+  $j('html').keypress(function(event) {
     if (event.which == '32')
     {
       //we are quoting the ruby variable resolution because the javascript test driver crashes doing it. wtf!
-      if ($('#do_reveal').is(":visible") && ("#{@typed}" == "false"))
+      if ($j('#do_reveal').is(":visible") && ("#{@typed}" == "false"))
       {
-        $('#do_reveal').click();
-      }
-      else
-      {
-        var positive_style = 'positive large inline-block' ;
-
-        //click on button with highlight
-        if ($('#do_dont_know').attr('class') == positive_style)
-        {
-          $('#do_dont_know').click();
-        }
-        else if ($('#do_partial_answer').attr('class') == positive_style)
-        {
-          $('#do_partial_answer').click();
-        }
-        else if ($('#do_shaky_good').attr('class') == positive_style)
-        {
-          $('#do_shaky_good').click();
-        }
-        else if ($('#do_good').attr('class') == positive_style)
-        {
-          $('#do_good').click();
-        }
+        $j('#do_reveal').click();
       }
     }
-    if ($('#do_reveal').is(":hidden"))
+    if ($j('#do_reveal').is(":hidden"))
     {
       if (event.which == '49')
       {
-        $('#do_dont_know').click();
+        $j('#do_dont_know').click();
       }
       if (event.which == '50')
       {
-        $('#do_partial_answer').click();
+        $j('#do_partial_answer').click();
       }
       if (event.which == '51')
       {
-        $('#do_shaky_good').click();
+        $j('#do_shaky_good').click();
       }
       if (event.which == '52')
       {
-        $('#do_good').click();
+        $j('#do_good').click();
       }
     }
   });
 
   //start timer when document is ready
-  $(document).ready(function() {
-    $("#card_front").focus();
+  $j(document).ready(function() {
+    $j("#card_front").focus();
 
     var start_time = document.getElementById("start_time") ;
     start_time.value = new Date ().getTime() ;
@@ -155,7 +160,7 @@
     //    //if we have a new card then we show the new card notice
     //    if (data == true)
     //    {
-    //      $("#new_card_notice").show();
+    //      $j("#new_card_notice").show();
     //    }
     //
     //    var is_new = document.getElementById("is_new") ;
@@ -170,93 +175,59 @@
     //$.ajax({
     //  url: "/deck/0/due_count",
     //  success: function(data){
-    //    $("header p.subtitle").text("number of cards due: " + (data - 1));
+    //    $j("header p.subtitle").text("number of cards due: " + (data - 1));
     //  }
     //});
   });
 
   //perform the reveal action
-  $('#do_reveal').click(function(event) {
+  $j('#do_reveal').click(function(event) {
     var end = new Date();
     var start_time = document.getElementById("start_time") ;
     var duration = document.getElementById("duration") ;
-    //var card_answer = document.getElementById("card_answer") ;
     var card_answer = document.getElementById("term_typed_answer") ;
-    var user_answer = document.getElementById("translation_form") ;
+    var user_answer = document.getElementById("answer_form") ;
     var is_new = document.getElementById("is_new") ;
 
+
     duration.value = end - start_time.value;
-
-    var positive_style = 'positive large inline-block' ;
-
-    //don't highlight buttons based on time if first button is positive (i.e. first reveal)
-    if (is_new.value == "false")
+    if (duration.value <= 2000)
     {
-      //highlight buttons based on speed of answer
-      if (duration.value <= 2000)
+      //set all checkboxes as ticked
+
+      if ($j("#review_result_listening").length != 0)
       {
-        //highlight buttons based on typed answer
-        if (user_answer)
-        {
-          if (card_answer.value == user_answer.value)
-          {
-            $('#do_good').attr('class', positive_style)
-            $("#do_good").focus();
-          }
-          else
-          {
-            $('#do_partial_answer').attr('class', positive_style)
-            $("#do_partial_answer").focus();
-
-            //tell the user their answer didn't match
-            $("#answer_result").text("is not correct");
-          }
-
-          $("#answer_result").show();
-        }
-        else
-        {
-          $('#do_good').attr('class', positive_style)
-          $("#do_good").focus();
-        }
+        $j("#review_result_listening").attr('checked', true);
       }
-      else
+      if ($j("#review_result_reading").length != 0)
       {
-        //highlight buttons based on typed answer
-        if (user_answer)
-        {
-          if (card_answer.value == user_answer.value)
-          {
-            $('#do_shaky_good').attr('class', positive_style)
-            $("#do_shaky_good").focus();
-          }
-          else
-          {
-            $('#do_partial_answer').attr('class', positive_style)
-            $("#do_partial_answer").focus();
-
-            //tell the user their answer didn't match
-            $("#answer_result").text("is not correct");
-          }
-
-          $("#answer_result").show();
-        }
-        else
-        {
-          $('#do_shaky_good').attr('class', positive_style)
-          $("#do_shaky_good").focus();
-        }
+        $j("#review_result_reading").attr('checked', true);
+      }
+      if ($j("#review_result_speaking").length != 0)
+      {
+        $j("#review_result_speaking").attr('checked', true);
+      }
+      if ($j("#review_result_writing").length != 0)
+      {
+        $j("#review_result_writing").attr('checked', true);
       }
     }
-    else
+
+
+    if (user_answer)
     {
-      $('#do_dont_know').attr('class', positive_style)
-      $("#do_dont_know").focus();
+      if (card_answer.value != user_answer.value)
+      {
+        //tell the user their answer didn't match
+        $j("#answer_result").text("is not correct");
+        $j("#review_result_typing").attr('checked', false);
+      }
+
+      $j("#answer_result").show();
     }
 
 
-
-    $("#back_of_card").show();
-    $("#reveal_button").hide();
-    $("#review_buttons").show();
+    $j("#back_of_card").show();
+    $j("#reveal_button").hide();
+    $j("#review_buttons").show();
   });

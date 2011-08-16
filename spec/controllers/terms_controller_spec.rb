@@ -1068,4 +1068,182 @@ describe TermsController do
       response.should redirect_to set_path(@set.id)
     end
   end
+
+  context '"POST" record_review' do
+    before(:each) do
+      @set = Sets.make
+      @english = Language.make(:name => "English")
+      @spanish = Language.make(:name => "Spanish")
+      @idiom = Idiom.make
+      SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
+      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
+      UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
+
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+      CardTiming.create(:seconds => 600)
+      CardTiming.create(:seconds => 3600)
+      CardTiming.create(:seconds => 15400)
+    end
+
+    it 'should redirect to review set if term is not valid' do
+      post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id + 100, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
+
+      response.should be_redirect
+      response.should redirect_to review_language_set_path(@spanish.id, @set.id, :review_mode => "listening,reading,writing,speaking,typing")
+    end
+
+    it 'should redirect to show language if set is not valid' do
+      post :record_review, :language_id => @spanish.id, :set_id => @set.id + 100, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
+
+      response.should be_redirect
+      response.should redirect_to language_path(@spanish.id)
+    end
+
+    it 'should redirect to user home if langauge is not valid' do
+      post :record_review, :language_id => @spanish.id + 100, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
+
+      response.should be_redirect
+      response.should redirect_to user_index_path
+    end
+
+    it 'should redirect show language if user is not learning language' do
+      post :record_review, :language_id => @english.id, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1"
+
+      response.should be_redirect
+      response.should redirect_to language_path(@english.id)
+    end
+
+    it 'should redirect to review set if review mode is not supplied or is not valid' do
+      post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0
+
+      response.should be_redirect
+      response.should redirect_to review_language_set_path(@spanish.id, @set.id)
+    end
+
+    it 'should redirect to review set if the term has not been scheduled' do
+      post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
+
+      response.should be_redirect
+      response.should redirect_to review_language_set_path(@spanish.id, @set.id, :review_mode => "listening,reading,writing,speaking,typing")
+    end
+
+    describe 'on successful review' do
+      before(:each) do
+        @schedule = UserIdiomSchedule.create(:user_id => @user.id, :idiom_id => @idiom.id, :language_id => @spanish.id)
+        @due_date = 1.day.ago
+        @duration = 2000
+        @elapsed = 1500
+        UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING, :due => @due_date, :interval => 5)
+        UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::WRITING, :due => @due_date, :interval => 25)
+        UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::TYPING, :due => @due_date, :interval => 120)
+        UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::SPEAKING, :due => @due_date, :interval => 600)
+        UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::HEARING, :due => @due_date, :interval => 3600)
+      end
+
+      it 'should record a review for each review type' do
+        start = Time.now
+        post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => @duration, :elapsed => @elapsed,
+          :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1",
+          :review_mode => "listening,reading,writing,speaking,typing"
+        finish = Time.now
+
+        response.should be_redirect
+        response.should redirect_to review_language_set_path(@spanish.id, @set.id, :review_mode => "listening,reading,writing,speaking,typing")
+
+        UserIdiomReview.count.should == 5
+        UserIdiomReview.all.each do |review|
+          review.user_id.should == @user.id
+          review.idiom_id.should == @idiom.id
+          review.language_id.should == @spanish.id
+
+          review.due = @due_date
+          review.review_start >= start
+          review.review_start <= finish
+          review.reveal >= start + @duration
+          review.reveal <= finish
+          review.result_recorded >= start + @elapsed
+          review.result_recorded <= finish
+
+          if review.review_type == UserIdiomReview::READING
+            review.success.should == true
+          end
+          if review.review_type == UserIdiomReview::WRITING
+            review.success.should == false
+          end
+          if review.review_type == UserIdiomReview::TYPING
+            review.success.should == true
+          end
+          if review.review_type == UserIdiomReview::HEARING
+            review.success.should == true
+          end
+          if review.review_type == UserIdiomReview::SPEAKING
+            review.success.should == false
+          end
+        end
+      end
+
+      it 'should reset the interval for failed reviews' do
+        post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => @duration, :elapsed => @elapsed,
+          :listening => "0", :reading => 0, :writing => false, :speaking => false, :typing => false,
+          :review_mode => "listening,reading,writing,speaking,typing"
+
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id).each do |due_item|
+          due_item.interval.should == 5
+        end
+      end
+
+      it 'should increase the interval for successful reviews' do
+        post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => @duration, :elapsed => @elapsed,
+          :listening => 1, :reading => true, :writing => true, :speaking => true, :typing => true,
+          :review_mode => "listening,reading,writing,speaking,typing"
+
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING).first.interval.should == 25
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::WRITING).first.interval.should == 120
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::TYPING).first.interval.should == 600
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::SPEAKING).first.interval.should == 3600
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::HEARING).first.interval.should == 15400
+      end
+
+      it 'should not alter review types not specified' do
+        post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => @duration, :elapsed => @elapsed,
+          :listening => 1, :reading => true, :writing => true, :speaking => true, :typing => true,
+          :review_mode => "reading"
+
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING).first.interval.should == 25
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::WRITING).first.interval.should == 25
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::TYPING).first.interval.should == 120
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::SPEAKING).first.interval.should == 600
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::HEARING).first.interval.should == 3600
+
+        UserIdiomReview.count.should == 1
+      end
+
+      it 'should not record reviews for review types not scheduled yet' do
+        UserIdiomDueItems.delete_all
+        UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING, :due => @due_date, :interval => 5)
+
+        post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => @duration, :elapsed => @elapsed,
+          :listening => 1, :reading => true, :writing => true, :speaking => true, :typing => true,
+          :review_mode => "reading"
+
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING).first.interval.should == 25
+        UserIdiomDueItems.count.should == 1
+        UserIdiomReview.count.should == 1
+      end
+
+      it 'should skip an interval is skip is supplied' do
+        post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => @duration, :elapsed => @elapsed,
+          :listening => false, :reading => false, :writing => false, :speaking => false, :typing => false,
+          :review_mode => "listening,reading,writing,speaking,typing", :skip => true
+
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING).first.interval.should == 25
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::WRITING).first.interval.should == 120
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::TYPING).first.interval.should == 600
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::SPEAKING).first.interval.should == 3600
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::HEARING).first.interval.should == 15400
+      end
+    end
+  end
 end

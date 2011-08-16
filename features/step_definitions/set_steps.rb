@@ -42,6 +42,7 @@ Given /^the user has the "([^"]*)" set as a goal for the "([^"]*)" language$/ do
   language = get_language language_name
 
   UserSets.create(:user_id => get(:user).id, :set_id => set.id, :language_id => language.id, :chapter => 1)
+  UserLanguages.create(:user_id => get(:user).id, :language_id => language.id) if UserLanguages.where(:user_id => get(:user).id, :language_id => language.id).empty?
 end
 
 

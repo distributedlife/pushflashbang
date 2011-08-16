@@ -1,7 +1,3 @@
-= html_safe(ap "native #{native}")
-= html_safe(ap "learned #{learned}")
-= html_safe(ap "audio #{audio}")
-= html_safe(ap "typed #{typed}")
 - answer = nil
 - card_answer = ""
 - @learned_translations.each do |learned_translation|
@@ -35,23 +31,23 @@
   .pad_from_top
   .section_break
   .pad_from_top
-  - semantic_form_for(answer, :url => '#', :method => :post) do |f|
+  - semantic_form_for("answer", :url => '#', :method => :put, :html => {:id => "answer"}) do |f|
     = f.input :form, :as => :string, :label => false, :hint => I18n.t('deck.learn.labels.answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
   %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
   :javascript
     //override the enter button on the formsubmit so that clicking enter performs a reveal rather than submitting the form
-    $("#edit_translation_#{answer.id}").submit(function(event) {
+    $j("#answer").submit(function(event) {
       event.preventDefault();
 
       //only perform the enter action once
-      if ($("#translation_form").attr('disabled') == true)
+      if ($j("#answer_form").attr('disabled') == true)
       {
         return false ;
       }
 
-      $('#do_reveal').click();
+      $j('#do_reveal').click();
 
-      $("#translation_form").attr('disabled', true);
+      $j("#answer_form").attr('disabled', true);
     });
 
 

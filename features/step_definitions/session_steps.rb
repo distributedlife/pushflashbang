@@ -107,6 +107,7 @@ end
 
 And /^I record my result$/ do
   And %{I click on "I knew the answer"}
+  sleep 0.5
 end
 
 And /^I review the same card again$/ do
@@ -117,6 +118,7 @@ And /^I review the same card again$/ do
   And %{I go to the "deck session" page}
   And %{I click on "Reveal"}
   And %{I click on "I knew the answer"}
+  sleep 0.5
 end
 
 And /^the card interval should be (\d+)$/ do |interval|
@@ -275,6 +277,7 @@ And /^I click on the "([^"]*)" button$/ do |button_number|
   elsif button_number == "fourth"
     And %{I click on "I knew the answer"}
   end
+  sleep 0.5
 end
 
 And /^the "([^"]*)" button is normal/ do |button_number|

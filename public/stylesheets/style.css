@@ -210,7 +210,7 @@ input[type="submit"].neutral:hover {
   background: black; }
 
 select {
-  font-size: 0.6em;
+  font-size: 1em;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -659,3 +659,15 @@ div.jp-duration {
   font-size: .64em;
   font-style: oblique;
   text-align: right; }
+
+.checked {
+  background: url("/images/chk_on.png") no-repeat; }
+
+.unchecked {
+  background: url("/images/chk_off.png") no-repeat; }
+
+.selected {
+  background: url("/images/rdo_on.png") no-repeat; }
+
+.unselected {
+  background: url("/images/rdo_off.png") no-repeat; }

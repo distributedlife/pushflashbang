@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110731062101) do
+ActiveRecord::Schema.define(:version => 20110815110241) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -138,11 +138,11 @@ ActiveRecord::Schema.define(:version => 20110731062101) do
     t.datetime "review_start"
     t.datetime "reveal"
     t.datetime "result_recorded"
-    t.string   "result_success"
     t.integer  "interval"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "language_id"
+    t.boolean  "success"
   end
 
   create_table "user_idiom_schedules", :force => true do |t|

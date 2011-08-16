@@ -33,4 +33,18 @@ describe LanguagesHelper do
       language_is_valid_for_user?(@language.id + 1, @user.id).should be false
     end
   end
+
+  describe 'user_is_learning_language?' do
+    before(:each) do
+      UserLanguages.make(:user_id => @user.id, :language_id => @language.id)
+    end
+
+    it 'should return true if user is learning language' do
+      user_is_learning_language?(@language.id, @user.id).should be true
+    end
+
+    it 'should return false if the user is not learning the language' do
+      user_is_learning_language?(@language.id, @user.id + 1).should be false
+    end
+  end
 end

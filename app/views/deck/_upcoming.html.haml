@@ -25,6 +25,6 @@
     .pad_from_top
     %p.subscript= "due in #{distance_of_time_in_words(Time.now, upcoming_card["due"], true)}"
 :javascript
-  $("html").everyTime(30000, function(i) {
+  $J("html").everyTime(30000, function(i) {
     location.reload();
   }, 0);

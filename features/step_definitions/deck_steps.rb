@@ -188,7 +188,6 @@ And /^I should see an input field to type my answer$/ do
 end
 
 And /^I type the answer correctly$/ do
-  ap get(:card).front
   on_page :DeckSessionPage, Capybara.current_session do |page|
     page.type_answer get(:card).front
   end

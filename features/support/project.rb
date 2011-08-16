@@ -7,8 +7,8 @@ require File.expand_path(File.dirname(__FILE__) + "../../../spec/support/bluepri
 Dir[File.dirname(__FILE__) + '/../components/*.rb'].each {|file| require file}
 
 #use akephalos for the javascript driver
-Capybara.javascript_driver = :akephalos
-#Capybara.javascript_driver = :webkit
+#Capybara.javascript_driver = :akephalos
+Capybara.javascript_driver = :webkit
 
 World(SystemUnderTest)
 World(UserComponent)

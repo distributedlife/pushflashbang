@@ -90,15 +90,3 @@ Feature: review terms
       | reading     |
       | writing     |
     Then I should be on the "completed set" page
-
-
-  # handling typing correctly
-  Scenario: typing review handles correct answer and compares to native
-    Given I review the "greetings" set in "Spanish" using the "speaking and typing" review mode
-    And I typed "un poco de" in as the answer
-    When I reveal the answer I will be told I am correct
-
-  Scenario: typing review handles incorrect answer and compares to native
-    Given I review the "greetings" set in "Spanish" using the "speaking and typing" review mode
-    And I typed "bajo" in as the answer
-    When I reveal the answer I will be told I am incorrect

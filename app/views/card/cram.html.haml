@@ -20,22 +20,22 @@
         .pad
 
 :javascript
-  $('html').keypress(function(event) {
+  $j('html').keypress(function(event) {
     if (event.which == '32')
     {
-      if ($('#do_reveal').is(":visible"))
+      if ($j('#do_reveal').is(":visible"))
       {
-        $('#do_reveal').click();
+        $j('#do_reveal').click();
       }
       else
       {
-        $('#do_next').click();
+        $j('#do_next').click();
       }
     }
   });
 
-  $('#do_reveal').click(function(event) {
-    $("#back_of_card").show();
-    $("#reveal_button").hide();
-    $("#review_buttons").show();
+  $j('#do_reveal').click(function(event) {
+    $j("#back_of_card").show();
+    $j("#reveal_button").hide();
+    $j("#review_buttons").show();
   });
