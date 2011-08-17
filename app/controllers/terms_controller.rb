@@ -378,6 +378,8 @@ class TermsController < ApplicationController
         due_item.interval = CardTiming.get_first.seconds
       end
 
+      due_item.due = Time.now + due_item.interval
+
       review.save!
       due_item.save!
     end

@@ -28,6 +28,30 @@ Given /^I typed "([^"]*)" in as the answer$/ do |answer|
   end
 end
 
+Given /^all terms in the "([^"]*)" set chapter (\d+) for "([^"]*)" are scheduled but not due$/ do |set_name, chapter, language_name|
+  set = get_set_from_name set_name
+  language = get_language language_name
+
+  SetTerms.where(:set_id => set.id, :chapter => chapter.to_s).each do |set_term|
+    schedule = UserIdiomSchedule.where(:user_id => get(:user).id, :idiom_id => set_term.term_id)
+    if schedule.empty?
+      schedule = UserIdiomSchedule.create(:user_id => get(:user).id, :idiom_id => set_term.term_id, :language_id => language.id)
+
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 1, :interval => CardTiming.first.seconds)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 2, :interval => CardTiming.first.seconds)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 4, :interval => CardTiming.first.seconds)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 8, :interval => CardTiming.first.seconds)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 16, :interval => CardTiming.first.seconds)
+    else
+      schedule = schedule.first
+      UserIdiomDueItems.where(:user_idiom_schedule_id => schedule.id, :user_id => get(:user).id).each do |due_item|
+        due_item.due = 1.day.from_now
+        due_item.save!
+      end
+    end
+  end
+end
+
 
 ################################################################################
 ################################################################################
@@ -355,4 +379,8 @@ Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an uns
 
   review = UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
   review.first.success.should be false
+end
+
+Then /^I should see the time when the next card is due$/ do
+  And %{show me the page} 
 end

@@ -1134,7 +1134,9 @@ describe TermsController do
         @schedule = UserIdiomSchedule.create(:user_id => @user.id, :idiom_id => @idiom.id, :language_id => @spanish.id)
         @due_date = 1.day.ago
         @duration = 2000
-        @elapsed = 1500
+        @duration_in_s = @duration / 1000
+        @elapsed = 3500
+        @elapsed_in_s = @elapsed / 1000
         UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING, :due => @due_date, :interval => 5)
         UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::WRITING, :due => @due_date, :interval => 25)
         UserIdiomDueItems.create(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::TYPING, :due => @due_date, :interval => 120)
@@ -1158,13 +1160,18 @@ describe TermsController do
           review.idiom_id.should == @idiom.id
           review.language_id.should == @spanish.id
 
-          review.due = @due_date
-          review.review_start >= start
-          review.review_start <= finish
-          review.reveal >= start + @duration
-          review.reveal <= finish
-          review.result_recorded >= start + @elapsed
-          review.result_recorded <= finish
+          due_item = UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => review.review_type)
+          due_item = due_item.first
+          due_item.due.utc.should >= (start + due_item.interval).utc
+          due_item.due.utc.should <= (finish + due_item.interval).utc
+
+          review.due.utc.should == @due_date.utc
+          review.review_start.utc.should >= (start - @elapsed_in_s).utc
+          review.review_start.utc.should <= finish.utc
+          review.reveal.utc.should >= (start - @elapsed_in_s + @duration_in_s).utc
+          review.reveal.utc.should <= finish.utc
+          review.result_recorded.utc.should >= start.utc
+          review.result_recorded.utc.should <= finish.utc
 
           if review.review_type == UserIdiomReview::READING
             review.success.should == true

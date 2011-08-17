@@ -1,22 +1,5 @@
-//- current_time_chunk = 0
-//- heading_display = false
 .cards
 - upcoming_cards.each do |upcoming_card|
-  //= Time.parse(upcoming_card["due"])
-  //.pad_from_top
-  //= @time_chunks[current_time_chunk]
-  //.pad_from_top
-  //= Time.parse(upcoming_card["due"]) < @time_chunks[current_time_chunk]
-  //.pad_from_top
-  //- if Time.parse(upcoming_card["due"]) < @time_chunks[current_time_chunk]
-  //  %p due is less than time chunk
-  //  - unless heading_display
-  //    %p= "#{current_time_chunk} due in... #{distance_of_time_in_words(Time.now.utc, @time_chunks[current_time_chunk], true)}"
-  //- else
-  //  - current_time_chunk = current_time_chunk + 1
-  //  - heading_display = true
-  //  %p= "due in... #{distance_of_time_in_words(Time.now, time_chunks[current_time_chunk], true)}"
-    
   .div{:class => "card_panel_full_page left centre"}
     %p#upcoming{:id => upcoming_card["id"]}= "#{upcoming_card["front"]}"
     - if is_pronunciation_on_front? pronunciation_side

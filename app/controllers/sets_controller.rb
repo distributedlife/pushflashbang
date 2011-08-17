@@ -193,13 +193,13 @@ class SetsController < ApplicationController
     #there are no due cards; can we schedule one?
     next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
     if next_term.nil?
-      redirect_to completed_language_set_path(params[:language_id], params[:id]) and return
+      redirect_to completed_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode]) and return
     end
 
 
     # is the next card in the next chapter? We should ask the user if they want to progress
     if next_term.chapter > user_set.chapter
-      redirect_to next_chapter_language_set_path(params[:language_id], params[:id]) and return
+      redirect_to next_chapter_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode]) and return
     else
       #show the card to the user
       scheduled_term = UserIdiomSchedule.create(:user_id => current_user.id, :language_id => params[:language_id], :idiom_id => next_term.term_id)
@@ -213,11 +213,127 @@ class SetsController < ApplicationController
   end
 
   def next_chapter
+    redirect_to languages_path and return unless language_exists? params[:language_id]
+    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:id]
 
+    review_types = parse_review_types params[:review_mode]
+    if review_types.empty?
+      return redirect_to language_set_path(params[:language_id], params[:id])
+    end
+
+    #get user set
+    user_set = UserSets.where(:user_id => current_user.id, :set_id => params[:id], :language_id => params[:language_id])
+    if user_set.empty?
+      return redirect_to language_sets_path(params[:language_id], params[:id])
+    end
+    user_set = user_set.first
+
+    
+    #are there cards in the set for the language?
+    unless set_has_at_least_one_idiom_for_language? params[:language_id], params[:id]
+      flash[:failure] = "This set can't be reviewed in the specified language because it has not been translated into that language"
+      redirect_to language_set_path(params[:language_id], params[:id]) and return
+    end
+
+    
+    #are there are any due cards?
+    next_due = UserIdiomSchedule.get_next_due_for_user_for_set_for_proficiencies params[:language_id], current_user.id, params[:id], review_types
+    unless next_due.nil?
+      return redirect_to review_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode])
+    end
+
+
+    #there are no due cards; can we schedule one?
+    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
+    #there are no cards left at all; we should go to the completed page
+    if next_term.nil?
+      return redirect_to review_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode])
+    end
+
+    #redirect if we have to schedule in this chapter
+    unless next_term.chapter > user_set.chapter
+      return redirect_to review_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode])
+    end
+
+
+    sql = <<-SQL
+      select due_item.due
+      from user_idiom_due_items due_item
+      inner join user_idiom_schedules s
+        on s.id = due_item.user_idiom_schedule_id
+        and s.user_id = #{current_user.id}
+        and s.language_id = #{params[:language_id]}
+      inner join set_terms st
+        on s.idiom_id = st.term_id
+        and st.set_id = #{params[:id]}
+      where due_item.review_type in (#{review_types.join(',')})
+      order by due_item.due desc
+    SQL
+
+    results = ActiveRecord::Base.connection.execute(sql)
+    as_time = results.first["due"]
+
+    @next_due_time = Time.parse(as_time).utc + Time.parse(as_time).gmt_offset
+    @refresh_in_ms = (@next_due_time - Time.now) * 1000
   end
   
   def completed
-    
+    redirect_to languages_path and return unless language_exists? params[:language_id]
+    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:id]
+
+    review_types = parse_review_types params[:review_mode]
+    if review_types.empty?
+      return redirect_to language_set_path(params[:language_id], params[:id])
+    end
+
+    #get user set
+    user_set = UserSets.where(:user_id => current_user.id, :set_id => params[:id], :language_id => params[:language_id])
+    if user_set.empty?
+      return redirect_to language_sets_path(params[:language_id], params[:id])
+    end
+    user_set = user_set.first
+
+
+    #are there cards in the set for the language?
+    unless set_has_at_least_one_idiom_for_language? params[:language_id], params[:id]
+      flash[:failure] = "This set can't be reviewed in the specified language because it has not been translated into that language"
+      redirect_to language_set_path(params[:language_id], params[:id]) and return
+    end
+
+    #are there are any due cards?
+    next_due = UserIdiomSchedule.get_next_due_for_user_for_set_for_proficiencies params[:language_id], current_user.id, params[:id], review_types
+    unless next_due.nil?
+      return redirect_to review_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode])
+    end
+
+
+    #there are no due cards; can we schedule one?
+    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
+    #there are unscheduled cards; we should be on the chapter page or ready for review
+    unless next_term.nil?
+      return redirect_to review_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode])
+    end
+
+
+    sql = <<-SQL
+      select due_item.due
+      from user_idiom_due_items due_item
+      inner join user_idiom_schedules s
+        on s.id = due_item.user_idiom_schedule_id
+        and s.user_id = #{current_user.id}
+        and s.language_id = #{params[:language_id]}
+      inner join set_terms st
+        on s.idiom_id = st.term_id
+        and st.set_id = #{params[:id]}
+      where due_item.review_type in (#{review_types.join(',')})
+      order by due_item.due desc
+    SQL
+
+    results = ActiveRecord::Base.connection.execute(sql)
+    as_time = results.first["due"]
+
+    @next_due_time = Time.parse(as_time).utc + Time.parse(as_time).gmt_offset
+    @refresh_in_ms = (@next_due_time - Time.now) * 1000
   end
   
   private

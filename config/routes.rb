@@ -51,6 +51,7 @@ PushFlashBang::Application.routes.draw do
       member do
         get 'review'
         get 'next_chapter'
+        post 'advance_chapter'
         get 'completed'
         put 'set_goal'
         put 'unset_goal'
@@ -116,5 +117,4 @@ PushFlashBang::Application.routes.draw do
       end
     end
   end
-
 end

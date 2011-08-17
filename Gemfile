@@ -42,7 +42,7 @@ gem 'aws-s3'
 group :development, :test do
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'gherkin'
+  gem 'gherkin', '2.4.6'
   gem 'cucumber-rails'
   gem 'cucumber'
   gem 'rspec-rails'

@@ -80,3 +80,5 @@ Feature: review term results
       | speaking | not checked |
     Then I the term containing "un poco de" for language "Spanish" should have a successful "reading" review
     And I the term containing "un poco de" for language "Spanish" should have a successful "speaking" review
+
+  Scenario: Next due card is shown
