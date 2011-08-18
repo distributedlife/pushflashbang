@@ -46,7 +46,7 @@ PushFlashBang::Application.configure do
     :port                 => 587,
     :domain               => 'distributedlife.com',
     :user_name            => 'ryan.boucher@distributedlife.com',
-    :password             => 'bowser16',
+    :password             => 'xxx',
     :authentication       => 'plain',
     :enable_starttls_auto => true
   }
