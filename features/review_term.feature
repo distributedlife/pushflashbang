@@ -80,13 +80,3 @@ Feature: review terms
       | reading     |
       | writing     |
     Then I should be on the "next set chapter" page
-
-  Scenario: When I have no chapters to advance to, show end of set page
-    Given the term containing "un poco de" in "English" is scheduled but not due
-    Given the term containing "one" in "English" is scheduled but not due
-    Given the term containing "two" in "English" is scheduled but not due
-    When I review the "greetings" set in "English" using the following proficiences:
-      | proficiency |
-      | reading     |
-      | writing     |
-    Then I should be on the "completed set" page

@@ -3,7 +3,7 @@
 #advance_button
   .panel
     .button{:class => "centre big_button"}
-      = link_to "Advance", advance_chapter_language_set_path(params[:language_id], params[:id]), :class => 'positive', :id => 'do_advance'
+      = link_to "Advance", advance_chapter_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode]), :class => 'positive', :id => 'do_advance', :method => :post
     .pad_from_top
 
 #next_due

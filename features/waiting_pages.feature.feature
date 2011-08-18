@@ -28,11 +28,16 @@ Feature: waiting pages
     Then I should be on the "next set chapter" page
 
   Scenario: end of chapter, advance to next
-    Given I have reached the end of a chapter
+    Given all terms in the "greetings" set chapter 1 for "English" are scheduled but not due
     When I choose to advance to the next chapter
-    Then I should be on the next chapter
+    Then I should be on chapter 2
 
-  Scenario: end of set
-    Given all terms in the "greetings" set are scheduled but not due
-    When I review the "greetings" set in "English" using the "reading" review mode
+  Scenario: When I have no chapters to advance to, show end of set page
+    Given the term containing "un poco de" in "English" is scheduled but not due
+    Given the term containing "one" in "English" is scheduled but not due
+    Given the term containing "two" in "English" is scheduled but not due
+    When I review the "greetings" set in "English" using the following proficiences:
+      | proficiency |
+      | reading     |
+      | writing     |
     Then I should be on the "completed set" page

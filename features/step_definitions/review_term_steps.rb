@@ -29,13 +29,13 @@ Given /^I typed "([^"]*)" in as the answer$/ do |answer|
 end
 
 Given /^all terms in the "([^"]*)" set chapter (\d+) for "([^"]*)" are scheduled but not due$/ do |set_name, chapter, language_name|
-  set = get_set_from_name set_name
-  language = get_language language_name
+  add(:set, get_set_from_name(set_name))
+  add(:language, get_language(language_name))
 
-  SetTerms.where(:set_id => set.id, :chapter => chapter.to_s).each do |set_term|
+  SetTerms.where(:set_id => get(:set).id, :chapter => chapter.to_s).each do |set_term|
     schedule = UserIdiomSchedule.where(:user_id => get(:user).id, :idiom_id => set_term.term_id)
     if schedule.empty?
-      schedule = UserIdiomSchedule.create(:user_id => get(:user).id, :idiom_id => set_term.term_id, :language_id => language.id)
+      schedule = UserIdiomSchedule.create(:user_id => get(:user).id, :idiom_id => set_term.term_id, :language_id => get(:language).id)
 
       UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 1, :interval => CardTiming.first.seconds)
       UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 2, :interval => CardTiming.first.seconds)
@@ -143,6 +143,18 @@ When /^I submit the following results as perfect$/ do |table|
     end
 
     page.do_record_review_perfect
+  end
+end
+
+When /^I choose to advance to the next chapter$/ do
+  add(:review_mode, "reading")
+  
+  goto_page :ShowLanguageSetPage, Capybara.current_session, sut do |page|
+    page.select_review_mode get(:review_mode)
+  end
+
+  on_page :NextSetChapterPage, Capybara.current_session do |page|
+    page.advance!
   end
 end
 
@@ -381,6 +393,8 @@ Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an uns
   review.first.success.should be false
 end
 
-Then /^I should see the time when the next card is due$/ do
-  And %{show me the page} 
+Then /^I should be on chapter (\d+)$/ do |chapter|
+  user_set = UserSets.where(:user_id => get(:user).id, :set_id => get(:set).id).first
+  user_set.chapter.should == chapter.to_i
 end
+

@@ -864,15 +864,176 @@ describe SetsController do
 
       assigns[:next_due_time].should >= Time.now - (1.day.from_now - start)
       assigns[:next_due_time].should <= 1.day.from_now.utc
-#      assigns[:refresh_in_ms].should >= (start - 1.day.from_now).abs - 10
-#      assigns[:refresh_in_ms].should <= (start - 1.day.from_now).abs
       assigns[:refresh_in_ms].should >= ((start - 1.day.from_now).abs - 10) * 1000
       assigns[:refresh_in_ms].should <= ((start - 1.day.from_now).abs) * 1000
     end
   end
 
   context '"POST" advance_chapter' do
-    
+    before(:each) do
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+      CardTiming.create(:seconds => 600)
+      @language = Language.make   #primary language
+      @language2 = Language.make
+      @language3 = Language.make
+      @language4 = Language.make  #has no terms in set
+      @set = Sets.make            #primary set
+      @set2 = Sets.make
+
+      #first idiom is in language and set
+      @idiom1 = Idiom.make
+      t1 = Translation.make(:language_id => @language.id)
+      t2 = Translation.make(:language_id => @language2.id)
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t1.id)
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t2.id)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
+
+      #second idiom is not in language but is in set
+      @idiom2 = Idiom.make
+      t1 = Translation.make(:language_id => @language2.id)
+      t2 = Translation.make(:language_id => @language3.id)
+      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t1.id)
+      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t2.id)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
+
+      #third idiom is not in set but is in language
+      @idiom3 = Idiom.make
+      t1 = Translation.make(:language_id => @language.id)
+      t2 = Translation.make(:language_id => @language2.id)
+      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t1.id)
+      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t2.id)
+      SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
+
+      #fourth idiom is in language and set
+      @idiom4 = Idiom.make
+      t1 = Translation.make(:language_id => @language.id)
+      t2 = Translation.make(:language_id => @language2.id)
+      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t1.id)
+      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t2.id)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
+
+      #Nth idiom is in the language and set but in a subsequent chapter
+      @idiomN = Idiom.make
+      t1 = Translation.make(:language_id => @language.id)
+      t2 = Translation.make(:language_id => @language2.id)
+      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t1.id)
+      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t2.id)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
+    end
+
+    it 'should redirect to languages_path if language is invalid' do
+      get :advance_chapter, :language_id => @language.id + 100, :id => @set.id, :review_mode => 'reading'
+
+
+      response.should be_redirect
+      response.should redirect_to languages_path
+    end
+
+    it 'should redirect to sets_path if set is invalid' do
+      get :advance_chapter, :language_id => @language.id, :id => @set.id + 100, :review_mode => 'reading'
+
+      response.should be_redirect
+      response.should redirect_to language_path(@language.id)
+    end
+
+    it 'should redirect to the language_sets_path if the review type is not set or is invalid' do
+      get :advance_chapter, :language_id => @language.id, :id => @set.id
+
+      response.should be_redirect
+      response.should redirect_to language_set_path(@language.id, @set.id)
+
+      get :advance_chapter, :language_id => @language.id, :id => @set.id, :review_mode => 'bananas'
+
+      response.should be_redirect
+      response.should redirect_to language_set_path(@language.id, @set.id)
+    end
+
+    it 'should redirect to the language set page if the set contains no terms for that language' do
+      UserSets.create(:set_id => @set.id, :user_id => @user.id, :language_id => @language4.id, :chapter => 1)
+
+      get :advance_chapter, :language_id => @language4.id, :id => @set.id, :review_mode => 'reading, typing'
+
+      UserSets.first.chapter.should == 1
+
+      response.should be_redirect
+      response.should redirect_to language_set_path(@language4.id, @set.id)
+    end
+
+    describe 'should redirect to the language set review if' do
+      it 'there are unscheduled terms for the specified review types' do
+        UserSets.create(:set_id => @set.id, :user_id => @user.id, :language_id => @language.id, :chapter => 1)
+
+        get :advance_chapter, :language_id => @language.id, :id => @set.id, :review_mode => 'reading, typing'
+
+        UserSets.first.chapter.should == 1
+
+        response.should be_redirect
+        response.should redirect_to review_language_set_path(@language.id, @set.id, :review_mode => 'reading, typing')
+      end
+
+      it 'there are due terms for the specified review types' do
+        UserSets.create(:set_id => @set.id, :user_id => @user.id, :language_id => @language.id, :chapter => 1)
+        schedule = UserIdiomSchedule.create(:idiom_id => @idiom1.id, :language_id => @language.id, :user_id => @user.id)
+        UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.ago, :interval => 5)
+
+        get :advance_chapter, :language_id => @language.id, :id => @set.id, :review_mode => 'reading, typing'
+
+        UserSets.first.chapter.should == 1
+
+        response.should be_redirect
+        response.should redirect_to review_language_set_path(@language.id, @set.id, :review_mode => 'reading, typing')
+      end
+    end
+
+    describe 'should not redirect back to the set review' do
+      it 'it should ignore other review types when finding due or scheduable terms' do
+        UserSets.create(:set_id => @set.id, :user_id => @user.id, :language_id => @language.id, :chapter => 1)
+
+        # our only scheduled item is due for reading but no other review type, as the review mode is typing it should not be shown
+        schedule = UserIdiomSchedule.create(:idiom_id => @idiom1.id, :language_id => @language.id, :user_id => @user.id)
+        UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 4, :due => 1.day.from_now, :interval => 5)
+
+        schedule = UserIdiomSchedule.create(:idiom_id => @idiom4.id, :language_id => @language.id, :user_id => @user.id)
+        UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 4, :due => 1.day.from_now, :interval => 5)
+
+        get :advance_chapter, :language_id => @language.id, :id => @set.id, :review_mode => 'typing'
+
+        UserSets.first.chapter.should == 2
+
+        response.should be_redirect
+        response.should redirect_to review_language_set_path(@language.id, @set.id, :review_mode => 'typing')
+      end
+
+      it 'should redirect back to the set review if there are no unscheduled terms in the set including other chapters' do
+        UserSets.create(:set_id => @set.id, :user_id => @user.id, :language_id => @language3.id, :chapter => 1)
+
+        start = Time.now
+        get :advance_chapter, :language_id => @language3.id, :id => @set.id, :review_mode => 'reading, typing'
+
+        UserSets.first.chapter.should == 1
+
+        response.should be_redirect
+        response.should redirect_to review_language_set_path(@language3.id, @set.id, :review_mode => 'reading, typing')
+      end
+    end
+
+    it 'increment the chapter count by 1' do
+      UserSets.create(:set_id => @set.id, :user_id => @user.id, :language_id => @language.id, :chapter => 1)
+
+      schedule = UserIdiomSchedule.create(:idiom_id => @idiom1.id, :language_id => @language.id, :user_id => @user.id)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.from_now, :interval => 5)
+      schedule = UserIdiomSchedule.create(:idiom_id => @idiom4.id, :language_id => @language.id, :user_id => @user.id)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.from_now, :interval => 5)
+
+      get :advance_chapter, :language_id => @language.id, :id => @set.id, :review_mode => 'reading'
+
+      UserSets.first.chapter.should == 2
+
+      response.should be_redirect
+      response.should redirect_to review_language_set_path(@language.id, @set.id, :review_mode => 'reading')
+    end
   end
 
   context '"GET" completed' do

@@ -10,4 +10,8 @@ module NextSetChapterPage
   def is_current_page?
     @session.has_content? "You've reached chapter"
   end
+
+  def advance!
+    @session.click_on "do_advance"
+  end
 end
