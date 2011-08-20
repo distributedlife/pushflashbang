@@ -2,24 +2,15 @@ Given /^the term containing "([^"]*)" in "([^"]*)" is due$/ do |containing_form,
   idiom = get_idiom_containing_form containing_form
   language = get_language(language_name)
 
-  schedule = UserIdiomSchedule.create(:user_id => get(:user).id, :idiom_id => idiom.id, :language_id => language.id)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.ago, :review_type => 1, :interval => CardTiming.first.seconds)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.ago, :review_type => 2, :interval => CardTiming.first.seconds)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.ago, :review_type => 4, :interval => CardTiming.first.seconds)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.ago, :review_type => 8, :interval => CardTiming.first.seconds)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.ago, :review_type => 16, :interval => CardTiming.first.seconds)
+
+  create_schedule_and_due_items get(:user).id, idiom.id, language.id, 1.day.ago
 end
 
 Given /^the term containing "([^"]*)" in "([^"]*)" is scheduled but not due$/ do |containing_form, language_name|
   idiom = get_idiom_containing_form containing_form
   language = get_language(language_name)
 
-  schedule = UserIdiomSchedule.create(:user_id => get(:user).id, :idiom_id => idiom.id, :language_id => language.id)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 1, :interval => CardTiming.first.seconds)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 2, :interval => CardTiming.first.seconds)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 4, :interval => CardTiming.first.seconds)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 8, :interval => CardTiming.first.seconds)
-  UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 16, :interval => CardTiming.first.seconds)
+  create_schedule_and_due_items get(:user).id, idiom.id, language.id, 1.day.from_now
 end
 
 Given /^I typed "([^"]*)" in as the answer$/ do |answer|
@@ -35,13 +26,7 @@ Given /^all terms in the "([^"]*)" set chapter (\d+) for "([^"]*)" are scheduled
   SetTerms.where(:set_id => get(:set).id, :chapter => chapter.to_s).each do |set_term|
     schedule = UserIdiomSchedule.where(:user_id => get(:user).id, :idiom_id => set_term.term_id)
     if schedule.empty?
-      schedule = UserIdiomSchedule.create(:user_id => get(:user).id, :idiom_id => set_term.term_id, :language_id => get(:language).id)
-
-      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 1, :interval => CardTiming.first.seconds)
-      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 2, :interval => CardTiming.first.seconds)
-      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 4, :interval => CardTiming.first.seconds)
-      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 8, :interval => CardTiming.first.seconds)
-      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :due => 1.day.from_now, :review_type => 16, :interval => CardTiming.first.seconds)
+      create_schedule_and_due_items get(:user).id, set_term.term_id, get(:language).id, 1.day.from_now
     else
       schedule = schedule.first
       UserIdiomDueItems.where(:user_idiom_schedule_id => schedule.id, :user_id => get(:user).id).each do |due_item|
@@ -166,27 +151,10 @@ end
 Then /^the first term in the set is scheduled for "([^"]*)"$/ do |review_type|
   UserIdiomSchedule.count.should == 1
 
-  if review_type == 'reading'
-    review_type_num = 1
-  end
-  if review_type == 'writing'
-    review_type_num = 2
-  end
-  if review_type == 'typing'
-    review_type_num = 4
-  end
-  if review_type == 'listening'
-    review_type_num = 8
-  end
-  if review_type == 'speaking'
-    review_type_num = 16
-  end
-
-
   first = UserIdiomSchedule.first
   found = false
   UserIdiomDueItems.where(:user_idiom_schedule_id => first.id).each do |due_item|
-    found = true if due_item.review_type == review_type_num
+    found = true if due_item.review_type == UserIdiomReview.to_review_type_int(review_type)
   end
 
   found.should == true
@@ -195,27 +163,10 @@ end
 Then /^the first term in the set is not scheduled for "([^"]*)"$/ do |review_type|
   UserIdiomSchedule.count.should == 1
 
-  if review_type == 'reading'
-    review_type_num = 1
-  end
-  if review_type == 'writing'
-    review_type_num = 2
-  end
-  if review_type == 'typing'
-    review_type_num = 4
-  end
-  if review_type == 'listening'
-    review_type_num = 8
-  end
-  if review_type == 'speaking'
-    review_type_num = 16
-  end
-
-
   first = UserIdiomSchedule.first
   not_found = false
   UserIdiomDueItems.where(:user_idiom_schedule_id => first.id).each do |due_item|
-    not_found = true unless due_item.review_type == review_type_num
+    not_found = true unless due_item.review_type == UserIdiomReview.to_review_type_int(review_type)
   end
 
   not_found.should == true

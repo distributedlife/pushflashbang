@@ -16,6 +16,7 @@ World(IdiomComponent)
 World(TranslationComponent)
 World(LanguageComponent)
 World(SetComponent)
+World(UserIdiomScheduleComponent)
 
 
 Akephalos.filter(:get, "http://www.google-analytics.com")

@@ -18,3 +18,6 @@
         %span#form= translation.form
         - unless translation.pronunciation.empty?
           %span#pronunciation= "(#{translation.pronunciation})"
+        - if translation.audio.file?
+          #audio
+            =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}

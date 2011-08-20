@@ -18,3 +18,8 @@
   =render :partial => '/common/definitions', :locals => {:topic => "translation-pronunciation"}
 = f.input :pronunciation, :as => :string, :label => false, :hint => I18n.t('form.translation-pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
 .pad_from_top
+
+#audio_definition
+  =render :partial => '/common/definitions', :locals => {:topic => "translation-audio"}
+= f.file_field :audio
+.pad_from_top

@@ -22,7 +22,7 @@ class TermsController < ApplicationController
     invalid_count = 0
     translation_params.each do |translation|
       t = Translation.new(translation[1])
-
+      
       unless t.language_id.nil? and t.form.nil? and t.pronunciation.nil?
         unless t.form.empty? and t.pronunciation.empty?
           @translations << t
@@ -161,6 +161,7 @@ class TermsController < ApplicationController
 
   def review
     begin
+      #TODO: change english to native
       english = Language.where(:name => "English").first
       
       return language_set_path(params[:language_id], params[:set_id]) unless idiom_exists? params[:id]
@@ -181,16 +182,14 @@ class TermsController < ApplicationController
         @audio = "front"
         @native = "back"
         @learned = "back"
-      else
-        if params[:review_mode]["reading"]
-          @learned = "front"
-          @native = "back"
-        else
-          if params[:review_mode]["speaking"]
-            @learned = "back"
-            @native = "front"
-          end
-        end
+      end
+      if params[:review_mode]["reading"]
+        @learned = "front"
+        @native = "back"
+      end
+      if params[:review_mode]["translating"]
+        @learned = "back"
+        @native = "front"
       end
       if params[:review_mode]["typing"]
         @typed = true
@@ -370,6 +369,11 @@ class TermsController < ApplicationController
         next unless params[:review_mode]["listening"]
         review.review_type = UserIdiomReview::HEARING
         review.success = params[:skip].nil? ? to_boolean(params[:listening]) : true
+      end
+      if due_item.review_type == UserIdiomReview.to_review_type_int("translating")
+        next unless params[:review_mode]["translating"]
+        review.review_type = UserIdiomReview::TRANSLATING
+        review.success = params[:skip].nil? ? to_boolean(params[:translating]) : true
       end
 
       if review.success

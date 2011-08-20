@@ -3,4 +3,7 @@
   - unless translation.pronunciation.empty?
     %span#pronunciation= "(#{translation.pronunciation})"
   %span#language.subscript.contrast_faint= translation.languages.name
+  - if translation.audio.file?
+    #audio
+      =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
   %span{:style => "min-width: 0.3em; display:inline-block"}

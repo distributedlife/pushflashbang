@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110815110241) do
+ActiveRecord::Schema.define(:version => 20110818102405) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20110815110241) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "language_id"
+    t.string   "audio_file_name"
   end
 
   create_table "user_card_reviews", :force => true do |t|

@@ -385,7 +385,7 @@ describe CardController do
       UserCardReview.all.each do |user_card_review|
         user_card_review.card_id.should == card2.id
         user_card_review.user_id.should == @user.id
-        user_card_review.due.should == card_due_date
+        user_card_review.due.to_s.should == card_due_date.to_s
         user_card_review.review_start.should >= card_due_date
         user_card_review.review_start.should <= Time.now - (elapsed_in_ms / 1000)
         user_card_review.reveal.utc.to_s.should == (user_card_review.review_start + (duration_in_ms / 1000)).utc.to_s

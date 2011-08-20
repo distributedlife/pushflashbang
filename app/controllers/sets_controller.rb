@@ -424,29 +424,10 @@ class SetsController < ApplicationController
     
     review_type_nums = []
     review_types.split(',').each do |review_type|
-      review_type = review_type.downcase
       review_type.strip!
 
-      if review_type == 'reading'
-        review_type_nums << 1
-        next
-      end
-      if review_type == 'writing'
-        review_type_nums << 2
-        next
-      end
-      if review_type == 'typing'
-        review_type_nums << 4
-        next
-      end
-      if review_type == 'listening'
-        review_type_nums << 8
-        next
-      end
-      if review_type == 'speaking'
-        review_type_nums << 16
-        next
-      end
+      value = UserIdiomReview.to_review_type_int(review_type)
+      review_type_nums << value unless value.nil?
     end
 
     return review_type_nums

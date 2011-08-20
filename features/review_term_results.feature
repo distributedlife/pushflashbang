@@ -33,7 +33,7 @@ Feature: review term results
     And I should see a "typing" checkbox and it is not checked
 
   Scenario: user review check box exists for each listening and writing
-    Given I review the "greetings" set in "Spanish" using the "listen and writing" review mode
+    Given I review the "greetings" set in "Spanish" using the "listening and writing" review mode
     When I reveal the answer after 3 seconds
     And I should see the "Record Results" button
     And I should see the "Too Easy! Show me this left often" button
@@ -62,7 +62,7 @@ Feature: review term results
     And I the term containing "un poco de" for language "Spanish" should have a successful "typing" review
 
   Scenario: submitted options are recorded
-    Given I review the "greetings" set in "Spanish" using the "listen and writing" review mode
+    Given I review the "greetings" set in "Spanish" using the "listening and writing" review mode
     When I reveal the answer
     When I submit the following results
       | review type | result |
@@ -80,5 +80,3 @@ Feature: review term results
       | speaking | not checked |
     Then I the term containing "un poco de" for language "Spanish" should have a successful "reading" review
     And I the term containing "un poco de" for language "Spanish" should have a successful "speaking" review
-
-  Scenario: Next due card is shown

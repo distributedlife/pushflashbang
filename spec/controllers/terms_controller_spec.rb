@@ -1253,4 +1253,52 @@ describe TermsController do
       end
     end
   end
+
+  context '"GET" review' do
+    before(:each) do
+      @set = Sets.make
+      @english = Language.make(:name => "English")
+      @spanish = Language.make(:name => "Spanish")
+      @idiom = Idiom.make
+      SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
+      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
+      UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
+
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+      CardTiming.create(:seconds => 600)
+      CardTiming.create(:seconds => 3600)
+      CardTiming.create(:seconds => 15400)
+    end
+
+
+    it 'should redirect to language path if idiom does not exist' do
+
+    end
+
+    it 'should redirect to language path if set does not exist' do
+
+    end
+
+    it 'should redirect to user home if language does not exist' do
+
+    end
+
+    it 'should return the term' do
+
+    end
+
+    it 'should return all translations in term that match the learned language' do
+
+    end
+
+    it 'should return all translations in term that match the native language' do
+
+    end
+
+    it 'should set audio, typed, native, learned based on the review mode' do
+      
+    end
+  end
 end

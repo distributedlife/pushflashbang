@@ -14,14 +14,14 @@ Feature: review term in typing mode
     And the user has the "greetings" set as a goal for the "Spanish" language
 
     Scenario: typing review handles correct answer and compares to native
-    When I review the "greetings" set in "Spanish" using the "speaking and typing" review mode
+    When I review the "greetings" set in "Spanish" using the "translating, speaking and typing" review mode
     And I typed "un poco de" in as the answer
     When I reveal the answer
     Then I will be told I am correct
     And I should see a "typing" checkbox and it is checked
 
   Scenario: typing review handles incorrect answer and compares to native
-    Given I review the "greetings" set in "Spanish" using the "speaking and typing" review mode
+    Given I review the "greetings" set in "Spanish" using the "translating, speaking and typing" review mode
     And I typed "bajo" in as the answer
     When I reveal the answer
     Then I will be told I am not correct

@@ -35,6 +35,7 @@ Feature: review terms
     And the first term in the set is not scheduled for "typing"
     And the first term in the set is not scheduled for "speaking"
     And the first term in the set is not scheduled for "listening"
+    And the first term in the set is not scheduled for "translating"
     And I should be on the "review term" page
     And the first scheduled term is shown
 
@@ -46,11 +47,13 @@ Feature: review terms
       | typing      |
       | speaking    |
       | listening   |
+      | translating |
     Then the first term in the set is scheduled for "reading"
     And the first term in the set is scheduled for "writing"
     And the first term in the set is scheduled for "typing"
     And the first term in the set is scheduled for "speaking"
     And the first term in the set is scheduled for "listening"
+    And the first term in the set is scheduled for "translating"
     And I should be on the "review term" page
     And the first scheduled term is shown
 
