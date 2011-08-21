@@ -1165,7 +1165,7 @@ describe TermsController do
           due_item.due.utc.should >= (start + due_item.interval).utc
           due_item.due.utc.should <= (finish + due_item.interval).utc
 
-          review.due.utc.should == @due_date.utc
+          review.due.utc.to_s.should == @due_date.utc.to_s
           review.review_start.utc.should >= (start - @elapsed_in_s).utc
           review.review_start.utc.should <= finish.utc
           review.reveal.utc.should >= (start - @elapsed_in_s + @duration_in_s).utc

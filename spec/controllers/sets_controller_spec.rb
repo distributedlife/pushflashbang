@@ -466,13 +466,16 @@ describe SetsController do
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
       CardTiming.create(:seconds => 600)
-      @language = Language.make   #primary language
-      @language2 = Language.make
+      @language = Language.make   #primary language to learn
+      @language2 = Language.make  #user native language
       @language3 = Language.make
       @language4 = Language.make  #has no terms in set
       @set = Sets.make            #primary set
       @set2 = Sets.make
 
+      @user.native_language_id = @language2.id
+      @user.save!
+      
       #first idiom is in language and set
       @idiom1 = Idiom.make
       t1 = Translation.make(:language_id => @language.id)
@@ -481,7 +484,7 @@ describe SetsController do
       IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
-      #second idiom is not in language but is in set
+      #second idiom is not in language but is in set (has user native; but not learn)
       @idiom2 = Idiom.make
       t1 = Translation.make(:language_id => @language2.id)
       t2 = Translation.make(:language_id => @language3.id)
@@ -642,31 +645,40 @@ describe SetsController do
       UserIdiomDueItems.last.interval.should == 5
     end
 
-    it 'should not show terms in the set that do not translate into the language' do
+#    it 'should not show terms in the set that do not translate into the language' do
+#      UserIdiomSchedule.count.should == 0
+#      UserIdiomDueItems.count.should == 0
+#
+#      start = Time.now
+#      get :review, :language_id => @language3.id, :id => @set.id, :review_mode => 'reading, typing'
+#      finish = Time.now
+#
+#      UserIdiomSchedule.count.should == 1
+#      UserIdiomSchedule.first.user_id.should == @user.id
+#      UserIdiomSchedule.first.idiom_id.should == @idiom2.id
+#      UserIdiomSchedule.first.language_id.should == @language3.id
+#
+#      UserIdiomDueItems.count.should == 2
+#      UserIdiomDueItems.first.user_idiom_schedule_id.should == UserIdiomSchedule.first.id
+#      UserIdiomDueItems.first.review_type.should == 1
+#      UserIdiomDueItems.first.due.utc.to_s.should >= start.utc.to_s
+#      UserIdiomDueItems.first.due.utc.to_s.should <= finish.utc.to_s
+#      UserIdiomDueItems.first.interval.should == 5
+#
+#      UserIdiomDueItems.last.user_idiom_schedule_id.should == UserIdiomSchedule.first.id
+#      UserIdiomDueItems.last.review_type.should == 4
+#      UserIdiomDueItems.last.due.utc.to_s.should >= start.utc.to_s
+#      UserIdiomDueItems.last.due.utc.to_s.should <= finish.utc.to_s
+#      UserIdiomDueItems.last.interval.should == 5
+#    end
+
+    it 'should not show terms in the set that do not translate into the users native language' do
       UserIdiomSchedule.count.should == 0
       UserIdiomDueItems.count.should == 0
 
       start = Time.now
-      get :review, :language_id => @language3.id, :id => @set.id, :review_mode => 'reading, typing'
+      get :review, :language_id => @language.id, :id => @set.id, :review_mode => 'reading, typing'
       finish = Time.now
-
-      UserIdiomSchedule.count.should == 1
-      UserIdiomSchedule.first.user_id.should == @user.id
-      UserIdiomSchedule.first.idiom_id.should == @idiom2.id
-      UserIdiomSchedule.first.language_id.should == @language3.id
-
-      UserIdiomDueItems.count.should == 2
-      UserIdiomDueItems.first.user_idiom_schedule_id.should == UserIdiomSchedule.first.id
-      UserIdiomDueItems.first.review_type.should == 1
-      UserIdiomDueItems.first.due.utc.to_s.should >= start.utc.to_s
-      UserIdiomDueItems.first.due.utc.to_s.should <= finish.utc.to_s
-      UserIdiomDueItems.first.interval.should == 5
-
-      UserIdiomDueItems.last.user_idiom_schedule_id.should == UserIdiomSchedule.first.id
-      UserIdiomDueItems.last.review_type.should == 4
-      UserIdiomDueItems.last.due.utc.to_s.should >= start.utc.to_s
-      UserIdiomDueItems.last.due.utc.to_s.should <= finish.utc.to_s
-      UserIdiomDueItems.last.interval.should == 5
     end
 
     it 'should redirect to the next chapter in set page if there are no due terms and no terms to schedule' do
@@ -724,6 +736,9 @@ describe SetsController do
       @language4 = Language.make  #has no terms in set
       @set = Sets.make            #primary set
       @set2 = Sets.make
+
+      @user.native_language_id = @language.id
+      @user.save!
 
       #first idiom is in language and set
       @idiom1 = Idiom.make
@@ -881,6 +896,9 @@ describe SetsController do
       @language4 = Language.make  #has no terms in set
       @set = Sets.make            #primary set
       @set2 = Sets.make
+
+      @user.native_language_id = @language2.id
+      @user.save!
 
       #first idiom is in language and set
       @idiom1 = Idiom.make
@@ -1048,6 +1066,9 @@ describe SetsController do
       @language4 = Language.make  #has no terms in set
       @set = Sets.make            #primary set
       @set2 = Sets.make
+
+      @user.native_language_id = @language2.id
+      @user.save!
 
       #first idiom is in language and set
       @idiom1 = Idiom.make

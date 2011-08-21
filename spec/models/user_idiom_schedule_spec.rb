@@ -651,4 +651,119 @@ describe UserIdiomSchedule do
       count.should == 3
     end
   end
+
+  context 'get_first_unscheduled_term_for_user_for_set_for_proficiencies' do
+    before(:each) do
+      @english = Language.make
+      @spanish = Language.make
+      @chinese = Language.make
+
+      @user = User.make(:native_language_id => @english.id)
+
+      #an idiom with spanish, english and chinese
+      @idiom1 = Idiom.make
+      @t11 = Translation.make(:language_id => @english.id)
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t11.id)
+      @t12 = Translation.make(:language_id => @spanish.id)
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t12.id)
+      @t13 = Translation.make(:language_id => @chinese.id)
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t12.id)
+
+      #english and chinese
+      @idiom2 = Idiom.make
+      @t21 = Translation.make(:language_id => @english.id)
+      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t21.id)
+      @t22 = Translation.make(:language_id => @chinese.id)
+      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t22.id)
+
+      #spanish and chinese
+      @idiom3 = Idiom.make
+      @t31 = Translation.make(:language_id => @spanish.id)
+      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => @t31.id)
+      @t32 = Translation.make(:language_id => @chinese.id)
+      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => @t32.id)
+
+      #an idiom with spanish, english
+      @idiom4 = Idiom.make
+      @t41 = Translation.make(:language_id => @english.id)
+      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => @t41.id)
+      @t42 = Translation.make(:language_id => @spanish.id)
+      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => @t42.id)
+
+      #an idiom with spanish, english
+      @idiom5 = Idiom.make
+      @t51 = Translation.make(:language_id => @english.id)
+      IdiomTranslation.make(:idiom_id => @idiom5.id, :translation_id => @t51.id)
+      @t52 = Translation.make(:language_id => @spanish.id)
+      IdiomTranslation.make(:idiom_id => @idiom5.id, :translation_id => @t52.id)
+
+
+      @set1 = Sets.make
+      @st11 = SetTerms.make(:set_id => @set1.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
+      @st12 = SetTerms.make(:set_id => @set1.id, :term_id => @idiom2.id, :chapter => 1, :position => 2) #to be ignore
+      @st13 = SetTerms.make(:set_id => @set1.id, :term_id => @idiom3.id, :chapter => 1, :position => 3) #to be ignore
+      @st14 = SetTerms.make(:set_id => @set1.id, :term_id => @idiom4.id, :chapter => 1, :position => 4)
+      @st15 = SetTerms.make(:set_id => @set1.id, :term_id => @idiom5.id, :chapter => 2, :position => 1)
+
+      @set2 = Sets.make
+
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+      CardTiming.create(:seconds => 600)
+    end
+
+    it 'should ignore terms that have been reviewed for the specified review type' do
+      schedule = UserIdiomSchedule.make(:user_id => @user.id, :idiom_id => @idiom1.id, :language_id => @spanish.id)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 2, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 4, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 8, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 16, :due => 1.day.from_now)
+
+      first = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [32]
+
+      first.should == @st11
+    end
+
+    it 'should ignore terms that dont support the users native language' do
+      schedule = UserIdiomSchedule.make(:user_id => @user.id, :idiom_id => @idiom1.id, :language_id => @spanish.id)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 2, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 4, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 8, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 16, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 32, :due => 1.day.from_now)
+
+      first = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32]
+
+      first.should == @st14
+    end
+
+    it 'should ignore terms that dont support the learn language' do
+      schedule = UserIdiomSchedule.make(:user_id => @user.id, :idiom_id => @idiom1.id, :language_id => @spanish.id)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 2, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 4, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 8, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 16, :due => 1.day.from_now)
+      UserIdiomDueItems.make(:user_idiom_schedule_id => schedule.id, :review_type => 32, :due => 1.day.from_now)
+
+      first = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32]
+
+      first.should == @st14
+    end
+
+    it 'should ignore terms that are not in the set' do
+      first = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set2.id, [1,2,4,8,16,32]
+
+      first.nil?.should be true
+    end
+
+    it 'should return the next unscheduled for the set, user native lang, learned language sorted by position and chapter' do
+      first = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32]
+
+      first.should == @st11
+    end
+  end
 end

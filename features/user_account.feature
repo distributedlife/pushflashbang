@@ -3,7 +3,10 @@ Feature: User accounts
   I want to be able to identify myself to the system
   So that my interactions with the system are remembered
 
-Scenario: user can register account and is automatically logged in
+  Background:
+    Given the "English" language has been created
+
+  Scenario: user can register account and is automatically logged in
   Given I go to the "register account" page
   When I create an account for "user@testingthis.com"
   Then I should be on the "user home" page

@@ -50,7 +50,7 @@ And /^I create a card without a front$/ do
 end
 
 And /^the card interval is (\d+)$/ do |interval|
-  card_schedule = UserCardSchedule::get_next_due_for_user_for_deck(get(:user_id), get(:deck_id))
+  card_schedule = UserCardSchedule::get_next_due_for_user_for_deck(get(:user).id, get(:deck_id))
 
   card_schedule.interval = interval
   card_schedule.save!

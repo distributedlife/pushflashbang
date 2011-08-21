@@ -1,9 +1,15 @@
+Given /^the "([^"]*)" language has been created$/ do |language_name|
+  add(:language, create_language(language_name))
+end
+
+
 And /^I create an account for "([^"]*)"$/ do |email|
   password = "password"
 
   fill_in('user_email', :with => email)
   fill_in('user_password', :with => password)
   fill_in('user_password_confirmation', :with => password)
+  select("English", :from => "user_native_language_id")
   click_on("Join!")
 
   add(:user, User.where(:email => email).first)
@@ -14,12 +20,13 @@ And /^I am a new, authenticated user$/ do
   email = 'user@testing.com'
   password = 'password'
 
-  Given %{I have one user "#{email}" with password "#{password}"}
+  And %{the "English" language has been created}
+  And %{I have one user "#{email}" with password "#{password}"}
   And %{I login with "#{email}" and "#{password}"}
 end
 
 And /^I have one\s+user "([^\"]*)" with password "([^\"]*)"$/ do |email, password|
-  User.new(:email => email, :password => password, :password_confirmation => password).save!
+  User.new(:email => email, :password => password, :password_confirmation => password, :native_language_id => get(:language).id).save!
 end
 
 And /^I login with "([^\"]*)" and "([^\"]*)"$/ do |email, password|
@@ -32,7 +39,6 @@ And /^I login with "([^\"]*)" and "([^\"]*)"$/ do |email, password|
   add(:password, password)
 
   add(:user, User.where(:email => email).first)
-  add(:user_id, get(:user).id)
 end
 
 And /^I log in as "([^"]*)"$/ do |email|

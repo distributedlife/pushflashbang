@@ -3,6 +3,12 @@
   = semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
     = f.input :email, :as => :email, :label => false, :hint => I18n.t('user.edit.labels.email'), :required => false, :wrapper_html => {:class => 'full_width'}
     .pad_from_top
+    = f.input :native_language_id, :as => :select, :collection => Language.all, :label => false, :hint => I18n.t('form.translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
+    :javascript
+      $j("#user_native_language_id").attr("class", "chzn-select")
+      $j("#user_native_language_id").attr("data-placehoder", "Select a language")
+      $j("#user_native_language_id").css('width', '100%');
+    .pad_from_top
     = f.input :password, :as => :password, :label => false, :hint => I18n.t('user.edit.labels.password'), :required => false, :wrapper_html => {:class => 'full_width'}
     .pad_from_top
     = f.input :password_confirmation, :as => :password, :label => false, :hint => I18n.t('user.edit.labels.confirm_password'), :required => false, :wrapper_html => {:style => 'full_width'}

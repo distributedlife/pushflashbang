@@ -161,8 +161,7 @@ class TermsController < ApplicationController
 
   def review
     begin
-      #TODO: change english to native
-      english = Language.where(:name => "English").first
+      native_language_id = current_user.native_language_id
       
       return language_set_path(params[:language_id], params[:set_id]) unless idiom_exists? params[:id]
 
@@ -172,7 +171,7 @@ class TermsController < ApplicationController
       @learned_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
 
       # get all translations in the term, that match the users native language
-      @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => english.id, :idiom_translations => {:idiom_id => params[:id]})
+      @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => native_language_id, :idiom_translations => {:idiom_id => params[:id]})
 
       @audio = "back"
       @typed = false

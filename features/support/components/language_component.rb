@@ -27,7 +27,12 @@ module LanguageComponent
     if language_name.nil? or language_name.empty?
       Language.make
     else
-      Language.make(:name => language_name)
+      existing = Language.where(:name => language_name)
+      if existing.empty?
+        Language.make(:name => language_name)
+      else
+        existing.first
+      end
     end
   end
 

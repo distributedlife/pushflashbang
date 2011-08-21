@@ -41,7 +41,7 @@ And /^the deck is configured to show the pronunciation on the back$/ do
 end
 
 And /^I have created a deck$/ do
-  add(:deck, Deck.make(:name => "My Deck", :user_id => get(:user_id)))
+  add(:deck, Deck.make(:name => "My Deck", :user_id => get(:user).id))
   add(:deck_id, get(:deck).id)
   add(:chapter, 1)
 end
@@ -56,7 +56,7 @@ And /^I have created many cards in the deck$/ do
 end
 
 And /^I have a deck with (\d+) chapters$/ do |chapter_count|
-  deck = Deck.make(:name => "My Deck", :user_id => get(:user_id))
+  deck = Deck.make(:name => "My Deck", :user_id => get(:user).id)
   add(:deck, deck)
   add(:deck_id, deck.id)
 
@@ -114,7 +114,7 @@ And /^the deck should be deleted$/ do
 end
 
 And /^I can see all of my decks$/ do
-  decks = Deck.where(:user_id => get(:user_id))
+  decks = Deck.where(:user_id => get(:user).id)
 
   decks.each do |deck|
     And %{I should see "#{deck.name}"}
@@ -127,7 +127,7 @@ And /^I will not see decks created by other users$/ do
   decks = Deck.all
 
   decks.each do |deck|
-    if deck.user_id != get(:user_id)
+    if deck.user_id != get(:user).id
       And %{I should not see "#{deck.name}"}
 
       unless deck.description.nil?
@@ -141,7 +141,7 @@ And /^I will see shared decks created by other users$/ do
   decks = Deck.all
 
   decks.each do |deck|
-    if deck.user_id != get(:user_id)
+    if deck.user_id != get(:user).id
       if deck.shared == true
         And %{I should see "#{deck.name}"}
         And %{I should see "#{deck.pronunciation_side}"}
@@ -178,7 +178,7 @@ And /^I should see the card count$/ do
 end
 
 And /^I should see the card due count$/ do
-  And %{I should see "#{UserCardSchedule.get_due_count_for_user_for_deck(get(:user_id), get(:deck_id))}"}
+  And %{I should see "#{UserCardSchedule.get_due_count_for_user_for_deck(get(:user).id, get(:deck_id))}"}
 end
 
 And /^I should see an input field to type my answer$/ do

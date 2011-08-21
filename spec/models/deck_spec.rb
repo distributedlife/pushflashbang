@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Deck do
   context 'to be valid' do
     before(:each) do
-      @user = User.create(:email => 'a@b.com', :password => 'password', :confirm_password => 'password')
+      @user = User.make
     end
 
     it 'should be associated with a user' do
@@ -97,7 +97,7 @@ describe Deck do
 
   context 'delete' do
     before(:each) do
-      @user = User.create(:email => 'a@b.com', :password => 'password', :confirm_password => 'password')
+      @user = User.make
     end
     
     it 'should delete the deck' do
@@ -142,7 +142,7 @@ describe Deck do
 
   context 'getChapters' do
     before(:each) do
-      @user = User.create(:email => 'a@b.com', :password => 'password', :confirm_password => 'password')
+      @user = User.make
       @deck = Deck.make(:user_id => @user.id)
     end
 

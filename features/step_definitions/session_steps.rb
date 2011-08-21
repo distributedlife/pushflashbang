@@ -15,17 +15,17 @@ end
 And /^there are cards due$/ do
   add(:card, Card.make(:deck_id => get(:deck_id)))
   add(:card_id, get(:card).id)
-  add(:user_card_schedule, UserCardSchedule.make(:due, :user_id => get(:user_id), :card_id => get(:card).id))
+  add(:user_card_schedule, UserCardSchedule.make(:due, :user_id => get(:user).id, :card_id => get(:card).id))
 
   add(:card, Card.make(:deck_id => get(:deck_id)))
   add(:card_id, get(:card).id)
-  add(:user_card_schedule, UserCardSchedule.make(:user_id => get(:user_id), :card_id => get(:card).id, :due => 2.days.ago))
+  add(:user_card_schedule, UserCardSchedule.make(:user_id => get(:user).id, :card_id => get(:card).id, :due => 2.days.ago))
 end
 
 And /^the next due card is in the current chapter$/ do
-  user_deck = UserDeckChapter.where(:user_id => get(:user_id), :deck_id => get(:deck_id)).first
+  user_deck = UserDeckChapter.where(:user_id => get(:user).id, :deck_id => get(:deck_id)).first
   if user_deck.nil?
-    user_deck = UserDeckChapter.make(:user_id => get(:user_id), :deck_id => get(:deck_id))
+    user_deck = UserDeckChapter.make(:user_id => get(:user).id, :deck_id => get(:deck_id))
     add(:user_deck, user_deck)
   end
 
@@ -34,14 +34,14 @@ And /^the next due card is in the current chapter$/ do
 end
 
 And /^the next due card is in the next chapter$/ do
-  user_deck = UserDeckChapter.where(:user_id => get(:user_id), :deck_id => get(:deck_id))
-  user_deck = UserDeckChapter.make(:user_id => get(:user_id), :deck_id => get(:deck_id)) unless user_deck.nil?
+  user_deck = UserDeckChapter.where(:user_id => get(:user).id, :deck_id => get(:deck_id))
+  user_deck = UserDeckChapter.make(:user_id => get(:user).id, :deck_id => get(:deck_id)) unless user_deck.nil?
 
   #all scheduled cards are made not due
   And %{there are no cards due}
 
   Card.all.each do |card|
-    next unless UserCardSchedule.where(:user_id => get(:user_id), :card_id => card.id).first.nil?
+    next unless UserCardSchedule.where(:user_id => get(:user).id, :card_id => card.id).first.nil?
 
     card.chapter = user_deck.chapter + 1
     card.save!
@@ -53,7 +53,7 @@ And /^the next due card is in the next chapter$/ do
 end
 
 And /^the first due card is shown$/ do
-  scheduled_card = Card.find(UserCardSchedule.order(:due).find(:first, :conditions => ["user_id = ? and due <= ?", get(:user_id), Time.now]).card_id)
+  scheduled_card = Card.find(UserCardSchedule.order(:due).find(:first, :conditions => ["user_id = ? and due <= ?", get(:user).id, Time.now]).card_id)
   And %{I should see "#{scheduled_card.front}"}
 end
 
@@ -71,7 +71,7 @@ When /^I have reviewed a new card$/ do
 end
 
 And /^the card has been reviewed before$/ do
-  UserCardReview.make(:card_id => get(:card_id), :user_id => get(:user_id))
+  UserCardReview.make(:card_id => get(:card_id), :user_id => get(:user).id)
 end
 
 And /^I take (\d+) seconds to review a card that is not new$/ do |seconds|
@@ -122,7 +122,7 @@ And /^I review the same card again$/ do
 end
 
 And /^the card interval should be (\d+)$/ do |interval|
-  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user_id)).first
+  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user).id).first
   scheduled_card.interval.to_s.should == interval
 end
 
@@ -132,28 +132,28 @@ And /^the interval should be (\d+) to the next plus up to (\d+) percent$/ do |in
   range = range.to_i
   range = (range / 100) + 1
 
-  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user_id)).first
+  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user).id).first
   scheduled_card.interval.should >= interval
   scheduled_card.interval.should <= (interval * range)
 end
 
 And /^the card should be rescheduled$/ do
-  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user_id)).first
+  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user).id).first
   scheduled_card.due.should >= Time.now
 end
 
 And /^the card interval should be increased$/ do
-  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user_id)).first
+  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user).id).first
   scheduled_card.interval.should == 5
 end
 
 And /^the card interval should be reset$/ do
-  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user_id)).first
+  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user).id).first
   scheduled_card.interval.should == 5
 end
 
 And /^the card interval should be increased to minimum$/ do
-  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user_id)).first
+  scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user).id).first
   scheduled_card.interval.should >= 3600 - CardTiming::RANGE
   scheduled_card.interval.should <= 3600 + CardTiming::RANGE
 end
@@ -229,7 +229,7 @@ end
 
 And /^there are cards due later$/ do
   card = Card.make(:deck_id => get(:deck_id))
-  UserCardSchedule.make(:user_id => get(:user_id), :card_id => card.id, :due => 2.days.from_now)
+  UserCardSchedule.make(:user_id => get(:user).id, :card_id => card.id, :due => 2.days.from_now)
 end
 
 And /^the first unscheduled card is scheduled$/ do
@@ -237,7 +237,7 @@ And /^the first unscheduled card is scheduled$/ do
 
 
   UserCardSchedule.last.card_id.should == cards.first.id
-  UserCardSchedule.last.user_id.should == get(:user_id)
+  UserCardSchedule.last.user_id.should == get(:user).id
 end
 
 And /^the first unscheduled card is shown$/ do
@@ -248,8 +248,8 @@ end
 
 And /^there are no unscheduled cards$/ do
   Card.all.each do |card|
-    if UserCardSchedule.where(:card_id => card.id, :user_id => get(:user_id)).count == 0
-      UserCardSchedule.create(:card_id => card.id, :user_id => get(:user_id), :due => 1.day.from_now, :interval => 0)
+    if UserCardSchedule.where(:card_id => card.id, :user_id => get(:user).id).count == 0
+      UserCardSchedule.create(:card_id => card.id, :user_id => get(:user).id, :due => 1.day.from_now, :interval => 0)
     end
   end
 end
@@ -259,11 +259,11 @@ And /^there are no cards in the deck$/ do
 end
 
 And /^the number of cards due is shown$/ do
-  And %{I should see "#{UserCardSchedule.get_due_count_for_user(get(:user_id))}"}
+  And %{I should see "#{UserCardSchedule.get_due_count_for_user(get(:user).id)}"}
 end
 
 And /^I should see the back of the card$/ do
-  scheduled_card = Card.find(UserCardSchedule.order(:due).find(:first, :conditions => ["user_id = ? and due <= ?", get(:user_id), Time.now]).card_id)
+  scheduled_card = Card.find(UserCardSchedule.order(:due).find(:first, :conditions => ["user_id = ? and due <= ?", get(:user).id, Time.now]).card_id)
   And %{I should see "#{scheduled_card.back}"}
 end
 

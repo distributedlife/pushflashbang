@@ -7,6 +7,12 @@
     .pad_from_top
     = f.input :password_confirmation, :as => :password, :label => false, :hint => I18n.t('user.registration.labels.confirm_password'), :required => false, :wrapper_html => {:style => 'full_width'}
     .pad_from_top
+    = f.input :native_language_id, :as => :select, :collection => Language.all, :label => false, :hint => I18n.t('form.translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
+    :javascript
+      $j("#user_native_language_id").attr("class", "chzn-select")
+      $j("#user_native_language_id").attr("data-placehoder", "Select a language")
+      $j("#user_native_language_id").css('width', '100%');
+    .pad_from_top
     = f.submit I18n.t('user.registration.labels.create_account'), :class => 'positive'
     - if devise_mapping.recoverable? && controller_name != 'passwords'
       = link_to I18n.t('user.actions.forgot_password'), new_password_path(resource_name), :class => 'neutral'

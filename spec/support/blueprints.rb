@@ -6,6 +6,7 @@ Sham.define do
   #users
   email {Faker::Internet.email(Faker::Name.first_name)}
   password(:unique => false) {'password'}
+  native_language_id(:unique => false) {1}
 
   #cards and decks
   name {Faker::Lorem.words(1)}
@@ -37,6 +38,7 @@ end
 User.blueprint do
   email
   password
+  native_language_id
 end
 
 Deck.blueprint do

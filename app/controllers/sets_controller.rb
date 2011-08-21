@@ -44,7 +44,7 @@ class SetsController < ApplicationController
   end
 
   def edit
-    redirect_to sets_path and return if !set_exists? params[:id]
+    redirect_to sets_path and return unless set_exists? params[:id]
 
     @set = Sets.find(params[:id])
     @set_names = SetName.order(:name).where(:sets_id => params[:id])
@@ -191,7 +191,7 @@ class SetsController < ApplicationController
 
 
     #there are no due cards; can we schedule one?
-    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
+    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(params[:language_id], current_user.native_language_id, current_user.id, params[:id], review_types)
     if next_term.nil?
       redirect_to completed_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode]) and return
     end
@@ -270,7 +270,7 @@ class SetsController < ApplicationController
 
 
     #there are no due cards; can we schedule one?
-    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
+    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(params[:language_id], current_user.native_language_id, current_user.id, params[:id], review_types)
     #there are unscheduled cards; we should be on the chapter page or ready for review
     unless next_term.nil?
       return redirect_to review_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode])
@@ -344,7 +344,7 @@ class SetsController < ApplicationController
 
 
     #there are no due cards; can we schedule one?
-    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(language_id, user_id, set_id, review_types)
+    next_term = UserIdiomSchedule::get_first_unscheduled_term_for_user_for_set_for_proficiencies(language_id, current_user.native_language_id, user_id, set_id, review_types)
     #there are no cards left at all; we should go to the completed page
     if next_term.nil?
       return review_language_set_path(language_id, set_id, :review_mode => review_mode)
