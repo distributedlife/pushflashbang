@@ -163,7 +163,9 @@ class TermsController < ApplicationController
     begin
       native_language_id = current_user.native_language_id
       
-      return language_set_path(params[:language_id], params[:set_id]) unless idiom_exists? params[:id]
+      redirect_to language_set_path(params[:language_id], params[:set_id]) and return unless idiom_exists? params[:id]
+      redirect_to language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+      redirect_to user_index_path and return unless language_is_valid? params[:language_id]
 
       @term = Idiom.find(params[:id])
 
@@ -198,6 +200,7 @@ class TermsController < ApplicationController
         render "learn.mobile"
       end
     rescue
+      ap "hmmm"
     end
   end
 

@@ -30,4 +30,29 @@ describe User do
       User.count.should == 0
     end
   end
+
+  context 'migrate_all_users_without_language_to_english' do
+    it 'should update all users without a native language' do
+
+    end
+
+    it 'should not update users that have a language' do
+      lang = Language.make
+
+      user = User.make(:native_language_id => lang.id)
+
+      User::migrate_all_users_without_language_to_english
+
+      user.native_language_id.should == lang.id
+    end
+
+    it 'should create the english language if it does not exist' do
+      Language.count.should == 0
+
+      User::migrate_all_users_without_language_to_english
+
+      Language.count.should == 1
+      Language.first.name.should == "English"
+    end
+  end
 end

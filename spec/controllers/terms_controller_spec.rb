@@ -1259,10 +1259,26 @@ describe TermsController do
       @set = Sets.make
       @english = Language.make(:name => "English")
       @spanish = Language.make(:name => "Spanish")
+      @chinese = Language.make(:name => "Chinese")
       @idiom = Idiom.make
+      @t1 = Translation.make(:language_id => @english.id, :form => "zee")
+      @t2 = Translation.make(:language_id => @english.id, :form => "yee")
+      @t3 = Translation.make(:language_id => @chinese.id, :form => "wee")
+      @t4 = Translation.make(:language_id => @spanish.id, :form => "vee")
+      @t5 = Translation.make(:language_id => @spanish.id, :form => "uee")
+      @t6 = Translation.make(:language_id => @spanish.id, :form => "xee")
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t1.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t2.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t3.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t4.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t5.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t6.id)
       SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
       UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
       UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
+
+      @user.native_language_id = @english.id
+      @user.save!
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -1273,32 +1289,75 @@ describe TermsController do
     end
 
 
-    it 'should redirect to language path if idiom does not exist' do
+    it 'should redirect to language set path if idiom does not exist' do
+      get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id + 100, :review_mode => 'reading'
 
+      response.should be_redirect
+      response.should redirect_to language_set_path(@spanish.id, @set.id)
     end
 
     it 'should redirect to language path if set does not exist' do
+      get :review, :language_id => @spanish.id, :set_id => @set.id + 100, :id => @idiom.id, :review_mode => 'reading'
 
+      response.should be_redirect
+      response.should redirect_to language_path(@spanish.id)
     end
 
     it 'should redirect to user home if language does not exist' do
+      get :review, :language_id => @spanish.id + 100, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
 
+      response.should redirect_to user_index_path
+      response.should be_redirect
     end
 
     it 'should return the term' do
+      get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
 
+      assigns[:term].should == @idiom
     end
 
     it 'should return all translations in term that match the learned language' do
+      get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
 
+      assigns[:learned_translations].count.should == 3
+      assigns[:learned_translations][0].should == @t5
+      assigns[:learned_translations][1].should == @t4
+      assigns[:learned_translations][2].should == @t6
     end
 
     it 'should return all translations in term that match the native language' do
+      get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
 
+      assigns[:native_translations].count.should == 2
+      assigns[:native_translations][0].should == @t2
+      assigns[:native_translations][1].should == @t1
     end
 
     it 'should set audio, typed, native, learned based on the review mode' do
-      
+      get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
+
+      assigns[:audio].should == 'back'
+      assigns[:typed].should == false
+      assigns[:native].should == 'back'
+      assigns[:learned].should == 'front'
+
+      get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'listening'
+
+      assigns[:audio].should == 'front'
+      assigns[:typed].should == false
+      assigns[:native].should == 'back'
+      assigns[:learned].should == 'back'
+
+      get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'translating'
+
+      assigns[:audio].should == 'back'
+      assigns[:typed].should == false
+      assigns[:native].should == 'front'
+      assigns[:learned].should == 'back'
+
+      get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'typing'
+
+      assigns[:typed].should == true
     end
   end
 end

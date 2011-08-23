@@ -9,9 +9,9 @@ class User < ActiveRecord::Base
 
   validates :native_language_id, :presence => true
 
-  def migrate_all_users_without_language_to_english
+  def self.migrate_all_users_without_language_to_english
     english = Language.where(:name => "English")
-    if english.nil?
+    if english.empty?
       english = Language.create(:name => "English")
     else
       english = english.first
