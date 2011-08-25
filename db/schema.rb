@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110820053901) do
+ActiveRecord::Schema.define(:version => 20110823115005) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -55,6 +55,16 @@ ActiveRecord::Schema.define(:version => 20110820053901) do
 
   create_table "languages", :force => true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "related_translations", :force => true do |t|
+    t.integer  "translation1_id"
+    t.integer  "translation2_id"
+    t.boolean  "share_written_form"
+    t.boolean  "share_audible_form"
+    t.boolean  "share_meaning"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

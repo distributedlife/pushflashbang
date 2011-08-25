@@ -96,7 +96,7 @@ PushFlashBang::Application.routes.draw do
   
   resources :terms do
     collection do
-      post 'add_translation'
+      get 'add_translation'
       post 'select'
     end
 

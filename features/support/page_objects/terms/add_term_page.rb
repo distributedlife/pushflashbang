@@ -20,12 +20,11 @@ module AddTermPage
   def form_has_hash_contents index, hash
     @session.find_field("translation_#{index}_form").value.should == hash[:form]
     @session.find_field("translation_#{index}_language_id").text[hash[:language]].nil?.should == false unless hash[:language].blank?
-#    @session.find_field("translation_#{index}_language_id").text.should == hash[:language] 
     @session.find_field("translation_#{index}_pronunciation").value.should == hash[:pronunciation]
   end
 
   def add_translation_slot
-    @session.click_on("add translation")
+    @session.click_on("add_translation")
   end
 
   def add_translations

@@ -45,8 +45,20 @@ class TermsController < ApplicationController
         IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => to.id)
       end
 
+
+      #scan for related translations of the same language
+      @translations.each do |t1|
+        Translation.all.each do |t2|
+          next if t1.id == t2.id
+
+          RelatedTranslations::create_relationship_if_needed t1,t2
+        end
+      end
+
+      
       link = self.class.helpers.link_to('Click here to edit.', edit_term_path(idiom.id))
       flash[:success] = "Related terms created. #{link}"
+
 
       #if we have a set_id. we should link the term to that set
       if params[:set_id]

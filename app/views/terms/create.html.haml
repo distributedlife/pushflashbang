@@ -10,7 +10,7 @@
             = render :partial => 'create_term_form', :locals => {:translation => translation, :i => i, :f => f}
             .pad_from_top
       #translation{:id => @translations.count}
-        = link_to I18n.t('actions.add-translation'), add_translation_terms_path(:i => @translations.count), :class => 'neutral', :method => :post, :remote => :true
+        = link_to I18n.t('actions.add-translation'), add_translation_terms_path(:i => @translations.count), :class => 'neutral', :method => :post, :remote => :true, :id => "add_translation"
         .pad_from_top
         .pad_from_top
 
