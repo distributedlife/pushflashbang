@@ -5,7 +5,6 @@ Feature: related translations
       | form         | language | pronunciation |
       | a little bit | English  |               |
       | some         | English  |               |
-      | some         | English  |               |
     Then the translation "a little bit" is related to translation "some" by meaning
     Then the translation "a little bit" is not related to translation "some" by form
     Then the translation "a little bit" is not related to translation "some" by pronunciation

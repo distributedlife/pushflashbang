@@ -40,11 +40,11 @@ describe LanguagesHelper do
     end
 
     it 'should return true if user is learning language' do
-      user_is_learning_language?(@language.id, @user.id).should be true
+      LanguagesHelper::user_is_learning_language?(@language.id, @user.id).should be true
     end
 
     it 'should return false if the user is not learning the language' do
-      user_is_learning_language?(@language.id, @user.id + 1).should be false
+      LanguagesHelper::user_is_learning_language?(@language.id, @user.id + 1).should be false
     end
   end
 end
