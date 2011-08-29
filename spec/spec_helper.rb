@@ -7,6 +7,9 @@ require 'rspec/rails'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+# our test components from cucumber
+Dir[Rails.root.join("features/support/components/*.rb")].each {|file| require file}
+
 RSpec.configure do |config|
   # == Mock Framework
   #
@@ -31,4 +34,12 @@ RSpec.configure do |config|
 
   #devise helpers
   config.include Devise::TestHelpers, :type => :controller
+
+  #cucumber test helpers
+  config.include UserComponent
+  config.include IdiomComponent
+  config.include TranslationComponent
+  config.include LanguageComponent
+  config.include SetComponent
+  config.include UserIdiomScheduleComponent
 end

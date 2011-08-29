@@ -13,6 +13,33 @@ class RelatedTranslations < ActiveRecord::Base
       rt.first
     end
   end
+  
+  def self.delete_relationships_for_transation translation
+    RelatedTranslations.where(:translation1_id => translation.id).each do |rt|
+      rt.delete
+    end
+    RelatedTranslations.where(:translation2_id => translation.id).each do |rt|
+      rt.delete
+    end
+  end
+
+  def self.rebuild_relationships_for_translation translation
+    RelatedTranslations::delete_relationships_for_transation translation
+
+    Translation.all.each do |t2|
+      next if translation.id == t2.id
+
+      RelatedTranslations::create_relationship_if_needed translation,t2
+    end
+  end
+
+  def self.create_relationships_for_translation translation
+    Translation.all.each do |t2|
+      next if translation.id == t2.id
+
+      RelatedTranslations::create_relationship_if_needed translation,t2
+    end
+  end
 
   def self.create_relationship_if_needed t1, t2
     rt1 = get_relationship t1.id, t2.id

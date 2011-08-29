@@ -5,6 +5,7 @@ Feature: related translations
       | form         | language | pronunciation |
       | a little bit | English  |               |
       | some         | English  |               |
+      | some         | English  |               |
     Then the translation "a little bit" is related to translation "some" by meaning
     Then the translation "a little bit" is not related to translation "some" by form
     Then the translation "a little bit" is not related to translation "some" by pronunciation
@@ -61,6 +62,8 @@ Feature: related translations
     Then the translation "desert" is related to translation "wasteland" by pronunciation
 
 
+### TODO: implement these after the cucumber-rails patch is made (currently tested by rspec controller tests)
+#
 #  Scenario: Add new translation to existing term; link to others in language by meaning
 #
 #  Scenario: Add new translation to existing term; link to others in language if they share form
@@ -72,5 +75,3 @@ Feature: related translations
 #  Scenario: update translation, changing form; delink form only and relink
 #
 #  Scenario: update translation, changing pronunciation; delink pronunciation only and relink
-#
-#  Scenario: delete translation, delink all

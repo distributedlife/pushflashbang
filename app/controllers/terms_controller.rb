@@ -47,12 +47,8 @@ class TermsController < ApplicationController
 
 
       #scan for related translations of the same language
-      @translations.each do |t1|
-        Translation.all.each do |t2|
-          next if t1.id == t2.id
-
-          RelatedTranslations::create_relationship_if_needed t1,t2
-        end
+      @translations.each do |translation|
+        RelatedTranslations::create_relationships_for_translation translation
       end
 
       
@@ -117,6 +113,13 @@ class TermsController < ApplicationController
           IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => to.id)
         end
       end
+
+
+      #scan for related translations of the same language
+      @translations.each do |translation|
+        RelatedTranslations::rebuild_relationships_for_translation translation
+      end
+
 
       link = self.class.helpers.link_to('Click here to view.', edit_term_path(idiom.id))
       flash[:success] = "Related terms created. #{link}"
