@@ -3,7 +3,7 @@
 development:
   adapter: postgresql
   database: pushflashbang_dev
-  username: rybo
+  username: pushflashbang
   encoding: utf8
   pool: 5
   timeout: 5000
@@ -14,7 +14,7 @@ development:
 test: &test
   adapter: postgresql
   database: pushflashbang_test
-  username: rybo
+  username: pushflashbang
   encoding: utf8
   pool: 5
   timeout: 5000
