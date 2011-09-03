@@ -41,7 +41,13 @@ Given /^the user has reviewed the idiom "([^"]*)" before in the "([^"]*)" langua
   idiom = get_idiom_containing_form containing_form
   language = get_language language_name
 
-  UserIdiomSchedule.make(:user_id => get(:user).id, :idiom_id => idiom.id, :language_id => language.id)
+  is = UserIdiomSchedule.make(:user_id => get(:user).id, :idiom_id => idiom.id, :language_id => language.id)
+  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 1, :due => Time.now)
+  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 2, :due => Time.now)
+  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 4, :due => Time.now)
+  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 8, :due => Time.now)
+  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 16, :due => Time.now)
+  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 32, :due => Time.now)
 end
 
 ################################################################################
@@ -91,6 +97,20 @@ When /^I review the "([^"]*)" term in the "([^"]*)" set in "([^"]*)" using the "
 
   goto_page :ReviewTermPage, Capybara.current_session, sut
 end
+
+When /^I record the successful review of the  "([^"]*)" term in the "([^"]*)" set in "([^"]*)" using the "([^"]*)" review mode$/ do |containing_form, set_name, language_name, review_mode|
+  add(:idiom, get_idiom_containing_form(containing_form))
+  add(:set, get_set_from_name(set_name))
+  add(:language, get_language(language_name))
+  add(:review_mode, review_mode)
+
+  goto_page :ReviewTermPage, Capybara.current_session, sut do |page|
+    page.reveal!
+    page.do_record_review_perfect
+    sleep 0.25
+  end
+end
+
 
 
 When /^I reveal the answer I will be told I am correct$/ do
@@ -399,4 +419,34 @@ Then /^after the reveal I should see native text containing "([^"]*)"$/ do |text
     page.reveal!
     page.native_language_contains?(text).should be true
   end
+end
+
+Then /^the "([^"]*)" term should have a review and be scheduled in the future for "([^"]*)"$/ do |containing_form, review_mode|
+  idiom = get_idiom_containing_form containing_form
+  review_type = UserIdiomReview::to_review_type_int review_mode
+
+  UserIdiomSchedule.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => get(:language).id).count.should == 1
+  is = UserIdiomSchedule.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => get(:language).id).first
+  di = UserIdiomDueItems.where(:user_idiom_schedule_id => is.id, :review_type => review_type).first
+  di.due.utc.should >= Time.now.utc
+end
+
+Then /^the "([^"]*)" term should not have a review and should not be scheduled for "([^"]*)"$/ do |containing_form, review_mode|
+  idiom = get_idiom_containing_form containing_form
+  
+  UserIdiomSchedule.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => get(:language).id).count.should == 0
+end
+
+Then /^the terms "([^"]*)", "([^"]*)" should be in sync for "([^"]*)"$/ do |containing_form1, containing_form2, review_mode|
+  idiom1 = get_idiom_containing_form containing_form1
+  idiom2 = get_idiom_containing_form containing_form2
+  review_type = UserIdiomReview::to_review_type_int review_mode
+
+  is1 = UserIdiomSchedule.where(:idiom_id => idiom1.id, :user_id => get(:user).id, :language_id => get(:language).id).first
+  is2 = UserIdiomSchedule.where(:idiom_id => idiom2.id, :user_id => get(:user).id, :language_id => get(:language).id).first
+#  ap UserIdiomDueItems.all
+  di1 = UserIdiomDueItems.where(:user_idiom_schedule_id => is1.id, :review_type => review_type).first
+  di2 = UserIdiomDueItems.where(:user_idiom_schedule_id => is2.id, :review_type => review_type).first
+
+  di1.due.utc.to_s.should == di2.due.utc.to_s
 end

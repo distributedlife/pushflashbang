@@ -187,12 +187,13 @@ class TermsController < ApplicationController
       # get all translations in the term, that match the learned language
       @learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
       learned_translations_in_idiom = @learned_translations_in_idiom.map{|t| t.id}
-
-
+      redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?
       
       # get all translations in the term, that match the users native language
       @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => native_language_id, :idiom_translations => {:idiom_id => params[:id]})
 
+
+      # configure display based on review mode
       @audio = "back"
       @typed = false
       @native = "not set"
@@ -203,25 +204,26 @@ class TermsController < ApplicationController
         @native = "back"
         @learned = "back"
 
-        @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], {:audible => true}
+        related_translation_link = {:audible => true}
       end
       if params[:review_mode]["reading"]
         @learned = "front"
         @native = "back"
 
-        @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], {:written => true}
+        related_translation_link = {:written => true}
       end
       if params[:review_mode]["translating"]
         @learned = "back"
         @native = "front"
-
-        @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], {:meaning => true}
+        related_translation_link = {:meaning => true}
       end
       if params[:review_mode]["typing"]
         @typed = true
       end
+      
 
       #get related count and idioms
+      @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], related_translation_link
       @related_count = @learned_translations.count
       idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', @learned_translations])
       idiom_translations = idiom_translations.map{|t| t.idiom_id}
@@ -359,72 +361,87 @@ class TermsController < ApplicationController
     redirect_to language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
     redirect_to review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
 
+
+    related_translation_link = {:audible => true} if params[:review_mode]["listening"]
+    related_translation_link = {:written => true} if params[:review_mode]["reading"]
+    related_translation_link = {:meaning => true} if params[:review_mode]["translating"]
+
+    learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+    learned_translations_in_idiom = learned_translations_in_idiom.map{|t| t.id}
+    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?
+    learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], related_translation_link
+    idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', learned_translations])
+    idiom_translations = idiom_translations.map{|t| t.idiom_id}
+
+    sync_due_times = []
     
-    schedule = UserIdiomSchedule.where(:user_id => current_user.id, :idiom_id => params[:id], :language_id => params[:language_id])
-    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
-    schedule = schedule.first
+    Idiom.find(idiom_translations).each do |idiom|
+      schedule = UserIdiomSchedule.where(:user_id => current_user.id, :idiom_id => idiom.id, :language_id => params[:language_id])
+      redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
+      schedule = schedule.first
 
 
-    params[:duration] ||= 0
-    params[:elapsed] ||= 0
-    duration_in_seconds = params[:duration].to_i / 1000
-    elapsed_in_seconds = params[:elapsed].to_i / 1000
+      params[:duration] ||= 0
+      params[:elapsed] ||= 0
+      duration_in_seconds = params[:duration].to_i / 1000
+      elapsed_in_seconds = params[:elapsed].to_i / 1000
 
-    now = Time.now
-    UserIdiomDueItems.where(:user_idiom_schedule_id => schedule.id).each do |due_item|
-      review_start_time = now - elapsed_in_seconds < due_item.due ? due_item.due : now - elapsed_in_seconds
+      now = Time.now
+      UserIdiomDueItems.where(:user_idiom_schedule_id => schedule.id).each do |due_item|
+        review_start_time = now - elapsed_in_seconds < due_item.due ? due_item.due : now - elapsed_in_seconds
 
-      review = UserIdiomReview.new
-      review.due = due_item.due
-      review.review_start = review_start_time
-      review.reveal = review_start_time + duration_in_seconds
-      review.user_id = current_user.id
-      review.idiom_id = params[:id]
-      review.language_id = params[:language_id]
-      review.result_recorded = now
-      review.interval = due_item.interval
+        review = UserIdiomReview.new
+        review.due = due_item.due
+        review.review_start = review_start_time
+        review.reveal = review_start_time + duration_in_seconds
+        review.user_id = current_user.id
+        review.idiom_id = idiom.id
+        review.language_id = params[:language_id]
+        review.result_recorded = now
+        review.interval = due_item.interval
 
-      if due_item.review_type == UserIdiomReview.to_review_type_int("reading")
-        next unless params[:review_mode]["reading"]
-        review.review_type = UserIdiomReview::READING
-        review.success = params[:skip].nil? ? to_boolean(params[:reading]) : true
+        if due_item.review_type == UserIdiomReview.to_review_type_int("reading")
+          next unless params[:review_mode]["reading"]
+          review.review_type = UserIdiomReview::READING
+          review.success = params[:skip].nil? ? to_boolean(params[:reading]) : true
+        end
+        if due_item.review_type == UserIdiomReview.to_review_type_int("typing")
+          next unless params[:review_mode]["typing"]
+          review.review_type = UserIdiomReview::TYPING
+          review.success = params[:skip].nil? ? to_boolean(params[:typing]) : true
+        end
+        if due_item.review_type == UserIdiomReview.to_review_type_int("speaking")
+          next unless params[:review_mode]["speaking"]
+          review.review_type = UserIdiomReview::SPEAKING
+          review.success = params[:skip].nil? ? to_boolean(params[:speaking]) : true
+        end
+        if due_item.review_type == UserIdiomReview.to_review_type_int("writing")
+          next unless params[:review_mode]["writing"]
+          review.review_type = UserIdiomReview::WRITING
+          review.success = params[:skip].nil? ? to_boolean(params[:writing]) : true
+        end
+        if due_item.review_type == UserIdiomReview.to_review_type_int("listening")
+          next unless params[:review_mode]["listening"]
+          review.review_type = UserIdiomReview::HEARING
+          review.success = params[:skip].nil? ? to_boolean(params[:listening]) : true
+        end
+        if due_item.review_type == UserIdiomReview.to_review_type_int("translating")
+          next unless params[:review_mode]["translating"]
+          review.review_type = UserIdiomReview::TRANSLATING
+          review.success = params[:skip].nil? ? to_boolean(params[:translating]) : true
+        end
+
+        if review.success
+          due_item.interval = CardTiming.get_next(due_item.interval).seconds
+        else
+          due_item.interval = CardTiming.get_first.seconds
+        end
+
+        sync_due_times[due_item.review_type] ||= Time.now + due_item.interval
+        due_item.due = sync_due_times[due_item.review_type]
+        review.save!
+        due_item.save!
       end
-      if due_item.review_type == UserIdiomReview.to_review_type_int("typing")
-        next unless params[:review_mode]["typing"]
-        review.review_type = UserIdiomReview::TYPING
-        review.success = params[:skip].nil? ? to_boolean(params[:typing]) : true
-      end
-      if due_item.review_type == UserIdiomReview.to_review_type_int("speaking")
-        next unless params[:review_mode]["speaking"]
-        review.review_type = UserIdiomReview::SPEAKING
-        review.success = params[:skip].nil? ? to_boolean(params[:speaking]) : true
-      end
-      if due_item.review_type == UserIdiomReview.to_review_type_int("writing")
-        next unless params[:review_mode]["writing"]
-        review.review_type = UserIdiomReview::WRITING
-        review.success = params[:skip].nil? ? to_boolean(params[:writing]) : true
-      end
-      if due_item.review_type == UserIdiomReview.to_review_type_int("listening")
-        next unless params[:review_mode]["listening"]
-        review.review_type = UserIdiomReview::HEARING
-        review.success = params[:skip].nil? ? to_boolean(params[:listening]) : true
-      end
-      if due_item.review_type == UserIdiomReview.to_review_type_int("translating")
-        next unless params[:review_mode]["translating"]
-        review.review_type = UserIdiomReview::TRANSLATING
-        review.success = params[:skip].nil? ? to_boolean(params[:translating]) : true
-      end
-
-      if review.success
-        due_item.interval = CardTiming.get_next(due_item.interval).seconds
-      else
-        due_item.interval = CardTiming.get_first.seconds
-      end
-
-      due_item.due = Time.now + due_item.interval
-
-      review.save!
-      due_item.save!
     end
 
     redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode])

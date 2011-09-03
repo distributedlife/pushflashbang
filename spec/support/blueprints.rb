@@ -137,7 +137,7 @@ UserIdiomReview.blueprint do
   reveal
   result_recorded
   success
-  interval
+  interval {5}
 end
 
 UserIdiomSchedule.blueprint do

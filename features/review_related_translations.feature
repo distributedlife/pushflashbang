@@ -274,18 +274,36 @@ Feature: reviewing related translations
 
 
 
+  Scenario: do not record reviews against idioms not yet learned by the user
+    Given the following related translations:
+      | form | language | pronunciation |
+      | desert | Chinese  | desert|
+      | 毛 | English  | sdfs |
+    And the following related translations:
+      | form | language | pronunciation |
+      | desert | Chinese| desert|
+      | 牦 | English  | nleg|
+    And the group containing "毛" is in the set "all"
+    And the group containing "牦" is in the set "all"
+    And the user has reviewed the idiom "毛" before in the "Chinese" language
+    When I record the successful review of the  "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    Then the "毛" term should have a review and be scheduled in the future for "listening"
+    And the "牦" term should not have a review and should not be scheduled for "listening"
 
-
-#  Scenario: recording a review when I know no other cards
-#    When I review the "沙" term in the "all" set in "English" using the "listening" review mode
-#    And I record the review as a success
-#    Then the "沙" term should have a review and be scheduled
-#    And the "dessert" term should not have a review and should not be scheduled
-#
-#  Scenario: recording a review when I know other cards that share something
-#    Given I have reviewed the term containing "沙" in "English" using the "listening" review mode
-#    When I review the "dessert" term in the "all" set in "English" using the "listening" review mode
-#    And I record the review as a success
-#    Then the "沙" term should have a review and be scheduled
-#    Then the "dessert" term should have a review and be scheduled
-#    And the "沙" term and the "dessert" term schedule should be in sync for "listening"
+ Scenario: do not record reviews against idioms not yet learned by the user
+    Given the following related translations:
+      | form | language | pronunciation |
+      | desert | Chinese  | desert|
+      | 毛 | English  | sdfs |
+    And the following related translations:
+      | form | language | pronunciation |
+      | desert | Chinese| desert|
+      | 牦 | English  | nleg|
+    And the group containing "毛" is in the set "all"
+    And the group containing "牦" is in the set "all"
+    And the user has reviewed the idiom "毛" before in the "Chinese" language
+    And the user has reviewed the idiom "牦" before in the "Chinese" language
+    When I record the successful review of the  "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    Then the "毛" term should have a review and be scheduled in the future for "listening"
+    Then the "牦" term should have a review and be scheduled in the future for "listening"
+    And the terms "毛", "牦" should be in sync for "listening"

@@ -87,14 +87,6 @@ class RelatedTranslations < ActiveRecord::Base
         AND rt.share_written_form in (#{options[:written]})
         AND rt.share_audible_form in (#{options[:audible]})
     SQL
-#    get_related_sql = <<-SQL
-#      SELECT distinct(rt.translation2_id)
-#      FROM related_translations rt
-#      WHERE rt.translation1_id in (#{translation_ids.join(',')})
-#        AND rt.share_meaning in (#{options[:meaning]})
-#        AND rt.share_written_form in (#{options[:written]})
-#        AND rt.share_audible_form in (#{options[:audible]})
-    #SQL
 
     related = self.find_by_sql(get_related_sql)
     related = related.map{|s| s.translation2_id}

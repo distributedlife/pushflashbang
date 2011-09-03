@@ -1345,9 +1345,19 @@ describe TermsController do
       @english = Language.make(:name => "English")
       @spanish = Language.make(:name => "Spanish")
       @idiom = Idiom.make
+
       SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
       UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
       UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
+
+      t1 = Translation.make(:language_id => @english.id)
+      t2 = Translation.make(:language_id => @spanish.id)
+
+      add_translation_to_idiom @idiom.id, t1.id
+      add_translation_to_idiom @idiom.id, t2.id
+
+      relate_translation_to_others t1.id, @idiom.id
+      relate_translation_to_others t2.id, @idiom.id
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
