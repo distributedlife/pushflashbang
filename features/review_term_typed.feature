@@ -17,6 +17,7 @@ Feature: review term in typing mode
     When I review the "greetings" set in "Spanish" using the "translating, speaking and typing" review mode
     And I typed "un poco de" in as the answer
     When I reveal the answer
+    And show me the page
     Then I will be told I am correct
     And I should see a "typing" checkbox and it is checked
 

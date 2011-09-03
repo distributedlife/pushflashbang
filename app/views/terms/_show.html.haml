@@ -1,10 +1,10 @@
 - answer = nil
 - card_answer = ""
-//- @learned_translations.each do |learned_translation|
-//  - card_answer = "#{card_answer}, #{learned_translation.form}" unless card_answer.empty?
-//  - card_answer = learned_translation.form if card_answer.empty?
-//  - answer = learned_translation.clone
-//  - answer.form = ""
+- @learned_translations_in_idiom.each do |learned_translation|
+  - card_answer = "#{card_answer}, #{learned_translation.form}" unless card_answer.empty?
+  - card_answer = learned_translation.form if card_answer.empty?
+  - answer = learned_translation.clone
+  - answer.form = ""
 
 = hidden_field_tag "term_typed_answer", "#{card_answer}"
 
@@ -16,14 +16,6 @@
     - @learned_translations_in_idiom.each do |learned_translation|
       %span.learned_form= learned_translation.form
       .pad_from_top
-    //  - unless learned_translation.pronunciation.nil?
-    //    - words = {}
-    //    %div{:class => "centre inline-block"}
-    //      - learned_translation.pronunciation.split(' ').each do |word|
-    //        %div{:class => "left", :style => "padding: 0.6em;"}
-    //          %p{:class => "minor_title"}= word
-    //          %p= (get_pronunciation_expansion word).html_safe
-    //      .pad
 //- if @card.audio.file?
 //  =render :partial => '/audio_controls', :locals => {:audio_url => @card.audio.url}
 //
