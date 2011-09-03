@@ -1,94 +1,291 @@
+@javascript
 Feature: reviewing related translations
 
   Background:
     Given reference data has been loaded
+    And the following sets:
+      | name      | description                                    |
+      | all |  |
+    And the user has the "all" set as a goal for the "Chinese" language
+    And the user native language is "English"
+
+  Scenario: Listening review, share pronunciation (learned)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | he | English  | |
+      | 他1    | Chinese | ta              |
     And the following related translations:
       | form | language | pronunciation |
-      | two  | English  | /dɪˈzɜː(ɹ)t/  |
-      | 2    | English  |               |
-      | 二    | Chinese  | èr            |
-      | 两    | Chinese  | liǎng         |
-      | dos  | Spanish  |               |
+      | she | English  | |
+      | 她2    | Chinese | ta              |
     And the following related translations:
-      | form        | language | pronunciation |
-      | desert      | English  | /dɪˈzɜː(ɹ)t/  |
-      | arid region | English  |               |
-      | 沙漠          | Chinese  | tián shí      |
-      | desertes    | Spanish  |               |
+      | form | language | pronunciation |
+      | it | English  | |
+      | 它3    | Chinese | ta              |
+    And the group containing "he" is in the set "all"
+    And the group containing "she" is in the set "all"
+    And the group containing "it" is in the set "all"
+    And the user has reviewed the idiom "he" before in the "Chinese" language
+    And the user has reviewed the idiom "she" before in the "Chinese" language
+    And the user has reviewed the idiom "it" before in the "Chinese" language
+    When I review the "he" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "3" meanings
+    And after the reveal I should see native text containing "he"
+    And after the reveal I should see native text containing "she"
+    And after the reveal I should see native text containing "it"
+    And after the reveal I should see learned text containing "他"
+    And after the reveal I should see learned text containing "她"
+    And after the reveal I should see learned text containing "它"
+
+  Scenario: share pronunciation (native)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | he | Chinese  | |
+      | 他1    | English | ta              |
     And the following related translations:
-      | form             | language | pronunciation |
-      | desert           | English  | /dɪˈzɜːt/     |
-      | 沙                | Chinese  | ce dee        |
-      | justice desertes | Spanish  |               |
+      | form | language | pronunciation |
+      | she | Chinese  | |
+      | 她2    | English| ta              |
+    And the group containing "he" is in the set "all"
+    And the group containing "she" is in the set "all"
+    And the user has reviewed the idiom "he" before in the "Chinese" language
+    And the user has reviewed the idiom "she" before in the "Chinese" language
+    When I review the "he" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "1" meanings
+    And after the reveal I should see learned text containing "he"
+    And after the reveal I should see native text containing "他"
+
+  Scenario: Translation review, share meaning (both)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | hi | English  | |
+      | hello | English  | |
+      | 你好    | Chinese | ni hao              |
+      | 喂    | Chinese | wei              |
+    And the group containing "hi" is in the set "all"
+    And the user has reviewed the idiom "hi" before in the "Chinese" language
+    When I review the "hi" term in the "all" set in "Chinese" using the "translating" review mode
+    Then before the reveal I should see "2" meanings
+    And before the reveal I should see native text containing "hi"
+    And before the reveal I should see native text containing "hello"
+    And after the reveal I should see learned text containing "你好"
+    And after the reveal I should see learned text containing "喂"
+
+  Scenario: Reading review, share form and proncunciation (learned)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | fur | English  | fur|
+      | 毛 | Chinese  | mao2 |
     And the following related translations:
-      | form    | language | pronunciation |
-      | dessert | English  | /dɪˈzɜːt/     |
-      | 甜食      | Chinese  | tián shí      |
-      | curros  | Spanish  |               |
-    And the group containing "two" is in the set "numbers"
-    And the group containing "arid region" is in the set "all"
-    And the group containing "抛弃" is in the set "all" in chapter "2"
-    And the group containing "dessert" is in the set "all" in chapter "3"
-    And the user has the "all" set as a goal for the "English" language
-    And the user has the "numbers" set as a goal for the "English" language
-    And the user native language is "Chinese"
+      | form | language | pronunciation |
+      | hair | English  | hair|
+      | 毛 | Chinese  | mao2 |
+      | 牦 | Chinese  | mao2 |
+    And the following related translations:
+      | form | language | pronunciation |
+      | feathers | English  | feathers|
+      | 毛 | Chinese  | mao2 |
+    And the following related translations:
+      | form | language | pronunciation |
+      | tail | English  | rail|
+      | 牦 | Chinese  | mao2 |
+    And the following related translations:
+      | form | language | pronunciation |
+      | yak | English  | yak|
+      | 牦 | Chinese  | mao2 |
+    And the group containing "fur" is in the set "all"
+    And the group containing "hair" is in the set "all"
+    And the group containing "feathers" is in the set "all"
+    And the group containing "tail" is in the set "all"
+    And the group containing "yak" is in the set "all"
+    And the user has reviewed the idiom "fur" before in the "Chinese" language
+    And the user has reviewed the idiom "hair" before in the "Chinese" language
+    And the user has reviewed the idiom "feathers" before in the "Chinese" language
+    And the user has reviewed the idiom "tail" before in the "Chinese" language
+    And the user has reviewed the idiom "yak" before in the "Chinese" language
+    When I review the "fur" term in the "all" set in "Chinese" using the "reading" review mode
+    Then before the reveal I should see "3" meanings
+    And before the reveal I should see learned text containing "毛"
+    And after the reveal I should see native text containing "fur"
+    And after the reveal I should see native text containing "feathers"
+    And after the reveal I should see native text containing "hair"
 
-  #three idioms with multiple relationships
-  #Learned-Meaning: desert, arid region
-  #Native-Meaning:  沙漠
-  #Learned-Written: desert, desert
-  #Native-Written:
-  #Learned-Audible: desert, desserts
-  #Native-Audible: 甜食, 沙漠
+  Scenario: Reading review, share form and proncunciation (learned)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | fur | Chinese  | fur|
+      | 毛 | English | mao2 |
+    And the following related translations:
+      | form | language | pronunciation |
+      | hair | Chinese  | hair|
+      | 毛 | English  | mao2 |
+      | 牦 | English  | mao2 |
+    And the following related translations:
+      | form | language | pronunciation |
+      | feathers | Chinese  | feathers|
+      | 毛 |English  | mao2 |
+    And the following related translations:
+      | form | language | pronunciation |
+      | tail | Chinese  | rail|
+      | 牦 | English  | mao2 |
+    And the following related translations:
+      | form | language | pronunciation |
+      | yak | Chinese | yak|
+      | 牦 | English  | mao2 |
+    And the group containing "fur" is in the set "all"
+    And the group containing "hair" is in the set "all"
+    And the group containing "feathers" is in the set "all"
+    And the group containing "tail" is in the set "all"
+    And the group containing "yak" is in the set "all"
+    And the user has reviewed the idiom "fur" before in the "Chinese" language
+    And the user has reviewed the idiom "hair" before in the "Chinese" language
+    And the user has reviewed the idiom "feathers" before in the "Chinese" language
+    And the user has reviewed the idiom "tail" before in the "Chinese" language
+    And the user has reviewed the idiom "yak" before in the "Chinese" language
+    When I review the "fur" term in the "all" set in "Chinese" using the "reading" review mode
+    Then before the reveal I should see "1" meanings
+    And before the reveal I should see learned text containing "fur"
+    And after the reveal I should see native text containing "毛"
 
 
-  Scenario: user reviews term with relationship to itself via meaning (both native and learned)
-    When I review the "two" term in the "numbers" set in "English" using the "translating" review mode
-    Then before the reveal I should see "二"
-    And before the reveal I should see "两"
-    And before the reveal I should see "2 meanings"
-    And after the reveal I should see "one"
-    And after the reveal I should see "1"
-    And I should not see "dos"
+  Scenario: Share proncunciation and meaning (learned)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | hair | English  | hair|
+      | 毛 | Chinese  | mao |
+      | 牦 | Chinese  | mao |
+    And the group containing "hair" is in the set "all"
+    And the user has reviewed the idiom "hair" before in the "Chinese" language
+    When I review the "hair" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "2" meaning
+    And after the reveal I should see learned text containing "毛"
+    And after the reveal I should see learned text containing "牦"
+    And after the reveal I should see native text containing "hair"
 
-  Scenario: review term with relationship to another by written, relationship not yet known
-    When I review the "arid region" term in the "all" set in "English" using the "reading" review mode
-    Then before the reveal I should see "desert"
-    And before the reveal I should see "arid region"
-    And before the reveal I should see "1 meaning"
-    And after the reveal I should see "沙漠"
+  Scenario: Share proncunciation and meaning (native)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | hair | Chinese  | hair|
+      | 毛 | English  | mao |
+      | 牦 | English  | mao |
+    And the group containing "hair" is in the set "all"
+    And the user has reviewed the idiom "hair" before in the "Chinese" language
+    When I review the "hair" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "1" meaning
+    And after the reveal I should see learned text containing "hair"
+    And after the reveal I should see native text containing "毛"
+    And after the reveal I should see native text containing "牦"
 
-  Scenario: review term with relationship to another by written, relationship is now known
-    Given I have reviewed the term containing "沙漠" in "English" using the "reading" review mode
-    When I review the "arid region" term in the "all" set in "English" using the "reading" review mode
-    Then before the reveal I should see "desert"
-    And before the reveal I should see "arid region"
-    And before the reveal I should see "2 meanings"
-    And after the reveal I should see "沙漠"
-    And after the reveal I should see "沙"
+  Scenario: Share form (learned)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | desert | English  | desert|
+      | 毛 | Chinese  | sdfs |
+    And the following related translations:
+      | form | language | pronunciation |
+      | desert | English  | desert|
+      | 牦 | Chinese  | nleg|
+    And the group containing "毛" is in the set "all"
+    And the group containing "牦" is in the set "all"
+    And the user has reviewed the idiom "毛" before in the "Chinese" language
+    And the user has reviewed the idiom "牦" before in the "Chinese" language
+    When I review the "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "1" meaning
+    And after the reveal I should see native text containing "desert"
+    And after the reveal I should see learned text containing "毛"
 
-  Scenario: review term with relationship to another by audible form, relationship not yet known
-    When I review the "沙" term in the "all" set in "English" using the "listening" review mode
-    And before the reveal I should see "1 meaning"
-    And after the reveal I should see "desert"
+  Scenario: Share form (native)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | desert | Chinese  | desert|
+      | 毛 | English  | sdfs |
+    And the following related translations:
+      | form | language | pronunciation |
+      | desert | Chinese| desert|
+      | 牦 | English  | nleg|
+    And the group containing "毛" is in the set "all"
+    And the group containing "牦" is in the set "all"
+    And the user has reviewed the idiom "毛" before in the "Chinese" language
+    And the user has reviewed the idiom "牦" before in the "Chinese" language
+    When I review the "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "2" meanings
+    And after the reveal I should see learned text containing "desert"
+    And after the reveal I should see native text containing "毛"
+    And after the reveal I should see native text containing "牦"
 
-  Scenario: review term with relationship to another by audible form, relationship is now known
-    Given I have reviewed the term containing "沙" in "English" using the "listening" review mode
-    When I review the "dessert" term in the "all" set in "English" using the "listening" review mode
-    And before the reveal I should see "2 meaning"
-    And after the reveal I should see "desert"
-    And after the reveal I should see "dessert"
+  Scenario: Share form and meaning (native)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | gasses | English  | desert|
+      | gases | English  | desert|
+      | 毛 | Chinese  | sdfs |
+    And the group containing "毛" is in the set "all"
+    And the user has reviewed the idiom "毛" before in the "Chinese" language
+    When I review the "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "1" meanings
+    And after the reveal I should see native text containing "gasses"
+    And after the reveal I should see native text containing "gases"
+    And after the reveal I should see learned text containing "毛"
 
-  Scenario: recording a review when I know no other cards
-    When I review the "沙" term in the "all" set in "English" using the "listening" review mode
-    And I record the review as a success
-    Then the "沙" term should have a review and be scheduled
-    And the "dessert" term should not have a review and should not be scheduled
+  Scenario: Share form and meaning (learned)
+    Given the following related translations:
+      | form | language | pronunciation |
+      | gasses | Chinese  | desert|
+      | gases | Chinese  | desert|
+      | 毛 | English  | sdfs |
+    And the group containing "毛" is in the set "all"
+    And the user has reviewed the idiom "毛" before in the "Chinese" language
+    When I review the "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "2" meaning
+    And after the reveal I should see learned text containing "gasses"
+    And after the reveal I should see learned text containing "gases"
+    And after the reveal I should see native text containing "毛"
 
-  Scenario: recording a review when I know other cards that share something
-    Given I have reviewed the term containing "沙" in "English" using the "listening" review mode
-    When I review the "dessert" term in the "all" set in "English" using the "listening" review mode
-    And I record the review as a success
-    Then the "沙" term should have a review and be scheduled
-    Then the "dessert" term should have a review and be scheduled
-    And the "沙" term and the "dessert" term schedule should be in sync for "listening"
+
+  Scenario: ignore other languages
+    Given the following related translations:
+      | form | language | pronunciation |
+      | el gasisos | Spanish  | desert|
+      | gases | English | desert|
+      | 毛 | Chinese  | sdfs |
+    And the group containing "毛" is in the set "all"
+    And the user has reviewed the idiom "毛" before in the "Chinese" language
+    When I review the "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "1" meaning
+    And after the reveal I should see native text containing "gases"
+    And after the reveal I should see learned text containing "毛"
+
+
+  Scenario: do not show idioms not yet learned by the user
+    Given the following related translations:
+      | form | language | pronunciation |
+      | desert | Chinese  | desert|
+      | 毛 | English  | sdfs |
+    And the following related translations:
+      | form | language | pronunciation |
+      | desert | Chinese| desert|
+      | 牦 | English  | nleg|
+    And the group containing "毛" is in the set "all"
+    And the group containing "牦" is in the set "all"
+    When I review the "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    Then before the reveal I should see "1" meanings
+    And after the reveal I should see learned text containing "desert"
+    And after the reveal I should see native text containing "毛"
+
+
+
+
+
+#  Scenario: recording a review when I know no other cards
+#    When I review the "沙" term in the "all" set in "English" using the "listening" review mode
+#    And I record the review as a success
+#    Then the "沙" term should have a review and be scheduled
+#    And the "dessert" term should not have a review and should not be scheduled
+#
+#  Scenario: recording a review when I know other cards that share something
+#    Given I have reviewed the term containing "沙" in "English" using the "listening" review mode
+#    When I review the "dessert" term in the "all" set in "English" using the "listening" review mode
+#    And I record the review as a success
+#    Then the "沙" term should have a review and be scheduled
+#    Then the "dessert" term should have a review and be scheduled
+#    And the "沙" term and the "dessert" term schedule should be in sync for "listening"

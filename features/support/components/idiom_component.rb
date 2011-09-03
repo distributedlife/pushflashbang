@@ -22,6 +22,14 @@ module IdiomComponent
     Idiom.find(idiom_translation.first.idiom_id)
   end
 
+  def get_idiom idiom_id, translation_id
+    IdiomTranslation.where(:idiom_id => idiom_id, :translation_id => translation_id).first
+  end
+
+  def user_has_reviewed_idiom idiom_id, language_id, user_id
+    UserIdiomSchedule.make(:idiom_id => idiom_id, :language_id => language_id, :user_id => user_id)
+  end
+
   private
   def verify_idiom_prerequisites
     ensure_user_exists_and_is_logged_in

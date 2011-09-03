@@ -1,10 +1,10 @@
 - answer = nil
 - card_answer = ""
-- @learned_translations.each do |learned_translation|
-  - card_answer = "#{card_answer}, #{learned_translation.form}" unless card_answer.empty?
-  - card_answer = learned_translation.form if card_answer.empty?
-  - answer = learned_translation.clone
-  - answer.form = ""
+//- @learned_translations.each do |learned_translation|
+//  - card_answer = "#{card_answer}, #{learned_translation.form}" unless card_answer.empty?
+//  - card_answer = learned_translation.form if card_answer.empty?
+//  - answer = learned_translation.clone
+//  - answer.form = ""
 
 = hidden_field_tag "term_typed_answer", "#{card_answer}"
 
@@ -13,17 +13,17 @@
     - @native_translations.each do |native_translation|
       %span.native_form= native_translation.form
   - if learned == "front" or learned == "both"
-    - @learned_translations.each do |learned_translation|
+    - @learned_translations_in_idiom.each do |learned_translation|
       %span.learned_form= learned_translation.form
       .pad_from_top
-      - unless learned_translation.pronunciation.nil?
-        - words = {}
-        %div{:class => "centre inline-block"}
-          - learned_translation.pronunciation.split(' ').each do |word|
-            %div{:class => "left", :style => "padding: 0.6em;"}
-              %p{:class => "minor_title"}= word
-              %p= (get_pronunciation_expansion word).html_safe
-          .pad
+    //  - unless learned_translation.pronunciation.nil?
+    //    - words = {}
+    //    %div{:class => "centre inline-block"}
+    //      - learned_translation.pronunciation.split(' ').each do |word|
+    //        %div{:class => "left", :style => "padding: 0.6em;"}
+    //          %p{:class => "minor_title"}= word
+    //          %p= (get_pronunciation_expansion word).html_safe
+    //      .pad
 //- if @card.audio.file?
 //  =render :partial => '/audio_controls', :locals => {:audio_url => @card.audio.url}
 //
@@ -53,19 +53,23 @@
 
 #back_of_card{:class => "hidden"}
   .section_break
-  %p{:class => "giant mandarin"}
-    - if native == "back" or native == "both"
-      - @native_translations.each do |native_translation|
-        %span.native_form= native_translation.form
-    - if learned == "back" or learned == "both"
-      - @learned_translations.each do |learned_translation|
-        %span.learned_form= learned_translation.form
-        .pad_from_top
-        - unless learned_translation.pronunciation.nil?
-          - words = {}
-          %div{:class => "centre inline-block"}
-            - learned_translation.pronunciation.split(' ').each do |word|
-              %div{:class => "left", :style => "padding: 0.6em;"}
-                %p{:class => "minor_title"}= word
-                %p= (get_pronunciation_expansion word).html_safe
-            .pad
+    - @idioms.each do |idiom|
+      #idiom_group{:id => "#{idiom.id}"}
+        - if learned == "back" or learned == "both"
+          - Idiom::translations_in_idiom_and_language(idiom.id, @learned_language.id).each do |translation|
+            #learned_translation{:id => "#{translation.id}"}
+              %p{:class => "giant mandarin"}
+                %span.learned_form= translation.form
+                .pad_from_top
+              - unless translation.pronunciation.nil?
+                - words = {}
+                %div{:class => "centre inline-block"}
+                  - translation.pronunciation.split(' ').each do |word|
+                    %div{:class => "left", :style => "padding: 0.6em;"}
+                      %p{:class => "minor_title"}= word
+                      %p= (get_pronunciation_expansion word).html_safe
+                  .pad
+        - if native == "back" or native == "both"
+          - Idiom::translations_in_idiom_and_language(idiom.id, @native_language.id).each do |translation|
+            #native_translation{:id => "#{translation.id}"}
+              %span.native_form= translation.form

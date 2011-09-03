@@ -37,6 +37,12 @@ Given /^all terms in the "([^"]*)" set chapter (\d+) for "([^"]*)" are scheduled
   end
 end
 
+Given /^the user has reviewed the idiom "([^"]*)" before in the "([^"]*)" language$/ do |containing_form, language_name|
+  idiom = get_idiom_containing_form containing_form
+  language = get_language language_name
+
+  UserIdiomSchedule.make(:user_id => get(:user).id, :idiom_id => idiom.id, :language_id => language.id)
+end
 
 ################################################################################
 ################################################################################
@@ -76,6 +82,16 @@ When /^I review the "([^"]*)" set in "([^"]*)" using the "([^"]*)" review mode$/
     page.select_review_mode review_mode
   end
 end
+
+When /^I review the "([^"]*)" term in the "([^"]*)" set in "([^"]*)" using the "([^"]*)" review mode$/ do |containing_form, set_name, language_name, review_mode|
+  add(:idiom, get_idiom_containing_form(containing_form))
+  add(:set, get_set_from_name(set_name))
+  add(:language, get_language(language_name))
+  add(:review_mode, review_mode)
+
+  goto_page :ReviewTermPage, Capybara.current_session, sut
+end
+
 
 When /^I reveal the answer I will be told I am correct$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
@@ -345,3 +361,42 @@ Then /^I should be on chapter (\d+)$/ do |chapter|
   user_set.chapter.should == chapter.to_i
 end
 
+Then /^before the reveal I should see native text containing "([^"]*)"$/ do |text|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.native_language_contains?(text).should be true
+  end
+end
+
+Then /^before the reveal I should see learned text containing "([^"]*)"$/ do |text|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.learned_language_contains?(text).should be true
+  end
+end
+
+
+Then /^before the reveal I should see "([^"]*)" meanings$/ do |meaning_count|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.meaning_count_is?(meaning_count).should be true
+  end
+end
+
+Then /^before the reveal I should see "([^"]*)" meaning$/ do |meaning_count|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.meaning_count_is?(meaning_count).should be true
+  end
+end
+
+
+Then /^after the reveal I should see learned text containing "([^"]*)"$/ do |text|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.reveal!
+    page.learned_language_contains?(text).should be true
+  end
+end
+
+Then /^after the reveal I should see native text containing "([^"]*)"$/ do |text|
+  on_page :ReviewTermPage, Capybara.current_session do |page|
+    page.reveal!
+    page.native_language_contains?(text).should be true
+  end
+end

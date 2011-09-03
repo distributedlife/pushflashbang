@@ -185,8 +185,11 @@ class TermsController < ApplicationController
       @term = Idiom.find(params[:id])
 
       # get all translations in the term, that match the learned language
-      @learned_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+      @learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+      learned_translations_in_idiom = @learned_translations_in_idiom.map{|t| t.id}
 
+
+      
       # get all translations in the term, that match the users native language
       @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => native_language_id, :idiom_translations => {:idiom_id => params[:id]})
 
@@ -194,23 +197,42 @@ class TermsController < ApplicationController
       @typed = false
       @native = "not set"
       @learned = "not set"
+      @related_count = nil
       if params[:review_mode]["listening"]
         @audio = "front"
         @native = "back"
         @learned = "back"
+
+        @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], {:audible => true}
       end
       if params[:review_mode]["reading"]
         @learned = "front"
         @native = "back"
+
+        @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], {:written => true}
       end
       if params[:review_mode]["translating"]
         @learned = "back"
         @native = "front"
+
+        @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], {:meaning => true}
       end
       if params[:review_mode]["typing"]
         @typed = true
       end
 
+      #get related count and idioms
+      @related_count = @learned_translations.count
+      idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', @learned_translations])
+      idiom_translations = idiom_translations.map{|t| t.idiom_id}
+      @idioms = Idiom.find(idiom_translations)
+
+
+      #send languages
+      @learned_language = Language.find(params[:language_id])
+      @native_language = Language.find(current_user.native_language_id)
+
+      
       if detect_browser == "mobile_application"
         render "learn.mobile"
       end

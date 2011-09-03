@@ -92,6 +92,10 @@ module ReviewTermPage
     @session.click_on "do_result_perfect"
   end
 
+  def meaning_count_is? count
+    @session.find("p#meaning_count").text == count
+  end
+
   private
   def does_one_element_of_set_contain element, set
     found = false

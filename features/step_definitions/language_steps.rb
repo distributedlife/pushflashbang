@@ -1,3 +1,12 @@
+Given /^the user native language is "([^"]*)"$/ do |language_name|
+  language = get_language language_name
+
+  user = get(:user)
+  user.native_language_id = language.id
+  user.save!
+end
+
+
 And /^I know the following languages: "([^"]*)"$/ do |languages|
   languages.split(',').each do |language_name|
     language_name.strip!

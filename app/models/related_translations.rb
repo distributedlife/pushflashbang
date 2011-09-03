@@ -25,19 +25,14 @@ class RelatedTranslations < ActiveRecord::Base
 
   def self.rebuild_relationships_for_translation translation
     RelatedTranslations::delete_relationships_for_transation translation
-
-    Translation.all.each do |t2|
-      next if translation.id == t2.id
-
-      RelatedTranslations::create_relationship_if_needed translation,t2
-    end
+    RelatedTranslations::create_relationships_for_translation translation
   end
 
   def self.create_relationships_for_translation translation
     Translation.all.each do |t2|
       next if translation.id == t2.id
 
-      RelatedTranslations::create_relationship_if_needed translation,t2
+      RelatedTranslations::create_relationship_if_needed translation, t2
     end
   end
 
@@ -49,7 +44,7 @@ class RelatedTranslations < ActiveRecord::Base
     rt2 ||= RelatedTranslations.new(:translation1_id => t2.id, :translation2_id => t1.id)
 
     if t1.language_id == t2.language_id
-      if IdiomTranslation.translations_share_idiom t1.id, t2.id
+      if IdiomTranslation.translations_share_idiom? t1.id, t2.id
         rt1.share_meaning = true
         rt2.share_meaning = true
       end
@@ -75,5 +70,34 @@ class RelatedTranslations < ActiveRecord::Base
 
     rt1.save!
     rt2.save!
+  end
+
+  def self.get_related translation_ids, user_id, language_id, options = {}
+    options[:meaning] ||= 'true,false'
+    options[:written] ||= 'true,false'
+    options[:audible] ||= 'true,false'
+
+    get_related_sql = <<-SQL
+      SELECT distinct(rt.translation2_id)
+      FROM related_translations rt
+      JOIN idiom_translations it ON rt.translation1_id = it.translation_id
+      JOIN user_idiom_schedules uis ON it.idiom_id = uis.idiom_id AND uis.user_id = #{user_id} AND uis.language_id = #{language_id}
+      WHERE rt.translation1_id in (#{translation_ids.join(',')})
+        AND rt.share_meaning in (#{options[:meaning]})
+        AND rt.share_written_form in (#{options[:written]})
+        AND rt.share_audible_form in (#{options[:audible]})
+    SQL
+#    get_related_sql = <<-SQL
+#      SELECT distinct(rt.translation2_id)
+#      FROM related_translations rt
+#      WHERE rt.translation1_id in (#{translation_ids.join(',')})
+#        AND rt.share_meaning in (#{options[:meaning]})
+#        AND rt.share_written_form in (#{options[:written]})
+#        AND rt.share_audible_form in (#{options[:audible]})
+    #SQL
+
+    related = self.find_by_sql(get_related_sql)
+    related = related.map{|s| s.translation2_id}
+    related | translation_ids
   end
 end

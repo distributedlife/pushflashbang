@@ -33,6 +33,10 @@ module TranslationComponent
     add(:idiom_translation, idiom_translation)
   end
 
+  def add_translation_to_idiom idiom_id, translation_id
+    IdiomTranslation.make(:idiom_id => idiom_id, :translation_id => translation_id)
+  end
+
   def relate_translation_to_others translation_id, idiom_id
     t = Translation.find translation_id
 
