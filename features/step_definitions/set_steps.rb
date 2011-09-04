@@ -38,11 +38,11 @@ Given /^the group containing "([^"]*)" is in the set "([^"]*)" in chapter "([^"]
 end
 
 Given /^the user has the "([^"]*)" set as a goal for the "([^"]*)" language$/ do |set_name, language_name|
-  set = get_set_from_name set_name
-  language = get_language language_name
+  add(:set, get_set_from_name(set_name))
+  add(:language, get_language(language_name))
 
-  UserSets.create(:user_id => get(:user).id, :set_id => set.id, :language_id => language.id, :chapter => 1)
-  UserLanguages.create(:user_id => get(:user).id, :language_id => language.id) if UserLanguages.where(:user_id => get(:user).id, :language_id => language.id).empty?
+  UserSets.create(:user_id => get(:user).id, :set_id => get(:set).id, :language_id => get(:language).id, :chapter => 1)
+  UserLanguages.create(:user_id => get(:user).id, :language_id => get(:language).id) if UserLanguages.where(:user_id => get(:user).id, :language_id => get(:language).id).empty?
 end
 
 
@@ -220,7 +220,6 @@ end
 
 Then /^I should see the following language support information:$/ do |table|
   on_page :ShowSetPage, Capybara.current_session do |page|
-    And %{show me the page}
     table.hashes.each do |hash|
       page.language_support_on_page hash
     end

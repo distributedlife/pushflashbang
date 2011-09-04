@@ -225,9 +225,10 @@ class TermsController < ApplicationController
       #get related count and idioms
       @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], related_translation_link
       @related_count = @learned_translations.count
-      idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', @learned_translations])
-      idiom_translations = idiom_translations.map{|t| t.idiom_id}
-      @idioms = Idiom.find(idiom_translations)
+#      idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', @learned_translations])
+#      idiom_translations = idiom_translations.map{|t| t.idiom_id}
+#      @idioms = Idiom.find(idiom_translations)
+      @idioms = get_idioms_from_translations @learned_translations
 
 
       #send languages
@@ -368,14 +369,12 @@ class TermsController < ApplicationController
 
     learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
     learned_translations_in_idiom = learned_translations_in_idiom.map{|t| t.id}
+
     redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?
     learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], related_translation_link
-    idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', learned_translations])
-    idiom_translations = idiom_translations.map{|t| t.idiom_id}
 
-    sync_due_times = []
-    
-    Idiom.find(idiom_translations).each do |idiom|
+    sync_due_times = []    
+    get_idioms_from_translations(learned_translations).each do |idiom|
       schedule = UserIdiomSchedule.where(:user_id => current_user.id, :idiom_id => idiom.id, :language_id => params[:language_id])
       redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
       schedule = schedule.first
@@ -450,6 +449,12 @@ class TermsController < ApplicationController
   private
   def to_boolean value
     return [true, "true", 1, "1", "T", "t"].include?(value.class == String ? value.downcase : value)
+  end
+
+  def get_idioms_from_translations translations
+    idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', translations])
+    idiom_translations = idiom_translations.map{|t| t.idiom_id}
+    Idiom.find(idiom_translations)
   end
 
   def add_term_to_set set_id, term_id

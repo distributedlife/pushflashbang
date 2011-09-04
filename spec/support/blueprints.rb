@@ -158,3 +158,11 @@ UserSets.blueprint do
   language_id
   chapter {1}
 end
+
+RelatedTranslations.blueprint do
+  translation1_id
+  translation2_id
+  share_meaning {false}
+  share_written_form {false}
+  share_audible_form {false}
+end

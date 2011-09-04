@@ -267,11 +267,12 @@ Feature: reviewing related translations
       | 牦 | English  | nleg|
     And the group containing "毛" is in the set "all"
     And the group containing "牦" is in the set "all"
+    And the user has reviewed the idiom "毛" before in the "Chinese" language
     When I review the "毛" term in the "all" set in "Chinese" using the "listening" review mode
     Then before the reveal I should see "1" meanings
     And after the reveal I should see learned text containing "desert"
     And after the reveal I should see native text containing "毛"
-
+    And after the reveal I should not see native text containing "牦"
 
 
   Scenario: do not record reviews against idioms not yet learned by the user
@@ -284,9 +285,9 @@ Feature: reviewing related translations
       | desert | Chinese| desert|
       | 牦 | English  | nleg|
     And the group containing "毛" is in the set "all"
-    And the group containing "牦" is in the set "all"
+    And the group containing "牦" is in the set "all" in chapter "2"
     And the user has reviewed the idiom "毛" before in the "Chinese" language
-    When I record the successful review of the  "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    When I record the successful review of the "毛" term in the "all" set in "Chinese" using the "listening" review mode
     Then the "毛" term should have a review and be scheduled in the future for "listening"
     And the "牦" term should not have a review and should not be scheduled for "listening"
 
@@ -303,7 +304,7 @@ Feature: reviewing related translations
     And the group containing "牦" is in the set "all"
     And the user has reviewed the idiom "毛" before in the "Chinese" language
     And the user has reviewed the idiom "牦" before in the "Chinese" language
-    When I record the successful review of the  "毛" term in the "all" set in "Chinese" using the "listening" review mode
+    When I record the successful review of the "毛" term in the "all" set in "Chinese" using the "listening" review mode
     Then the "毛" term should have a review and be scheduled in the future for "listening"
     Then the "牦" term should have a review and be scheduled in the future for "listening"
     And the terms "毛", "牦" should be in sync for "listening"

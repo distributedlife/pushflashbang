@@ -48,39 +48,43 @@ module TranslationComponent
 
     IdiomTranslation.where(:idiom_id => idiom_id).each do |other|
       next if other.translation_id == t.id
+      next if t.language_id != Translation.find(other.translation_id).language_id
 
-      relate_translations_by_meaning t, other
+      relate_translations_by_meaning t.id, other.translation_id
     end
   end
 
-  def relate_translations_by_meaning t1, t2
-    rt1 = RelatedTranslations.where(:translation1_id => t1.id, :translation2_id => t2.id)
-    rt2 = RelatedTranslations.where(:translation1_id => t2.id, :translation2_id => t1.id)
+  def relate_translations_by_meaning t1_id, t2_id
+    rt1 = RelatedTranslations.where(:translation1_id => t1_id, :translation2_id => t2_id)
+    rt2 = RelatedTranslations.where(:translation1_id => t2_id, :translation2_id => t1_id)
 
     if rt1.empty?
-      rt1 = RelatedTranslations.new(:translation1_id => t1.id, :translation2_id => t2.id)
-      rt1.share_meaning = true
-      rt1.save!
+      rt1 = RelatedTranslations.new(:translation1_id => t1_id, :translation2_id => t2_id)
+      rt1.share_written_form = false
+      rt1.share_audible_form = false
     else
       rt1 = rt1.first
-      rt1.share_meaning = true
-      rt1.save!
     end
+    rt1.share_meaning = true
+    rt1.save!
+
     if rt2.empty?
-      rt2 = RelatedTranslations.new(:translation1_id => t2.id, :translation2_id => t1.id)
-      rt2.share_meaning = true
-      rt2.save!
+      rt2 = RelatedTranslations.new(:translation1_id => t2_id, :translation2_id => t1_id)
+      rt2.share_written_form = false
+      rt2.share_audible_form = false
     else
       rt2 = rt2.first
-      rt2.share_meaning = true
-      rt2.save!
     end
+    rt2.share_meaning = true
+    rt2.save!
   end
 
   def relate_translations t1, t2
     rt1 = RelatedTranslations.new(:translation1_id => t1.id, :translation2_id => t2.id)
     rt2 = RelatedTranslations.new(:translation1_id => t2.id, :translation2_id => t1.id)
     if t1.language_id == t2.language_id
+      #don't relate meaning here
+
       if t1.form == t2.form
         rt1.share_written_form = true
         rt2.share_written_form = true

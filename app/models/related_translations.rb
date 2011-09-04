@@ -73,19 +73,19 @@ class RelatedTranslations < ActiveRecord::Base
   end
 
   def self.get_related translation_ids, user_id, language_id, options = {}
-    options[:meaning] ||= 'true,false'
-    options[:written] ||= 'true,false'
-    options[:audible] ||= 'true,false'
+    options[:meaning] = 'true,false' if options[:meaning].nil?
+    options[:written] = 'true,false' if options[:written].nil?
+    options[:audible] = 'true,false' if options[:audible].nil?
 
     get_related_sql = <<-SQL
       SELECT distinct(rt.translation2_id)
       FROM related_translations rt
-      JOIN idiom_translations it ON rt.translation1_id = it.translation_id
+      JOIN idiom_translations it ON rt.translation2_id = it.translation_id
       JOIN user_idiom_schedules uis ON it.idiom_id = uis.idiom_id AND uis.user_id = #{user_id} AND uis.language_id = #{language_id}
-      WHERE rt.translation1_id in (#{translation_ids.join(',')})
-        AND rt.share_meaning in (#{options[:meaning]})
-        AND rt.share_written_form in (#{options[:written]})
-        AND rt.share_audible_form in (#{options[:audible]})
+      WHERE rt.translation1_id IN (#{translation_ids.join(',')})
+        AND rt.share_meaning IN (#{options[:meaning]})
+        AND rt.share_written_form IN (#{options[:written]})
+        AND rt.share_audible_form IN (#{options[:audible]})
     SQL
 
     related = self.find_by_sql(get_related_sql)
