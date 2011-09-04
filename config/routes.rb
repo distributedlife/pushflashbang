@@ -14,6 +14,9 @@ PushFlashBang::Application.routes.draw do
           post 'unlearn'
         end
       end
+
+      put 'start_editing'
+      put 'stop_editing'
     end
   end
 

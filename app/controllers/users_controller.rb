@@ -17,4 +17,16 @@ class UsersController < ApplicationController
     #get user languages
     @user_languages = UserLanguages.joins(:language).where(:user_id => current_user.id)
   end
+
+  def start_editing
+    current_user.start_editing
+
+    redirect_to :back
+  end
+
+  def stop_editing
+    current_user.stop_editing
+
+    redirect_to :back
+  end
 end

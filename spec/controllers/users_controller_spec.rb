@@ -66,4 +66,44 @@ describe UsersController do
       assigns[:user_languages].count.should == 1
     end
   end
+
+  context '"PUT" start_editing' do
+    before(:each) do
+      @user = User.make
+      sign_in :user, @user
+
+      request.env["HTTP_REFERER"] = "http://whereiwasbefore.com"
+    end
+
+    it 'should put the user in edit mode' do
+      put :stop_editing
+      @user.reload
+      @user.in_edit_mode?.should be false
+      
+      put :start_editing
+
+      @user.reload
+      @user.in_edit_mode?.should be true
+    end
+  end
+
+  context '"PUT" stop_editing' do
+    before(:each) do
+      @user = User.make
+      sign_in :user, @user
+
+      request.env["HTTP_REFERER"] = "http://whereiwasbefore.com"
+    end
+    
+    it 'should take the user out of edit mode' do
+      put :start_editing
+      @user.reload
+      @user.in_edit_mode?.should be true
+
+      put :stop_editing
+
+      @user.reload
+      @user.in_edit_mode?.should be false
+    end
+  end
 end

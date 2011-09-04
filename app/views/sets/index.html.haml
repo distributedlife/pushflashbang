@@ -1,6 +1,7 @@
 =render :partial => '/header', :locals => {:title => t('titles.set-index.title'), :subtitle => t('titles.set-index.subtitle')}
-%section{:class => ["panel right"], :style => "width: 15%"}
-  %span.menu= link_to t('actions.create-set'), new_set_path, :class => 'neutral'
+- if current_user.in_edit_mode?
+  %section{:class => ["panel right"], :style => "width: 15%"}
+    %span.menu= edit_link_to t('actions.create-set'), new_set_path, :class => 'neutral'
 #set_names
   - @sets.each do |set|
     =render :partial => '/sets/set_names', :locals => {:set => set, :link_title => true}

@@ -39,6 +39,7 @@ User.blueprint do
   email
   password
   native_language_id
+  edit_mode {true}
 end
 
 Deck.blueprint do

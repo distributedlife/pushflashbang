@@ -1,6 +1,11 @@
 %nav.right
   - if user_signed_in?
     %span.top_menu_panel
+      - if current_user.in_edit_mode?
+        %span= link_to I18n.t('actions.stop-editing'), stop_editing_user_index_path, :method => :put
+      - else
+        %span= link_to I18n.t('actions.start-editing'), start_editing_user_index_path, :method => :put
+    %span.top_menu_panel
       %span= link_to(I18n.t('user.actions.edit_registration'), edit_user_registration_path)
     %span.top_menu_panel
       %span= link_to(I18n.t('user.actions.sign_out'), destroy_user_session_path)

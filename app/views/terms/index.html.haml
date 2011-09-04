@@ -1,21 +1,23 @@
 - current_idiom = 0
 
 =render :partial => '/header', :locals => {:title => t('term.index.title'), :subtitle => t('term.index.subtitle')}
-%section{:class => ["panel right"], :style => "width: 15%"}
-  %span.menu= link_to t('actions.new-term'), new_term_path, :class => 'neutral'
+- if current_user.in_edit_mode?
+  %section{:class => ["panel right"], :style => "width: 15%"}
+    %span.menu= link_to t('actions.new-term'), new_term_path, :class => 'neutral'
 %section{:class => ["panel left"], :style => "width: 70%"}
   #translations
     - @translations.each do |translation|
       - if translation.idiom_translations.idiom_id != current_idiom and !current_idiom.nil?
         - current_idiom = translation.idiom_translations.idiom_id
         .pad_from_top
-        %span.subscript{:style => "float: right;"}
-          [
-          = link_to t('actions.edit-term'), edit_term_path(current_idiom)
-          ]
-          [
-          = link_to t('actions.add-to-set'), select_term_term_sets_path(current_idiom), :id => "term_#{current_idiom}_add_to_set"
-          ]
+        - if current_user.in_edit_mode?
+          %span.subscript{:style => "float: right;"}
+            [
+            = link_to t('actions.edit-term'), edit_term_path(current_idiom)
+            ]
+            [
+            = link_to t('actions.add-to-set'), select_term_term_sets_path(current_idiom), :id => "term_#{current_idiom}_add_to_set"
+            ]
       #translation
         #translation{:id => translation.id}
           %span#language.subscript.contrast_faint= translation.languages.name

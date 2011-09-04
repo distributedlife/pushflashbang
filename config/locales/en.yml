@@ -61,6 +61,8 @@ en:
     set-goal: "Add as Goal"
     sets: "Sets"
     stop-learning: "stop learning?"
+    stop-editing: "stop editing"
+    start-editing: "edit"
     start-learning: "learn?"
     start-learning-emphatic: "Click here to start learning!"
     terms: "Terms"

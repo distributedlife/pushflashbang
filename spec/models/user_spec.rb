@@ -55,4 +55,32 @@ describe User do
       Language.first.name.should == "English"
     end
   end
+
+  context 'in_edit_mode?' do
+    it 'should return true if user is in edit mode' do
+      user = User.create(:edit_mode => true)
+      user.in_edit_mode?.should be true
+    end
+
+    it 'should return false if user is not in edit mode' do
+      user = User.create(:edit_mode => false)
+      user.in_edit_mode?.should be false
+    end
+  end
+
+  context 'start_editing' do
+    it 'user should be in edit mode' do
+      user = User.make(:edit_mode => false)
+      user.start_editing
+      user.in_edit_mode?.should be true
+    end
+  end
+
+  context 'stop_editing' do
+    it 'user should be in edit mode' do
+      user = User.make(:edit_mode => true)
+      user.stop_editing
+      user.in_edit_mode?.should be false
+    end
+  end
 end

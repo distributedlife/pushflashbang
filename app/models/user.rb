@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :native_language_id
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :native_language_id, :edit_mode
 
   validates :native_language_id, :presence => true
 
@@ -21,5 +21,19 @@ class User < ActiveRecord::Base
       user.native_language_id = english.id if user.native_language_id.nil?
       user.save!
     end
+  end
+
+  def in_edit_mode?
+    return self.edit_mode
+  end
+
+  def start_editing
+    self.edit_mode = true
+    self.save!
+  end
+
+  def stop_editing
+    self.edit_mode = false
+    self.save!
   end
 end
