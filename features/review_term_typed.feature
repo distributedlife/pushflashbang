@@ -12,6 +12,7 @@ Feature: review term in typing mode
       | a little bit | English  |               |
     And the group containing "a little bit" is in the set "greetings"
     And the user has the "greetings" set as a goal for the "Spanish" language
+    And the user has reviewed the idiom "un poco de" before in the "Spanish" language
 
     Scenario: typing review handles correct answer and compares to native
     When I review the "greetings" set in "Spanish" using the "translating, speaking and typing" review mode

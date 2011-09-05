@@ -22,6 +22,7 @@ Feature: review term results
     And the group containing "one" is in the set "greetings"
     And the group containing "two" is in the set "greetings" in chapter "2"
     And the user has the "greetings" set as a goal for the "Spanish" language
+    And the user has reviewed the idiom "un poco de" before in the "Spanish" language
 
   Scenario: user review check box exists for each reading, speaking and typing
     Given I review the "greetings" set in "Spanish" using the "reading, speaking and typing" review mode

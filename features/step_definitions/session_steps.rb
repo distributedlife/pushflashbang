@@ -139,7 +139,7 @@ end
 
 And /^the card should be rescheduled$/ do
   scheduled_card = UserCardSchedule.where(:card_id => get(:card_id), :user_id => get(:user).id).first
-  scheduled_card.due.should >= Time.now
+  scheduled_card.due.utc.should >= Time.now.utc
 end
 
 And /^the card interval should be increased$/ do

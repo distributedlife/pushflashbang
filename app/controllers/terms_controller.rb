@@ -174,6 +174,10 @@ class TermsController < ApplicationController
     end
   end
 
+  def first_review
+    review
+  end
+  
   def review
     begin
       native_language_id = current_user.native_language_id
@@ -225,9 +229,6 @@ class TermsController < ApplicationController
       #get related count and idioms
       @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id], related_translation_link
       @related_count = @learned_translations.count
-#      idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', @learned_translations])
-#      idiom_translations = idiom_translations.map{|t| t.idiom_id}
-#      @idioms = Idiom.find(idiom_translations)
       @idioms = get_idioms_from_translations @learned_translations
 
 

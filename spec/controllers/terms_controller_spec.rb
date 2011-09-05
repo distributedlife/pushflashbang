@@ -1834,4 +1834,305 @@ describe TermsController do
       end
     end
   end
+
+  context '"GET" first_review' do
+    before(:each) do
+      @set = Sets.make
+      @english = Language.make(:name => "English")
+      @spanish = Language.make(:name => "Spanish")
+      @chinese = Language.make(:name => "Chinese")
+      @idiom = Idiom.make
+      @idiom2 = Idiom.make
+      @idiom3 = Idiom.make
+      @t1 = Translation.make(:language_id => @english.id, :form => "zee")
+      @t2 = Translation.make(:language_id => @english.id, :form => "yee")
+      @t3 = Translation.make(:language_id => @chinese.id, :form => "wee")
+      @t4 = Translation.make(:language_id => @spanish.id, :form => "vee")
+      @t5 = Translation.make(:language_id => @spanish.id, :form => "uee")
+      @t6 = Translation.make(:language_id => @spanish.id, :form => "xee")
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t1.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t2.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t3.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t4.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t5.id)
+      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t6.id)
+      SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
+      SetTerms.make(:term_id => @idiom2.id, :set_id => @set.id)
+      SetTerms.make(:term_id => @idiom3.id, :set_id => @set.id)
+      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
+      UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
+      UserLanguages.make(:user_id => @user.id, :language_id => @chinese.id)
+
+      @user.native_language_id = @english.id
+      @user.save!
+
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+      CardTiming.create(:seconds => 600)
+      CardTiming.create(:seconds => 3600)
+      CardTiming.create(:seconds => 15400)
+    end
+
+
+    it 'should redirect to language set path if idiom does not exist' do
+      get :first_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id + 100, :review_mode => 'reading'
+
+      response.should be_redirect
+      response.should redirect_to language_set_path(@spanish.id, @set.id)
+    end
+
+    it 'should redirect to language path if set does not exist' do
+      get :first_review, :language_id => @spanish.id, :set_id => @set.id + 100, :id => @idiom.id, :review_mode => 'reading'
+
+      response.should be_redirect
+      response.should redirect_to language_path(@spanish.id)
+    end
+
+    it 'should redirect to user home if language does not exist' do
+      get :first_review, :language_id => @spanish.id + 100, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
+
+      response.should redirect_to user_index_path
+      response.should be_redirect
+    end
+
+    it 'should return the term' do
+      get :first_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
+
+      assigns[:term].should == @idiom
+    end
+
+    it 'should set audio, typed, native, learned based on the review mode' do
+      get :first_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
+
+      assigns[:audio].should == 'back'
+      assigns[:typed].should == false
+      assigns[:native].should == 'back'
+      assigns[:learned].should == 'front'
+
+      get :first_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'listening'
+
+      assigns[:audio].should == 'front'
+      assigns[:typed].should == false
+      assigns[:native].should == 'back'
+      assigns[:learned].should == 'back'
+
+      get :first_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'translating'
+
+      assigns[:audio].should == 'back'
+      assigns[:typed].should == false
+      assigns[:native].should == 'front'
+      assigns[:learned].should == 'back'
+
+      get :first_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'typing'
+
+      assigns[:typed].should == true
+    end
+
+    describe 'related translations' do
+      before(:each) do
+        Translation.delete_all
+        IdiomTranslation.delete_all
+      end
+
+      it 'should not return idioms the user has not learned' do
+        @fur_e = Translation.make(:language_id => @english.id, :form => "fur", :pronunciation => "fur")
+        @fur_c = Translation.make(:language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+
+        @hair_e = Translation.make(:language_id => @english.id, :form => "hair", :pronunciation => "hair")
+        @hair_c1 = Translation.make(:language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+        @hair_c2 = Translation.make(:language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+
+        add_translation_to_idiom @idiom.id, @fur_e.id
+        add_translation_to_idiom @idiom.id, @fur_c.id
+        add_translation_to_idiom @idiom2.id, @hair_e.id
+        add_translation_to_idiom @idiom2.id, @hair_c1.id
+        add_translation_to_idiom @idiom2.id, @hair_c2.id
+
+        relate_translation_to_others @fur_e.id, @idiom.id
+        relate_translation_to_others @fur_c.id, @idiom.id
+        relate_translation_to_others @hair_e.id, @idiom2.id
+        relate_translation_to_others @hair_c1.id, @idiom2.id
+        relate_translation_to_others @hair_c2.id, @idiom2.id
+
+
+
+        get :first_review, :language_id => @chinese.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
+
+        assigns[:learned_translations].count.should == 1
+        assigns[:idioms].count.should == 1
+
+        element_is_in_set?(@fur_c.id, assigns[:learned_translations]).should be true
+        element_is_in_set?(@idiom, assigns[:idioms]).should be true
+      end
+
+      describe 'when the review mode is listening' do
+        it 'should return all related translations that share pronunciation' do
+          @hi = Translation.make(:language_id => @english.id, :form => "he", :pronunciation => "he")
+          @hello = Translation.make(:language_id => @english.id, :form => "hello", :pronunciation => "hello")
+          @nihao = Translation.make(:language_id => @chinese.id, :form => "你好", :pronunciation => "ni hao")
+          @wei = Translation.make(:language_id => @chinese.id, :form => "喂", :pronunciation => "wei")
+
+          add_translation_to_idiom @idiom.id, @hi.id
+          add_translation_to_idiom @idiom.id, @hello.id
+          add_translation_to_idiom @idiom.id, @nihao.id
+          add_translation_to_idiom @idiom.id, @wei.id
+
+          relate_translation_to_others @hi.id, @idiom.id
+          relate_translation_to_others @hello.id, @idiom.id
+          relate_translation_to_others @nihao.id, @idiom.id
+          relate_translation_to_others @wei.id, @idiom.id
+
+          user_has_reviewed_idiom @idiom.id, @chinese.id, @user.id
+
+
+
+          get :first_review, :language_id => @chinese.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'translating'
+
+          assigns[:learned_translations].count.should == 2
+          assigns[:idioms].count.should == 1
+
+          element_is_in_set?(@nihao.id, assigns[:learned_translations]).should be true
+          element_is_in_set?(@wei.id, assigns[:learned_translations]).should be true
+          element_is_in_set?(@idiom, assigns[:idioms]).should be true
+        end
+
+        it 'should return all related translations that share form' do
+          @idiom4 = Idiom.make
+          @idiom5 = Idiom.make
+
+          @hair_e = Translation.make(:language_id => @english.id, :form => "hair", :pronunciation => "hair")
+          @hair_c1 = Translation.make(:language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+          @hair_c2 = Translation.make(:language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+
+          add_translation_to_idiom @idiom2.id, @hair_e.id
+          add_translation_to_idiom @idiom2.id, @hair_c1.id
+          add_translation_to_idiom @idiom2.id, @hair_c2.id
+
+          relate_translation_to_others @hair_e.id, @idiom2.id
+          relate_translation_to_others @hair_c1.id, @idiom2.id
+          relate_translation_to_others @hair_c2.id, @idiom2.id
+
+          user_has_reviewed_idiom @idiom2.id, @chinese.id, @user.id
+
+
+
+          get :first_review, :language_id => @chinese.id, :set_id => @set.id, :id => @idiom2.id, :review_mode => 'listening'
+
+          assigns[:learned_translations].count.should == 2
+          assigns[:idioms].count.should == 1
+
+          element_is_in_set?(@hair_c1.id, assigns[:learned_translations]).should be true
+          element_is_in_set?(@hair_c2.id, assigns[:learned_translations]).should be true
+          element_is_in_set?(@idiom2, assigns[:idioms]).should be true
+        end
+      end
+
+      describe 'when the review mode is translating' do
+        before(:each) do
+          @he_e = Translation.make(:language_id => @english.id, :form => "hi", :pronunciation => "hi")
+          @he_c = Translation.make(:language_id => @chinese.id, :form => "他", :pronunciation => "ta1")
+          @she_e = Translation.make(:language_id => @english.id, :form => "she", :pronunciation => "she")
+          @she_c = Translation.make(:language_id => @chinese.id, :form => "她", :pronunciation => "ta1")
+          @it_e = Translation.make(:language_id => @english.id, :form => "it", :pronunciation => "it")
+          @it_c = Translation.make(:language_id => @chinese.id, :form => "它", :pronunciation => "ta1")
+
+          add_translation_to_idiom @idiom.id, @he_e.id
+          add_translation_to_idiom @idiom.id, @he_c.id
+          add_translation_to_idiom @idiom2.id, @she_e.id
+          add_translation_to_idiom @idiom2.id, @she_c.id
+          add_translation_to_idiom @idiom3.id, @it_e.id
+          add_translation_to_idiom @idiom3.id, @it_c.id
+
+          relate_translation_to_others @he_e.id, @idiom.id
+          relate_translation_to_others @he_c.id, @idiom.id
+          relate_translation_to_others @she_e.id, @idiom2.id
+          relate_translation_to_others @she_c.id, @idiom2.id
+          relate_translation_to_others @it_e.id, @idiom3.id
+          relate_translation_to_others @it_c.id, @idiom3.id
+
+          user_has_reviewed_idiom @idiom.id, @chinese.id, @user.id
+          user_has_reviewed_idiom @idiom2.id, @chinese.id, @user.id
+          user_has_reviewed_idiom @idiom3.id, @chinese.id, @user.id
+        end
+
+        it 'should return all related translations that share pronunciation' do
+          get :first_review, :language_id => @chinese.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'listening'
+
+          assigns[:learned_translations].count.should == 3
+          assigns[:idioms].count.should == 3
+
+          element_is_in_set?(@he_c.id, assigns[:learned_translations]).should be true
+          element_is_in_set?(@she_c.id, assigns[:learned_translations]).should be true
+          element_is_in_set?(@it_c.id, assigns[:learned_translations]).should be true
+          element_is_in_set?(@idiom, assigns[:idioms]).should be true
+          element_is_in_set?(@idiom2, assigns[:idioms]).should be true
+          element_is_in_set?(@idiom3, assigns[:idioms]).should be true
+        end
+      end
+
+      describe 'when the review mode is reading' do
+        before(:each) do
+          @idiom4 = Idiom.make
+          @idiom5 = Idiom.make
+
+          @fur_e = Translation.make(:language_id => @english.id, :form => "fur", :pronunciation => "fur")
+          @fur_c = Translation.make(:language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+
+          @hair_e = Translation.make(:language_id => @english.id, :form => "hair", :pronunciation => "hair")
+          @hair_c1 = Translation.make(:language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+          @hair_c2 = Translation.make(:language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+
+          @feathers_e = Translation.make(:language_id => @english.id, :form => "feathers", :pronunciation => "feathers")
+          @feathers_c = Translation.make(:language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+
+          @tail_e = Translation.make(:language_id => @english.id, :form => "tail", :pronunciation => "tail")
+          @tail_c = Translation.make(:language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+
+          @yak_e = Translation.make(:language_id => @english.id, :form => "yak", :pronunciation => "yak")
+          @yak_c = Translation.make(:language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+
+          add_translation_to_idiom @idiom.id, @fur_e.id
+          add_translation_to_idiom @idiom.id, @fur_c.id
+          add_translation_to_idiom @idiom2.id, @hair_e.id
+          add_translation_to_idiom @idiom2.id, @hair_c1.id
+          add_translation_to_idiom @idiom2.id, @hair_c2.id
+          add_translation_to_idiom @idiom3.id, @feathers_e.id
+          add_translation_to_idiom @idiom3.id, @feathers_c.id
+          add_translation_to_idiom @idiom4.id, @tail_e.id
+          add_translation_to_idiom @idiom4.id, @tail_c.id
+          add_translation_to_idiom @idiom5.id, @yak_e.id
+          add_translation_to_idiom @idiom5.id, @yak_c.id
+
+          relate_translation_to_others @fur_e.id, @idiom.id
+          relate_translation_to_others @fur_c.id, @idiom.id
+          relate_translation_to_others @hair_e.id, @idiom2.id
+          relate_translation_to_others @hair_c1.id, @idiom2.id
+          relate_translation_to_others @hair_c2.id, @idiom2.id
+          relate_translation_to_others @feathers_e.id, @idiom3.id
+          relate_translation_to_others @feathers_c.id, @idiom3.id
+          relate_translation_to_others @tail_e.id, @idiom4.id
+          relate_translation_to_others @tail_c.id, @idiom4.id
+          relate_translation_to_others @yak_e.id, @idiom5.id
+          relate_translation_to_others @yak_c.id, @idiom5.id
+
+          user_has_reviewed_idiom @idiom.id, @chinese.id, @user.id
+          user_has_reviewed_idiom @idiom2.id, @chinese.id, @user.id
+          user_has_reviewed_idiom @idiom3.id, @chinese.id, @user.id
+        end
+
+        it 'should return all related translations that share form' do
+          get :first_review, :language_id => @chinese.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
+
+          assigns[:learned_translations].count.should == 3
+          assigns[:idioms].count.should == 3
+
+          element_is_in_set?(@fur_c.id, assigns[:learned_translations]).should be true
+          element_is_in_set?(@idiom, assigns[:idioms]).should be true
+          element_is_in_set?(@idiom2, assigns[:idioms]).should be true
+          element_is_in_set?(@idiom3, assigns[:idioms]).should be true
+        end
+      end
+    end
+  end
 end

@@ -36,7 +36,7 @@ Feature: review terms
     And the first term in the set is not scheduled for "speaking"
     And the first term in the set is not scheduled for "listening"
     And the first term in the set is not scheduled for "translating"
-    And I should be on the "review term" page
+    And I should be on the "first review term" page
     And the first scheduled term is shown
 
   Scenario: all review modes are set
@@ -54,7 +54,7 @@ Feature: review terms
     And the first term in the set is scheduled for "speaking"
     And the first term in the set is scheduled for "listening"
     And the first term in the set is scheduled for "translating"
-    And I should be on the "review term" page
+    And I should be on the "first review term" page
     And the first scheduled term is shown
 
   Scenario: When I have due cards, then the first due card is shown
@@ -72,7 +72,7 @@ Feature: review terms
       | proficiency |
       | reading     |
       | writing     |
-    Then I should be on the "review term" page
+    Then I should be on the "first review term" page
     And the term containing "one" shown
 
   Scenario: When I have no due terms and all terms are scheduled show set-chapter advance

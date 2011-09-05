@@ -15,6 +15,7 @@ Feature: review modes
       | a little bit | English  |               |
     And the group containing "a little bit" is in the set "greetings"
     And the user has the "greetings" set as a goal for the "Spanish" language
+    And the user has reviewed the idiom "un poco de" before in the "Spanish" language
 
   Scenario: selecting a review mode of "listening" sets the correct review types
     When I review the "greetings" set in "Spanish" using the "listening" review mode

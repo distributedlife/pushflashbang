@@ -1,0 +1,40 @@
+=render :partial => '/header', :locals => {:title => t('titles.new-term-review.title'), :subtitle => 'number of terms due: ...'}
+
+#review_mode
+  .panel
+    %p
+      The current review mode is:
+      %span.contrast_faint= "#{params[:review_mode]}"
+
+#term{:id => "#{@term.id}"}
+  .panel
+    %p#meaning_count= "#{@related_count}"
+    =render :partial => '/terms/show', :locals => {:term => @term, :native => @native, :learned => @learned, :audio => @audio, :typed => @typed}
+
+#review_buttons
+  .panel
+    .button{:class => "centre large_button"}
+      %ul
+        %li{:class => 'inline-block'}
+          = link_to t('actions.ok'), '#', :class => 'positive large inline-block', :method => :post, :id => "do_results", :style => 'width:12em;'
+          :javascript
+            $j('#do_results').click(function(event) {
+              var link = "#{record_review_language_set_term_path()}";
+              link = link + "&review_mode=" + "#{params[:review_mode]}" ;
+              link = link + "&listening=true";
+              link = link + "&reading=true";
+              link = link + "&speaking=true";
+              link = link + "&writing=true";
+              link = link + "&typing=true";
+              
+              $j('#do_results').attr('href', link);
+            });
+      .pad
+
+:javascript
+  $j('html').keypress(function(event) {
+    if (event.which == '32')
+    {
+      $j('#do_results').click();
+    }
+  });

@@ -201,14 +201,14 @@ class SetsController < ApplicationController
     if next_term.chapter > user_set.chapter
       redirect_to next_chapter_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode]) and return
     else
-      #show the card to the user
+      #show the new card to the user
       scheduled_term = UserIdiomSchedule.create(:user_id => current_user.id, :language_id => params[:language_id], :idiom_id => next_term.term_id)
       review_types.each do |review_type|
         if UserIdiomDueItems.where(:user_idiom_schedule_id => scheduled_term.id, :review_type => review_type).empty?
           UserIdiomDueItems.create(:user_idiom_schedule_id => scheduled_term.id, :due => Time.now, :interval => CardTiming.get_first.seconds, :review_type => review_type)
         end
       end
-      redirect_to review_language_set_term_path(params[:language_id], params[:id], next_term.term_id, :review_mode => params[:review_mode]) and return
+      redirect_to first_review_language_set_term_path(params[:language_id], params[:id], next_term.term_id, :review_mode => params[:review_mode]) and return
     end
   end
 

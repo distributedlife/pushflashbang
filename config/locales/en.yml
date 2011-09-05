@@ -104,12 +104,12 @@ en:
     set-has-no-translations: "There are currently no translations in the set"
     user-has-no-languages: "You have not selected to learn any languages."
   titles:
-    user-home:
-      title: "Welcome to PushFlashBang"
-      subtitle: ""
     language-index:
       title: "All Supported languages"
       subtitle: ""
+    new-term-review:
+      title: "New Term!"
+      subtitle: "Congralutions, here is a new term for you to learn"
     set-completed:
       title: "Set Complete!"
       subtitle: ""
@@ -146,7 +146,9 @@ en:
     translation-create:
       title: "Create a set of related translations"
       subtitle: ""
-
+    user-home:
+      title: "Welcome to PushFlashBang"
+      subtitle: ""
 
 
 

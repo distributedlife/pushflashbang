@@ -550,11 +550,11 @@ describe SetsController do
       response.should redirect_to language_set_path(@language4.id, @set.id)
     end
     
-    it 'should redirect to the next term in the set for the user if there are no terms due' do
+    it 'should redirect to the new term page for the next term in the set for the user if there are no terms due' do
       get :review, :language_id => @language.id, :id => @set.id, :review_mode => 'reading'
 
       response.should be_redirect
-      response.should redirect_to review_language_set_term_path(@language.id, @set.id, @idiom1.id, :review_mode => "reading")
+      response.should redirect_to first_review_language_set_term_path(@language.id, @set.id, @idiom1.id, :review_mode => "reading")
     end
 
     it 'should schedule the next unscheduled term for the specified review types when there are no due terms' do
@@ -644,33 +644,6 @@ describe SetsController do
       UserIdiomDueItems.last.due.utc.to_s.should <= finish.utc.to_s
       UserIdiomDueItems.last.interval.should == 5
     end
-
-#    it 'should not show terms in the set that do not translate into the language' do
-#      UserIdiomSchedule.count.should == 0
-#      UserIdiomDueItems.count.should == 0
-#
-#      start = Time.now
-#      get :review, :language_id => @language3.id, :id => @set.id, :review_mode => 'reading, typing'
-#      finish = Time.now
-#
-#      UserIdiomSchedule.count.should == 1
-#      UserIdiomSchedule.first.user_id.should == @user.id
-#      UserIdiomSchedule.first.idiom_id.should == @idiom2.id
-#      UserIdiomSchedule.first.language_id.should == @language3.id
-#
-#      UserIdiomDueItems.count.should == 2
-#      UserIdiomDueItems.first.user_idiom_schedule_id.should == UserIdiomSchedule.first.id
-#      UserIdiomDueItems.first.review_type.should == 1
-#      UserIdiomDueItems.first.due.utc.to_s.should >= start.utc.to_s
-#      UserIdiomDueItems.first.due.utc.to_s.should <= finish.utc.to_s
-#      UserIdiomDueItems.first.interval.should == 5
-#
-#      UserIdiomDueItems.last.user_idiom_schedule_id.should == UserIdiomSchedule.first.id
-#      UserIdiomDueItems.last.review_type.should == 4
-#      UserIdiomDueItems.last.due.utc.to_s.should >= start.utc.to_s
-#      UserIdiomDueItems.last.due.utc.to_s.should <= finish.utc.to_s
-#      UserIdiomDueItems.last.interval.should == 5
-#    end
 
     it 'should not show terms in the set that do not translate into the users native language' do
       UserIdiomSchedule.count.should == 0
