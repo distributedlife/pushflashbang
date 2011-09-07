@@ -391,12 +391,18 @@ class TermsController < ApplicationController
     redirect_to set_path(set_id)
   end
 
+  def error_redirect_to(reason, options = {}, response_status = {})
+    puts "User (#{current_user.id}) redirected: #{reason}"
+
+    redirect_to options, response_status
+  end
+
   def record_review
-    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return unless idiom_exists? params[:id]
-    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:set_id]
-    redirect_to user_index_path and return unless language_is_valid? params[:language_id]
-    redirect_to language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
-    redirect_to review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
+    error_redirect_to "idiom #{params[:id]} not found", review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return unless idiom_exists? params[:id]
+    error_redirect_to "set #{params[:set_id]} not found", language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+    error_redirect_to "language #{params[:language_id]} not found", user_index_path and return unless language_is_valid? params[:language_id]
+    error_redirect_to "user is not learning #{params[:language_id]}", language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
+    error_redirect_to "idiom #{params[:reviw_mode]} not set", review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
 
 
     related_translation_link = {:audible => true} if params[:review_mode]["listening"]
