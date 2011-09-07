@@ -6,6 +6,7 @@ class Language < ActiveRecord::Base
   def self.get_or_create name
     language = Language.where(:name => name)
     if language.empty?
+      puts "Creating language #{name}"
       language = Language.create(:name => name)
     else
       language = language.first

@@ -7,6 +7,7 @@
       %span.menu= link_to t('actions.set-goal'), select_set_set_language_index_path(params[:id]), :class => 'neutral', :id => "set_goal"
   - else
     - @user_goal.each do |goal|
+      = goal.language.name
       %span.menu= link_to t('actions.unset-goal'), unset_goal_language_set_path(goal.language_id, goal.set_id), :class => 'neutral', :id => "unset_goal", :method => :put
   .pad_from_top
   %span.menu= edit_link_to t('actions.link-term'), select_for_set_set_set_terms_path(params[:id]), :class => 'neutral', :id => "add_term"
@@ -19,5 +20,7 @@
 %section{:class => ["panel left"], :style => "width: 70%"}
   - unless @user_goal.empty?
     - @user_goal.each do |goal|
-      =render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => params[:id]}
+      %h2= goal.language.name
+      = render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => params[:id]}
+      .pad_from_top
 =render :partial => '/sets/set_terms', :locals => {:set => @set}

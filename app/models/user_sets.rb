@@ -1,4 +1,6 @@
 class UserSets < ActiveRecord::Base
+  belongs_to :language
+  
   attr_accessible :user_id, :set_id, :chapter, :language_id
 
   validates :user_id, :presence => true
