@@ -65,6 +65,7 @@ PushFlashBang::Application.routes.draw do
           get 'first_review'
           get 'review'
           post 'record_review'
+          post 'record_first_review'
         end
       end
     end

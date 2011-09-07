@@ -1,4 +1,7 @@
 include LanguagesHelper
+include IdiomHelper
+include SetHelper
+include TranslationHelper
 
 class TermsController < ApplicationController
   before_filter :authenticate_user!
@@ -175,7 +178,39 @@ class TermsController < ApplicationController
   end
 
   def first_review
-    review
+    begin
+      native_language_id = current_user.native_language_id
+
+      redirect_to language_set_path(params[:language_id], params[:set_id]) and return unless idiom_exists? params[:id]
+      redirect_to language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+      redirect_to user_index_path and return unless language_is_valid? params[:language_id]
+
+      @term = Idiom.find(params[:id])
+
+      # get all translations in the term, that match the learned language
+      @learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+      learned_translations_in_idiom = @learned_translations_in_idiom.map{|t| t.id}
+      redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?
+
+      # get all translations in the term, that match the users native language
+      @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => native_language_id, :idiom_translations => {:idiom_id => params[:id]})
+
+      #get related count and idioms
+      @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id]
+      @related_count = @learned_translations.count
+      @idioms = get_idioms_from_translations @learned_translations
+
+      #send languages
+      @learned_language = Language.find(params[:language_id])
+      @native_language = Language.find(current_user.native_language_id)
+
+
+      if detect_browser == "mobile_application"
+        render "learn.mobile"
+      end
+    rescue
+      ap "hmmm"
+    end
   end
   
   def review
@@ -447,73 +482,38 @@ class TermsController < ApplicationController
     redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode])
   end
 
-  private
-  def to_boolean value
-    return [true, "true", 1, "1", "T", "t"].include?(value.class == String ? value.downcase : value)
-  end
+  def record_first_review
+    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return unless idiom_exists? params[:id]
+    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+    redirect_to user_index_path and return unless language_is_valid? params[:language_id]
+    redirect_to language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
+    redirect_to review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
 
-  def get_idioms_from_translations translations
-    idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', translations])
-    idiom_translations = idiom_translations.map{|t| t.idiom_id}
-    Idiom.find(idiom_translations)
-  end
 
-  def add_term_to_set set_id, term_id
-    if SetTerms.where(:set_id => set_id, :term_id => term_id).empty?
-      max_position = SetTerms.where(:set_id => set_id).maximum(:position)
-      max_position ||= 0
-      max_chapter = SetTerms.where(:set_id => set_id).maximum(:chapter)
-      max_chapter ||= 1
+    learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+    learned_translations_in_idiom = learned_translations_in_idiom.map{|t| t.id}
 
-      SetTerms.create(:set_id => set_id, :term_id => term_id, :chapter => max_chapter, :position => max_position + 1)
-    end
-  end
+    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?
+    learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id]
 
-  def all_translations_sorted_correctly
-    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).all
-  end
+    get_idioms_from_translations(learned_translations).each do |idiom|
+      schedule = UserIdiomSchedule.where(:user_id => current_user.id, :idiom_id => idiom.id, :language_id => params[:language_id])
+      redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
+      schedule = schedule.first
 
-  def get_idiom_translations
-    if idiom_exists? params[:id]
-      @translations = Translation.joins(:languages, :idiom_translations).order(:name).order(:form).where(:idiom_translations => {:idiom_id => params[:id]})
+      # as we are seeing a new term; we need to sync related terms to this one. This means that all we be seen again in real soon
+      next_interval = CardTiming.get_next(CardTiming.get_first.seconds).seconds        #sync to second interval
+      next_due = Time.now + next_interval
+      UserIdiomReview::REVIEW_TYPES.each do |review_type|
+        due_item = get_first UserIdiomDueItems.where(:user_idiom_schedule_id => schedule.id, :review_type => review_type)
+        due_item ||= UserIdiomDueItems.new(:user_idiom_schedule_id => schedule.id, :review_type => review_type)
 
-      if @translations.empty?
-        flash[:failure] = "The term you were looking has no translations"
-        redirect_to terms_path
+        due_item.interval = next_interval
+        due_item.due = next_due
+        due_item.save!
       end
-    else
-      flash[:failure] = "The term you were looking for no longer exists"
-      redirect_to terms_path
     end
-  end
 
-  def set_exists? id
-    begin
-      Sets.find(id)
-
-      true
-    rescue
-      false
-    end
-  end
-
-  def idiom_exists? idiom_id
-    begin
-      Idiom.find(idiom_id)
-
-      true
-    rescue
-      false
-    end
-  end
-
-  def translation_exists? translation_id
-    begin
-      Translation.find(translation_id)
-
-      true
-    rescue
-      false
-    end
+    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode])
   end
 end

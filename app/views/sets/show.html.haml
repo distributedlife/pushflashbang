@@ -1,20 +1,19 @@
 =render :partial => '/header', :locals => {:title => t('titles.set-show.title'), :subtitle => t('titles.set-show.subtitle')}
-- if current_user.in_edit_mode?
-  %section{:class => ["panel right"], :style => "width: 15%"}
-    - if @user_goal.empty?
-      - if (params[:language_id])
-        %span.menu= link_to t('actions.set-goal'), set_goal_language_set_path(params[:language_id], params[:id]), :class => 'neutral', :id => "set_goal", :method => :put
-      - else
-        %span.menu= link_to t('actions.set-goal'), select_set_set_language_index_path(params[:id]), :class => 'neutral', :id => "set_goal"
+%section{:class => ["panel right"], :style => "width: 15%"}
+  - if @user_goal.empty?
+    - if (params[:language_id])
+      %span.menu= link_to t('actions.set-goal'), set_goal_language_set_path(params[:language_id], params[:id]), :class => 'neutral', :id => "set_goal", :method => :put
     - else
-      - @user_goal.each do |goal|
-        %span.menu= link_to t('actions.unset-goal'), unset_goal_language_set_path(goal.language_id, goal.set_id), :class => 'neutral', :id => "unset_goal", :method => :put
-    .pad_from_top
-    %span.menu= link_to t('actions.link-term'), select_for_set_set_set_terms_path(params[:id]), :class => 'neutral', :id => "add_term"
-    .pad_from_top
-    %span.menu= link_to t('actions.new-term'), new_set_set_term_path(params[:id]), :class => 'neutral', :method => :get
-    .pad_from_top
-    %span.menu= link_to t('actions.edit-set'), edit_set_path(params[:id]), :class => 'neutral'
+      %span.menu= link_to t('actions.set-goal'), select_set_set_language_index_path(params[:id]), :class => 'neutral', :id => "set_goal"
+  - else
+    - @user_goal.each do |goal|
+      %span.menu= link_to t('actions.unset-goal'), unset_goal_language_set_path(goal.language_id, goal.set_id), :class => 'neutral', :id => "unset_goal", :method => :put
+  .pad_from_top
+  %span.menu= edit_link_to t('actions.link-term'), select_for_set_set_set_terms_path(params[:id]), :class => 'neutral', :id => "add_term"
+  .pad_from_top
+  %span.menu= edit_link_to t('actions.new-term'), new_set_set_term_path(params[:id]), :class => 'neutral', :method => :get
+  .pad_from_top
+  %span.menu= edit_link_to t('actions.edit-set'), edit_set_path(params[:id]), :class => 'neutral'
 
 =render :partial => '/sets/set_names', :locals => {:set => @set}
 %section{:class => ["panel left"], :style => "width: 70%"}

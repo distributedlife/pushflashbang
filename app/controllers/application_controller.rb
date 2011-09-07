@@ -1,3 +1,6 @@
+include ArrayHelper
+include BooleanHelper
+
 class ApplicationController < ActionController::Base
   protect_from_forgery
   layout :detect_browser

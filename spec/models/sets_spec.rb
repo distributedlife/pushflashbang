@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Sets do
   context 'migrate_from_deck' do
     before(:each) do
+      @user = User.make
       @set = Sets.make
 
       @deck = Deck.make
@@ -131,6 +132,113 @@ describe Sets do
             SetTerms.where(:term_id => idiom_translation.idiom_id).each do |set_term|
               set_term.position.should == i + 1
             end
+          end
+        end
+      end
+    end
+
+    describe 'migrating reviews' do
+      it 'should create an idiom review for each card review' do
+        review = UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id,
+          :due => 5.days.ago, :review_start => 4.days.ago, :reveal => 3.days.ago,	:result_recorded => 2.days.ago,
+           :interval => 5, :review_type => 1)
+
+        UserCardReview.count.should == 1
+        
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomReview.count.should == 1
+        user_idiom_review = UserIdiomReview.first
+        user_idiom_review.user_id.should == review.user_id
+        user_idiom_review.due.should == review.due
+        user_idiom_review.review_start.should == review.review_start
+        user_idiom_review.reveal.should == review.reveal
+        user_idiom_review.interval.should == review.interval
+        user_idiom_review.review_type.should == review.review_type
+
+        t = Translation.where(:form => @cards.first.front)
+
+        user_idiom_review.idiom_id.should == IdiomTranslation.where(:translation_id => t.first.id).first.idiom_id
+        user_idiom_review.language_id.should == Language::get_or_create("Chinese (Simplified)").id
+      end
+
+      it 'should map a result of didnt_know to failure' do
+        UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id,
+          :result_success => 'didnt_know', :review_type => 1)
+
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomReview.first.success.should == false
+      end
+
+      it 'should map a result of partial_correct to failure' do
+        UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id,
+          :result_success => 'partial_correct', :review_type => 1)
+
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomReview.first.success.should == false
+      end
+
+      it 'should map a result of shaky_good to success' do
+        UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id,
+          :result_success => 'shaky_good', :review_type => 1)
+
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomReview.first.success.should == true
+      end
+
+      it 'should map a result of good to success' do
+        UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id,
+          :result_success => 'good', :review_type => 1)
+
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomReview.first.success.should == true
+      end
+    end
+
+    describe 'migrating schedules' do
+      it 'should migrate a schedule for each card schedule' do
+        old_schedule = UserCardSchedule.create(:user_id => @user.id, :card_id => @cards.first.id, :due => 5.days.ago, :interval => 36)
+
+        UserCardSchedule.count.should == 1
+
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomSchedule.count.should == 1
+        new_schedule = UserIdiomSchedule.first
+        new_schedule.user_id.should == old_schedule.user_id
+
+        t = Translation.where(:form => @cards.first.front)
+
+        new_schedule.idiom_id.should == IdiomTranslation.where(:translation_id => t.first.id).first.idiom_id
+        new_schedule.language_id.should == Language::get_or_create("Chinese (Simplified)").id
+      end
+
+      it 'should create a due item for each review type for the user for the card' do
+        old_schedule = UserCardSchedule.create(:user_id => @user.id, :card_id => @cards.first.id, :due => 5.days.ago, :interval => 36)
+
+        review1 = UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id, :review_type => 1)
+        review2 = UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id, :review_type => 32)
+
+
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomSchedule.count.should == 1
+        UserIdiomDueItems.count.should == 2
+        review_types = [review1.review_type, review2.review_type]
+        review_types_matched = []
+        UserIdiomDueItems.all.each do |due_item|
+          due_item.due.utc.should == old_schedule.due.utc
+          due_item.interval.should == old_schedule.interval
+
+          if [due_item.review_type] & review_types_matched == [due_item.review_type]
+            raise 'Due item not mapped correctly'
+          end
+          if [due_item.review_type] & review_types == [due_item.review_type]
+            review_types_matched << due_item.review_type
           end
         end
       end

@@ -1,3 +1,6 @@
+include TranslationHelper
+include IdiomHelper
+
 class TranslationsController < ApplicationController
   before_filter :authenticate_user!
 
@@ -49,26 +52,5 @@ class TranslationsController < ApplicationController
     return redirect_to terms_path unless idiom_exists? params[:term_id]
     
     @translations = Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(['idiom_translations.idiom_id != ?', params[:term_id]])
-  end
-
-  private
-  def idiom_exists? idiom_id
-    begin
-      Idiom.find(idiom_id)
-
-      true
-    rescue
-      false
-    end
-  end
-
-  def translation_exists? translation_id
-    begin
-      Translation.find(translation_id)
-
-      true
-    rescue
-      false
-    end
   end
 end

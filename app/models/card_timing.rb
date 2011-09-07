@@ -66,7 +66,6 @@ class CardTiming < ActiveRecord::Base
     end
 
     if current >= threshold
-#      next_interval.seconds = next_interval.seconds + (rand half_range) + 1
       next_interval.seconds = apply_random_variation next_interval.seconds
     end
 
@@ -83,7 +82,6 @@ class CardTiming < ActiveRecord::Base
     end
 
     if current >= threshold
-#      next_interval.seconds = next_interval.seconds + (rand half_range) + 1
       next_interval.seconds = apply_random_variation next_interval.seconds
     end
 

@@ -19,7 +19,7 @@
           = link_to t('actions.ok'), '#', :class => 'positive large inline-block', :method => :post, :id => "do_results", :style => 'width:12em;'
           :javascript
             $j('#do_results').click(function(event) {
-              var link = "#{record_review_language_set_term_path()}";
+              var link = "#{record_first_review_language_set_term_path()}";
               link = link + "&review_mode=" + "#{params[:review_mode]}" ;
               link = link + "&listening=true";
               link = link + "&reading=true";
