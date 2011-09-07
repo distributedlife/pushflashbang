@@ -28,6 +28,10 @@ class Sets < ActiveRecord::Base
       idiom = Idiom.create
 
       chinese_translation = Translation.create(:idiom_id => idiom.id, :language_id => chinese.id, :form => card.front, :pronunciation => card.pronunciation)
+      if card.audio.file?
+        chinese_translation.audio = card.audio
+        chinese_translation.save!
+      end
       IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => chinese_translation.id)
 
       card.back.split(',').each do |form|
@@ -38,8 +42,6 @@ class Sets < ActiveRecord::Base
 
         RelatedTranslations::create_relationships_for_translation english_translation
       end
-
-      
       RelatedTranslations::create_relationships_for_translation chinese_translation
 
 
@@ -53,6 +55,7 @@ class Sets < ActiveRecord::Base
 
   def rebuild_all_relationships
     Translation.all.each do |t|
+      puts "finding relationships for #{t.name}"
       RelatedTranslations::create_relationships_for_translation t
     end
   end
