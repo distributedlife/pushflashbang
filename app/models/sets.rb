@@ -50,8 +50,8 @@ class Sets < ActiveRecord::Base
       migrate_schedules card.id, idiom.id, chinese.id
     end
 
-    puts "rebuilding all relationships"
-    rebuild_all_relationships
+#    puts "rebuilding all relationships"
+#    rebuild_all_relationships
   end
 
   def rebuild_all_relationships
