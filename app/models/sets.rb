@@ -14,7 +14,6 @@ class Sets < ActiveRecord::Base
     deck = Deck.find deck_id
     next if deck.nil?
 
-    puts "Creating required languages"
     chinese = Language::get_or_create "Chinese (Simplified)"
     english = Language::get_or_create "English"
 
@@ -26,7 +25,6 @@ class Sets < ActiveRecord::Base
         current_chapter = current_chapter + 1
       end
 
-      puts "creating idiom and translations"
       idiom = Idiom.create
 
       chinese_translation = Translation.create(:idiom_id => idiom.id, :language_id => chinese.id, :form => card.front, :pronunciation => card.pronunciation)
@@ -42,17 +40,23 @@ class Sets < ActiveRecord::Base
       end
 
       
-      puts "relating translations"
       RelatedTranslations::create_relationships_for_translation chinese_translation
 
 
       SetTerms.create(:set_id => self.id, :term_id => idiom.id, :chapter => card.chapter, :position => index)
       index = index + 1
 
-      puts "migrating reviews"
       migrate_reviews card.id, idiom.id, chinese.id
-      puts "migrating schedules"
       migrate_schedules card.id, idiom.id, chinese.id
+    end
+
+    puts "rebuilding all relationships"
+    rebuild_all_relationships
+  end
+
+  def rebuild_all_relationships
+    Translation.all.each do |t|
+      RelatedTranslations::create_relationships_for_translation t
     end
   end
 
