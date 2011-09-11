@@ -64,27 +64,28 @@
 
               if ($j("#review_result_listening").length > 0)
               {
-                link = link + "&listening=" + $j("#review_result_listening").attr('checked');
+                //link = link + "&listening=" + $j("#review_result_listening").attr('checked');
+                link = link + "&listening=" + ($j("label[for='review_result_listening']").attr('class') == "checked");
               }
               if ($j("#review_result_reading").length > 0)
               {
-                link = link + "&reading=" + $j("#review_result_reading").attr('checked');
+                link = link + "&reading=" + ($j("label[for='review_result_reading']").attr('class') == "checked");
               }
               if ($j("#review_result_speaking").length > 0)
               {
-                link = link + "&speaking=" + $j("#review_result_speaking").attr('checked');
+                link = link + "&speaking=" + ($j("label[for='review_result_speaking']").attr('class') == "checked");
               }
               if ($j("#review_result_writing").length > 0)
               {
-                link = link + "&writing=" + $j("#review_result_writing").attr('checked');
+                link = link + "&writing=" + ($j("label[for='review_result_writing']").attr('class') == "checked")
               }
               if ($j("#review_result_typing").length > 0)
               {
-                link = link + "&typing=" + $j("#review_result_typing").attr('checked');
+                link = link + "&typing=" + ($j("label[for='review_result_typing']").attr('class') == "checked")
               }
               if ($j("#review_result_translating").length > 0)
               {
-                link = link + "&translating=" + $j("#review_result_translating").attr('checked');
+                link = link + "&translating=" + ($j("label[for='review_result_translating']").attr('class') == "checked")
               }
               
               $j('#do_results').attr('href', link);
@@ -107,27 +108,27 @@
 
               if ($j("#review_result_listening").length > 0)
               {
-                link = link + "&listening=" + $j("#review_result_listening").attr('checked');
+                link = link + "&listening=" + ($j("label[for='review_result_listening']").attr('class') == "checked");
               }
               if ($j("#review_result_reading").length > 0)
               {
-                link = link + "&reading=" + $j("#review_result_reading").attr('checked');
+                link = link + "&reading=" + ($j("label[for='review_result_reading']").attr('class') == "checked");
               }
               if ($j("#review_result_speaking").length > 0)
               {
-                link = link + "&speaking=" + $j("#review_result_speaking").attr('checked');
+                link = link + "&speaking=" + ($j("label[for='review_result_speaking']").attr('class') == "checked");
               }
               if ($j("#review_result_writing").length > 0)
               {
-                link = link + "&writing=" + $j("#review_result_writing").attr('checked');
+                link = link + "&writing=" + ($j("label[for='review_result_writing']").attr('class') == "checked");
               }
               if ($j("#review_result_typing").length > 0)
               {
-                link = link + "&typing=" + $j("#review_result_typing").attr('checked');
+                link = link + "&typing=" + ($j("label[for='review_result_typing']").attr('class') == "checked");
               }
               if ($j("#review_result_translating").length > 0)
               {
-                link = link + "&translating=" + $j("#review_result_translating").attr('checked');
+                link = link + "&translating=" + ($j("label[for='review_result_translating']").attr('class') == "checked");
               }
 
               $j('#do_result_perfect').attr('href', link);

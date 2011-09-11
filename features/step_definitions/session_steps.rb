@@ -106,7 +106,7 @@ When /^a card is scheduled$/ do
 end
 
 And /^I record my result$/ do
-  And %{I click on "I knew the answer"}
+  And %{I click on "Too Easy! Show me this less often"}
   sleep 0.5
 end
 
@@ -117,7 +117,7 @@ And /^I review the same card again$/ do
 
   And %{I go to the "deck session" page}
   And %{I click on "Reveal"}
-  And %{I click on "I knew the answer"}
+  And %{I click on "Too Easy! Show me this less often"}
   sleep 0.5
 end
 

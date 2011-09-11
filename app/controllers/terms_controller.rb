@@ -66,6 +66,7 @@ class TermsController < ApplicationController
 
       #if we have a set_id. we should link the term to that set
       params["translations"] ||= {}
+      params["translations"]["set_id"] ||= ""
       unless params["translations"]["set_id"].empty?
         add_term_to_set params["translations"]["set_id"], idiom.id
         
