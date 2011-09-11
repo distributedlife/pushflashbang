@@ -1,10 +1,10 @@
 # Migrate Decks
 # ACCS - Twers (reading practice)
-name = "ACCS - Twers (reading practice)"
-deck = Deck.where(:name => name).first
-set = Sets.create
-SetName.create(:name => deck.name, :description => deck.description, :sets_id => set.id)
-set.migrate_from_deck deck.id
+#name = "ACCS - Twers (reading practice)"
+#deck = Deck.where(:name => name).first
+#set = Sets.create
+#SetName.create(:name => deck.name, :description => deck.description, :sets_id => set.id)
+#set.migrate_from_deck deck.id
 
 # ACCS - Level 2 -TW (reading practice)
 name = "ACCS - Level 2 -TW (reading practice)"
