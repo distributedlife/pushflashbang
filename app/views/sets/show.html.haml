@@ -17,8 +17,8 @@
   %span.menu= edit_link_to t('actions.edit-set'), edit_set_path(params[:id]), :class => 'neutral'
 
 =render :partial => '/sets/set_names', :locals => {:set => @set}
-%section{:class => ["panel left"], :style => "width: 70%"}
-  - unless @user_goal.empty?
+- unless @user_goal.empty?
+  %section{:class => ["panel left"], :style => "width: 70%"}
     - @user_goal.each do |goal|
       %h2= goal.language.name
       = render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => params[:id]}
