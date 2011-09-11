@@ -108,6 +108,7 @@ en:
     confirm-cancel: "Please confirm you wish to cancel your account?"
     change-password: "Change my password"
     reset-password: "Send me password reset instructions"
+    create-account: "Create Account"
   form:
     user-email: "my email"
     user-change-email: "change email address?"

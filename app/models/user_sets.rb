@@ -10,6 +10,6 @@ class UserSets < ActiveRecord::Base
   validates :chapter, :presence => true, :numericality => { :greater_than => 0 }
 
   def self.get_for_user_and_set_where_learning_language user_id, set_id
-    UserSets.joins(:user_languages).where(:set_id => set_id, :user_id => user_id)
+    UserSets.joins(:user_languages).where(:set_id => set_id, :user_id => user_id, :user_languages => {:user_id => user_id})
   end
 end

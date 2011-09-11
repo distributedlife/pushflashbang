@@ -8,18 +8,26 @@
 
 = hidden_field_tag "term_typed_answer", "#{card_answer}"
 
-.panel
-  %p{:class => "giant mandarin"}
-    - if native == "front" or native == "both"
-      - @native_translations.each do |native_translation|
+.panel{:style => "text-align: center;"}
+  - audio_display_on_front = false
+  - if native == "front" or native == "both"
+    - @native_translations.each do |native_translation|
+      %p{:class => "giant mandarin", :style => "display: inline-block;"}
         %span.native_form= native_translation.form
-    - if learned == "front" or learned == "both"
-      - @learned_translations_in_idiom.each do |learned_translation|
-        %span.learned_form= learned_translation.form
-        .pad_from_top
-  /- if @card.audio.file?
-  //  =render :partial => '/audio_controls', :locals => {:audio_url => @card.audio.url}
-  //
+      - if audio == "front" and !audio_display_on_front
+        - if native_translation.audio.file?
+          = render :partial => '/audio_controls_start_only', :locals => {:audio_url => native_translation.audio.url}
+          - audio_display_on_front =  true
+  - if learned == "front" or learned == "both"
+    - @learned_translations_in_idiom.each do |learned_translation|
+      %p{:class => "giant mandarin", :style => "display: inline-block;"}
+        %span.learned_form{:style => "padding: 0.3em;"}= learned_translation.form
+      - if audio == "front" and !audio_display_on_front
+        - if learned_translation.audio.file?
+          = render :partial => '/audio_controls_start_only', :locals => {:audio_url => learned_translation.audio.url}
+          - audio_display_on_front =  true
+
+
   - if typed == true
     .pad_from_top
     .section_break
@@ -54,6 +62,8 @@
             #learned_translation{:id => "#{translation.id}", :style => "display: inline-block; "}
               %p.learned_form= translation.form
               %p.pronunciation= translation.pronunciation
+            - if translation.audio.file?
+              = render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url}
         .section_break
         .native
           - Idiom::translations_in_idiom_and_language(idiom.id, @native_language.id).each do |translation|
