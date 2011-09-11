@@ -1,3 +1,4 @@
+- new ||= false
 - answer = nil
 - card_answer = ""
 - @learned_translations_in_idiom.each do |learned_translation|
@@ -8,52 +9,54 @@
 
 = hidden_field_tag "term_typed_answer", "#{card_answer}"
 
-.panel{:style => "text-align: center;"}
-  - audio_display_on_front = false
-  - if native == "front" or native == "both"
-    - @native_translations.each do |native_translation|
-      %p{:class => "giant mandarin", :style => "display: inline-block;"}
-        %span.native_form= native_translation.form
-      - if audio == "front" and !audio_display_on_front
-        - if native_translation.audio.file?
-          = render :partial => '/audio_controls_start_only', :locals => {:audio_url => native_translation.audio.url}
-          - audio_display_on_front =  true
-  - if learned == "front" or learned == "both"
-    - @learned_translations_in_idiom.each do |learned_translation|
-      %p{:class => "giant mandarin", :style => "display: inline-block;"}
-        %span.learned_form{:style => "padding: 0.3em;"}= learned_translation.form
-      - if audio == "front" and !audio_display_on_front
-        - if learned_translation.audio.file?
-          = render :partial => '/audio_controls_start_only', :locals => {:audio_url => learned_translation.audio.url}
-          - audio_display_on_front =  true
+- unless new
+  .panel{:style => "text-align: center;"}
+    - audio_display_on_front = false
+    - if native == "front" or native == "both"
+      - @native_translations.each do |native_translation|
+        %p{:class => "giant mandarin", :style => "display: inline-block;"}
+          %span.native_form= native_translation.form
+        - if audio == "front" and !audio_display_on_front
+          - if native_translation.audio.file?
+            = render :partial => '/audio_controls_start_only', :locals => {:audio_url => native_translation.audio.url}
+            - audio_display_on_front =  true
+    - if learned == "front" or learned == "both"
+      - @learned_translations_in_idiom.each do |learned_translation|
+        %p{:class => "giant mandarin", :style => "display: inline-block;"}
+          %span.learned_form{:style => "padding: 0.3em;"}= learned_translation.form
+        - if audio == "front" and !audio_display_on_front
+          - if learned_translation.audio.file?
+            = render :partial => '/audio_controls_start_only', :locals => {:audio_url => learned_translation.audio.url}
+            - audio_display_on_front =  true
 
 
-  - if typed == true
-    .pad_from_top
-    .section_break
-    .pad_from_top
-    - semantic_form_for("answer", :url => '#', :method => :put, :html => {:id => "answer"}) do |f|
-      = f.input :form, :as => :string, :label => false, :hint => I18n.t('form.typed-answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
-    %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
-    :javascript
-      //override the enter button on the formsubmit so that clicking enter performs a reveal rather than submitting the form
-      $j("#answer").submit(function(event) {
-        event.preventDefault();
+    - if typed == true
+      .pad_from_top
+      .section_break
+      .pad_from_top
+      - semantic_form_for("answer", :url => '#', :method => :put, :html => {:id => "answer"}) do |f|
+        = f.input :form, :as => :string, :label => false, :hint => I18n.t('form.typed-answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
+      %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
+      :javascript
+        //override the enter button on the formsubmit so that clicking enter performs a reveal rather than submitting the form
+        $j("#answer").submit(function(event) {
+          event.preventDefault();
 
-        //only perform the enter action once
-        if ($j("#answer_form").attr('disabled') == true)
-        {
-          return false ;
-        }
+          //only perform the enter action once
+          if ($j("#answer_form").attr('disabled') == true)
+          {
+            return false ;
+          }
 
-        $j('#do_reveal').click();
+          $j('#do_reveal').click();
 
-        $j("#answer_form").attr('disabled', true);
-      });
+          $j("#answer_form").attr('disabled', true);
+        });
 
 
 #back_of_card{:class => "hidden"}
-  .section_break
+  - unless new
+    .section_break
   #idioms{:style => "text-align:center;"}
     - @idioms.each do |idiom|
       #idiom_group{:id => "#{idiom.id}", :class => "idiom-group", :style => "display: inline-block; text-align:center;"}

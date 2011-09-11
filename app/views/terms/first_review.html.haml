@@ -2,14 +2,20 @@
 
 #review_mode
   .panel
-    %p
-      ="#{t('text.current-review-mode')}:"
-      %span.contrast_faint= "#{params[:review_mode]}"
+    #term{:id => "#{@term.id}"}
+      =render :partial => '/terms/show', :locals => {:term => @term, :native => @native, :learned => @learned, :audio => @audio, :typed => @typed, :new => true}
 
-#term{:id => "#{@term.id}"}
+#pronunciation_guidance
   .panel
-    %p#meaning_count= "#{@related_count}"
-    =render :partial => '/terms/show', :locals => {:term => @term, :native => @native, :learned => @learned, :audio => @audio, :typed => @typed}
+    %p= t('text.pronunciation-guidance')
+    - @idioms.each do |idiom|
+      - Idiom::translations_in_idiom_and_language(idiom.id, @learned_language.id).each do |translation|
+        - unless translation.pronunciation.nil?
+          - words = {}
+          - translation.pronunciation.split(' ').each do |word|
+            .pronunciation{:style => "display: inline-block; padding: 0.6em; text-align: center;"}
+              %p.pronunciation= word
+              %p.pronunciation= (get_pronunciation_expansion word).html_safe
 
 #review_buttons
   .panel
@@ -26,6 +32,7 @@
               link = link + "&speaking=true";
               link = link + "&writing=true";
               link = link + "&typing=true";
+              link = link + "&translating=true";
               
               $j('#do_results').attr('href', link);
             });
