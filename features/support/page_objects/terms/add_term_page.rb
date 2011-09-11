@@ -28,6 +28,6 @@ module AddTermPage
   end
 
   def add_translations
-    @session.click_on("Create")
+    @session.click_on("term_create")
   end
 end

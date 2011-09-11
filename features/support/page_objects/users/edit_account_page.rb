@@ -12,7 +12,7 @@ module EditAccountPage
   end
 
   def cancel_account
-    @session.click_on "cancel my account"
+    @session.click_on "cancel_account"
   end
 
   def change_email_address email, password
@@ -30,23 +30,7 @@ module EditAccountPage
     self.do_update
   end
 
-  def email=
-
-  end
-
-  def current_password=
-
-  end
-
-  def new_password=
-
-  end
-
-  def new_password_confirm=
-
-  end
-
   def do_update
-    @session.click_on "make changes"
+    @session.click_on "update_account"
   end
 end

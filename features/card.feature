@@ -27,21 +27,21 @@ Feature: deck cards
   Scenario: can't created card without front
     Given I go to the "add card" page
     When I create a card without a front
-    And I click on "Add"
+    And I click on "Save"
     Then I should see "can't be blank"
 
   Scenario: edit card on deck
     Given I have created a card
     And I go to the "edit card" page
     When I change all deck properties
-    And I click on "Save Changes"
+    And I click on "Save"
     Then I should be on the "show card" page
     And I can see the card changes
 
   Scenario: remove card from deck
     Given I have created a card
     And I go to the "edit card" page
-    When I click on "Delete Card"
+    When I click on "Delete"
     Then the card should be deleted
     And I should be on the "show deck" page
 

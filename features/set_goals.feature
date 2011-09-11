@@ -15,11 +15,12 @@ Feature: Set goals
       | 一点儿          | Chinese (Simplified) | yì diǎnr      |
     And the group containing "a little bit" is in the set "greetings"
     And the group containing "a little bit" is in the set "farewells"
-    When I choose the set "greetings" for the "English" language as a goal
-    Then the following sets are listed as user goals on the "English" language page:
+    And I know the following languages: "Spanish"
+    When I choose the set "greetings" for the "Spanish" language as a goal
+    Then the following sets are listed as user goals on the "Spanish" language page:
       | name |
       | greetings |
-    And the following sets are listed as potential goals on the "English" language page:
+    And the following sets are listed as potential goals on the "Spanish" language page:
       | name |
       | farewells |
 
@@ -35,13 +36,14 @@ Feature: Set goals
       | 一点儿          | Chinese (Simplified) | yì diǎnr      |
     And the group containing "a little bit" is in the set "greetings"
     And the group containing "a little bit" is in the set "farewells"
-    And the user has the "greetings" set as a goal for the "English" language
-    And the user has the "farewells" set as a goal for the "English" language
-    When I choose to unset "greetings" for the "English" language as a goal
-    Then the following sets are listed as user goals on the "English" language page:
+    And I know the following languages: "Spanish"
+    And the user has the "greetings" set as a goal for the "Spanish" language
+    And the user has the "farewells" set as a goal for the "Spanish" language
+    When I choose to unset "greetings" for the "Spanish" language as a goal
+    Then the following sets are listed as user goals on the "Spanish" language page:
       | name |
       | farewells |
-    And the following sets are listed as potential goals on the "English" language page:
+    And the following sets are listed as potential goals on the "Spanish" language page:
       | name |
       | greetings |
 

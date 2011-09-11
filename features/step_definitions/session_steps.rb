@@ -275,7 +275,7 @@ And /^I click on the "([^"]*)" button$/ do |button_number|
   elsif button_number == "third"
     And %{I click on "I was shaky but I got it"}
   elsif button_number == "fourth"
-    And %{I click on "I knew the answer"}
+    And %{I click on "Too Easy! Show me this less often"}
   end
   sleep 0.5
 end
@@ -288,7 +288,7 @@ And /^the "([^"]*)" button is normal/ do |button_number|
   elsif button_number == "third"
     find_link("I was shaky but I got it")[:class].to_s["nuetral"] == "nuetral"
   elsif button_number == "fourth"
-    find_link("I knew the answer")[:class].to_s["nuetral"] == "nuetral"
+    find_link("Too Easy! Show me this less often")[:class].to_s["nuetral"] == "nuetral"
   end
 end
 
@@ -300,7 +300,7 @@ And /^the "([^"]*)" button is highlighted$/ do |button_number|
   elsif button_number == "third"
     find_link("I was shaky but I got it")[:class].to_s["positive"] == "positive"
   elsif button_number == "fourth"
-    find_link("I knew the answer")[:class].to_s["positive"] == "positive"
+    find_link("Too Easy! Show me this less often")[:class].to_s["positive"] == "positive"
   end
 end
 

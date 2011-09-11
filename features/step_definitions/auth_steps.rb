@@ -10,10 +10,9 @@ And /^I create an account for "([^"]*)"$/ do |email|
   fill_in('user_password', :with => password)
   fill_in('user_password_confirmation', :with => password)
   select("English", :from => "user_native_language_id")
-  click_on("Join!")
+  click_on("create_account")
 
   add(:user, User.where(:email => email).first)
-  add(:user_id, get(:user).id)
 end
 
 And /^I am a new, authenticated user$/ do

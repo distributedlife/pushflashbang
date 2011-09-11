@@ -372,7 +372,7 @@ Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an uns
   language = get_language(language_name)
 
   review = UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
-  review.first.success.should be false
+  review.first.success.should == false
 end
 
 Then /^I should be on chapter (\d+)$/ do |chapter|

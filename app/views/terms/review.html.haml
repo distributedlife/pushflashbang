@@ -82,6 +82,10 @@
               {
                 link = link + "&typing=" + $j("#review_result_typing").attr('checked');
               }
+              if ($j("#review_result_translating").length > 0)
+              {
+                link = link + "&translating=" + $j("#review_result_translating").attr('checked');
+              }
               
               $j('#do_results').attr('href', link);
             });
@@ -120,6 +124,10 @@
               if ($j("#review_result_typing").length > 0)
               {
                 link = link + "&typing=" + $j("#review_result_typing").attr('checked');
+              }
+              if ($j("#review_result_translating").length > 0)
+              {
+                link = link + "&translating=" + $j("#review_result_translating").attr('checked');
               }
 
               $j('#do_result_perfect').attr('href', link);
@@ -177,12 +185,11 @@
     var user_answer = document.getElementById("answer_form") ;
     var is_new = document.getElementById("is_new") ;
 
-
+    
     duration.value = end - start_time.value;
     if (duration.value <= 2000)
     {
       //set all checkboxes as ticked
-
       if ($j("#review_result_listening").length != 0)
       {
         $j("#review_result_listening").attr('checked', true);
@@ -198,6 +205,10 @@
       if ($j("#review_result_writing").length != 0)
       {
         $j("#review_result_writing").attr('checked', true);
+      }
+      if ($j("#review_result_translating").length != 0)
+      {
+        $j("#review_result_translating").attr('checked', true);
       }
     }
 

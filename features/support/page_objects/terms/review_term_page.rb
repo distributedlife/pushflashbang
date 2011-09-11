@@ -93,7 +93,7 @@ module ReviewTermPage
   end
 
   def meaning_count_is? count
-    @session.find("p#meaning_count").text == count
+    @session.find("#meaning_count").text == count
   end
 
   private

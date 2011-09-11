@@ -13,6 +13,6 @@
       $j("#user_native_language_id").attr("data-placehoder", t('actions.select-language'))
       $j("#user_native_language_id").css('width', '100%');
     .pad_from_top
-    = f.submit I18n.t('actions.create-account'), :class => 'positive'
+    = f.submit I18n.t('actions.create-account'), :class => 'positive', :id => "create_account"
     - if devise_mapping.recoverable? && controller_name != 'passwords'
       = link_to I18n.t('actions.forgot-password'), new_password_path(resource_name), :class => 'neutral'

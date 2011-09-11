@@ -20,6 +20,6 @@ module CreateDeckPage
   end
 
   def do_create
-    @session.click_on "Create Deck"
+    @session.click_on "deck_create"
   end
 end

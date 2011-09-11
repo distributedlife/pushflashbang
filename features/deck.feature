@@ -26,7 +26,7 @@ Feature: language decks
     Given I have created a deck
     And I go to the "edit deck" page
     And I edit all deck properties
-    When I click on "Save Changes"
+    When I click on "Save"
     Then I should be on the "show deck" page
     And the deck should be updated
 
@@ -34,7 +34,7 @@ Feature: language decks
     Given I have created a deck
     And I go to the "edit deck" page
     And I edit all deck properties to be invalid
-    When I press "Save Changes"
+    When I press "Save"
     Then the deck is not updated
     And I should be on the "edit deck" page
 
@@ -46,7 +46,7 @@ Feature: language decks
   Scenario: user can delete a created deck
     Given I have created a deck
     And I go to the "edit deck" page
-    When I click on "Delete Deck"
+    When I click on "Delete"
     Then the deck should be deleted
     Then I should be on the "user home" page
 

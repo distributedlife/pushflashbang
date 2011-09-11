@@ -22,7 +22,7 @@ class TermsController < ApplicationController
   end
 
   def create
-    @set_id = params[:set_id] if params[:set_id]
+#    @set_id = params[:set_id] if params[:set_id]
 
     translation_params = params[:translation]
     @translations = []
@@ -66,7 +66,7 @@ class TermsController < ApplicationController
 
       #if we have a set_id. we should link the term to that set
       params["translations"] ||= {}
-      unless params["translations"]["set_id"].nil?
+      unless params["translations"]["set_id"].empty?
         add_term_to_set params["translations"]["set_id"], idiom.id
         
         redirect_to new_set_set_term_path(params["translations"]["set_id"]) and return
@@ -498,6 +498,7 @@ class TermsController < ApplicationController
 
         sync_due_times[due_item.review_type] ||= Time.now + due_item.interval
         due_item.due = sync_due_times[due_item.review_type]
+        
         review.save!
         due_item.save!
       end

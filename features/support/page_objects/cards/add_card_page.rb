@@ -28,7 +28,7 @@ module AddCardPage
   end
 
   def add_card
-    @session.click_on('Add')
+    @session.click_on('card_create')
   end
 
   def front

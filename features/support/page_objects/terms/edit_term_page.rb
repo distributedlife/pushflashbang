@@ -28,7 +28,7 @@ module EditTermPage
   end
 
   def save_changes
-    @session.click_on("Save Changes")
+    @session.click_on("term_save")
   end
 
   def delete_translation index

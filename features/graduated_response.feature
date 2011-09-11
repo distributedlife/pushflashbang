@@ -13,7 +13,7 @@ Feature: Graduated Response
     Then I should see "I didn't know the answer"
     Then I should see "I knew some of the answer"
     Then I should see "I was shaky but I got it"
-    Then I should see "I knew the answer"
+    Then I should see "Too Easy! Show me this less often"
 
   @javascript
   Scenario: new card green button indicator
