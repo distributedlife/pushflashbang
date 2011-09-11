@@ -53,13 +53,6 @@ class Sets < ActiveRecord::Base
     end
   end
 
-  def rebuild_all_relationships
-    Translation.all.each do |t|
-      puts "finding relationships for #{t.name}"
-      RelatedTranslations::create_relationships_for_translation t
-    end
-  end
-
   private
   def migrate_reviews card_id, idiom_id, language_id
     map_result_success = Hash.new

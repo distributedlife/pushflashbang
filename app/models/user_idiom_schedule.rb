@@ -81,6 +81,13 @@ class UserIdiomSchedule < ActiveRecord::Base
       WHERE set_id = #{set_id}
     SQL
 
+#    AND
+#        (
+#          translations.audio_file_name IS NOT NULL
+#          AND #{UserIdiomReview::HEARING} IN (#{proficiencies.join(',')})
+#        )
+
+
     sql = <<-SQL
       SELECT *
       FROM set_terms

@@ -37,4 +37,10 @@ describe UserSets do
       user_card_review.valid?.should == true
     end
   end
+
+  describe 'get_for_user_and_set_where_learning_language' do
+    it 'should return records the user has as a goal'
+    it 'should not return records for other users'
+    it 'should not return records where the user is no longer learning the language'
+  end
 end

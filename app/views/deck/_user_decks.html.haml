@@ -1,7 +1,7 @@
 - @decks.each do |deck|
   #deck{:id => deck.id, :class => 'panel'}
     - if @card_counts[deck.id].nil?
-      %p{:class => ['subscript', 'right']}= "no cards in deck"
+      %p{:class => ['subscript', 'right']}= "#{t('text.empty-deck')}"
     - else
       %p{:class => ['subscript', 'right']}= "#{@card_counts[deck.id]} cards (#{@due_counts[deck.id]} due)"
     %p.minor_title

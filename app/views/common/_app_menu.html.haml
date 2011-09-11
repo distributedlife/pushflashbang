@@ -13,16 +13,13 @@
     //#TODO: simplify this code using before filters
     - unless params[:deck_id].nil?
       %span.top_menu_panel
-        %span= link_to 'Deck Home', "/deck/#{params[:deck_id]}"
-        //-if params[:controller] == "card"
-        //  %span.top_menu_panel
-        //    %span= link_to 'Card Home', "/deck/#{params[:deck_id]}/card/#{params[:id]}"
+        %span= link_to 'actions.deck home', "/deck/#{params[:deck_id]}"
     - else
       - unless @deck.nil?
         - unless @deck.id.nil?
           %span.top_menu_panel
-            %span= link_to 'Deck Home', "/deck/#{@deck.id}"
+            %span= link_to 'actions.deck home', "/deck/#{@deck.id}"
       - else
         -if params[:controller] == "deck"
           %span.top_menu_panel
-            %span= link_to 'Deck Home', "/deck/#{params[:id]}"
+            %span= link_to 'actions.deck home', "/deck/#{params[:id]}"

@@ -9,7 +9,6 @@
   - unless @card.pronunciation == ""
     .section_break
     .pad_from_top
-    %p.centre pronunciation
+    %p.centre= t('text.pronunciation')
     %p.giant= @card.pronunciation
   .pad
-

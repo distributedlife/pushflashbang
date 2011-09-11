@@ -6,7 +6,7 @@
       - current_chapter = set_term.chapter
       - unless current_chapter == 1
         .pad_from_top
-      %p{:style => "clear:left;"}= "Chapter #{current_chapter}"
+      %p{:style => "clear:left;"}= "#{t('text.chapter-prefix')} #{current_chapter}"
     - set_term.idioms.each do |idiom|
       =render :partial => '/sets/set_idioms', :locals => {:set => @set, :idiom => idiom}
   - if @set.set_terms.empty?

@@ -7,7 +7,7 @@
 %section{:class => ["panel left"], :style => "width: 70%"}
   #translations
     - if @translations.empty?
-      %p There are currently no translations in the system
+      %p= t('text.no-translations')
     - @translations.each do |translation|
       #translation
         #translation{:id => translation.id}

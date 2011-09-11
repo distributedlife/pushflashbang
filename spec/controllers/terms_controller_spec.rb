@@ -1607,7 +1607,7 @@ describe TermsController do
       assigns[:audio].should == 'back'
       assigns[:typed].should == false
       assigns[:native].should == 'back'
-      assigns[:learned].should == 'front'
+      assigns[:learned].should == 'both'
 
       get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :review_mode => 'listening'
 

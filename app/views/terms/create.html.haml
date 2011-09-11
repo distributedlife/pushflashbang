@@ -2,6 +2,7 @@
 #translations
   %section{:class => ["panel"]}
     - semantic_form_for("translations", :url => "/terms", :method => :post, :html => {:multipart => true}) do |form|
+      = form.input :set_id, :as => :hidden, :value => @set_id
       - @translations.each_with_index do |translation, i|
         #translation{:id => i}
           %p.minor_title= "#{t('text.header-translation-count')} #{i + 1}"
@@ -10,7 +11,7 @@
             = render :partial => 'create_term_form', :locals => {:translation => translation, :i => i, :f => f}
             .pad_from_top
       #translation{:id => @translations.count}
-        = link_to I18n.t('actions.add-translation'), add_translation_terms_path(:i => @translations.count), :class => 'neutral', :method => :post, :remote => :true, :id => "add_translation"
+        = link_to I18n.t('actions.add-translation'), add_translation_terms_path(:i => @translations.count), :class => 'neutral', :method => :get, :remote => :true, :id => "add_translation"
         .pad_from_top
         .pad_from_top
 

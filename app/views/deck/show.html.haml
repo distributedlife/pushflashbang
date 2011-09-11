@@ -4,23 +4,23 @@
     .panel
       %p.description= @deck.description
   .panel
-    %p.description= link_to "Review", learn_deck_path(@deck.id), :class => "focus"
+    %p.description= link_to t('actions.review'), learn_deck_path(@deck.id), :class => "focus"
     .pad_from_top
     - if @deck.user_id == current_user.id
-      %p.description= link_to "Add Card", new_deck_card_path(@deck.id)
+      %p.description= link_to t('actions.add-card'), new_deck_card_path(@deck.id)
       .pad
-      %p.description= link_to "Edit Deck", edit_deck_path(@deck.id)
+      %p.description= link_to t('actions.edit-deck'), edit_deck_path(@deck.id)
       .pad
       - if @deck.shared
-        %p.description= link_to "Stop Sharing Deck", toggle_share_deck_path(@deck.id)
+        %p.description= link_to t('actions.stop-sharing-deck'), toggle_share_deck_path(@deck.id)
       - else
-        %p.description= link_to "Share Deck", toggle_share_deck_path(@deck.id)
+        %p.description= link_to t('actions.share-deck'), toggle_share_deck_path(@deck.id)
       .pad
 
 %section{:class => ["left"], :style => "width: 75%; height: 80%"}
   - if @chapters.empty?
     .div{:class => "panel left", :style => ""}
-      %p This deck has no cards; 
+      %p= ('text.empty-deck')
   - else
     - current_chapter = 0
     - @chapters.each do |chapter|
@@ -29,5 +29,5 @@
         #chapter{:id => "#{current_chapter}"}
           %p.minor_title
             = "Chapter #{current_chapter}"
-            = link_to "[show]", reveal_deck_chapter_path(@deck.id, current_chapter), :class => "subscript", :remote => true
-            = link_to "[cram]", cram_deck_chapter_path(@deck.id, current_chapter), :class=> "subscript"
+            = link_to "[#{t('actions.show')}]", reveal_deck_chapter_path(@deck.id, current_chapter), :class => "subscript", :remote => true
+            = link_to "[#{t('actions.cram')}]", cram_deck_chapter_path(@deck.id, current_chapter), :class=> "subscript"

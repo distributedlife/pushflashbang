@@ -4,7 +4,7 @@
 = f.input :language_id, :as => :select, :collection => @languages, :id => i, :label => false, :hint => I18n.t('form.translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
 :javascript
   $j("#translation_#{i}_language_id").attr("class", "chzn-select")
-  $j("#translation_#{i}_language_id").attr("data-placehoder", "Select a language")
+  $j("#translation_#{i}_language_id").attr("data-placehoder", "#{t('actions.select-language')}")
   $j("#translation_#{i}_language_id").css('width', '90%');
   
 .pad_from_top

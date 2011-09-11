@@ -1,6 +1,7 @@
 include SetHelper
 include LanguagesHelper
 include ReviewTypeHelper
+include RedirectHelper
 
 class SetsController < ApplicationController
   before_filter :authenticate_user!
@@ -40,7 +41,7 @@ class SetsController < ApplicationController
       end
     end
 
-    @user_goal = UserSets.where(:set_id => @set.id, :user_id => current_user.id)
+    @user_goal = UserSets::get_for_user_and_set_where_learning_language current_user.id, @set.id
   end
 
   def index
@@ -158,11 +159,11 @@ class SetsController < ApplicationController
   end
 
   def review
-    redirect_to languages_path and return unless language_is_valid? params[:language_id]
-    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:id]
+    error_redirect_to "language #{params[:language_id]} not found", languages_path and return unless language_is_valid? params[:language_id]
+    error_redirect_to "set #{params[:id]} not found", language_path(params[:language_id]) and return unless set_exists? params[:id]
 
     review_types = parse_review_types params[:review_mode]
-    redirect_to language_set_path(params[:language_id], params[:id]) and return if review_types.empty?
+    error_redirect_to "review mode not set", language_set_path(params[:language_id], params[:id]) and return if review_types.empty?
 
 
     #get user set
@@ -177,7 +178,7 @@ class SetsController < ApplicationController
     #are there cards in the set for the language?
     unless set_has_at_least_one_idiom_for_language? params[:language_id], params[:id]
       flash[:failure] = "This set can't be reviewed in the specified language because it has not been translated into that language"
-      redirect_to language_set_path(params[:language_id], params[:id]) and return
+      error_redirect_to "This set does not support your language", language_set_path(params[:language_id], params[:id]) and return
     end
 
 
@@ -281,6 +282,7 @@ class SetsController < ApplicationController
     end
 
 
+    #TODO: move somewhere testable
     sql = <<-SQL
       select due_item.due
       from user_idiom_due_items due_item
@@ -296,6 +298,7 @@ class SetsController < ApplicationController
     SQL
 
     results = ActiveRecord::Base.connection.execute(sql)
+    ap results
     as_time = results.first["due"]
 
     @next_due_time = Time.parse(as_time).utc + Time.parse(as_time).gmt_offset

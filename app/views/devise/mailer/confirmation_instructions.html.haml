@@ -1,5 +1,3 @@
-%p= "Welcome #{@resource.email}!"
-
-%p You can confirm your account through the link below:
-
-%p= link_to 'Confirm my account', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token)
+%p= "#{t('text.welcome')} #{@resource.email}!"
+%p= t('text.instructions-confirm-account')
+%p= link_to t('actions.confirm-account'), confirmation_url(@resource, :confirmation_token => @resource.confirmation_token)

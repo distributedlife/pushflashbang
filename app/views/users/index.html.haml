@@ -4,7 +4,7 @@
     %span= t('text.header-languages')
     %span.subscript
       [
-      =link_to t('actions.add'), user_languages_path, :class => 'contrast', :id => "add_language"
+      =link_to t('actions.change'), user_languages_path, :class => 'contrast', :id => "add_language"
       ]
   =render :partial => '/languages/user_languages', :locals => {:languages => @languages}
 #user_decks{:class => "section_right", :style => "width: 50%;"}

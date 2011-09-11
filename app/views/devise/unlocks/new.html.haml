@@ -1,5 +1,5 @@
 =render :partial => '/header', :locals => {:title => t('users.unlock.title'), :subtitle => t('users.unlock.subtitle')}
-%h2 Resend unlock instructions
+%h2= t('text.resend-unlock-instructions')
 
 = form_for(resource, :as => resource_name, :url => unlock_path(resource_name), :html => { :method => :post }) do |f|
   = devise_error_messages!
@@ -9,6 +9,6 @@
     %br
     = f.email_field :email
 
-  %p= f.submit "Resend unlock instructions"
+  %p= f.submit t('actions.resend-unlock-instructions')
 
 = render :partial => "devise/shared/links"

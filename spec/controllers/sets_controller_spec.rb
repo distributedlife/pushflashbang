@@ -88,7 +88,20 @@ describe SetsController do
       assigns[:idiom_translations][1].translation.form.should == "Cabron"
     end
 
-    it 'should return if the user has the set as a goal' do
+    it 'should return if the user has the set as a goal and is learning the set language' do
+      set = Sets.make
+      sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
+      UserSets.make(:set_id => set.id, :user_id => @user.id)
+      UserLanguages.make(:user_id => @user.id, :language_id => Language::get_or_create("Spanish"))
+
+      get :show, :id => set.id
+
+      assigns[:set_names][0].should == sn1
+      assigns[:user_goal].first.set_id.should == set.id
+      assigns[:user_goal].first.user_id.should == @user.id
+    end
+
+    it 'should not return if the user has the set as a goal if the user is not learning the set language' do
       set = Sets.make
       sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
       UserSets.make(:set_id => set.id, :user_id => @user.id)
@@ -96,8 +109,7 @@ describe SetsController do
       get :show, :id => set.id
 
       assigns[:set_names][0].should == sn1
-      assigns[:user_goal].first.set_id.should == set.id
-      assigns[:user_goal].first.user_id.should == @user.id
+      assigns[:user_goal].count.should == 0
     end
   end
 
@@ -475,6 +487,9 @@ describe SetsController do
 
       @user.native_language_id = @language2.id
       @user.save!
+
+      UserLanguages.make(:user_id => @user.id, :language_id => @language.id)
+      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @language.id, :chapter => 1)
       
       #first idiom is in language and set
       @idiom1 = Idiom.make

@@ -2,30 +2,53 @@
 = hidden_field_tag "duration", 0
 = hidden_field_tag "is_new", 0
 
-=render :partial => '/header', :locals => {:title => t('titles.term-review.title'), :subtitle => 'number of terms due: ...'}
+=render :partial => '/header', :locals => {:title => t('titles.term-review.title'), :subtitle => "#{t('text.term-due-count')}: ..."}
 
 #review_mode
   .panel
     %p
       The current review mode is:
-      %span.contrast_faint= "#{params[:review_mode]}"
+      %span.contrast_faint= "#{params[:review_mode]}."
+      This term has
+      %span#meaning_count= "#{@related_count}"
+      ="answer#{"s" if @related_count > 1}."
 
-#term{:id => "#{@term.id}"}
+    #term{:id => "#{@term.id}"}
+      =render :partial => '/terms/show', :locals => {:term => @term, :native => @native, :learned => @learned, :audio => @audio, :typed => @typed}
+
+#pronunciation_guidance{:class => "hidden"}
   .panel
-    %p#meaning_count= "#{@related_count}"
-    =render :partial => '/terms/show', :locals => {:term => @term, :native => @native, :learned => @learned, :audio => @audio, :typed => @typed}
+    %p= t('text.pronunciation-guidance')
+    - @idioms.each do |idiom|
+      - Idiom::translations_in_idiom_and_language(idiom.id, @learned_language.id).each do |translation|
+        - unless translation.pronunciation.nil?
+          - words = {}
+          - translation.pronunciation.split(' ').each do |word|
+            .pronunciation{:style => "display: inline-block; padding: 0.6em; text-align: center;"}
+              %p.pronunciation= word
+              %p.pronunciation= (get_pronunciation_expansion word).html_safe
 
 #reveal_button
   .panel
     .button{:class => "centre big_button"}
-      = link_to "Reveal", '#', :class => 'positive', :id => "do_reveal"
+      = link_to t('actions-reveal'), '#', :class => 'positive', :id => "do_reveal"
     .pad_from_top
 
 #review_buttons{:class => "hidden"}
   .panel
     .button{:class => "centre large_button"}
-      %ul
-        %li{:class => 'left inline-block'}
+      %ul{:style => 'display: inline-block;'}
+        - semantic_form_for("review_result", :url => terms_path(:set_id => params[:set_id]), :method => :post) do |f|
+          - params[:review_mode].split(",").each do |review_type|
+            - review_type.strip!
+            - next if review_type.empty?
+            %li
+              - if review_type == "typing"
+                = f.input review_type.to_sym, :label => "#{@review_text[review_type]}", :required => false, :as => :boolean, :id => "#{review_type}_result", :input_html => { :checked => 'checked' }
+              - else
+                = f.input review_type.to_sym, :label => "#{@review_text[review_type]}", :required => false, :as => :boolean, :id => "#{review_type}_result"
+            .tiny_pad_from_top
+        %li
           = link_to t('actions.review-record-answer'), '#', :class => 'positive large inline-block', :method => :post, :id => "do_results", :style => 'width:12em;'
           :javascript
             $j('#do_results').click(function(event) {
@@ -62,7 +85,8 @@
               
               $j('#do_results').attr('href', link);
             });
-        %li{:class => 'right inline-block'}
+        .tiny_pad_from_top
+        %li
           = link_to t('actions.review-confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_result_perfect", :style => 'width:12em;'
           :javascript
             $j('#do_result_perfect').click(function(event) {
@@ -100,20 +124,6 @@
 
               $j('#do_result_perfect').attr('href', link);
             });
-      .pad_from_top
-      .pad_from_top
-      .pad_from_top
-      %li{:class => 'right inline-block'}
-        - semantic_form_for("review_result", :url => terms_path(:set_id => params[:set_id]), :method => :post) do |f|
-          - params[:review_mode].split(",").each do |review_type|
-            - review_type.strip!
-            - next if review_type.empty?
-            - if review_type == "typing"
-              = f.input review_type.to_sym, :label => "#{review_type}?", :required => false, :as => :boolean, :id => "#{review_type}_result", :input_html => { :checked => 'checked' }
-            - else
-              = f.input review_type.to_sym, :label => "#{review_type}?", :required => false, :as => :boolean, :id => "#{review_type}_result"
-      .pad_from_top
-      .pad_from_top
       .pad
 
 :javascript
@@ -156,14 +166,6 @@
 
     var is_new = document.getElementById("is_new") ;
     is_new.value = false ;
-
-
-    //$.ajax({
-    //  url: "/deck/0/due_count",
-    //  success: function(data){
-    //    $j("header p.subtitle").text("number of cards due: " + (data - 1));
-    //  }
-    //});
   });
 
   //perform the reveal action
@@ -205,7 +207,7 @@
       if (card_answer.value != user_answer.value)
       {
         //tell the user their answer didn't match
-        $j("#answer_result").text("is not correct");
+        $j("#answer_result").text("#{t('text.incorrect-notice')}");
         $j("#review_result_typing").attr('checked', false);
       }
 
@@ -213,7 +215,8 @@
     }
 
 
-    $j("#back_of_card").show();
     $j("#reveal_button").hide();
+    $j("#pronunciation_guidance").show();
     $j("#review_buttons").show();
+    $j("#back_of_card").show();
   });

@@ -3,10 +3,9 @@
 #advance_button
   .panel
     .button{:class => "centre big_button"}
-      = link_to "Advance", advance_deck_chapter_path(@deck.id), :class => 'positive', :id => 'do_advance'
+      = link_to t('actions.advance'), advance_deck_chapter_path(@deck.id), :class => 'positive', :id => 'do_advance'
     .pad_from_top
 
-//=render :partial => '/deck/upcoming_cards', :locals => {:upcoming_cards = @upcoming_cards}
 .cards
 - @upcoming_cards.each do |upcoming_card|
   .div{:class => "card_panel_full_page left centre"}

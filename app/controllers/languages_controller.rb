@@ -58,10 +58,10 @@ class LanguagesController < ApplicationController
     SetTerms.where(:set_id => set_id).each do |set_terms|
       IdiomTranslation.joins(:translation).where(:idiom_id => set_terms.term_id).each do |idiom_translation|
 
-        language = Language.where(:id => idiom_translation.translation.language_id)
-        next if language.empty?
+        language = get_first Language.where(:id => idiom_translation.translation.language_id)
+        next if language.nil?
+        next if language.id == current_user.native_language_id
 
-        language = language.first
         if languages[language.id].nil?
           languages[language.id] = language.id
             

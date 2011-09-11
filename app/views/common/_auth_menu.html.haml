@@ -6,11 +6,11 @@
       - else
         %span= link_to I18n.t('actions.start-editing'), start_editing_user_index_path, :method => :put
     %span.top_menu_panel
-      %span= link_to(I18n.t('user.actions.edit_registration'), edit_user_registration_path)
+      %span= link_to(I18n.t('actions.edit-registration'), edit_user_registration_path)
     %span.top_menu_panel
-      %span= link_to(I18n.t('user.actions.sign_out'), destroy_user_session_path)
+      %span= link_to(I18n.t('actions.sign-out'), destroy_user_session_path)
   - else
     %span.top_menu_panel
-      %span= link_to(I18n.t('user.actions.sign_up'), new_user_registration_path)
+      %span= link_to(I18n.t('actions.sign-up'), new_user_registration_path)
     %span.top_menu_panel
-      %span= link_to(I18n.t('user.actions.sign_in'), new_user_session_path)
+      %span= link_to(I18n.t('actions.sign-in'), new_user_session_path)

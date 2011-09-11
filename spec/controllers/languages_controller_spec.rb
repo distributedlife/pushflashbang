@@ -178,5 +178,29 @@ describe LanguagesController do
       assigns[:languages].first.should == spanish
       assigns[:set_id].should == set.id
     end
+
+    it 'should exclude the users native language' do
+      set = Sets.make
+      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make
+      english = Language.make(:name =>"English")
+      spanish = Language.make(:name =>"Spanish")
+      esperanto = Language.make(:name => "Esperanto")
+      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
+      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+
+      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
+
+      @user.native_language_id = spanish.id
+      @user.save
+
+      get :select, :set_id => set.id
+
+      assigns[:languages].count.should == 1
+      assigns[:languages].first.should == english
+      assigns[:set_id].should == set.id
+    end
   end
 end

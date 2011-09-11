@@ -2,6 +2,7 @@ include LanguagesHelper
 include IdiomHelper
 include SetHelper
 include TranslationHelper
+include RedirectHelper
 
 class TermsController < ApplicationController
   before_filter :authenticate_user!
@@ -15,10 +16,14 @@ class TermsController < ApplicationController
     @translations << Translation.new
     @translations << Translation.new
 
+    @set_id = params[:set_id] if params[:set_id]
+
     @languages = Language.all
   end
 
   def create
+    @set_id = params[:set_id] if params[:set_id]
+
     translation_params = params[:translation]
     @translations = []
 
@@ -60,10 +65,11 @@ class TermsController < ApplicationController
 
 
       #if we have a set_id. we should link the term to that set
-      if params[:set_id]
-        add_term_to_set params[:set_id], idiom.id
+      params["translations"] ||= {}
+      unless params["translations"]["set_id"].nil?
+        add_term_to_set params["translations"]["set_id"], idiom.id
         
-        redirect_to new_set_set_term_path(params[:set_id]) and return
+        redirect_to new_set_set_term_path(params["translations"]["set_id"]) and return
       else
         redirect_to new_term_path and return
       end
@@ -81,6 +87,8 @@ class TermsController < ApplicationController
   end
 
   def update
+    @idiom = Idiom.find(params[:id])
+
     translation_params = params[:translation]
     @translations = []
 
@@ -143,6 +151,7 @@ class TermsController < ApplicationController
   def add_translation
     @translation = Translation.new
     @i = params[:i]
+    @languages = Language.all
   end
 
   def show
@@ -195,6 +204,12 @@ class TermsController < ApplicationController
       # get all translations in the term, that match the users native language
       @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => native_language_id, :idiom_translations => {:idiom_id => params[:id]})
 
+
+      @audio = "front"
+      @typed = false
+      @native = "back"
+      @learned = "back"
+
       #get related count and idioms
       @learned_translations = RelatedTranslations::get_related learned_translations_in_idiom, current_user.id, params[:language_id]
       @related_count = @learned_translations.count
@@ -246,7 +261,7 @@ class TermsController < ApplicationController
         related_translation_link = {:audible => true}
       end
       if params[:review_mode]["reading"]
-        @learned = "front"
+        @learned = "both"
         @native = "back"
 
         related_translation_link = {:written => true}
@@ -271,6 +286,15 @@ class TermsController < ApplicationController
       @learned_language = Language.find(params[:language_id])
       @native_language = Language.find(current_user.native_language_id)
 
+
+      #send review text
+      @review_text = {}
+      @review_text["reading"] = "I knew what this meant in #{@native_language.name}"
+      @review_text["speaking"] = "I correctly pronounced this"
+      @review_text["writing"] = "I correctly wrote this"
+      @review_text["typing"] = "I correctly typed this"
+      @review_text["listening"] = "I knew what this meant in #{@native_language.name}"
+      @review_text["translating"] = "I knew what this meant in #{@learned_language.name}"
       
       if detect_browser == "mobile_application"
         render "learn.mobile"
@@ -389,12 +413,6 @@ class TermsController < ApplicationController
     end
 
     redirect_to set_path(set_id)
-  end
-
-  def error_redirect_to(reason, options = {}, response_status = {})
-    puts "User (#{current_user.id}) redirected: #{reason}"
-
-    redirect_to options, response_status
   end
 
   def record_review

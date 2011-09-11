@@ -20,52 +20,81 @@ en:
               invalid: "that must be correct :)"
   actions:
     add: "add"
-    add-translation: "Add translation"
+    add-card: "Add Card"
     add-to-set: "link to set"
+    add-translation: "Add translation"
+    advance: "Advance"
     cancel: "Cancel"
+    change: "change"
+    close: "close"
+    cram: "cram"
     create: "Create"
     create-set: "Create Set"
+    confirm-account: "Confirm Account"
     delete: "Delete"
     delete-set: "Delete Set"
     delete-set-name: "Delete Name"
     delete-translation: "Delete Translation"
     delink: "delink"
+    different-review-mode: "Click here to choose a different review mode"
     edit: "edit"
+    edit-deck: "edit deck"
+    edit-registration: "Account"
     edit-set: "edit set"
     edit-term: "edit group"
+    hide: "hide"
     home: "Home"
     languages: "Languages"
     link-term: "link term to set"
     link-translation: "link translation"
+    move-translation: "Move translation"
     move-translation-here: "Move translation here"
+    mute: "mute"
     new-deck: "new deck"
-    new-term: "create new term"
     new-set-name: "Add name"
+    new-term: "create new term"
+    next: "Next"
     next-chapter: "next chapter"
     next-position: "next position"
+    ok: "ok"
+    pause: "pause"
+    play: "play"
     prev-chapter: "prev chapter"
     prev-position: "prev position"
+    resend-confirmation: "Resend confirmation"
+    resend-unlock-instructions: "Resend unlock instructions"
+    reveal: "Reveal"
+    review: "Review"
+    review-confident: "Too Easy! Show me this less often"
+    review-record-answer: "Record Results"
     review-listening: "listening"
-    review-listen-write: "listening and writing"
     review-listen-type: "listening and typing"
+    review-listen-write: "listening and writing"
     review-reading: "reading"
     review-read-speak: "reading and speaking"
     review-read-speak-type: "reading, speaking and typing"
     review-translating-speaking: "translating and speaking"
     review-translate-speak-write: "translating, speaking and writing"
     review-translate-speak-type: "translating, speaking and typing"
-    review-record-answer: "Record Results"
-    review-confident: "Too Easy! Show me this left often"
     save: "Save"
+    select-language: "Select a language"
     select-set: "Select set"
     set-goal: "Add as Goal"
     sets: "Sets"
-    stop-learning: "stop learning?"
-    stop-editing: "stop editing"
+    share-deck: "Share Deck"
+    show: "show"
+    sign-out: "Logout"
+    sign-in: "Login"
+    sign-up: "Join!"
     start-editing: "edit"
     start-learning: "learn?"
     start-learning-emphatic: "Click here to start learning!"
+    stop-editing: "stop editing"
+    stop-learning: "stop learning?"
+    stop-sharing-deck: "Stop Sharing Deck"
     terms: "Terms"
+    unlock: "Unlock"
+    unmute: "unmute"
     unset-goal: "Remove Goal"
   form:
     set-name: "set name"
@@ -103,7 +132,35 @@ en:
     no-translations: "There are currently no translations in the system"
     set-has-no-translations: "There are currently no translations in the set"
     user-has-no-languages: "You have not selected to learn any languages."
+    chapter-prefix: "Chapter"
+    empty-deck: "No cards in deck"
+    instructions-confirm-account: "You can confirm your account through the link below:"
+    welcome: "Welcome:"
+    resend-confirmation: "Resend confirmation instructions"
+    resent-unlock-instructions: "Resend unlock instructions"
+    pronunciation: "pronunciation"
+    no-translations: "There are currently no translations in the system"
+    set-name-translation: "Set name translation"
+    hello: "Hello"
+    locked-account-notice: "Your account has been locked due to an excessive amount of unsuccessful sign in attempts."
+    unlock-account-instructions: "Click the link below to unlock your account"
+    next-review-notice: "Your next review in this set is due in"
+    cards-due-notice: "number of cards due"
+    new-card-notice: "This is a new card. You will not have seen it before"
+    incorrect-notice: "is not correct"
+    term-due-count: "number of terms due"
+    current-review-mode: "The current review mode is"
+    continue-learning: "Want to keep learning? You can practice this set in a difference mode."
+    refresh-notice: "You can leave this page open and we will take you to the next review when it is due."
+    completed-set-notice: "Congratulations! You've finished all the cards in this set."
+    pronunciation-guidance: "Pronunciation Guidance"
   titles:
+    about:
+      title: "PushFlashBang"
+      subtitle: "Language learning tools"
+    card-create:
+      title: "Add Card"
+      subtitle: "a flash card contains what you want to remember"
     language-index:
       title: "All Supported languages"
       subtitle: ""
@@ -152,202 +209,202 @@ en:
 
 
 
-  labels:
-    sets:
-      add_set_name: "Add set name translation"
+#  labels:
+#    sets:
+#      add_set_name: "Add set name translation"
   
       
   about:
     title: "PushFlashBang"
     subtitle: "Language learning tools"
-  general:
-    labels:
-      undo: "Click here to undo."
-    terms:
-  common:
-    labels:
-      save: "Save"
+#  general:
+#    labels:
+#      undo: "Click here to undo."
+#    terms:
+#  common:
+#    labels:
+#      save: "Save"
   
-  user:
-    home:
-      title: "Welcome %{email}"
-      subtitle: ""
-    registration:
-      title: "Sign up to PushFlashBang!"
-      subtitle: "signing up allows you to keep track of your learning progress"
-      labels:
-        email: "your email"
-        password: "a password"
-        confirm_password: "and the password again"
-        create_account: "Join!"
-    reset_password:
-      title: "Reset your password"
-      subtitle: ""
-      labels:
-        email: "enter your email address"
-        button: "Send me password reset instructions"
-      email:
-        greeting: "Hello"
-        what_is_this_email: "Someone has requested a link to change your password, and you can do this through the link below."
-        reset_password_link: "Change my password"
-        further_information: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
-    login:
-      title: "Sign in to PushFlashBang!"
-      subtitle: ""
-      labels:
-        email: "my email"
-        password: "my password"
-        remember_me: "and remember me from now on?"
-    edit:
-      title: "Manage your account"
-      subtitle: ""
-      labels:
-        email: "change email address?"
-        password: "change password? or leave blank"
-        confirm_password: "confirm your new password"
-        current_password: "your current password; to confirm changes"
-        update_account: "make changes"
-        cancel_account: "cancel my account"
-        cancel_account_confirm: "Are you sure?"
-    change_password:
-      title: "Change your password"
-      subtitle: ""
-      labels:
-        password: "your new password"
-        confirm_password: "confirm new password"
-        change_password: "Change Password"
-    actions:
-      forgot_password: "Forgot your password?"
-      sign_in: "Login"
-      sign_up: "Join"
-      sign_out: "Logout"
-      edit_registration: "Account"
-      search: "Search"
-      home: "User Home"
-      new_deck: "New Deck"
-      terms: "Terms"
-      create_deck: "Create Deck"
-      find_new_language: "add"
-      learn_language: "start learning?"
-      stop_learning_language: "stop learning?"
-  deck:
-    create:
-      title: "Create new deck"
-      subtitle: "a deck is a collection of flash cards that you want to learn"
-      labels:
-        name: "a name"
-        description: "a brief description"
-        lang: "the language code"
-        country: "the country code"
-        save: "Create Deck"
-    edit:
-      title: "Edit Deck"
-      subtitle: "You can change all properties of your deck here"
-      labels:
-        name: "a name"
-        description: "a brief description"
-        pronunciation_side: "where the pronunciation is shown"
-        supports_written_answer: "require typed answer?"
-        save: "Save Changes"
-        delete: "Delete Deck"
-        delete_confirm: "Are you sure?"
-    learn:
-      title:
-        new: "New Card"
-        old: "Card Review"
-      subtitle: "Cards due for review: %{count}"
-      labels:
-        answer: "your answer"
-    chapter:
-      title: You've reached chapter %{chapter}
-      subtitle: is it time to progress further into the deck?
-    upcoming:
-      title: No cards available for review
-      subtitle: leave this screen open and we'll send you back for a review when one becomes due
-    terminology:
-      name:
-        title: "name"
-        description: "A simple name that will allow you to identify this collection of learning items."
-      description:
-        title: "description"
-        description: "A longer description that expands on the name to provide you and others with more information about the contents of the deck"
-      lang:
-        title: "language code"
-        description: ""
-      country:
-        title: "country code"
-        description: ""
-      pronunciation:
-        title: "pronunciation side"
-        description: "The pronunciation side indicates on each card where the pronunciation information, if supplied, is shown. For speaking practice you would put it on the back of the card. This helps you know whether you were pronuncing the words correctly."
-      supports_written_answer:
-        title: "require typed answer"
-        description: "When you require a typed answer the user has to type the answer and then sees how correct they were. At present it is up to the user to rate themselves."
-  card:
-    create:
-      title: "Add Card"
-      subtitle: "a flash card contains what you want to remember"
-      labels:
-        front: "the question"
-        back: "the answer"
-        pronunciation: "the pronunciation"
-        save: "Add"
-    edit:
-      title: "Edit Card"
-      subtitle: "You can change all properties of your card here"
-      labels:
-        front: "the question"
-        back: "the answer"
-        pronunciation: "the pronunciation"
-        audio: "the url of sound file"
-        chapter: "the deck chapter"
-        save: "Save Changes"
-        delete: "Delete Card"
-        delete_confirm: "Are you sure?"
-    show:
-      title: "Card Details"
-      subtitle: ""
-      edit: "Edit Card"
-    reveal:
-      title:
-      subtitle:
-      labels:
-        didnt_know: I didn't know the answer
-        partial_answer: I knew some of the answer
-        shaky_but_good: I was shaky but I got it
-        confident: I knew the answer
-    terminology:
-      front:
-        title: "question"
-        description: "The front of the card is what you want build an association to, with the answer."
-      back:
-        title: "answer"
-        description: "The back of the card has the correct answer; you're trying to remember this using only the front"
-      pronunciation:
-        title: "pronunciation"
-        description: "The pronunciation key for this card. This is shown on the front or the back of the card depending on the deck settings. It is optional useful when how to pronounce the word is not expressed easily in the source lanuage i.e. mandarin"
-      audio:
-        title: "sound file"
-        description: "Supply the url of an audio file to be played when the card is shown to assist in learning."
-      chapter:
-        title: "chapter"
-        description: "The deck chapter is where in the deck the card is located. This used to create levels of difficulty within a deck and to allow users to limit their progress to a single chapter"
-  term:
-    index:
-      title: "Showing all terms"
-      subtitle: "A term represents an idiom translated into a language"
-  translation:
-    create:
-      title: "Create a set of related translations"
-      subtitle: ""
-      labels:
-        save: "Create related translations"
-        add_translation: "Add a new translation"
-        language: "the language"
-        form: "the translation"
-        pronunciation: "the pronunciation"
-    edit:
-      labels:
-        save: "Save Changes"
-    terminology:
+#  user:
+#    home:
+#      title: "Welcome %{email}"
+#      subtitle: ""
+#    registration:
+#      title: "Sign up to PushFlashBang!"
+#      subtitle: "signing up allows you to keep track of your learning progress"
+#      labels:
+#        email: "your email"
+#        password: "a password"
+#        confirm_password: "and the password again"
+#        create_account: "Join!"
+#    reset_password:
+#      title: "Reset your password"
+#      subtitle: ""
+#      labels:
+#        email: "enter your email address"
+#        button: "Send me password reset instructions"
+#      email:
+#        greeting: "Hello"
+#        what_is_this_email: "Someone has requested a link to change your password, and you can do this through the link below."
+#        reset_password_link: "Change my password"
+#        further_information: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
+#    login:
+#      title: "Sign in to PushFlashBang!"
+#      subtitle: ""
+#      labels:
+#        email: "my email"
+#        password: "my password"
+#        remember_me: "and remember me from now on?"
+#    edit:
+#      title: "Manage your account"
+#      subtitle: ""
+#      labels:
+#        email: "change email address?"
+#        password: "change password? or leave blank"
+#        confirm_password: "confirm your new password"
+#        current_password: "your current password; to confirm changes"
+#        update_account: "make changes"
+#        cancel_account: "cancel my account"
+#        cancel_account_confirm: "Are you sure?"
+#    change_password:
+#      title: "Change your password"
+#      subtitle: ""
+#      labels:
+#        password: "your new password"
+#        confirm_password: "confirm new password"
+#        change_password: "Change Password"
+#    actions:
+#      forgot_password: "Forgot your password?"
+#      sign_in: "Login"
+#      sign_up: "Join"
+#      sign_out: "Logout"
+#      edit_registration: "Account"
+#      search: "Search"
+#      home: "User Home"
+#      new_deck: "New Deck"
+#      terms: "Terms"
+#      create_deck: "Create Deck"
+#      find_new_language: "add"
+#      learn_language: "start learning?"
+#      stop_learning_language: "stop learning?"
+#  deck:
+#    create:
+#      title: "Create new deck"
+#      subtitle: "a deck is a collection of flash cards that you want to learn"
+#      labels:
+#        name: "a name"
+#        description: "a brief description"
+#        lang: "the language code"
+#        country: "the country code"
+#        save: "Create Deck"
+#    edit:
+#      title: "Edit Deck"
+#      subtitle: "You can change all properties of your deck here"
+#      labels:
+#        name: "a name"
+#        description: "a brief description"
+#        pronunciation_side: "where the pronunciation is shown"
+#        supports_written_answer: "require typed answer?"
+#        save: "Save Changes"
+#        delete: "Delete Deck"
+#        delete_confirm: "Are you sure?"
+#    learn:
+#      title:
+#        new: "New Card"
+#        old: "Card Review"
+#      subtitle: "Cards due for review: %{count}"
+#      labels:
+#        answer: "your answer"
+#    chapter:
+#      title: You've reached chapter %{chapter}
+#      subtitle: is it time to progress further into the deck?
+#    upcoming:
+#      title: No cards available for review
+#      subtitle: leave this screen open and we'll send you back for a review when one becomes due
+#    terminology:
+#      name:
+#        title: "name"
+#        description: "A simple name that will allow you to identify this collection of learning items."
+#      description:
+#        title: "description"
+#        description: "A longer description that expands on the name to provide you and others with more information about the contents of the deck"
+#      lang:
+#        title: "language code"
+#        description: ""
+#      country:
+#        title: "country code"
+#        description: ""
+#      pronunciation:
+#        title: "pronunciation side"
+#        description: "The pronunciation side indicates on each card where the pronunciation information, if supplied, is shown. For speaking practice you would put it on the back of the card. This helps you know whether you were pronuncing the words correctly."
+#      supports_written_answer:
+#        title: "require typed answer"
+#        description: "When you require a typed answer the user has to type the answer and then sees how correct they were. At present it is up to the user to rate themselves."
+#  card:
+#    create:
+#      title: "Add Card"
+#      subtitle: "a flash card contains what you want to remember"
+#      labels:
+#        front: "the question"
+#        back: "the answer"
+#        pronunciation: "the pronunciation"
+#        save: "Add"
+#    edit:
+#      title: "Edit Card"
+#      subtitle: "You can change all properties of your card here"
+#      labels:
+#        front: "the question"
+#        back: "the answer"
+#        pronunciation: "the pronunciation"
+#        audio: "the url of sound file"
+#        chapter: "the deck chapter"
+#        save: "Save Changes"
+#        delete: "Delete Card"
+#        delete_confirm: "Are you sure?"
+#    show:
+#      title: "Card Details"
+#      subtitle: ""
+#      edit: "Edit Card"
+#    reveal:
+#      title:
+#      subtitle:
+#      labels:
+#        didnt_know: I didn't know the answer
+#        partial_answer: I knew some of the answer
+#        shaky_but_good: I was shaky but I got it
+#        confident: I knew the answer
+#    terminology:
+#      front:
+#        title: "question"
+#        description: "The front of the card is what you want build an association to, with the answer."
+#      back:
+#        title: "answer"
+#        description: "The back of the card has the correct answer; you're trying to remember this using only the front"
+#      pronunciation:
+#        title: "pronunciation"
+#        description: "The pronunciation key for this card. This is shown on the front or the back of the card depending on the deck settings. It is optional useful when how to pronounce the word is not expressed easily in the source lanuage i.e. mandarin"
+#      audio:
+#        title: "sound file"
+#        description: "Supply the url of an audio file to be played when the card is shown to assist in learning."
+#      chapter:
+#        title: "chapter"
+#        description: "The deck chapter is where in the deck the card is located. This used to create levels of difficulty within a deck and to allow users to limit their progress to a single chapter"
+#  term:
+#    index:
+#      title: "Showing all terms"
+#      subtitle: "A term represents an idiom translated into a language"
+#  translation:
+#    create:
+#      title: "Create a set of related translations"
+#      subtitle: ""
+#      labels:
+#        save: "Create related translations"
+#        add_translation: "Add a new translation"
+#        language: "the language"
+#        form: "the translation"
+#        pronunciation: "the pronunciation"
+#    edit:
+#      labels:
+#        save: "Save Changes"
+#    terminology:
       

@@ -4,7 +4,7 @@
     - semantic_form_for(@set, :url => set_path(@set.id), :method => :put) do |form|
       - @set_names.each_with_index do |set_name, i|
         #set_name{:id => i}
-          %p.minor_title= "Set name translation: #{i + 1}"
+          %p.minor_title= "#{t('text.set-name-translation')}: #{i + 1}"
           %section{:class => ["panel"]}
             = semantic_fields_for "set_name[#{i}]", set_name do |f|
               = render :partial => 'create_set_name_form', :locals => {:set_name => set_name, :i => i, :f => f}

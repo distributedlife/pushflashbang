@@ -9,8 +9,6 @@
       - set.set_name.each do |set_name|
         %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, language_set_path(@language.id, set.id)
         %span{:id => "set_#{set.id}_description"}= set_name.description
-        //.pad_from_top
-        //=render :partial => '/sets/review_set_options', :locals => {:language_id => @language.id, :set_id => set.id}
 #available_sets
   %p.minor_title= "#{t('text.header-available-sets')}:"
   - if @sets.empty?

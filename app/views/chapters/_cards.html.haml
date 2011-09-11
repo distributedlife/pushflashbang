@@ -1,6 +1,6 @@
 %p.minor_title
-  = "Chapter #{chapter}"
-  = link_to "[hide]", '#', :remote => true, :class=>"subscript", :id => "show_chapter_#{chapter}"
+  = "#{t('text.chapter-prefix')} #{chapter}"
+  = link_to "[#{t('actions.hide')}]", '#', :remote => true, :class=>"subscript", :id => "show_chapter_#{chapter}"
   :javascript
     $j('#show_chapter_#{chapter}').click(function(event)
     {
@@ -17,7 +17,7 @@
 
       event.stopPropagation();
     });
-  = link_to "[cram]", cram_deck_chapter_path(deck.id, chapter), :class=> "subscript"
+  = link_to "[#{t('actions.cram')}]", cram_deck_chapter_path(deck.id, chapter), :class=> "subscript"
 #cards_for_chapter{:id => "#{chapter}"}
   - @cards.each do |card|
     .div{:class => "card_panel left", :style => ""}
@@ -64,7 +64,7 @@
 
       //Fade in the Popup and add close button
       //$j('#' + popID).fadeIn().css({ 'width': Number( popWidth ) });
-      $j('#' + popID).fadeIn().css({ 'width': Number( popWidth ), 'height' : Number (popHeight) }).prepend('<a href="#" class="close right"><p class="btn_close">close</p></a>');
+      $j('#' + popID).fadeIn().css({ 'width': Number( popWidth ), 'height' : Number (popHeight) }).prepend('<a href="#" class="close right"><p class="btn_close">#{t('actions.close')}</p></a>');
       //.prepend('<a href="#" class="close"><img src="close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
 
       //Define margin for center alignment (vertical   horizontal) - we add 80px to the height/width to accomodate for the padding  and border width defined in the css

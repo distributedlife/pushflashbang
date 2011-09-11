@@ -2,13 +2,13 @@
 
 #next_due
   .panel
-    %p= "Congratulations! You've finished all the cards in this set. Your next review in this set is due in #{distance_of_time_in_words(Time.now, @next_due_time, true)}"
+    %p= "#{t('text.completed-set-notice')} #{t('text.next-review-notice')} #{distance_of_time_in_words(Time.now, @next_due_time, true)}"
     .pad_from_top
-    %p You can leave this page open and we will take you to the next review when it is due.
+    %p= t('text.refresh-notice')
     .pad_from_top
     %p
-      Want to keep learning? You can practice this set in a difference mode; choose one from below (todo: filter out modes already completed)
-      You can learn a different set; click here to see all your sets and to find a new one.
+      =t('text.continue-learning')
+      =link_to t('actions.different-review-mode'), set_path(params[:id]), :class => "contrast"
     .pad_from_top
 :javascript
   $j("html").everyTime(#{@refresh_in_ms}, function(i) {

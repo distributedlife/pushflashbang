@@ -2,6 +2,7 @@
 #translations
   %section{:class => ["panel"]}
     - semantic_form_for("translations", :url => terms_path(:set_id => params[:set_id]), :method => :post, :html => {:multipart => true}) do |form|
+      = form.input :set_id, :as => :hidden, :value => @set_id
       - @translations.each_with_index do |translation, i|
         #translation{:id => i}
           %p.minor_title= "#{t('text.header-translation-count')} #{i + 1}"

@@ -54,6 +54,14 @@ header {
   padding: 0.6em;
   margin: 0.6em; }
 
+.idiom-group {
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  padding: 0.6em;
+  margin: 0.6em;
+  border: 1px dotted grey; }
+
 .panel-align {
   padding: 0.6em;
   margin: 0.6em; }
@@ -259,6 +267,32 @@ form {
     border: 1px solid black; }
   form a.neutral:hover {
     background: black; }
+  form label.unchecked {
+    margin: auto;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 2px solid #eeeeee;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
+    display: block;
+    width: 12em;
+    font-size: 0.8em; }
+  form label.checked {
+    margin: auto;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 2px solid #eeeeee;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
+    display: block;
+    width: 12em;
+    font-size: 0.8em; }
 
 .button a {
   margin: auto;
@@ -661,13 +695,30 @@ div.jp-duration {
   text-align: right; }
 
 .checked {
-  background: url("/images/chk_on.png") no-repeat; }
+  background-image: url("/images/chk_on.png");
+  background-repeat: no-repeat;
+  background-size: 10%;
+  background-position: center left; }
 
 .unchecked {
-  background: url("/images/chk_off.png") no-repeat; }
+  background-image: url("/images/chk_off.png");
+  background-repeat: no-repeat;
+  background-size: 10%;
+  background-position: center left; }
 
 .selected {
-  background: url("/images/rdo_on.png") no-repeat; }
+  background-image: url("/images/rdo_on.png");
+  background-repeat: no-repeat;
+  background-size: 10%;
+  background-position: center left; }
 
 .unselected {
-  background: url("/images/rdo_off.png") no-repeat; }
+  background-image: url("/images/rdo_off.png");
+  background-repeat: no-repeat;
+  background-size: 10%;
+  background-position: center left; }
+
+p.pronunciation {
+  font-size: 0.6em;
+  font-face: "courier-new";
+  color: #999999; }

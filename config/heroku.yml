@@ -12,6 +12,11 @@ prod:
     BUNDLE_WITHOUT: "development:test"
 #    GOOGLE_ANALYTICS: "UA-12345678-1"
 
+prod-blue:
+  app: blue-pushflashbang
+  config: &default
+    BUNDLE_WITHOUT: "development:test"
+
 staging:
   app: pushflashbang-preprod
   config: &default

@@ -2,8 +2,8 @@
 = hidden_field_tag "duration", 0
 = hidden_field_tag "is_new", 0
 
-=render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => 'number of cards due: ...'}
-=render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => 'This is a new card. You will not have seen it before', :with_group => true}
+=render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => "#{t('text.cards-due-notice')}: ..."}
+=render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => "#{'text.new-card-notice'}", :with_group => true}
 
 %section{:class => ["panel"]}
   =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}
@@ -13,7 +13,7 @@
   #reveal_button
     .panel
       .button{:class => "centre big_button"}
-        = link_to "Reveal", '#', :class => 'positive', :id => "do_reveal"
+        = link_to t('actions.reveal'), '#', :class => 'positive', :id => "do_reveal"
       .pad_from_top
 
   #review_buttons{:class => "hidden"}
@@ -165,7 +165,7 @@
     $j.ajax({
       url: "/deck/#{@deck.id}/due_count",
       success: function(data){
-        $j("header p.subtitle").text("number of cards due: " + (data - 1));
+        $j("header p.subtitle").text("#{t('text.cards-due-notice')}: " + (data - 1));
       }
     });
   });
@@ -203,7 +203,7 @@
             $j("#do_partial_answer").focus();
 
             //tell the user their answer didn't match
-            $j("#answer_result").text("is not correct");
+            $j("#answer_result").text("#{t('text.incorrect-answer')}");
           }
 
           $j("#answer_result").show();
@@ -230,7 +230,7 @@
             $j("#do_partial_answer").focus();
 
             //tell the user their answer didn't match
-            $j("#answer_result").text("is not correct");
+            $j("#answer_result").text("#{t('text.incorrect-answer')}");
           }
 
           $j("#answer_result").show();
