@@ -719,6 +719,7 @@ div.jp-duration {
   background-position: center left; }
 
 p.pronunciation {
+  padding-top: 0.6em;
   font-size: 0.6em;
   font-face: "courier-new";
   color: #999999; }
