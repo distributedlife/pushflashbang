@@ -2,7 +2,7 @@
 = hidden_field_tag "duration", 0
 = hidden_field_tag "is_new", 0
 
-=render :partial => '/header', :locals => {:title => t('title.deck-learn.title-old'), :subtitle => "#{t('text.cards-due-notice')}: ..."}
+=render :partial => '/header', :locals => {:title => t('titles.deck-learn.title-old'), :subtitle => "#{t('text.cards-due-notice')}: ..."}
 =render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => "#{'text.new-card-notice'}", :with_group => true}
 
 %section{:class => ["panel"]}
@@ -22,7 +22,7 @@
         %ul
           .pad_from_top
           %li{:class => 'inline-block'}
-            = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_dont_know", :style => 'width:14em;'
+            = link_to t('actions.review-didnt-know'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_dont_know", :style => 'width:14em;'
             :javascript
               $j('#do_dont_know').click(function(event) {
                 var end = new Date();
@@ -38,7 +38,7 @@
               });
           .pad_from_top
           %li{:class => 'inline-block'}
-            = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_partial_answer", :style => 'width:14em;'
+            = link_to t('actions.review-partial-answer'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_partial_answer", :style => 'width:14em;'
             :javascript
               $j('#do_partial_answer').click(function(event) {
                 var end = new Date();
@@ -53,7 +53,7 @@
               });
           .pad_from_top
           %li{:class => 'inline-block'}
-            = link_to t('card.reveal.labels.shaky_but_good'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_shaky_good", :style => 'width:14em;'
+            = link_to t('actions.review-shaky-but-good'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_shaky_good", :style => 'width:14em;'
             :javascript
               $j('#do_shaky_good').click(function(event) {
                 var end = new Date();
@@ -68,7 +68,7 @@
               });
           .pad_from_top
           %li{:class => 'inline-block'}
-            = link_to t('card.reveal.labels.confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_good", :style => 'width:14em;'
+            = link_to t('actions.review-confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_good", :style => 'width:14em;'
             :javascript
               $j('#do_good').click(function(event) {
                 var end = new Date();

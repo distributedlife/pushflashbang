@@ -25,7 +25,7 @@
     .section_break
     .pad_from_top
     - semantic_form_for("answer", :url => '#', :method => :put, :html => {:id => "answer"}) do |f|
-      = f.input :form, :as => :string, :label => false, :hint => I18n.t('deck.learn.labels.answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
+      = f.input :form, :as => :string, :label => false, :hint => I18n.t('form.typed-answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
     %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
     :javascript
       //override the enter button on the formsubmit so that clicking enter performs a reveal rather than submitting the form

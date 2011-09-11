@@ -10,4 +10,4 @@
     - set_term.idioms.each do |idiom|
       =render :partial => '/sets/set_idioms', :locals => {:set => @set, :idiom => idiom}
   - if @set.set_terms.empty?
-    %p= t('text-set-has-no-translations')
+    %p= t('text.set-has-no-translations')

@@ -8,14 +8,14 @@
           %section{:class => ["panel"]}
             = semantic_fields_for "set_name[#{i}]", set_name do |f|
               = render :partial => 'create_set_name_form', :locals => {:set_name => set_name, :i => i, :f => f}
-              = link_to I18n.t('set.edit.labels.delete'), delete_set_name_set_path(@set.id, :set_name_id => set_name.id), :class => 'negative', :method => :delete, :id => "set_name_#{i}_delete"
+              = link_to I18n.t('actions.delete'), delete_set_name_set_path(@set.id, :set_name_id => set_name.id), :class => 'negative', :method => :delete, :id => "set_name_#{i}_delete"
               .pad
       #set_name{:id => @set_names.count}
-        = link_to I18n.t('labels.sets.add_set_name'), add_set_name_set_path(:i => @set_names.count), :class => 'neutral', :method => :post, :remote => :true
+        = link_to I18n.t('actions.add-set-name'), add_set_name_set_path(:i => @set_names.count), :class => 'neutral', :method => :post, :remote => :true
         .pad_from_top
         .pad_from_top
 
-      = link_to I18n.t('set.edit.labels.delete'), set_path(@set.id), :class => 'negative', :method => :delete, :id => "set_delete"
+      = link_to I18n.t('actions.delete'), set_path(@set.id), :class => 'negative', :method => :delete, :id => "set_delete"
 
       - form.buttons do
-        = form.submit I18n.t('translation.edit.labels.save'), :class => 'positive'
+        = form.submit I18n.t('actions.save'), :class => 'positive'

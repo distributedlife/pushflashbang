@@ -1,18 +1,18 @@
 =render :partial => '/header', :locals => {:title => t('titles.user-registration.title'), :subtitle => t('titles.user-registration.subtitle')}
 %section{:class => ["panel"]}
   = semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
-    = f.input :email, :as => :email, :label => false, :hint => I18n.t('user.registration.labels.email'), :required => false, :wrapper_html => {:class => 'full_width'}
+    = f.input :email, :as => :email, :label => false, :hint => I18n.t('form.user-email'), :required => false, :wrapper_html => {:class => 'full_width'}
     .pad_from_top
-    = f.input :password, :as => :password, :label => false, :hint => I18n.t('user.registration.labels.password'), :required => false, :wrapper_html => {:class => 'full_width'}
+    = f.input :password, :as => :password, :label => false, :hint => I18n.t('form.user-password'), :required => false, :wrapper_html => {:class => 'full_width'}
     .pad_from_top
-    = f.input :password_confirmation, :as => :password, :label => false, :hint => I18n.t('user.registration.labels.confirm_password'), :required => false, :wrapper_html => {:style => 'full_width'}
+    = f.input :password_confirmation, :as => :password, :label => false, :hint => I18n.t('form.user-confirm-password'), :required => false, :wrapper_html => {:style => 'full_width'}
     .pad_from_top
-    = f.input :native_language_id, :as => :select, :collection => Language.all, :label => false, :hint => I18n.t('form.translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
+    = f.input :native_language_id, :as => :select, :collection => Language.all, :label => false, :hint => I18n.t('form.user-translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
     :javascript
       $j("#user_native_language_id").attr("class", "chzn-select")
       $j("#user_native_language_id").attr("data-placehoder", t('actions.select-language'))
       $j("#user_native_language_id").css('width', '100%');
     .pad_from_top
-    = f.submit I18n.t('user.registration.labels.create_account'), :class => 'positive'
+    = f.submit I18n.t('actions.create-account'), :class => 'positive'
     - if devise_mapping.recoverable? && controller_name != 'passwords'
-      = link_to I18n.t('user.actions.forgot_password'), new_password_path(resource_name), :class => 'neutral'
+      = link_to I18n.t('actions.forgot-password'), new_password_path(resource_name), :class => 'neutral'

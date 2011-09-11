@@ -21,7 +21,7 @@
       .button{:class => "centre large_button"}
         %ul
           %li{:class => 'left inline-block'}
-            = link_to t('card.reveal.labels.didnt_know'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_dont_know", :style => 'width:12em;'
+            = link_to t('actions.review-didn-_know'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_dont_know", :style => 'width:12em;'
             :javascript
               $j('#do_dont_know').click(function(event) {
                 var end = new Date();
@@ -36,7 +36,7 @@
                 $j('#do_dont_know').attr('href', link);
               });
           %li{:class => 'right inline-block'}
-            = link_to t('card.reveal.labels.shaky_but_good'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_shaky_good", :style => 'width:12em;'
+            = link_to t('actions.review-shaky-but-good'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_shaky_good", :style => 'width:12em;'
             :javascript
               $j('#do_shaky_good').click(function(event) {
                 var end = new Date();
@@ -53,7 +53,7 @@
           .pad_from_top
           .pad_from_top
           %li{:class => 'left inline-block'}
-            = link_to t('card.reveal.labels.partial_answer'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_partial_answer", :style => 'width:12em;'
+            = link_to t('actions.review-partial-answer'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_partial_answer", :style => 'width:12em;'
             :javascript
               $j('#do_partial_answer').click(function(event) {
                 var end = new Date();
@@ -67,7 +67,7 @@
                 $j('#do_partial_answer').attr('href', link);
               });
           %li{:class => 'right inline-block'}
-            = link_to t('card.reveal.labels.confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_good", :style => 'width:12em;'
+            = link_to t('actions.review-confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_good", :style => 'width:12em;'
             :javascript
               $j('#do_good').click(function(event) {
                 var end = new Date();
