@@ -197,6 +197,15 @@ describe Sets do
 
         UserIdiomReview.first.success.should == true
       end
+
+      it 'should map a review type of null to READING' do
+        UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id,
+          :result_success => 'good')
+
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomReview.first.review_type.should == UserIdiomReview::READING
+      end
     end
 
     describe 'migrating schedules' do
@@ -241,6 +250,17 @@ describe Sets do
             review_types_matched << due_item.review_type
           end
         end
+      end
+
+      it 'should create a due item of reading for each review type that is null' do
+        old_schedule = UserCardSchedule.create(:user_id => @user.id, :card_id => @cards.first.id, :due => 5.days.ago, :interval => 36)
+
+        review1 = UserCardReview.make(:user_id => @user.id, :card_id => @cards.first.id)
+
+        @set.migrate_from_deck(@deck.id)
+
+        UserIdiomDueItems.count.should == 1
+        UserIdiomDueItems.first.review_type.should == UserIdiomReview::READING
       end
     end
   end

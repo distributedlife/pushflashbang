@@ -1,17 +1,17 @@
 - semantic_form_for(@card, :url => deck_card_path(@card.deck_id, @card.id), :html => {:multipart => true}, :method => :put) do |f|
   #front_definition
     =render :partial => '/common/definitions', :locals => {:topic => "card-front"}
-  = f.input :front, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.front'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :front, :as => :text, :label => false, :hint => I18n.t('form.card-front'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #back_definition
     =render :partial => '/common/definitions', :locals => {:topic => "card-back"}
-  = f.input :back, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.back'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :back, :as => :text, :label => false, :hint => I18n.t('form.card-back'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #pronunciation_definition
     =render :partial => '/common/definitions', :locals => {:topic => "card-pronunciation"}
-  = f.input :pronunciation, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :pronunciation, :as => :text, :label => false, :hint => I18n.t('form.card-pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #audio_definition
@@ -21,8 +21,8 @@
 
   #chapter_definition
     =render :partial => '/common/definitions', :locals => {:topic => "card-chapter"}
-  = f.input :chapter, :label => false, :hint => I18n.t('card.edit.labels.chapter'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :chapter, :label => false, :hint => I18n.t('form.card-chapter'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
-  = f.submit I18n.t('card.edit.labels.save'), :class => 'positive'
-  = link_to I18n.t('card.edit.labels.delete'), deck_card_path(@card.deck_id, @card.id), :confirm => I18n.t('card.edit.labels.delete_confirm'), :method => :delete, :class => 'negative'
+  = f.submit I18n.t('actions.save'), :class => 'positive'
+  = link_to I18n.t('actions.delete'), deck_card_path(@card.deck_id, @card.id), :confirm => I18n.t('actions.delete_confirm'), :method => :delete, :class => 'negative'

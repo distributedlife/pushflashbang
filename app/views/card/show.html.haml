@@ -1,4 +1,4 @@
-=render :partial => '/header', :locals => {:title => t('card.show.title'), :subtitle => t('card.show.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.card-show.title'), :subtitle => t('titles.card-show.subtitle')}
 %section{:class => ["panel"]}
   %p.giant= @card.front
   - if @card.audio.file?

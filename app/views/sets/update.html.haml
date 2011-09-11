@@ -1,4 +1,4 @@
-=render :partial => '/header', :locals => {:title => t('set.edit.title'), :subtitle => t('set.edit.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.set-edit.title'), :subtitle => t('titles.set-edit.subtitle')}
 #set
   %section{:class => ["panel"]}
     - semantic_form_for(@set, :url => set_path(@set.id), :method => :put) do |form|

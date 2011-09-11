@@ -1,4 +1,4 @@
-=render :partial => '/header', :locals => {:title => t('deck.edit.title'), :subtitle => t('deck.edit.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.deck-edit.title'), :subtitle => t('titles.deck-edit.subtitle')}
 %section{:class => ["panel"]}
   #create_deck{:class => ['left'], :style => "width:100%"}
     =render :partial => 'edit_deck_form', :locals => {:deck => @deck}

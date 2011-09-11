@@ -1,4 +1,4 @@
-=render :partial => '/header', :locals => {:title => t('user.edit.title'), :subtitle => t('user.edit.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.user-edit.title'), :subtitle => t('titles.user-edit.subtitle')}
 %section{:class => ["panel"]}
   = semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
     = f.input :email, :as => :email, :label => false, :hint => I18n.t('user.edit.labels.email'), :required => false, :wrapper_html => {:class => 'full_width'}

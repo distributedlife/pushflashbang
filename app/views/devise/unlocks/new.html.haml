@@ -1,4 +1,4 @@
-=render :partial => '/header', :locals => {:title => t('users.unlock.title'), :subtitle => t('users.unlock.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.users-unlock.title'), :subtitle => t('titles.users-unlock.subtitle')}
 %h2= t('text.resend-unlock-instructions')
 
 = form_for(resource, :as => resource_name, :url => unlock_path(resource_name), :html => { :method => :post }) do |f|

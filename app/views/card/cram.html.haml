@@ -1,4 +1,4 @@
-=render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => ''}
+=render :partial => '/header', :locals => {:title => t('titles.deck-learn.title-old'), :subtitle => ''}
 
 %section{:class => ["panel"]}
   =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}

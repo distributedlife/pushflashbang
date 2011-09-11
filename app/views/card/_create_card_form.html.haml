@@ -1,17 +1,17 @@
 - semantic_form_for(@card, :url => "/deck/#{@card.deck_id}/card", :html => {:multipart => true}, :method => :post) do |f|
   #front_definition
     =render :partial => '/common/definitions', :locals => {:topic => "card-front"}
-  = f.input :front, :as => :text, :label => false, :hint => I18n.t('card.create.labels.front'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :front, :as => :text, :label => false, :hint => I18n.t('form.card-front'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #back_definition
     =render :partial => '/common/definitions', :locals => {:topic => "card-back"}
-  = f.input :back, :as => :text, :label => false, :hint => I18n.t('card.create.labels.back'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :back, :as => :text, :label => false, :hint => I18n.t('form.card-back'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #pronunciation_definition
     =render :partial => '/common/definitions', :locals => {:topic => "card-pronunciation"}
-  = f.input :pronunciation, :as => :text, :label => false, :hint => I18n.t('card.edit.labels.pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :pronunciation, :as => :text, :label => false, :hint => I18n.t('form.card-pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #audio_definition
@@ -21,8 +21,8 @@
 
   #chapter_definition
     =render :partial => '/common/definitions', :locals => {:topic => "card-chapter"}
-  = f.input :chapter, :label => false, :hint => I18n.t('card.edit.labels.chapter'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :chapter, :label => false, :hint => I18n.t('form.card-chapter'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   - f.buttons do
-    = f.submit I18n.t('card.create.labels.save'), :class => 'positive'
+    = f.submit I18n.t('actions.save'), :class => 'positive'

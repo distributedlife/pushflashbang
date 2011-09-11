@@ -2,7 +2,7 @@
 = hidden_field_tag "duration", 0
 = hidden_field_tag "is_new", 0
 
-=render :partial => '/header', :locals => {:title => t('deck.learn.title.old'), :subtitle => "#{t('text.cards-due-notice')}: ..."}
+=render :partial => '/header', :locals => {:title => t('title.deck-learn.title-old'), :subtitle => "#{t('text.cards-due-notice')}: ..."}
 =render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => "#{'text.new-card-notice'}", :with_group => true}
 
 %section{:class => ["panel"]}
@@ -201,7 +201,7 @@
             $j("#do_partial_answer").focus();
 
             //tell the user their answer didn't match
-            $j("#answer_result").text("#{t('text.incorrect-answer')}");
+            $j("#answer_result").text("#{t('text.incorrect-notice')}");
           }
 
           $j("#answer_result").show();
@@ -228,7 +228,7 @@
             $j("#do_partial_answer").focus();
 
             //tell the user their answer didn't match
-            $j("#answer_result").text("#{t('text.incorrect-answer')}");
+            $j("#answer_result").text("#{t('text.incorrect-notice')}");
           }
 
           $j("#answer_result").show();

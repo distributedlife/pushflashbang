@@ -1,4 +1,4 @@
-=render :partial => '/common/header', :locals => {:title => t('users.confirm.title'), :subtitle => t('users.confirm.subtitle')}
+=render :partial => '/common/header', :locals => {:title => t('titles.users-confirm.title'), :subtitle => t('titles.users-confirm.subtitle')}
 %h2= t('text.resend-confirmation')
 
 = form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f|

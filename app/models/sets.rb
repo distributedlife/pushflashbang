@@ -94,11 +94,11 @@ class Sets < ActiveRecord::Base
 
         user_idiom_due_item = UserIdiomDueItems.new(:user_idiom_schedule_id => user_idiom_schedule.id)
         user_idiom_due_item.review_type = review.review_type
+        user_idiom_due_item.review_type ||= UserIdiomReview::READING
         user_idiom_due_item.due = schedule.due
         user_idiom_due_item.interval = schedule.interval
         user_idiom_due_item.save!
 
-        user_idiom_due_item.review_type ||= UserIdiomReview::READING
 
         review_types_done << review.review_type
       end

@@ -1,6 +1,6 @@
 - current_idiom = 0
 
-=render :partial => '/header', :locals => {:title => t('term.index.title'), :subtitle => t('term.index.subtitle')}
+=render :partial => '/header', :locals => {:title => t('titles.term-index.title'), :subtitle => t('titles.term-index.subtitle')}
 - if current_user.in_edit_mode?
   %section{:class => ["panel right"], :style => "width: 15%"}
     %span.menu= link_to t('actions.new-term'), new_term_path, :class => 'neutral'

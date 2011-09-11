@@ -1,26 +1,26 @@
 - semantic_form_for(@deck, :url => deck_path(@deck.id), :method => :put) do |f|
   #brief_definition
     =render :partial => '/common/definitions', :locals => {:topic => "deck-name"}
-  = f.input :name, :as => :string, :label => false, :hint => I18n.t('deck.edit.labels.name'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :name, :as => :string, :label => false, :hint => I18n.t('form.deck-name'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #description_definition
     =render :partial => '/common/definitions', :locals => {:topic => "deck-description"}
-  = f.input :description, :as => :text, :label => false, :hint => I18n.t('deck.edit.labels.description'), :required => false, :wrapper_html => {:class => 'width60'}
+  = f.input :description, :as => :text, :label => false, :hint => I18n.t('form.deck-description'), :required => false, :wrapper_html => {:class => 'width60'}
   .pad_from_top
 
   #pronunciation_definition
     =render :partial => '/common/definitions', :locals => {:topic => "deck-pronunciation-side"}
-  = f.input :pronunciation_side, :label => I18n.t('deck.edit.labels.pronunciation_side'), :required => false, :as => :radio, :collection => @pronunciation_side_values, :wrapper_html => {:class => 'lo_propose'}
+  = f.input :pronunciation_side, :label => I18n.t('form.deck-pronunciation'), :required => false, :as => :radio, :collection => @pronunciation_side_values, :wrapper_html => {:class => 'lo_propose'}
   .pad_from_top
   .pad_from_top
 
   #pronunciation_definition
     =render :partial => '/common/definitions', :locals => {:topic => "deck-supports-written-answer"}
-  = f.input :supports_written_answer, :label => I18n.t('deck.edit.labels.supports_written_answer'), :required => false, :as => :boolean, :wrapper_html => {:class => 'lo_propose'}
+  = f.input :supports_written_answer, :label => I18n.t('form.deck-supports-written-answer'), :required => false, :as => :boolean, :wrapper_html => {:class => 'lo_propose'}
   .pad_from_top
   .pad_from_top
   .pad_from_top
 
-  = f.submit I18n.t('deck.edit.labels.save'), :class => 'positive'
-  = link_to I18n.t('deck.edit.labels.delete'), deck_path(@deck.id), :confirm => I18n.t('deck.edit.labels.delete_confirm'), :method => :delete, :class => 'negative'
+  = f.submit I18n.t('actions.save'), :class => 'positive'
+  = link_to I18n.t('actions.delete'), deck_path(@deck.id), :confirm => I18n.t('actions.delete_confirm'), :method => :delete, :class => 'negative'
