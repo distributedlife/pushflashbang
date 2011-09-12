@@ -318,7 +318,7 @@ en:
     user-edit:
       title: "Manage your account"
       subtitle: ""
-    users-login:
+    user-login:
       title: "Sign in to PushFlashBang!"
       subtitle: ""
     user-reset-password:
