@@ -51,6 +51,11 @@ PushFlashBang::Application.routes.draw do
   end
 
   resources :languages do
+    collection do
+      get 'user_languages'
+      get 'remaining_languages'
+    end
+
     resources :sets do
       member do
         get 'review'

@@ -254,6 +254,9 @@ en:
     refresh-notice: "You can leave this page open and we will take you to the next review when it is due."
     completed-set-notice: "Congratulations! You've finished all the cards in this set."
     pronunciation-guidance: "Pronunciation Guidance"
+    loading: "Loading..."
+    no-languages-remaining: "There are no languages left for you to learn."
+    no-user-languages: "You have not started learning a language yet."
   titles:
     about:
       title: "PushFlashBang"

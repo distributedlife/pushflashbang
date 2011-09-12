@@ -8,14 +8,14 @@ class UsersController < ApplicationController
     messages["warning"] = session[:warning] unless session[:warning].nil?
     messages["info"] = session[:info] unless session[:info].nil?
 
-    respond_to do |format|
-      format.json { render :json => messages}
-    end
-
     session.delete :success
     session.delete :warning
     session.delete :error
     session.delete :info
+
+    respond_to do |format|
+      format.json { render :json => messages}
+    end
   end
 
   def index

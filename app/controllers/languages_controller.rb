@@ -3,11 +3,26 @@ include LanguagesHelper
 class LanguagesController < ApplicationController
   before_filter :authenticate_user!
 
-#  caches_page :index, :show
+  caches_page :index
+#  caches_page :show
 
   def index
     @languages = Language.order(:name).all
+  end
+
+  def user_languages
     @user_languages = UserLanguages.order(:name).joins(:language).where(:user_id => current_user.id)
+  end
+
+  def remaining_languages
+    user_languages = UserLanguages.order(:name).joins(:language).where(:user_id => current_user.id)
+    user_languages = user_languages.map{|l| l.language_id}
+
+    if user_languages.empty?
+      @languages = Language.order(:name).all
+    else
+      @languages = Language.order(:name).find(:all, :conditions => ["id NOT IN (?)", user_languages])
+    end
   end
 
   def learn

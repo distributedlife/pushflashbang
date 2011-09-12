@@ -46,7 +46,7 @@ module LanguageComponent
 
   def user_is_learning_language? language_name
     language = ensure_language_exists language_name
-
+    
     UserLanguages.where(:language_id => language.id, :user_id => get(:user).id).count == 1
   end
 

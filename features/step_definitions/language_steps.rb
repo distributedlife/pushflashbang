@@ -40,10 +40,12 @@ end
 
 
 And /^my set of languages is: "([^"]*)"$/ do |languages|
+  sleep 0.25
+  
   languages.split(',').each do |language_name|
     language_name.strip!
 
-    user_is_learning_language?(language_name).should be true
+    user_is_learning_language?(language_name).should == true
   end
 end
 
