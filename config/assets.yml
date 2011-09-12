@@ -18,6 +18,7 @@ stylesheets:
     - public/stylesheets/reset.css
     - public/stylesheets/style.css
     - public/stylesheets/chosen.css
+    - public/stylesheets/bootstrap-1.2.0.min.css
   mobile:
     - public/stylesheets/reset.css
     - public/stylesheets/style.css

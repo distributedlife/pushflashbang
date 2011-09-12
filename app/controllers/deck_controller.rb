@@ -1,4 +1,5 @@
 include DeckHelper
+include RedirectHelper
 
 class DeckController < ApplicationController
   before_filter :authenticate_user!
@@ -13,8 +14,7 @@ class DeckController < ApplicationController
     if @deck.valid?
       @deck.save!
 
-      flash[:success] = "Deck successfully created!"
-      redirect_to show_deck_path(@deck)
+      success_redirect_to t('notice.deck-create'), show_deck_path(@deck)
     end
   end
 
@@ -39,7 +39,7 @@ class DeckController < ApplicationController
           @deck = deck
         else
           deck.save!
-          redirect_to show_deck_path(@deck)
+          success_redirect_to t('notice.deck-update'), show_deck_path(@deck)
         end
       end
     rescue
@@ -65,16 +65,13 @@ class DeckController < ApplicationController
         if deck.user == current_user
           deck.delete
 
-          flash[:success] = "Deck successfully deleted"
+          success_redirect_to t('notice.deck-delete'), user_index_path
         else
-          flash[:failure] = "Unable to delete deck as it does not belong to you."
+          error_redirect_to t('notice.not-authorised'), user_index_path
         end
-
-        redirect_to user_index_path
       end
     rescue
-      flash[:failure] = "Deck successfully deleted"
-      redirect_to user_index_path
+      success_redirect_to t('notice.deck-delete'), user_index_path
     end
   end
 
@@ -83,8 +80,7 @@ class DeckController < ApplicationController
       if deck_is_valid?
         cards = Card.where(:deck_id => params[:id])
         if cards.empty?
-          flash[:failure] = "You can't start a session until you have added cards to the deck."
-          redirect_to deck_path(params[:id])
+          error_redirect_to t('notice.deck-no-cards'), deck_path(params[:id])
           return
         end
 
@@ -104,8 +100,7 @@ class DeckController < ApplicationController
       if deck_is_valid?
         #if there are no cards in deck; we should not try and schedule any
         if Card.where(:deck_id => params[:id]).count == 0
-          flash[:failure] = "You can't start a session until you have added cards to the deck."
-          redirect_to deck_path(params[:id])
+          error_redirect_to t('notice.deck-no-cards'), deck_path(params[:id])
           return
         end
 
@@ -152,11 +147,15 @@ class DeckController < ApplicationController
       if deck.user == current_user
         deck.shared = !deck.shared
         deck.save!
-      else
-        flash[:failure] = "Unable to change deck sharing as it does not belong to you"
-      end
 
-      redirect_to deck_path(params[:id])
+        if deck.shared
+          info_redirect_to t('notice.deck-shared'), deck_path(params[:id])
+        else
+          info_redirect_to t('notice.deck-private'), deck_path(params[:id])
+        end
+      else
+        error_redirect_to t('notice.not-authorised'), deck_path(params[:id])
+      end
     end
   end
 
@@ -174,16 +173,14 @@ class DeckController < ApplicationController
       deck = Deck.find(params[:id])
 
       if deck.user != current_user && deck.shared == false
-        flash[:failure] = "Unable to show deck as it does not belong to you and it has not been shared"
-        redirect_to(user_index_path)
+        error_redirect_to t('notice.not-authorised'), user_index_path
 
         return false
       end
 
       true
     rescue
-      flash[:failure] = "The deck no longer exists"
-      redirect_to(user_index_path)
+      error_redirect_to t('notice.not-found'), user_index_path
       return false
     end
   end

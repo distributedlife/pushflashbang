@@ -95,8 +95,6 @@ describe TermsController do
       Idiom.count.should == 0
       IdiomTranslation.count.should == 0
       Translation.count.should == 0
-
-      flash[:failure].should == "At least two translations need to be supplied"
     end
 
     it 'should require at least two valid objects to be a success' do
@@ -209,8 +207,6 @@ describe TermsController do
       Translation.count.should == 0
       IdiomTranslation.count.should == 0
       Idiom.count.should == 0
-
-      flash[:failure].should == "All translations need to be complete"
     end
 
     it 'should relate translations within a language within the idiom by meaning' do
@@ -400,7 +396,7 @@ describe TermsController do
       get :show, :id => 100
 
       response.should be_redirect
-      flash[:failure].should == "The term you were looking for no longer exists"
+      response.should redirect_to terms_path
     end
 
     it 'should redirect to the show all terms path if the idiom has no translations' do
@@ -408,7 +404,8 @@ describe TermsController do
 
       get :show, :id => idiom.id
       
-      flash[:failure].should == "The term you were looking has no translations"
+      response.should be_redirect
+      response.should redirect_to terms_path
     end
   end
 
@@ -417,6 +414,7 @@ describe TermsController do
       get :edit, :id => 100
 
       response.should be_redirect
+      response.should redirect_to terms_path
     end
 
     it 'should redirect to the show all terms path if the idiom has no translations' do
@@ -424,7 +422,7 @@ describe TermsController do
 
       get :edit, :id => idiom.id
 
-      flash[:failure].should == "The term you were looking has no translations"
+      response.should redirect_to terms_path
     end
 
     it 'should return the idiom translation terms order by language and form' do
@@ -527,8 +525,6 @@ describe TermsController do
       Translation.find(translation1.id).should == translation1
       Translation.find(translation2.id).should == translation2
       IdiomTranslation.count.should == 2
-
-      flash[:failure].should == "At least two translations need to be supplied"
     end
 
     it 'should ignore completely empty objects' do
@@ -653,8 +649,6 @@ describe TermsController do
       Translation.find(translation1.id).should == translation1
       Translation.find(translation2.id).should == translation2
       IdiomTranslation.count.should == 2
-
-      flash[:failure].should == "All translations need to be complete"
     end
 
     it 'should remove relationships that are no longer true' do

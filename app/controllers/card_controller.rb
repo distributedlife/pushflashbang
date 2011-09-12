@@ -24,8 +24,7 @@ class CardController < ApplicationController
       if @card.valid?
         @card.save!
 
-        flash[:success] = "Card added to deck"
-        redirect_to new_deck_card_path(@deck)
+        success_redirect_to t('notice.card-add'), new_deck_card_path(@deck)
       end
     rescue
     end
@@ -54,7 +53,7 @@ class CardController < ApplicationController
 
         expire_page(:controller => 'card', :action => 'learn', :id => params[:id])
 
-        redirect_to deck_card_path(@deck)
+        success_redirect_to t('notice.card-update'), deck_card_path(@deck)
       end
     rescue
     end
@@ -65,8 +64,7 @@ class CardController < ApplicationController
       card = Card.find(params[:id])
       card.delete
 
-      flash[:failure] = "Deck successfully deleted"
-      redirect_to show_deck_path(params[:deck_id])
+      success_redirect_to t('notice.card-delete'), show_deck_path(params[:deck_id])
     end
   end
   
@@ -204,20 +202,16 @@ class CardController < ApplicationController
       deck = Deck.find(params[:deck_id])
 
       if deck.user != current_user && deck.shared == false
-        flash[:failure] = "Unable to show card as it does not belong to the user that is currently logged in on this machine."
-        redirect_to user_index_path
+        error_redirect_to t('notice.not-authorised'), user_index_path
       end
       if card.deck != deck
-        flash[:failure] = "The card does not belong to this deck"
-        redirect_to show_deck_path(params[:deck_id])
+        error_redirect_to t('notice.not-found'), show_deck_path(params[:deck_id])
       end
     rescue
       if card.nil?
-        flash[:failure] = "The card no longer exists"
-        redirect_to show_deck_path(params[:deck_id])
+        error_redirect_to t('notice.not-found'), show_deck_path(params[:deck_id])
       else
-        flash[:failure] = "The deck no longer exists"
-        redirect_to user_index_path
+        error_redirect_to t('notice.not-found'), user_index_path
       end
     end
   end
@@ -228,13 +222,11 @@ class CardController < ApplicationController
       deck = Deck.find(params[:deck_id])
 
       if deck.user != current_user
-        flash[:failure] = "Unable to complete action as this deck does not belong to you."
-        redirect_to user_index_path
+        error_redirect_to t('notice.not-authorised'), user_index_path
         return false
       end
       if card.deck != deck
-        flash[:failure] = "The card does not belong to this deck"
-        redirect_to show_deck_path(params[:deck_id])
+        error_redirect_to t('notice.not-found'), show_deck_path(params[:deck_id])
 
         return false
       end
@@ -242,13 +234,11 @@ class CardController < ApplicationController
       true
     rescue
       if card.nil?
-        flash[:failure] = "The card no longer exists"
-        redirect_to show_deck_path(params[:deck_id])
+        error_redirect_to t('notice.not-found'), show_deck_path(params[:deck_id])
 
         return false
       else
-        flash[:failure] = "The deck no longer exists"
-        redirect_to user_index_path
+        error_redirect_to t('notice.not-found'), user_index_path
 
         return false
       end
@@ -260,12 +250,10 @@ class CardController < ApplicationController
       deck = Deck.find(params[:deck_id])
 
       if deck.user != current_user && deck.shared == false
-        flash[:failure] = "Unable to show card as it does not belong to the user that is currently logged in on this machine."
-        redirect_to user_index_path
+        error_redirect_to t('notice.not-authorised'), user_index_path
       end
     rescue
-      flash[:failure] = "The deck no longer exists"
-      redirect_to user_index_path
+      error_redirect_to t('notice.not-found'), user_index_path
     end
   end
 end

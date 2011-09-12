@@ -44,7 +44,6 @@ Feature: sessions
     Given there are no cards in the deck
     And I go to the "deck session" page
     Then I should be on the "show deck" page
-    And I should see "You can't start a session until you have added cards to the deck."
 
   Scenario: items due count
     Given there are cards due

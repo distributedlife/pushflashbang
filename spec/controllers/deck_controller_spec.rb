@@ -75,7 +75,7 @@ describe DeckController do
     it 'should have flash message indicating successful deck creation' do
       post :create, :deck => {:name => "My new deck"}
 
-      flash[:info].should ~ /^Deck successfully created!/
+      session[:success].should ~ /^Deck successfully created/
     end
 
     it 'should require all mandatory fields' do

@@ -10,13 +10,11 @@ Feature: User accounts
   Given I go to the "register account" page
   When I create an account for "user@testingthis.com"
   Then I should be on the "user home" page
-  And I should see "Welcome! You have signed up successfully."
 
   Scenario: user is redirect to site index on logout
   Given I am a new, authenticated user
   When I click on "Logout"
   Then I should be on the "site index" page
-  And I should see "Signed out successfully."
 
   Scenario: user can delete account
   Given I am a new, authenticated user
@@ -24,7 +22,6 @@ Feature: User accounts
   When I cancel my account
   Then my account should be deleted
   And I should be on the "site index" page
-  And I should see "Bye! Your account was successfully cancelled. We hope to see you again soon."
 
   Scenario: user can change their email address
   Given I am a new, authenticated user

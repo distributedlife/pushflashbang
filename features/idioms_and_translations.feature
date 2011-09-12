@@ -12,7 +12,6 @@ Feature: users can add new terms to the system
     # this line is commented out as the akephalos driver tries to use a html template and not a haml one
     #      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
     Then translations will all linked to the same idiom
-    And I should see "Related terms created"
 
   @user
   Scenario: an invalid term allows the user to make corrections

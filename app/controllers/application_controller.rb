@@ -1,5 +1,6 @@
 include ArrayHelper
 include BooleanHelper
+include RedirectHelper
 
 class ApplicationController < ActionController::Base
   protect_from_forgery

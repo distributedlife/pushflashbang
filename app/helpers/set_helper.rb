@@ -54,11 +54,18 @@ module SetHelper
   end
 
   def is_user_at_end_of_chapter user_id, set_id, language_id, review_mode
-    return languages_path unless language_is_valid? language_id
-    return language_path(language_id) unless set_exists? set_id
+    unless language_is_valid? language_id
+      error t('notice.not-found')
+      return languages_path
+    end
+    unless set_exists? set_id
+      error t('notice.not-found')
+      return language_path(language_id)
+    end
 
     review_types = parse_review_types review_mode
     if review_types.empty?
+      error t('notice.review-mode-not-set')
       return language_set_path(language_id, set_id)
     end
 
@@ -72,7 +79,7 @@ module SetHelper
 
     #are there cards in the set for the language?
     unless set_has_at_least_one_idiom_for_language? language_id, set_id
-      flash[:failure] = "This set can't be reviewed in the specified language because it has not been translated into that language"
+      error t('notice.set-no-language-support')
       return language_set_path(language_id, set_id)
     end
 

@@ -5,7 +5,6 @@ PushFlashBang::Application.routes.draw do
 
   match 'info/check_style' => 'info#check_style'
   match 'info/about' => 'info#about'
-  match 'info/rebuild_relationships' => 'info#rebuild_relationships'
 
   resources :users, :as => "user" do
     collection do
@@ -18,6 +17,7 @@ PushFlashBang::Application.routes.draw do
 
       put 'start_editing'
       put 'stop_editing'
+      get 'flash_messages'
     end
   end
 

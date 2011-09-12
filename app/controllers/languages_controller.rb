@@ -13,6 +13,8 @@ class LanguagesController < ApplicationController
   def learn
     if language_is_valid_for_user? params[:id], current_user.id
       UserLanguages.create(:user_id => current_user.id, :language_id => params[:id])
+
+      success t('notice.start-learn-language')
     end
 
     redirect_to user_languages_path
@@ -23,6 +25,8 @@ class LanguagesController < ApplicationController
       UserLanguages.where(:user_id => current_user.id, :language_id => params[:id]).each do |language|
         language.delete
       end
+
+      success t('notice.stop-learn-language')
     end
 
     redirect_to user_languages_path

@@ -1,7 +1,11 @@
+include RedirectHelper
+
 class InfoController < ApplicationController
   def check_style
-    flash[:error] = "Error flash level"
-    flash[:info] = "Some informaton"
+    error "Error flash level"
+    info "Some informaton"
+    warning "Some warning"
+    success "Some success"
   end
 
   def about

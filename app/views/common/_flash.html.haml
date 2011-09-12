@@ -1,0 +1,13 @@
+:javascript
+  $j(document).ready(function() {
+    $j.ajax({
+      url: "/users/flash_messages",
+      success: function(data)
+      {
+        if (data["success"])  { flash_message("success", data["success"]); }
+        if (data["error"])    { flash_message("error", data["error"]); }
+        if (data["warning"])  { flash_message("warning", data["warning"]); }
+        if (data["info"])     { flash_message("info", data["info"]); }
+      }
+    });
+  });

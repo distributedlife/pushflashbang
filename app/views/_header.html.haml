@@ -4,6 +4,5 @@
   %p.title= title
   %p.subtitle= subtitle
   .section_break
-  .flash
-    - flash.each do |key, value|
-      =render :partial => '/common/notice', :locals => {:keys => key, :value => value}
+  #flash
+    =render :partial => '/common/flash'

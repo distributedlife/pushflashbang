@@ -27,11 +27,11 @@ class SetsController < ApplicationController
     
     expire_page(:controller => 'sets', :action => 'index')
 
-    redirect_to set_path(set.id)
+    success_redirect_to t('notice.set-create'), set_path(set.id)
   end
 
   def show
-    redirect_to sets_path and return if !set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), sets_path and return if !set_exists? params[:id]
 
     @set = Sets.find(params[:id])
     @set_names = SetName.order(:name).where(:sets_id => params[:id])
@@ -54,16 +54,16 @@ class SetsController < ApplicationController
   end
 
   def edit
-    redirect_to sets_path and return unless set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? params[:id]
 
     @set = Sets.find(params[:id])
     @set_names = SetName.order(:name).where(:sets_id => params[:id])
     
-    redirect_to sets_path and return if @set_names.empty?
+    error_redirect_to t('notice.not-found'), sets_path and return if @set_names.empty?
   end
 
   def update
-    redirect_to sets_path and return if !set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), sets_path and return if !set_exists? params[:id]
 
     @set = Sets.find(params[:id])
     @set_names = []
@@ -101,7 +101,7 @@ class SetsController < ApplicationController
       expire_page(:controller => 'sets', :action => 'index')
       expire_page(:controller => 'sets', :action => 'show' ,:id => params[:id])
 
-      redirect_to set_path(params[:id]) and return
+      success_redirect_to t('notice.set-update'), set_path(params[:id])
     end
   end
 
@@ -111,12 +111,11 @@ class SetsController < ApplicationController
   end
 
   def delete_set_name
-    redirect_to sets_path and return if !set_exists? params[:id]
-    redirect_to sets_path and return if !set_name_exists? params[:id], params[:set_name_id]
+    error_redirect_to t('notice.not-found'), sets_path and return if !set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), sets_path and return if !set_name_exists? params[:id], params[:set_name_id]
+    
     if SetName.where(:sets_id => params[:id]).count == 1
-      flash[:failure] = "Can't delete last set name"
-
-      redirect_to :back
+      error_redirect_to t('notice.set-cant-delete-name'), :back
       return
     end
 
@@ -126,57 +125,57 @@ class SetsController < ApplicationController
     expire_page(:controller => 'sets', :action => 'index')
     expire_page(:controller => 'sets', :action => 'show' ,:id => params[:id])
 
-    redirect_to :back
+    success_redirect_to t('notice.set-delete-name'), :back
   end
 
   def destroy
-    redirect_to sets_path and return if !set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), sets_path and return if !set_exists? params[:id]
 
     set = Sets.find(params[:id])
     set.delete
 
     expire_page(:controller => 'sets', :action => 'index')
 
-    redirect_to :back
+    success_redirect_to t('notice.set-delete'), :back
   end
 
   def select
     @idiom_id = params[:term_id]
     @sets = Sets.all
 
-    redirect_to user_index_path and return if @idiom_id.nil?
-    redirect_to user_index_path and return if @sets.empty?
+    error_redirect_to t('notice.not-found'), user_index_path and return if @idiom_id.nil?
+    error_redirect_to t('notice.not-found'), user_index_path and return if @sets.empty?
   end
 
   def set_goal
-    redirect_to sets_path and return unless set_exists? params[:id]
-    redirect_to sets_path and return unless language_is_valid? params[:language_id]
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), sets_path and return unless language_is_valid? params[:language_id]
 
     if UserSets.where(:set_id => params[:id], :user_id => current_user.id, :language_id => params[:language_id]).empty?
       UserSets.create(:set_id => params[:id], :user_id => current_user.id, :language_id => params[:language_id], :chapter => 1)
     end
 
-    redirect_to set_path(params[:id]) and return if params[:redirect_to] == "sets"
-    redirect_to :back
+    success_redirect_to t('notice.user-add-goal'), set_path(params[:id]) and return if params[:redirect_to] == "sets"
+    success_redirect_to t('notice.user-add-goal'), :back
   end
 
   def unset_goal
-    redirect_to sets_path and return unless set_exists? params[:id]
-    redirect_to sets_path and return unless language_is_valid? params[:language_id]
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), sets_path and return unless language_is_valid? params[:language_id]
 
     UserSets.where(:set_id => params[:id], :user_id => current_user.id, :language_id => params[:language_id]).each do |user_set|
       user_set.delete
     end
 
-    redirect_to :back
+    success_redirect_to t('notice.user-remove-goal'), :back
   end
 
   def review
-    error_redirect_to "language #{params[:language_id]} not found", languages_path and return unless language_is_valid? params[:language_id]
-    error_redirect_to "set #{params[:id]} not found", language_path(params[:language_id]) and return unless set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), languages_path and return unless language_is_valid? params[:language_id]
+    error_redirect_to t('notice.not-found'), language_path(params[:language_id]) and return unless set_exists? params[:id]
 
     review_types = parse_review_types params[:review_mode]
-    error_redirect_to "review mode not set", language_set_path(params[:language_id], params[:id]) and return if review_types.empty?
+    error_redirect_to t('notice.review-mode-not-set'), language_set_path(params[:language_id], params[:id]) and return if review_types.empty?
 
 
     #get user set
@@ -190,8 +189,7 @@ class SetsController < ApplicationController
 
     #are there cards in the set for the language?
     unless set_has_at_least_one_idiom_for_language? params[:language_id], params[:id]
-      flash[:failure] = "This set can't be reviewed in the specified language because it has not been translated into that language"
-      error_redirect_to "This set does not support your language", language_set_path(params[:language_id], params[:id]) and return
+      error_redirect_to t('notice.set-no-language-support'), language_set_path(params[:language_id], params[:id]) and return
     end
 
 
@@ -258,14 +256,13 @@ class SetsController < ApplicationController
   end
   
   def completed
-    redirect_to languages_path and return unless language_is_valid? params[:language_id]
-    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:id]
+    error_redirect_to t('notice.not-found'), languages_path and return unless language_is_valid? params[:language_id]
+    error_redirect_to t('notice.not-found'), language_path(params[:language_id]) and return unless set_exists? params[:id]
 
     review_types = parse_review_types params[:review_mode]
-    if review_types.empty?
-      return redirect_to language_set_path(params[:language_id], params[:id])
-    end
+    return error_redirect_to t('notice.review-mode-not-set'), language_set_path(params[:language_id], params[:id]) if review_types.empty?
 
+    
     #get user set
     user_set = UserSets.where(:user_id => current_user.id, :set_id => params[:id], :language_id => params[:language_id])
     if user_set.empty?
@@ -276,8 +273,7 @@ class SetsController < ApplicationController
 
     #are there cards in the set for the language?
     unless set_has_at_least_one_idiom_for_language? params[:language_id], params[:id]
-      flash[:failure] = "This set can't be reviewed in the specified language because it has not been translated into that language"
-      redirect_to language_set_path(params[:language_id], params[:id]) and return
+      error_redirect_to t('notice.set-no-language-support'), language_set_path(params[:language_id], params[:id]) and return
     end
 
     #are there are any due cards?
@@ -311,7 +307,6 @@ class SetsController < ApplicationController
     SQL
 
     results = ActiveRecord::Base.connection.execute(sql)
-    ap results
     as_time = results.first["due"]
 
     @next_due_time = Time.parse(as_time).utc + Time.parse(as_time).gmt_offset

@@ -1,6 +1,23 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!
 
+  def flash_messages
+    messages = {}
+    messages["success"] = session[:success] unless session[:success].nil?
+    messages["error"] = session[:error] unless session[:error].nil?
+    messages["warning"] = session[:warning] unless session[:warning].nil?
+    messages["info"] = session[:info] unless session[:info].nil?
+
+    respond_to do |format|
+      format.json { render :json => messages}
+    end
+
+    session.delete :success
+    session.delete :warning
+    session.delete :error
+    session.delete :info
+  end
+
   def index
     @decks = Deck.order(:name).where("user_id = ? OR shared = ?", current_user.id, true)
 
@@ -21,12 +38,12 @@ class UsersController < ApplicationController
   def start_editing
     current_user.start_editing
 
-    redirect_to :back
+    info_redirect_to t('notice.start-editing'), :back
   end
 
   def stop_editing
     current_user.stop_editing
 
-    redirect_to :back
+    info_redirect_to t('notice.stop-editing'), :back
   end
 end

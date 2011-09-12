@@ -59,10 +59,6 @@ class TermsController < ApplicationController
         RelatedTranslations::create_relationships_for_translation translation
       end
 
-      
-      link = self.class.helpers.link_to('Click here to edit.', edit_term_path(idiom.id))
-      flash[:success] = "Related terms created. #{link}"
-
 
       #if we have a set_id. we should link the term to that set
       params["translations"] ||= {}
@@ -76,20 +72,19 @@ class TermsController < ApplicationController
           expire_page(:controller => 'languages', :action => 'show', :id => translation.language_id)
         end
 
-        redirect_to new_set_set_term_path(params["translations"]["set_id"]) and return
+        success_redirect_to t('notice.term-create'), new_set_set_term_path(params["translations"]["set_id"]) and return
       else
         expire_page(:controller => 'terms', :action => 'index')
-        redirect_to new_term_path and return
+        success_redirect_to t('notice.term-create'), new_term_path and return
       end
     end
 
     while @translations.count < 2
       @translations << Translation.new
-      flash[:failure] = "At least two translations need to be supplied" if flash[:failure].nil?
+      error t('notice.term-insuffient-translations') if no_user_errors?
     end
 
-
-    flash[:failure] = "All translations need to be complete" if flash[:failure].nil?
+    error t('notice.term-translations-incomplete') if no_user_errors?
 
     @languages = Language.all
   end
@@ -140,8 +135,6 @@ class TermsController < ApplicationController
       end
 
 
-      link = self.class.helpers.link_to('Click here to view.', edit_term_path(idiom.id))
-      flash[:success] = "Related terms update. #{link}"
 
       expire_page(:controller => 'terms', :action => 'index')
       SetTerms.where(:term_id => idiom.id).each do |set_term|
@@ -151,16 +144,15 @@ class TermsController < ApplicationController
         expire_page(:controller => 'languages', :action => 'show', :id => translation.language_id)
       end
 
-      redirect_to term_path(idiom.id) and return
+      success_redirect_to t('notice.term-update'), term_path(idiom.id) and return
     end
 
     while @translations.count < 2
       @translations << Translation.new
-      flash[:failure] = "At least two translations need to be supplied" if flash[:failure].nil?
+      error t('notice.term-insuffient-translations') if no_user_errors?
     end
 
-
-    flash[:failure] = "All translations need to be complete" if flash[:failure].nil?
+    error t('notice.term-translations-incomplete') if no_user_errors?
 
     @languages = Language.all
   end
@@ -176,7 +168,7 @@ class TermsController < ApplicationController
   end
 
   def edit
-    redirect_to terms_path and return unless idiom_exists? params[:id]
+    error_redirect_to t('notice.not-found'), terms_path and return unless idiom_exists? params[:id]
     
     @idiom = Idiom.find(params[:id])
     get_idiom_translations
@@ -185,15 +177,15 @@ class TermsController < ApplicationController
   end
 
   def select
-    return redirect_to terms_path unless idiom_exists? params[:idiom_id]
-    return redirect_to terms_path unless translation_exists? params[:translation_id]
+    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:idiom_id]
+    return error_redirect_to t('notice.not-found'), terms_path unless translation_exists? params[:translation_id]
 
     @translations = Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(['idiom_translations.idiom_id != ?', params[:idiom_id]])
   end
 
   def select_for_set
     set_id = params[:set_id]
-    redirect_to sets_path and return unless set_exists? set_id
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? set_id
 
     @translations = []
     all_translations_sorted_correctly.each do |translation|
@@ -207,9 +199,9 @@ class TermsController < ApplicationController
     begin
       native_language_id = current_user.native_language_id
 
-      redirect_to language_set_path(params[:language_id], params[:set_id]) and return unless idiom_exists? params[:id]
-      redirect_to language_path(params[:language_id]) and return unless set_exists? params[:set_id]
-      redirect_to user_index_path and return unless language_is_valid? params[:language_id]
+      error_redirect_to t('notice.not-found'), language_set_path(params[:language_id], params[:set_id]) and return unless idiom_exists? params[:id]
+      error_redirect_to t('notice.not-found'), language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+      error_redirect_to t('notice.not-found'), user_index_path and return unless language_is_valid? params[:language_id]
 
       @term = Idiom.find(params[:id])
 
@@ -249,9 +241,9 @@ class TermsController < ApplicationController
     begin
       native_language_id = current_user.native_language_id
       
-      redirect_to language_set_path(params[:language_id], params[:set_id]) and return unless idiom_exists? params[:id]
-      redirect_to language_path(params[:language_id]) and return unless set_exists? params[:set_id]
-      redirect_to user_index_path and return unless language_is_valid? params[:language_id]
+      error_redirect_to t('notice.not-found'), language_set_path(params[:language_id], params[:set_id]) and return unless idiom_exists? params[:id]
+      error_redirect_to t('notice.not-found'), language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+      error_redirect_to t('notice.not-found'), user_index_path and return unless language_is_valid? params[:language_id]
 
       @term = Idiom.find(params[:id])
 
@@ -324,37 +316,37 @@ class TermsController < ApplicationController
   def add_to_set
     set_id = params[:set_id]
     term_id = params[:id]
-    redirect_to user_index_path and return unless set_exists? set_id
-    redirect_to user_index_path and return unless idiom_exists? term_id
+    error_redirect_to t('notice.not-found'), user_index_path and return unless set_exists? set_id
+    error_redirect_to t('notice.not-found'), user_index_path and return unless idiom_exists? term_id
 
     add_term_to_set set_id, term_id
 
     expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
-    redirect_to set_path(set_id)
+    success_redirect_to t('notice.set-idiom-added'), set_path(set_id)
   end
 
   def remove_from_set
     set_id = params[:set_id]
     term_id = params[:id]
-    redirect_to user_index_path and return unless set_exists? set_id
-    redirect_to user_index_path and return unless idiom_exists? term_id
+    error_redirect_to t('notice.not-found'), user_index_path and return unless set_exists? set_id
+    error_redirect_to t('notice.not-found'), user_index_path and return unless idiom_exists? term_id
 
     SetTerms.where(:set_id => set_id, :term_id => term_id).each do |set_term|
       set_term.delete
     end
 
     expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
-    redirect_to set_path(set_id)
+    success_redirect_to t('notice.set-idiom-removed'), set_path(set_id)
   end
 
   def next_chapter
     set_id = params[:set_id]
     term_id = params[:id]
-    redirect_to sets_path and return unless set_exists? set_id
-    redirect_to set_path(set_id) and return unless idiom_exists? term_id
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? set_id
+    error_redirect_to t('notice.not-found'), set_path(set_id) and return unless idiom_exists? term_id
 
     set_term = SetTerms.where(:set_id => set_id, :term_id => term_id)
-    redirect_to set_path(set_id) and return if set_term.empty?
+    error_redirect_to t('notice.not-found'), set_path(set_id) and return if set_term.empty?
 
     existing_chapter = set_term.first.chapter
     set_term.first.chapter = set_term.first.chapter + 1
@@ -365,17 +357,17 @@ class TermsController < ApplicationController
     end
 
     expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
-    redirect_to set_path(set_id)
+    success_redirect_to t('notice.set-idiom-next-chapter'), set_path(set_id)
   end
 
   def prev_chapter
     set_id = params[:set_id]
     term_id = params[:id]
-    redirect_to sets_path and return unless set_exists? set_id
-    redirect_to set_path(set_id) and return unless idiom_exists? term_id
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? set_id
+    error_redirect_to t('notice.not-found'), set_path(set_id) and return unless idiom_exists? term_id
 
     set_term = SetTerms.where(:set_id => set_id, :term_id => term_id)
-    redirect_to set_path(set_id) and return if set_term.empty?
+    error_redirect_to t('notice.not-found'), set_path(set_id) and return if set_term.empty?
 
     set_term.first.chapter = set_term.first.chapter - 1
     set_term.first.save
@@ -385,17 +377,17 @@ class TermsController < ApplicationController
     end
 
     expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
-    redirect_to set_path(set_id)
+    success_redirect_to t('notice.set-idiom-prev-chapter'), set_path(set_id)
   end
 
   def next_position
     set_id = params[:set_id]
     term_id = params[:id]
-    redirect_to sets_path and return unless set_exists? set_id
-    redirect_to set_path(set_id) and return unless idiom_exists? term_id
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? set_id
+    error_redirect_to t('notice.not-found'), set_path(set_id) and return unless idiom_exists? term_id
 
     set_term = SetTerms.where(:set_id => set_id, :term_id => term_id)
-    redirect_to set_path(set_id) and return if set_term.empty?
+    error_redirect_to t('notice.not-found'), set_path(set_id) and return if set_term.empty?
 
 
     current_position = set_term.first.position
@@ -410,17 +402,17 @@ class TermsController < ApplicationController
     end
 
     expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
-    redirect_to set_path(set_id)
+    success_redirect_to t('notice.set-idiom-next-position'), set_path(set_id)
   end
 
   def prev_position
     set_id = params[:set_id]
     term_id = params[:id]
-    redirect_to sets_path and return unless set_exists? set_id
-    redirect_to set_path(set_id) and return unless idiom_exists? term_id
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? set_id
+    error_redirect_to t('notice.not-found'), set_path(set_id) and return unless idiom_exists? term_id
 
     set_term = SetTerms.where(:set_id => set_id, :term_id => term_id)
-    redirect_to set_path(set_id) and return if set_term.empty?
+    error_redirect_to t('notice.not-found'), set_path(set_id) and return if set_term.empty?
 
 
     current_position = set_term.first.position
@@ -435,15 +427,15 @@ class TermsController < ApplicationController
     end
 
     expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
-    redirect_to set_path(set_id)
+    success_redirect_to t('notice.set-idiom-prev-position'), set_path(set_id)
   end
 
   def record_review
-    error_redirect_to "idiom #{params[:id]} not found", review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return unless idiom_exists? params[:id]
-    error_redirect_to "set #{params[:set_id]} not found", language_path(params[:language_id]) and return unless set_exists? params[:set_id]
-    error_redirect_to "language #{params[:language_id]} not found", user_index_path and return unless language_is_valid? params[:language_id]
-    error_redirect_to "user is not learning #{params[:language_id]}", language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
-    error_redirect_to "idiom #{params[:reviw_mode]} not set", review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
+    error_redirect_to t('notice.not-found'), review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return unless idiom_exists? params[:id]
+    error_redirect_to t('notice.not-found'), language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+    error_redirect_to t('notice.not-found'), user_index_path and return unless language_is_valid? params[:language_id]
+    error_redirect_to t('notice.user-not-learning-language'), language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
+    error_redirect_to t('notice.review-mode-not-set'), review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
 
 
     related_translation_link = {:audible => true} if params[:review_mode]["listening"]
@@ -459,7 +451,7 @@ class TermsController < ApplicationController
     sync_due_times = []    
     get_idioms_from_translations(learned_translations).each do |idiom|
       schedule = UserIdiomSchedule.where(:user_id => current_user.id, :idiom_id => idiom.id, :language_id => params[:language_id])
-      redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
+      error_redirect_to t('notice.not-found'), review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
       schedule = schedule.first
 
 
@@ -531,9 +523,9 @@ class TermsController < ApplicationController
   end
 
   def record_first_review
-    redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return unless idiom_exists? params[:id]
-    redirect_to language_path(params[:language_id]) and return unless set_exists? params[:set_id]
-    redirect_to user_index_path and return unless language_is_valid? params[:language_id]
+    error_redirect_to t('notice.not-found'), review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return unless idiom_exists? params[:id]
+    error_redirect_to t('notice.not-found'), language_path(params[:language_id]) and return unless set_exists? params[:set_id]
+    error_redirect_to t('notice.not-found'), user_index_path and return unless language_is_valid? params[:language_id]
     redirect_to language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
     redirect_to review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
 
@@ -546,7 +538,7 @@ class TermsController < ApplicationController
 
     get_idioms_from_translations(learned_translations).each do |idiom|
       schedule = UserIdiomSchedule.where(:user_id => current_user.id, :idiom_id => idiom.id, :language_id => params[:language_id])
-      redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
+      error_redirect_to t('notice.not-found'), review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if schedule.empty?
       schedule = schedule.first
 
       # as we are seeing a new term; we need to sync related terms to this one. This means that all we be seen again in real soon

@@ -20,12 +20,10 @@ module IdiomHelper
       @translations = Translation.joins(:languages, :idiom_translations).order(:name).order(:form).where(:idiom_translations => {:idiom_id => params[:id]})
 
       if @translations.empty?
-        flash[:failure] = "The term you were looking has no translations"
-        redirect_to terms_path
+        error_redirect_to t('notice.term-no-translations'), terms_path
       end
     else
-      flash[:failure] = "The term you were looking for no longer exists"
-      redirect_to terms_path
+      error_redirect_to t('notice.not-found'), terms_path
     end
   end
 end

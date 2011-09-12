@@ -8,35 +8,38 @@ class TranslationsController < ApplicationController
     idiom_translations = IdiomTranslation.where(:idiom_id => params[:term_id])
 
     if idiom_translations.count <= 2
-      flash[:failure] = "Can't delete a translation from a term that has only two translations"
+      error_redirect_to t('notice.translation-delete-not-allowed'), :back
     else
       IdiomTranslation.where(:idiom_id => params[:term_id], :translation_id => params[:id]).each do |it|
         it.delete
       end
 
+      RelatedTranslations::delete_relationships_for_transation Translation.find(params[:id])
+
       Translation.where(:id => params[:id]).each do |t|
         t.delete
       end
-    end
 
-    redirect_to :back
+      success_redirect_to t('notice.translation-delete'), :back
+    end
   end
 
   def attach
-    return redirect_to terms_path unless idiom_exists? params[:term_id]
-    return redirect_to terms_path unless translation_exists? params[:id]
+    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:term_id]
+    return error_redirect_to t('notice.not-found'), terms_path unless translation_exists? params[:id]
 
     if IdiomTranslation.where(:idiom_id => params[:term_id], :translation_id => params[:id]).empty?
       IdiomTranslation.create(:idiom_id => params[:term_id], :translation_id => params[:id])
     end
+    RelatedTranslations::rebuild_relationships_for_translation Translation.find(params[:id])
 
-    redirect_to term_path(params[:term_id])
+    success_redirect_to t('notice.translation-attached'), term_path(params[:term_id])
   end
   
   def attach_and_detach
-    return redirect_to terms_path unless idiom_exists? params[:term_id]
-    return redirect_to terms_path unless idiom_exists? params[:remove_from_idiom_id]
-    return redirect_to terms_path unless translation_exists? params[:id]
+    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:term_id]
+    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:remove_from_idiom_id]
+    return error_redirect_to t('notice.not-found'), terms_path unless translation_exists? params[:id]
 
     IdiomTranslation.where(:idiom_id => params[:remove_from_idiom_id], :translation_id => params[:id]).each do |link|
       link.delete
@@ -45,11 +48,13 @@ class TranslationsController < ApplicationController
       IdiomTranslation.create(:idiom_id => params[:term_id], :translation_id => params[:id])
     end
 
-    redirect_to term_path(params[:term_id])
+    RelatedTranslations::rebuild_relationships_for_translation Translation.find(params[:id])
+
+    success_redirect_to t('notice.translation-moved'), term_path(params[:term_id])
   end
 
   def select
-    return redirect_to terms_path unless idiom_exists? params[:term_id]
+    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:term_id]
     
     @translations = Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(['idiom_translations.idiom_id != ?', params[:term_id]])
   end

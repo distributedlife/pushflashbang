@@ -106,4 +106,9 @@ describe UsersController do
       @user.in_edit_mode?.should be false
     end
   end
+
+  context 'flash_messages' do
+    it 'should delete session messages when read'
+    it 'should return session messages when set'
+  end
 end
