@@ -6,6 +6,8 @@ include RedirectHelper
 class SetsController < ApplicationController
   before_filter :authenticate_user!
 
+  caches_page :index, :show
+
   def new
     @set_name = SetName.new
   end
@@ -21,6 +23,8 @@ class SetsController < ApplicationController
     set = Sets.create
     @set_name.sets_id = set.id
     @set_name.save
+    
+    expire_page(:controller => 'sets', :action => 'index')
 
     redirect_to set_path(set.id)
   end
@@ -93,6 +97,9 @@ class SetsController < ApplicationController
         set_name.save
       end
 
+      expire_page(:controller => 'sets', :action => 'index')
+      expire_page(:controller => 'sets', :action => 'show' ,:id => params[:id])
+
       redirect_to set_path(params[:id]) and return
     end
   end
@@ -115,6 +122,9 @@ class SetsController < ApplicationController
     set_name = SetName.find params[:set_name_id]
     set_name.delete
 
+    expire_page(:controller => 'sets', :action => 'index')
+    expire_page(:controller => 'sets', :action => 'show' ,:id => params[:id])
+
     redirect_to :back
   end
 
@@ -123,6 +133,8 @@ class SetsController < ApplicationController
 
     set = Sets.find(params[:id])
     set.delete
+
+    expire_page(:controller => 'sets', :action => 'index')
 
     redirect_to :back
   end

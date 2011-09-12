@@ -33,13 +33,13 @@ Feature: review term results
     And I should see a "speaking" checkbox and it is not checked
     And I should see a "typing" checkbox and it is not checked
 
-  Scenario: user review check box exists for each listening and writing
-    Given I review the "greetings" set in "Spanish" using the "listening and writing" review mode
-    When I reveal the answer after 3 seconds
-    And I should see the "Record Results" button
-    And I should see the "Too Easy! Show me this less often" button
-    And I should see a "listening" checkbox and it is not checked
-    And I should see a "writing" checkbox and it is not checked
+#  Scenario: user review check box exists for each listening and writing
+#    Given I review the "greetings" set in "Spanish" using the "listening and writing" review mode
+#    When I reveal the answer after 3 seconds
+#    And I should see the "Record Results" button
+#    And I should see the "Too Easy! Show me this less often" button
+#    And I should see a "listening" checkbox and it is not checked
+#    And I should see a "writing" checkbox and it is not checked
 
   Scenario: all options excepting typing are ticked for review under 2 seconds
     Given I review the "greetings" set in "Spanish" using the "reading, speaking and typing" review mode
@@ -62,22 +62,24 @@ Feature: review term results
     And I the term containing "un poco de" for language "Spanish" should have an unsuccessful "speaking" review
     And I the term containing "un poco de" for language "Spanish" should have a successful "typing" review
 
-  Scenario: submitted options are recorded
-    Given I review the "greetings" set in "Spanish" using the "listening and writing" review mode
-    When I reveal the answer
-    When I submit the following results
-      | review type | result |
-      | listening | checked |
-      | writing | not checked |
-    Then I the term containing "un poco de" for language "Spanish" should have a successful "listening" review
-    And I the term containing "un poco de" for language "Spanish" should have an unsuccessful "writing" review
+#  Scenario: submitted options are recorded
+#    Given I review the "greetings" set in "Spanish" using the "listening and writing" review mode
+#    When I reveal the answer
+#    When I submit the following results
+#      | review type | result |
+#      | listening | checked |
+#      | writing | not checked |
+#    Then I the term containing "un poco de" for language "Spanish" should have a successful "listening" review
+#    And I the term containing "un poco de" for language "Spanish" should have an unsuccessful "writing" review
 
   Scenario: submitted options are recorded
-    Given I review the "greetings" set in "Spanish" using the "reading and speaking" review mode
+    Given I review the "greetings" set in "Spanish" using the "translating, speaking and writing" review mode
     When I reveal the answer
     When I submit the following results as perfect
       | review type | result |
-      | reading | not checked |
+      | translating | not checked |
       | speaking | not checked |
-    Then I the term containing "un poco de" for language "Spanish" should have a successful "reading" review
-    And I the term containing "un poco de" for language "Spanish" should have a successful "speaking" review
+      | writing | not checked |
+    Then I the term containing "un poco de" for language "Spanish" should have a successful "translating" review
+    Then I the term containing "un poco de" for language "Spanish" should have a successful "speaking" review
+    And I the term containing "un poco de" for language "Spanish" should have a successful "writing" review

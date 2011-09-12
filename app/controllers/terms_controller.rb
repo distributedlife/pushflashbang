@@ -7,6 +7,8 @@ include RedirectHelper
 class TermsController < ApplicationController
   before_filter :authenticate_user!
 
+  caches_page :index, :show, :first_review, :review
+
   def index
     @translations = all_translations_sorted_correctly
   end
@@ -22,8 +24,6 @@ class TermsController < ApplicationController
   end
 
   def create
-#    @set_id = params[:set_id] if params[:set_id]
-
     translation_params = params[:translation]
     @translations = []
 
@@ -70,8 +70,15 @@ class TermsController < ApplicationController
       unless params["translations"]["set_id"].empty?
         add_term_to_set params["translations"]["set_id"], idiom.id
         
+        expire_page(:controller => 'terms', :action => 'index')
+        expire_page(:controller => 'sets', :action => 'show' ,:id =>  params["translations"]["set_id"])
+        @translations.each do |translation|
+          expire_page(:controller => 'languages', :action => 'show', :id => translation.language_id)
+        end
+
         redirect_to new_set_set_term_path(params["translations"]["set_id"]) and return
       else
+        expire_page(:controller => 'terms', :action => 'index')
         redirect_to new_term_path and return
       end
     end
@@ -134,7 +141,16 @@ class TermsController < ApplicationController
 
 
       link = self.class.helpers.link_to('Click here to view.', edit_term_path(idiom.id))
-      flash[:success] = "Related terms created. #{link}"
+      flash[:success] = "Related terms update. #{link}"
+
+      expire_page(:controller => 'terms', :action => 'index')
+      SetTerms.where(:term_id => idiom.id).each do |set_term|
+        expire_page(:controller => 'sets', :action => 'show' ,:id => set_term.set_id)
+      end
+      @translations.each do |translation|
+        expire_page(:controller => 'languages', :action => 'show', :id => translation.language_id)
+      end
+
       redirect_to term_path(idiom.id) and return
     end
 
@@ -313,6 +329,7 @@ class TermsController < ApplicationController
 
     add_term_to_set set_id, term_id
 
+    expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
     redirect_to set_path(set_id)
   end
 
@@ -326,6 +343,7 @@ class TermsController < ApplicationController
       set_term.delete
     end
 
+    expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
     redirect_to set_path(set_id)
   end
 
@@ -346,6 +364,7 @@ class TermsController < ApplicationController
       SetTerms::decrement_chapters_for_set_after_chapter set_id, existing_chapter
     end
 
+    expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
     redirect_to set_path(set_id)
   end
 
@@ -365,6 +384,7 @@ class TermsController < ApplicationController
       SetTerms::increment_chapters_for_set set_id
     end
 
+    expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
     redirect_to set_path(set_id)
   end
 
@@ -389,6 +409,7 @@ class TermsController < ApplicationController
       next_term.first.save
     end
 
+    expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
     redirect_to set_path(set_id)
   end
 
@@ -413,6 +434,7 @@ class TermsController < ApplicationController
       prev_term.first.save
     end
 
+    expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
     redirect_to set_path(set_id)
   end
 
