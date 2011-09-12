@@ -1,0 +1,2 @@
+$j("#user_goals").html("#{escape_javascript(render :partial => '/sets/user_goals', :locals => {:goals => @user_goals, :set_id => params[:id], :language_id => @language_id})}")
+$j("#user_review_options").html("#{escape_javascript(render :partial => '/sets/user_review_options', :locals => {:goals => @user_goals})}")

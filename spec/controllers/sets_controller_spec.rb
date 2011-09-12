@@ -83,8 +83,6 @@ describe SetsController do
 
       assigns[:set_names][0].should == sn1
       assigns[:set_names][1].should == sn2
-
-      assigns[:user_goal].empty?.should be true
     end
 
     it 'should redirect to sets_path when there is an error' do
@@ -134,18 +132,20 @@ describe SetsController do
       assigns[:idiom_translations][1].translation.language_id.should == spanish.id
       assigns[:idiom_translations][1].translation.form.should == "Cabron"
     end
+  end
 
+  context '"GET" user_goals' do
     it 'should return if the user has the set as a goal and is learning the set language' do
+      l = Language::get_or_create("Spanish")
       set = Sets.make
       sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
-      UserSets.make(:set_id => set.id, :user_id => @user.id)
-      UserLanguages.make(:user_id => @user.id, :language_id => Language::get_or_create("Spanish"))
+      UserSets.make(:set_id => set.id, :user_id => @user.id, :language_id => l.id)
+      UserLanguages.make(:user_id => @user.id, :language_id => l.id)
 
-      get :show, :id => set.id
+      xhr :get, :user_goals, :id => set.id
 
-      assigns[:set_names][0].should == sn1
-      assigns[:user_goal].first.set_id.should == set.id
-      assigns[:user_goal].first.user_id.should == @user.id
+      assigns[:user_goals].first.set_id.should == set.id
+      assigns[:user_goals].first.user_id.should == @user.id
     end
 
     it 'should not return if the user has the set as a goal if the user is not learning the set language' do
@@ -153,10 +153,9 @@ describe SetsController do
       sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
       UserSets.make(:set_id => set.id, :user_id => @user.id)
 
-      get :show, :id => set.id
+      xhr :get, :user_goals, :id => set.id
 
-      assigns[:set_names][0].should == sn1
-      assigns[:user_goal].count.should == 0
+      assigns[:user_goals].count.should == 0
     end
   end
 

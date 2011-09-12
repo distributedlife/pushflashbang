@@ -6,8 +6,7 @@ include RedirectHelper
 class SetsController < ApplicationController
   before_filter :authenticate_user!
 
-  caches_page :index
-#  caches_page :show
+  caches_page :index, :show
 
   def new
     @set_name = SetName.new
@@ -34,6 +33,13 @@ class SetsController < ApplicationController
         end
       end
     end
+  end
+
+  def user_goals
+    @language_id = nil
+    @language_id = params[:language_id] unless params[:language_id].nil?
+
+    @user_goals = UserSets::get_for_user_and_set_where_learning_language current_user.id, params[:id]
   end
 
   def create
@@ -68,8 +74,6 @@ class SetsController < ApplicationController
         @idiom_translations << idiom_translation
       end
     end
-
-    @user_goal = UserSets::get_for_user_and_set_where_learning_language current_user.id, @set.id
   end
 
   def index

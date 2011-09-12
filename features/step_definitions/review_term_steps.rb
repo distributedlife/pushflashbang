@@ -376,6 +376,8 @@ Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an uns
 end
 
 Then /^I should be on chapter (\d+)$/ do |chapter|
+  sleep 0.25
+  
   user_set = UserSets.where(:user_id => get(:user).id, :set_id => get(:set).id).first
   user_set.chapter.should == chapter.to_i
 end

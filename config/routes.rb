@@ -68,6 +68,7 @@ PushFlashBang::Application.routes.draw do
         get 'completed'
         put 'set_goal'
         put 'unset_goal'
+        get 'user_goals'
       end
 
       resources :terms do
@@ -85,6 +86,7 @@ PushFlashBang::Application.routes.draw do
     member do
       post 'add_set_name'
       delete 'delete_set_name'
+      get 'user_goals'
     end
     
     resources :languages, :as => "set_language" do

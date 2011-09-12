@@ -22,11 +22,13 @@ Feature: waiting pages
     And the group containing "two" is in the set "greetings" in chapter "2"
     And the user has the "greetings" set as a goal for the "Spanish" language
 
+  @javascript
   Scenario: end of chapter
     Given all terms in the "greetings" set chapter 1 for "Spanish" are scheduled but not due
     When I review the "greetings" set in "Spanish" using the "reading" review mode
     Then I should be on the "next set chapter" page
 
+  @javascript
   Scenario: end of chapter, advance to next
     Given all terms in the "greetings" set chapter 1 for "Spanish" are scheduled but not due
     When I choose to advance to the next chapter

@@ -1,0 +1,6 @@
+- unless goals.empty?
+  %section{:class => ["panel left"], :style => "width: 70%"}
+    - goals.each do |goal|
+      %h2= goal.language.name
+      = render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => params[:id]}
+      .pad_from_top

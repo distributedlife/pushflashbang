@@ -1,14 +1,7 @@
 =render :partial => '/header', :locals => {:title => t('titles.set-show.title'), :subtitle => t('titles.set-show.subtitle')}
 %section{:class => ["panel right"], :style => "width: 15%"}
-  - if @user_goal.empty?
-    - if (params[:language_id])
-      %span.menu= link_to t('actions.set-goal'), set_goal_language_set_path(params[:language_id], params[:id]), :class => 'neutral', :id => "set_goal", :method => :put
-    - else
-      %span.menu= link_to t('actions.set-goal'), select_set_set_language_index_path(params[:id]), :class => 'neutral', :id => "set_goal"
-  - else
-    - @user_goal.each do |goal|
-      = goal.language.name
-      %span.menu= link_to t('actions.unset-goal'), unset_goal_language_set_path(goal.language_id, goal.set_id), :class => 'neutral', :id => "unset_goal", :method => :put
+  #user_goals
+    %p= t('text.loading')
   .pad_from_top
   %span.menu= edit_link_to t('actions.link-term'), select_for_set_set_set_terms_path(params[:id]), :class => 'neutral', :id => "add_term"
   .pad_from_top
@@ -17,10 +10,17 @@
   %span.menu= edit_link_to t('actions.edit-set'), edit_set_path(params[:id]), :class => 'neutral'
 
 =render :partial => '/sets/set_names', :locals => {:set => @set}
-- unless @user_goal.empty?
-  %section{:class => ["panel left"], :style => "width: 70%"}
-    - @user_goal.each do |goal|
-      %h2= goal.language.name
-      = render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => params[:id]}
-      .pad_from_top
+#user_review_options
 =render :partial => '/sets/set_terms', :locals => {:set => @set}
+
+:javascript
+  $j(document).ready(function() {
+    if (#{params[:language_id].nil?})
+    {
+      $j.ajax({ url: "/sets/#{params[:id]}/user_goals" });
+    }
+    else
+    {
+      $j.ajax({ url: "/languages/#{params[:language_id]}/sets/#{params[:id]}/user_goals" });
+    }
+  });

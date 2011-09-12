@@ -1,0 +1,9 @@
+- if goals.empty?
+  - if language_id
+    %span.menu= link_to t('actions.set-goal'), set_goal_language_set_path(language_id, set_id), :class => 'neutral', :id => "set_goal", :method => :put
+  - else
+    %span.menu= link_to t('actions.set-goal'), select_set_set_language_index_path(set_id), :class => 'neutral', :id => "set_goal"
+- else
+  - goals.each do |goal|
+    = goal.language.name
+    %span.menu= link_to t('actions.unset-goal'), unset_goal_language_set_path(goal.language_id, goal.set_id), :class => 'neutral', :id => "unset_goal", :method => :put
