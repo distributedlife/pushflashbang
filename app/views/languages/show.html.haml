@@ -1,27 +1,16 @@
 =render :partial => '/header', :locals => {:title => @language.name, :subtitle => ""}
-#user_sets
-  %p.minor_title= "#{t('text.header-user-sets')}:"
-  - if @user_sets.empty?
-    #set{:class => 'panel'}
-      %p= t('text.user-has-no-sets')
-  - @user_sets.each do |set|
-    #set{:id => set.id, :class => 'panel'}
-      - set.set_name.each do |set_name|
-        %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, language_set_path(@language.id, set.id)
-        %span{:id => "set_#{set.id}_description"}= set_name.description
-#available_sets
-  %p.minor_title= "#{t('text.header-available-sets')}:"
-  - if @sets.empty?
-    #set{:class => 'panel'}
-      %p= t('text.language-has-no-sets')
-  - @sets.each do |set|
-    #set{:id => set.id, :class => 'panel'}
-      - set.set_name.each do |set_name|
-        %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, language_set_path(@language.id, set.id)
-        %span{:id => "set_#{set.id}_description"}= set_name.description
-        .pad_from_top
-        %span.subscript{:style => "float: right;"}
-          [
-          %span.menu= link_to t('actions.set-goal'), set_goal_language_set_path(@language.id, set.id), :class => 'neutral', :id => "set_#{set.id}_goal", :method => :put
-          ]
-        .pad_from_top
+#sets
+  %p.minor_title
+    = "#{t('text.header-user-sets')}:"
+    #user_sets
+      .panel
+        %p= t('text.loading')
+  %p.minor_title
+    = "#{t('text.header-available-sets')}:"
+    #available_sets
+      .panel
+        %p= t('text.loading')
+:javascript
+  $j(document).ready(function() {
+    $j.ajax({ url: "/languages/#{params[:id]}/sets/user_sets" });
+  });

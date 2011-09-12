@@ -1,0 +1,14 @@
+- if sets.empty?
+  #set{:class => 'panel'}
+    %p= t('text.language-has-no-sets')
+- sets.each do |set|
+  #set{:id => set.id, :class => 'panel'}
+    - set.set_name.each do |set_name|
+      %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, language_set_path(language.id, set.id)
+      %span{:id => "set_#{set.id}_description"}= set_name.description
+      .pad_from_top
+      %span.subscript{:style => "float: right;"}
+        [
+        %span.menu= link_to t('actions.set-goal'), set_goal_language_set_path(language.id, set.id), :class => 'neutral', :id => "set_#{set.id}_goal", :method => :put
+        ]
+      .pad_from_top

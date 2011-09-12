@@ -13,6 +13,29 @@ class SetsController < ApplicationController
     @set_name = SetName.new
   end
 
+  def user_sets
+    @language = Language.find(params[:language_id])
+    @user_sets = []
+    @sets = []
+    set_ids = []
+
+    IdiomTranslation.joins(:translation).where(:translations => {:language_id => @language.id}).each do |idiom_translation|
+      SetTerms.where(:term_id => idiom_translation.idiom_id).each do |set_terms|
+        if set_ids[set_terms.set_id].nil?
+          set_ids[set_terms.set_id] = set_terms.set_id
+
+          Sets.where(:id => set_terms.set_id).each do |set|
+            if UserSets.where(:set_id => set.id, :user_id => current_user.id, :language_id => @language.id).empty?
+              @sets << set
+            else
+              @user_sets << set
+            end
+          end
+        end
+      end
+    end
+  end
+
   def create
     @set_name = SetName.new(params[:set_name])
     @set_name.sets_id = 1
@@ -30,7 +53,7 @@ class SetsController < ApplicationController
     success_redirect_to t('notice.set-create'), set_path(set.id)
   end
 
-  def show
+  def show 
     error_redirect_to t('notice.not-found'), sets_path and return if !set_exists? params[:id]
 
     @set = Sets.find(params[:id])

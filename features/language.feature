@@ -1,3 +1,4 @@
+@javascript
 Feature: language features
   In order to easily see the languages I am learning
   As a language learner
@@ -8,7 +9,6 @@ Feature: language features
     When I go to the "user home" page
     Then I should see "You have not selected to learn any languages."
 
-  @javascript
   Scenario Outline: a user can select a language choice from the list
     Given I know the following languages: "<current languages>"
     And the following languages are available: "<available languages>"
@@ -21,14 +21,12 @@ Feature: language features
       | English           | Spanish              | Spanish              | English, Spanish                       |
       | English, Spanish  | Chinese (Simplified) | Chinese (Simplified) | English, Spanish, Chinese (Simplified) |
 
-  @javascript
   Scenario: a user can remove a language choice from the list
     Given I know the following languages: "English, Spanish"
     When I go to the "user languages" page
     And I select "Spanish" to stop learning
     Then my set of languages is: "English"
 
-  @javascript
   Scenario: a user can see their language choices on their home page
     Given I know the following languages: "English, Spanish"
     When I go to the "user home" page

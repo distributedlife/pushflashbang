@@ -57,6 +57,10 @@ PushFlashBang::Application.routes.draw do
     end
 
     resources :sets do
+      collection do
+        get 'user_sets'
+      end
+
       member do
         get 'review'
         get 'next_chapter'

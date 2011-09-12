@@ -3,8 +3,7 @@ include LanguagesHelper
 class LanguagesController < ApplicationController
   before_filter :authenticate_user!
 
-  caches_page :index
-#  caches_page :show
+  caches_page :index, :show
 
   def index
     @languages = Language.order(:name).all
@@ -51,25 +50,6 @@ class LanguagesController < ApplicationController
     redirect_to user_index_path and return unless language_is_valid? params[:id]
 
     @language = Language.find(params[:id])
-    @user_sets = []
-    @sets = []
-    set_ids = []
-
-    IdiomTranslation.joins(:translation).where(:translations => {:language_id => @language.id}).each do |idiom_translation|
-      SetTerms.where(:term_id => idiom_translation.idiom_id).each do |set_terms|
-        if set_ids[set_terms.set_id].nil?
-          set_ids[set_terms.set_id] = set_terms.set_id
-          
-          Sets.where(:id => set_terms.set_id).each do |set|
-            if UserSets.where(:set_id => set.id, :user_id => current_user.id).empty?
-              @sets << set
-            else
-              @user_sets << set
-            end
-          end
-        end
-      end
-    end
   end
 
   def select

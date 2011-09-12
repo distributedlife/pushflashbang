@@ -1,3 +1,4 @@
+@javascript
 Feature: Set goals
   In order to focus on certain sets
   As a language learner
@@ -46,5 +47,3 @@ Feature: Set goals
     And the following sets are listed as potential goals on the "Spanish" language page:
       | name |
       | greetings |
-
-#  Scenario: user can see goal progress

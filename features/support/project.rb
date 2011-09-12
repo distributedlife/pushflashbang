@@ -19,5 +19,5 @@ World(SetComponent)
 World(UserIdiomScheduleComponent)
 
 
-Akephalos.filter(:get, "http://www.google-analytics.com")
-Akephalos.filter(:get, "https://ssl.google-analytics.com")
+FakeWeb.register_uri(:get, "http://www.google-analytics.com", :body => "", :status => ["404", "Not Found"])
+FakeWeb.register_uri(:get, "https://ssl.google-analytics.com", :body => "", :status => ["404", "Not Found"])
