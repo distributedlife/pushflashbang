@@ -3,7 +3,7 @@ include LanguagesHelper
 class LanguagesController < ApplicationController
   before_filter :authenticate_user!
 
-  caches_page :index, :show
+#  caches_page :index, :show
 
   def index
     @languages = Language.order(:name).all

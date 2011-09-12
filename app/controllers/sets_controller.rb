@@ -6,7 +6,8 @@ include RedirectHelper
 class SetsController < ApplicationController
   before_filter :authenticate_user!
 
-  caches_page :index, :show
+  caches_page :index
+#  caches_page :show
 
   def new
     @set_name = SetName.new
