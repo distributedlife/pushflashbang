@@ -19,3 +19,8 @@ namespace :staging do
     sh "heroku pgbackups:restore DATABASE `heroku pgbackups:url --app pushflashbang` --app pushflashbang-preprod"
   end
 end
+
+desc "Package assets for production"
+task :assets do
+  sh "bundle exec jammit --base-url http://pushflashbang.com"
+end
