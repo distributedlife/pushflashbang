@@ -1,13 +1,28 @@
-%p.minor_title= t('text.header-set-terms')
-#translations
-  - current_chapter = 0
-  - @set.set_terms.order(:chapter).order(:position).each do |set_term|
-    - if current_chapter != set_term.chapter
-      - current_chapter = set_term.chapter
-      - unless current_chapter == 1
-        .pad_from_top
-      %p{:style => "clear:left;"}= "#{t('text.chapter-prefix')} #{current_chapter}"
-    - set_term.idioms.each do |idiom|
-      =render :partial => '/sets/set_idioms', :locals => {:set => @set, :idiom => idiom}
-  - if @set.set_terms.empty?
-    %p= t('text.set-has-no-translations')
+#chapter{:id => params[:chapter]}
+  %p{:style => "clear:left;"}
+    = "#{t('text.chapter-prefix')} #{params[:chapter]}"
+    = link_to "[#{t('actions.hide')}]", "#", :class => "subscript", :remote => true, :id => "show_chapter_#{params[:chapter]}"
+    :javascript
+      $j('#show_chapter_#{params[:chapter]}').click(function(event)
+      {
+        if ($j('#show_chapter_#{params[:chapter]}').text() == "[hide]")
+        {
+          $j('#chapter_content_#{params[:chapter]}').hide();
+          $j('#show_chapter_#{params[:chapter]}').text('[show]');
+        }
+        else
+        {
+          $j('#chapter_content_#{params[:chapter]}').show();
+          $j('#show_chapter_#{params[:chapter]}').text('[hide]');
+        }
+
+        event.stopPropagation();
+      });
+    #chapter_content{:id => params[:chapter]}
+      - set = Sets.find params[:id]
+      - set_terms = SetTerms.order(:position).where(:chapter => params[:chapter], :set_id => params[:id])
+      - if set_terms.empty?
+        %p= t('text.set-has-no-translations')
+      - set_terms.each do |set_term|
+        - set_term.idioms.each do |idiom|
+          =render :partial => '/sets/set_idioms', :locals => {:set => set, :idiom => idiom}

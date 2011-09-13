@@ -88,6 +88,7 @@ PushFlashBang::Application.routes.draw do
       post 'add_set_name'
       delete 'delete_set_name'
       get 'user_goals'
+      get 'show_chapter'
     end
     
     resources :languages, :as => "set_language" do

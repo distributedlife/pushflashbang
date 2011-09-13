@@ -1,3 +1,4 @@
+@javascript
 Feature: Sets and Goals
   In order to set goals on what I want to learn
   As a language learner
@@ -73,11 +74,7 @@ Feature: Sets and Goals
       | a little bit | English              |               |
       | 一点儿          | Chinese (Simplified) | yì diǎnr      |
     When I add the group containing "a little bit" to the set "greetings"
-    Then the following will be visible on the show set page
-      | form         | language             | pronunciation |
-      | un poco de   | Spanish              |               |
-      | a little bit | English              |               |
-      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
+    Then the term containing "un poco de" will be in the "greetings" set
 
   Scenario: add a term to a set (from set)
     Given the following sets:
@@ -90,11 +87,7 @@ Feature: Sets and Goals
       | 一点儿          | Chinese (Simplified) | yì diǎnr      |
     And I am on viewing the set "greetings"
     When I add the group containing "a little bit" to the current set
-    Then the following will be visible on the show set page
-      | form         | language             | pronunciation |
-      | un poco de   | Spanish              |               |
-      | a little bit | English              |               |
-      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
+    Then the term containing "un poco de" will be in the "greetings" set
 
   Scenario: remove a term from a set
     Given the following sets:
@@ -109,15 +102,8 @@ Feature: Sets and Goals
       | Hello | Gibberish              |               |
       | 你好    | Chinese (Simplified) | nǐ hǎo        |
     When I remove the group containing "a little bit" to the set "greetings"
-    Then the following will be visible on the show set page
-      | form  | language             | pronunciation |
-      | Hello | Gibberish              |               |
-      | 你好    | Chinese (Simplified) | nǐ hǎo        |
-    Then the following will be not visible on the show set page
-      | form  | language             | pronunciation |
-      | a little bit | English              |               |
-      | un poco de   | Spanish              |               |
-
+    Then the term containing "Hello" will be in the "greetings" set
+    And the term containing "un poco de" will not be in the "greetings" set
 
 
    Scenario: move a term to next chapter in set

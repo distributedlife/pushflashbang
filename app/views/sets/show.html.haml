@@ -11,16 +11,18 @@
 
 =render :partial => '/sets/set_names', :locals => {:set => @set}
 #user_review_options
-=render :partial => '/sets/set_terms', :locals => {:set => @set}
+  :javascript
+    $j(document).ready(function() {
+      if (#{params[:language_id].nil?})
+      {
+        $j.ajax({ url: "/sets/#{params[:id]}/user_goals" });
+      }
+      else
+      {
+        $j.ajax({ url: "/languages/#{params[:language_id]}/sets/#{params[:id]}/user_goals" });
+      }
+    });
 
-:javascript
-  $j(document).ready(function() {
-    if (#{params[:language_id].nil?})
-    {
-      $j.ajax({ url: "/sets/#{params[:id]}/user_goals" });
-    }
-    else
-    {
-      $j.ajax({ url: "/languages/#{params[:language_id]}/sets/#{params[:id]}/user_goals" });
-    }
-  });
+#summary{:class => ["left"], :style => "width: 100%"}
+  #chapters{:class => ["left"], :style => "width: 100%"}
+    =render :partial => '/sets/set_chapters', :locals => {:chapters => @chapters}

@@ -1,0 +1,9 @@
+- if chapters.length == 0
+  .panel
+    %p= t('text.set-has-no-translations')
+- chapters.each do |chapter|
+  #chapter{:id => chapter.chapter}
+    %p{:style => "clear:left;"}
+      = "#{t('text.chapter-prefix')} #{chapter.chapter}"
+      = link_to "[#{t('actions.show')}]", show_chapter_set_path(:id => params[:id], :chapter => chapter.chapter), :class => "subscript", :remote => true, :id => "toggle_chapter_#{chapter.chapter}"
+      #chapter_content{:id => chapter.chapter}

@@ -91,49 +91,12 @@ describe SetsController do
       response.should be_redirect
       response.should redirect_to sets_path
     end
-
-    it 'should return all terms and translations in the set' do
-      english = Language.create(:name => "English")
-      spanish = Language.create(:name => "Spanish")
-      chinese = Language.create(:name => "Chinese")
-      set = Sets.make
-      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-
-      idiom1 = Idiom.make
-      idiom2 = Idiom.make
-
-      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
-      term2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
-      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
-      term4 = Translation.make(:language_id => english.id, :form => "Hobo")
-      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
-      term6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
-
-      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
-      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
-      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term3.id)
-      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term4.id)
-      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term5.id)
-      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term6.id)
-
-      SetTerms.make(:set_id => set.id, :term_id => idiom1.id)
-
-      get :show, :id => set.id
-
-      assigns[:idiom_translations][2].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][2].translation.language_id.should == chinese.id
-      assigns[:idiom_translations][2].translation.form.should == "ce"
-
-      assigns[:idiom_translations][0].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][0].translation.language_id.should == english.id
-      assigns[:idiom_translations][0].translation.form.should == "Zebra"
-
-      assigns[:idiom_translations][1].idiom_id.should == idiom1.id
-      assigns[:idiom_translations][1].translation.language_id.should == spanish.id
-      assigns[:idiom_translations][1].translation.form.should == "Cabron"
-    end
   end
 
+  context '"GET" show_chapter' do
+    it 'shoudl be tested'
+  end
+  
   context '"GET" user_goals' do
     it 'should return if the user has the set as a goal and is learning the set language' do
       l = Language::get_or_create("Spanish")

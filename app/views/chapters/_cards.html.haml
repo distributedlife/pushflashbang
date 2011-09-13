@@ -1,18 +1,18 @@
 %p.minor_title
   = "#{t('text.chapter-prefix')} #{chapter}"
-  = link_to "[#{t('actions.hide')}]", '#', :remote => true, :class=>"subscript", :id => "show_chapter_#{chapter}"
+  = link_to "[#{t('actions.hide')}]", '#', :remote => true, :class=>"subscript", :id => "toggle_chapter_#{chapter}"
   :javascript
-    $j('#show_chapter_#{chapter}').click(function(event)
+    $j('#toggle_chapter_#{chapter}').click(function(event)
     {
-      if ($j('#show_chapter_#{chapter}').text() == "[hide]")
+      if ($j('#toggle_chapter_#{chapter}').text() == "[hide]")
       {
         $j('#cards_for_chapter_#{chapter}').hide();
-        $j('#show_chapter_#{chapter}').text('[show]');
+        $j('#toggle_chapter_#{chapter}').text('[show]');
       }
       else
       {
         $j('#cards_for_chapter_#{chapter}').show();
-        $j('#show_chapter_#{chapter}').text('[hide]');
+        $j('#toggle_chapter_#{chapter}').text('[hide]');
       }
 
       event.stopPropagation();

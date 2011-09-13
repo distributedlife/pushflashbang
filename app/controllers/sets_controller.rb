@@ -1,8 +1,7 @@
 include SetHelper
 include LanguagesHelper
 include ReviewTypeHelper
-include RedirectHelper
-
+  
 class SetsController < ApplicationController
   before_filter :authenticate_user!
 
@@ -66,14 +65,11 @@ class SetsController < ApplicationController
     @set_names = SetName.order(:name).where(:sets_id => params[:id])
     redirect_to sets_path and return if @set_names.empty?
 
-    @idiom_translations = []
-    SetTerms.order(:chapter).order(:position).where(:set_id => params[:id]).each do |set|
-      IdiomTranslation.joins(:translation).order(:language_id).order(:form).where(:idiom_id => set.term_id).each do |idiom_translation|
-        idiom_translation[:chapter] = set.chapter
-        idiom_translation[:position] = set.position
-        @idiom_translations << idiom_translation
-      end
-    end
+    @chapters = SetTerms.select(:chapter).where(:set_id => params[:id]).group(:chapter)
+  end
+
+  def show_chapter
+    params[:chapter] ||= 0
   end
 
   def index

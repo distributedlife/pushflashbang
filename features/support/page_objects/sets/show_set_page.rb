@@ -64,4 +64,8 @@ module ShowSetPage
   def unset_as_goal
     @session.find_link("unset_goal").click
   end
+
+  def expand_chapter chapter
+    @session.find_link("toggle_chapter_#{chapter}").click
+  end
 end
