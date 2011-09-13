@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110904113356) do
+ActiveRecord::Schema.define(:version => 20110913112931) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20110904113356) do
   end
 
   create_table "idioms", :force => true do |t|
+    t.string "idiom_type"
   end
 
   create_table "languages", :force => true do |t|

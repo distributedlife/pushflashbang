@@ -91,7 +91,7 @@ UserDeckChapter.blueprint do
 end
 
 Idiom.blueprint do
-
+  idiom_type {'v'}
 end
 
 Translation.blueprint do
