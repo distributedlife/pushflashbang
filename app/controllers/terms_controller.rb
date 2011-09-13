@@ -309,7 +309,7 @@ class TermsController < ApplicationController
         render "learn.mobile"
       end
     rescue
-      ap "hmmm"
+      puts "An unknown error occurred for user #{current_user.email} with params: #{params}"
     end
   end
 
