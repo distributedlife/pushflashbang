@@ -13,3 +13,8 @@
 
   %body
     = yield
+
+    :javascript
+      jQuery(function($){
+        $('.chzn-select').chosen();
+      });
