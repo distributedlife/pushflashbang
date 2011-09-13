@@ -65,7 +65,7 @@ class SetsController < ApplicationController
     @set_names = SetName.order(:name).where(:sets_id => params[:id])
     redirect_to sets_path and return if @set_names.empty?
 
-    @chapters = SetTerms.select(:chapter).where(:set_id => params[:id]).group(:chapter)
+    @chapters = SetTerms.select(:chapter).where(:set_id => params[:id]).group(:chapter).order(:chapter)
   end
 
   def show_chapter
