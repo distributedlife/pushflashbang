@@ -352,4 +352,14 @@ class SetsController < ApplicationController
     
     redirect_to review_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode])
   end
+
+  def due_count
+    review_types = parse_review_types params[:review_mode]
+
+    @due_count = UserIdiomSchedule.get_due_count_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
+
+    respond_to do |format|
+      format.json { render :json => @due_count}
+    end
+  end
 end

@@ -69,6 +69,7 @@ PushFlashBang::Application.routes.draw do
         put 'set_goal'
         put 'unset_goal'
         get 'user_goals'
+        get 'due_count'
       end
 
       resources :terms do

@@ -12,6 +12,8 @@ javascripts:
     - public/javascripts/chosen.jquery.js
     - public/javascripts/mootools.js
     - public/javascripts/moocheck.js
+  analytics:
+    - public/javascripts/google.js
 
 stylesheets:
   common:

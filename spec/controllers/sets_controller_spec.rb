@@ -1240,4 +1240,67 @@ describe SetsController do
       assigns[:refresh_in_ms].should <= ((start - 1.day.from_now).abs) * 1000
     end
   end
+
+  context '"GET" due_count' do
+    before(:each) do
+      CardTiming.create(:seconds => 5)
+      CardTiming.create(:seconds => 25)
+      CardTiming.create(:seconds => 120)
+      CardTiming.create(:seconds => 600)
+      @language = Language.make   #primary language to learn
+      @language2 = Language.make  #user native language
+      @language3 = Language.make
+      @language4 = Language.make  #has no terms in set
+      @set = Sets.make            #primary set
+      @set2 = Sets.make
+
+      @user.native_language_id = @language2.id
+      @user.save!
+
+      UserLanguages.make(:user_id => @user.id, :language_id => @language.id)
+      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @language.id, :chapter => 1)
+
+      #first idiom is in language and set
+      @idiom1 = Idiom.make
+      t1 = Translation.make(:language_id => @language.id)
+      t2 = Translation.make(:language_id => @language2.id)
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t1.id)
+      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t2.id)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
+
+      #second idiom is not in language but is in set (has user native; but not learn)
+      @idiom2 = Idiom.make
+      t1 = Translation.make(:language_id => @language2.id)
+      t2 = Translation.make(:language_id => @language3.id)
+      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t1.id)
+      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t2.id)
+      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
+    end
+
+    it 'should return the due count' do
+      schedule = UserIdiomSchedule.create(:idiom_id => @idiom1.id, :language_id => @language.id, :user_id => @user.id)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.ago, :interval => 5)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 2, :due => 1.day.from_now, :interval => 5)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 4, :due => 1.day.from_now, :interval => 5)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 8, :due => 1.day.from_now, :interval => 5)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 16, :due => 1.day.from_now, :interval => 5)
+
+      xhr :get, :due_count, :language_id => @language.id, :id => @set.id, :review_mode => 'reading, speaking'
+      
+      assigns[:due_count].should be 1
+    end
+
+    it 'should not include due items for different review modes' do
+      schedule = UserIdiomSchedule.create(:idiom_id => @idiom1.id, :language_id => @language.id, :user_id => @user.id)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.ago, :interval => 5)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 2, :due => 1.day.from_now, :interval => 5)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 4, :due => 1.day.from_now, :interval => 5)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 8, :due => 1.day.from_now, :interval => 5)
+      UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 16, :due => 1.day.from_now, :interval => 5)
+
+      xhr :get, :due_count, :language_id => @language.id, :id => @set.id, :review_mode => 'speaking'
+
+      assigns[:due_count].should be 0
+    end
+  end
 end
