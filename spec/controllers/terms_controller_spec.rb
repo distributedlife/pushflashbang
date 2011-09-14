@@ -1465,6 +1465,53 @@ describe TermsController do
         end
       end
 
+      it 'should deal with whitespace correctly' do
+        start = Time.now
+        post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => @duration, :elapsed => @elapsed,
+          :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1",
+          :review_mode => "listening , reading , writing,%20speaking, typing"
+        finish = Time.now
+
+        response.should be_redirect
+        response.should redirect_to review_language_set_path(@spanish.id, @set.id, :review_mode => "listening,reading,writing,speaking,typing")
+
+        UserIdiomReview.count.should == 5
+        UserIdiomReview.all.each do |review|
+          review.user_id.should == @user.id
+          review.idiom_id.should == @idiom.id
+          review.language_id.should == @spanish.id
+
+          due_item = UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => review.review_type)
+          due_item = due_item.first
+          due_item.due.utc.should >= (start + due_item.interval).utc
+          due_item.due.utc.should <= (finish + due_item.interval).utc
+
+          review.due.utc.to_s.should == @due_date.utc.to_s
+          review.review_start.utc.should >= (start - @elapsed_in_s).utc
+          review.review_start.utc.should <= finish.utc
+          review.reveal.utc.should >= (start - @elapsed_in_s + @duration_in_s).utc
+          review.reveal.utc.should <= finish.utc
+          review.result_recorded.utc.should >= start.utc
+          review.result_recorded.utc.should <= finish.utc
+
+          if review.review_type == UserIdiomReview::READING
+            review.success.should == true
+          end
+          if review.review_type == UserIdiomReview::WRITING
+            review.success.should == false
+          end
+          if review.review_type == UserIdiomReview::TYPING
+            review.success.should == true
+          end
+          if review.review_type == UserIdiomReview::HEARING
+            review.success.should == true
+          end
+          if review.review_type == UserIdiomReview::SPEAKING
+            review.success.should == false
+          end
+        end
+      end
+
       it 'should reset the interval for failed reviews' do
         post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => @duration, :elapsed => @elapsed,
           :listening => "0", :reading => 0, :writing => false, :speaking => false, :typing => false,

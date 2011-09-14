@@ -437,6 +437,9 @@ class TermsController < ApplicationController
     error_redirect_to t('notice.user-not-learning-language'), language_path(params[:language_id]) and return unless user_is_learning_language? params[:language_id], current_user.id
     error_redirect_to t('notice.review-mode-not-set'), review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
 
+    params[:review_mode].gsub!("%20","")
+    params[:review_mode].gsub!(" ","")
+    params[:review_mode].gsub!("\t","")
 
     related_translation_link = {:audible => true} if params[:review_mode]["listening"]
     related_translation_link = {:written => true} if params[:review_mode]["reading"]
