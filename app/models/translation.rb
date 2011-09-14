@@ -8,7 +8,7 @@ class Translation < ActiveRecord::Base
     :s3_credentials => "#{Rails.root}/config/s3.yml",
     :path => "audio/:id/#{Digest::MD5::hexdigest(":id").upcase}.:extension"
 
-  attr_accessible :language_id, :form, :pronunciation, :audio
+  attr_accessible :language_id, :form, :pronunciation, :audio, :t_type
 
   validates :language_id, :presence => true
   validates :form, :presence => true
