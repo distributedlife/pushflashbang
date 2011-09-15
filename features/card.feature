@@ -17,13 +17,6 @@ Feature: deck cards
     Then I should be on the "add card" page
     And the form is empty
 
-@wip
-  Scenario: created cards can be seen on deck page
-    Given I have created a card
-    And I go to the "show deck" page
-    And I click on "show" chapter 1
-    Then I can see all cards in this deck
-
   Scenario: can't created card without front
     Given I go to the "add card" page
     When I create a card without a front
