@@ -32,9 +32,9 @@ class RelatedTranslations < ActiveRecord::Base
     candidates = <<-SQL
       SELECT * 
       FROM translations 
-      WHERE form = '#{translation.form}'
-      OR language_id = #{translation.language_id} 
-      OR pronunciation = '#{translation.pronunciation}'
+      WHERE form = '#{translation.form.gsub("'", "\'")}'
+      OR language_id = #{translation.language_id}
+      OR pronunciation = '#{translation.pronunciation.gsub("'", "\'")}'
     SQL
     Translation.find_by_sql(candidates).each do |t2|
       next if translation.id == t2.id
