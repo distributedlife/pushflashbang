@@ -23,7 +23,7 @@ class BuchmeierDictionaryParser
   end
 
   def parse language
-#    @results = @results | parse_dictionary_page("en-es-a", language)
+    @results = @results | parse_dictionary_page("en-es-a", language)
     @results = @results | parse_dictionary_page("en-es-b", language)
     @results = @results | parse_dictionary_page("en-es-c", language)
     @results = @results | parse_dictionary_page("en-es-d", language)
