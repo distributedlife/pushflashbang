@@ -2,7 +2,6 @@
 
 def merge_idioms idioms = []
 	return if idioms.empty?
-ap idioms
 	root = idioms.first
 	idioms.each do |idiom|
 		next if root == idiom
@@ -63,7 +62,6 @@ def upload_dictionary full_set, language_name
 
     #other languages
     other_translations = []
-    ap potential_idiom
     unless potential_idiom[language_name.downcase.to_sym].nil?
       potential_idiom[language_name.downcase.to_sym][:definitions].each do |other_language|
         other_language[:form].each do |form|
@@ -102,7 +100,6 @@ end
 parser = BuchmeierDictionaryParser.new
 parser.parse "spanish"
 
-#ap full_set
 start = Time.now
 upload_dictionary parser.results, "Spanish"
 finish = Time.now

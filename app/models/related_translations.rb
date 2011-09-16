@@ -37,7 +37,6 @@ class RelatedTranslations < ActiveRecord::Base
       OR pronunciation = '#{translation.pronunciation}'
     SQL
     Translation.find_by_sql(candidates).each do |t2|
-#    Translation.all.each do |t2|
       next if translation.id == t2.id
 
       RelatedTranslations::create_relationship_if_needed translation, t2
