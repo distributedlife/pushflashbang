@@ -29,7 +29,15 @@ class RelatedTranslations < ActiveRecord::Base
   end
 
   def self.create_relationships_for_translation translation
-    Translation.all.each do |t2|
+    candidates = <<-SQL
+      SELECT * 
+      FROM translations 
+      WHERE form = '#{translation.form}'
+      OR language_id = #{translation.language_id} 
+      OR pronunciation = '#{translation.pronunciation}'
+    SQL
+    Translation.find_by_sql(candidates).each do |t2|
+#    Translation.all.each do |t2|
       next if translation.id == t2.id
 
       RelatedTranslations::create_relationship_if_needed translation, t2
