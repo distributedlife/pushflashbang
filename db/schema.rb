@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110914070852) do
+ActiveRecord::Schema.define(:version => 20110916230354) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -42,6 +42,21 @@ ActiveRecord::Schema.define(:version => 20110914070852) do
     t.boolean  "supports_written_answer"
     t.integer  "review_types"
   end
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "idiom_translations", :force => true do |t|
     t.integer  "idiom_id"

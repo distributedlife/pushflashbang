@@ -36,6 +36,7 @@ gem 'paperclip'
 gem 'validate_url'
 gem 'aws-s3'
 gem 'mechanize'
+gem 'delayed_job'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
