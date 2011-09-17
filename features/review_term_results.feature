@@ -29,8 +29,8 @@ Feature: review term results
     When I reveal the answer after 3 seconds
     And I should see the "Record Results" button
     And I should see the "Too Easy! Show me this less often" button
-    And I should see a "reading" checkbox and it is not checked
-    And I should see a "speaking" checkbox and it is not checked
+    And I should see a "reading" checkbox and it is checked
+    And I should see a "speaking" checkbox and it is checked
     And I should see a "typing" checkbox and it is not checked
 
 #  Scenario: user review check box exists for each listening and writing
