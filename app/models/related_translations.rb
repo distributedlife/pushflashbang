@@ -29,15 +29,7 @@ class RelatedTranslations < ActiveRecord::Base
   end
 
   def self.create_relationships_for_translation translation
-#    candidates = <<-SQL
-#      SELECT *
-#      FROM translations
-#      WHERE form = '#{translation.form.gsub(/'/, "\\\\'")}'
-#      OR language_id = #{translation.language_id}
-#      OR pronunciation = '#{translation.pronunciation.gsub("'", "\'")}'
-    #SQL
     results = Translation.where("form = :form OR language_id = :language_id OR pronunciation = :pronunciation", :form => translation.form, :language_id => translation.language_id, :pronunciation => translation.pronunciation)
-#    Translation.find_by_sql(candidates).each do |t2|
     results.each do |t2|
       next if translation.id == t2.id
 
