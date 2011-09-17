@@ -1,1 +1,0 @@
-#Delayed::Job.enqueue UploadDictionaryJob.new("Spanish", "a")

@@ -32,7 +32,7 @@ class RelatedTranslations < ActiveRecord::Base
     candidates = <<-SQL
       SELECT * 
       FROM translations 
-      WHERE form = '#{translation.form.gsub("'", "\'")}'
+      WHERE form = '#{translation.form.gsub(/'/, "\\\\'")}'
       OR language_id = #{translation.language_id}
       OR pronunciation = '#{translation.pronunciation.gsub("'", "\'")}'
     SQL
