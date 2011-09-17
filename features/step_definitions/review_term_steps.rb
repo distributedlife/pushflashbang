@@ -376,7 +376,7 @@ Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an uns
 end
 
 Then /^I should be on chapter (\d+)$/ do |chapter|
-  sleep 0.25
+  sleep 0.50
   
   user_set = UserSets.where(:user_id => get(:user).id, :set_id => get(:set).id).first
   user_set.chapter.should == chapter.to_i
@@ -431,6 +431,8 @@ end
 
 
 Then /^the "([^"]*)" term should have a review and be scheduled in the future for "([^"]*)"$/ do |containing_form, review_mode|
+  now = Time.now.utc
+  
   idiom = get_idiom_containing_form containing_form
   review_type = UserIdiomReview::to_review_type_int review_mode
 
@@ -439,7 +441,7 @@ Then /^the "([^"]*)" term should have a review and be scheduled in the future fo
   UserIdiomSchedule.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => get(:language).id).count.should == 1
   is = UserIdiomSchedule.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => get(:language).id).first
   di = UserIdiomDueItems.where(:user_idiom_schedule_id => is.id, :review_type => review_type).first
-  di.due.utc.should >= Time.now.utc
+  di.due.utc.should >= now
 end
 
 Then /^the "([^"]*)" term should not have a review and should not be scheduled for "([^"]*)"$/ do |containing_form, review_mode|

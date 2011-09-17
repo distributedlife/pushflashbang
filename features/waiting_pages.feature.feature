@@ -21,6 +21,7 @@ Feature: waiting pages
     And the group containing "one" is in the set "greetings"
     And the group containing "two" is in the set "greetings" in chapter "2"
     And the user has the "greetings" set as a goal for the "Spanish" language
+    And the user native language is "English"
 
   @javascript
   Scenario: end of chapter
