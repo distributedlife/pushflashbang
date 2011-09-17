@@ -11,6 +11,14 @@ namespace :prod do
   task :backup do
     sh "heroku pgbackups:capture --expire --app pushflashbang"
   end
+
+  desc "Tag the current release"
+  task :tag do
+    release_name = "release-#{Time.now.utc.strftime("%Y%m%d%H%M%S")}"
+    puts "Tagging release as '#{release_name}'"
+    puts `git tag -a #{release_name} -m 'Tagged release'`
+    puts `git push origin master --tags`
+  end
 end
 
 namespace :staging do
