@@ -215,7 +215,7 @@ describe UserIdiomSchedule do
       us2di5 = UserIdiomDueItems.make(:user_idiom_schedule_id => us2.id, :due => 5.days.ago, :review_type => 16)
 
       count = UserIdiomSchedule.get_due_count_for_user(@language.id, @user.id)
-      count.should == 10
+      count.should == 2
     end
   end
 
@@ -286,7 +286,7 @@ describe UserIdiomSchedule do
       us2di5 = UserIdiomDueItems.make(:user_idiom_schedule_id => us2.id, :due => 1.days.ago, :review_type => 16)
 
       count = UserIdiomSchedule.get_due_count_for_user_for_set(@language.id, @user.id, @set2.id)
-      count.should == 5
+      count.should == 1
     end
   end
 
@@ -552,10 +552,10 @@ describe UserIdiomSchedule do
       count.should == 2
 
       count = UserIdiomSchedule.get_due_count_for_user_for_proficiencies(@language.id, @user.id, [2, 4])
-      count.should == 4
+      count.should == 2
 
       count = UserIdiomSchedule.get_due_count_for_user_for_proficiencies(@language.id, @user.id, [2, 4, 16])
-      count.should == 6
+      count.should == 2
     end
   end
 
@@ -629,7 +629,7 @@ describe UserIdiomSchedule do
       count.should == 0
     end
 
-    it 'should return the most due item' do
+    it 'should only count the due items for the set' do
       us1 = UserIdiomSchedule.make(:user_id => @user.id, :idiom_id => @idiom1.id, :language_id => @language.id)
       us1di1 = UserIdiomDueItems.make(:user_idiom_schedule_id => us1.id, :due => 10.day.ago, :review_type => 1)
       us1di2 = UserIdiomDueItems.make(:user_idiom_schedule_id => us1.id, :due => 9.days.ago, :review_type => 2)
@@ -646,9 +646,31 @@ describe UserIdiomSchedule do
       count = UserIdiomSchedule.get_due_count_for_user_for_set_for_proficiencies(@language.id, @user.id, @set2.id, [2])
       count.should == 1
       count = UserIdiomSchedule.get_due_count_for_user_for_set_for_proficiencies(@language.id, @user.id, @set2.id, [2,4])
-      count.should == 2
+      count.should == 1
       count = UserIdiomSchedule.get_due_count_for_user_for_set_for_proficiencies(@language.id, @user.id, @set2.id, [2,4,16])
-      count.should == 3
+      count.should == 1
+    end
+
+    it 'should not count multiple due items for an idiom' do
+      us1 = UserIdiomSchedule.make(:user_id => @user.id, :idiom_id => @idiom1.id, :language_id => @language.id)
+      us1di1 = UserIdiomDueItems.make(:user_idiom_schedule_id => us1.id, :due => 10.day.ago, :review_type => 1)
+      us1di2 = UserIdiomDueItems.make(:user_idiom_schedule_id => us1.id, :due => 9.days.ago, :review_type => 2)
+      us1di3 = UserIdiomDueItems.make(:user_idiom_schedule_id => us1.id, :due => 8.days.ago, :review_type => 4)
+      us1di4 = UserIdiomDueItems.make(:user_idiom_schedule_id => us1.id, :due => 7.days.ago, :review_type => 8)
+      us1di5 = UserIdiomDueItems.make(:user_idiom_schedule_id => us1.id, :due => 6.days.ago, :review_type => 16)
+      us2 = UserIdiomSchedule.make(:user_id => @user.id, :idiom_id => @idiom1.id, :language_id => @language.id)
+      us2di1 = UserIdiomDueItems.make(:user_idiom_schedule_id => us2.id, :due => 5.days.ago, :review_type => 1)
+      us2di2 = UserIdiomDueItems.make(:user_idiom_schedule_id => us2.id, :due => 4.days.ago, :review_type => 2)
+      us2di3 = UserIdiomDueItems.make(:user_idiom_schedule_id => us2.id, :due => 3.days.ago, :review_type => 4)
+      us2di4 = UserIdiomDueItems.make(:user_idiom_schedule_id => us2.id, :due => 2.days.ago, :review_type => 8)
+      us2di5 = UserIdiomDueItems.make(:user_idiom_schedule_id => us2.id, :due => 1.days.ago, :review_type => 16)
+
+      count = UserIdiomSchedule.get_due_count_for_user_for_set_for_proficiencies(@language.id, @user.id, @set1.id, [2])
+      count.should == 2
+      count = UserIdiomSchedule.get_due_count_for_user_for_set_for_proficiencies(@language.id, @user.id, @set1.id, [2,4])
+      count.should == 2
+      count = UserIdiomSchedule.get_due_count_for_user_for_set_for_proficiencies(@language.id, @user.id, @set1.id, [2,4,16])
+      count.should == 2
     end
   end
 

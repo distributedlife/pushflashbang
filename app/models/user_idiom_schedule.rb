@@ -14,7 +14,7 @@ class UserIdiomSchedule < ActiveRecord::Base
   end
 
   def self.get_due_count_for_user language_id, user_id
-    UserIdiomDueItems.order(:due).joins(:user_idiom_schedule).find(:all, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due", {:language_id => language_id, :user_id => user_id, :due => Time.now}]).count
+    UserIdiomDueItems.select(:user_idiom_schedule_id).group(:user_idiom_schedule_id).joins(:user_idiom_schedule).find(:all, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due", {:language_id => language_id, :user_id => user_id, :due => Time.now}]).count
   end
 
 
@@ -23,7 +23,7 @@ class UserIdiomSchedule < ActiveRecord::Base
   end
 
   def self.get_due_count_for_user_for_set language_id, user_id, set_id
-    UserIdiomDueItems.order(:due).joins(:user_idiom_schedule).find(:all, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due AND idiom_id in (SELECT term_id FROM set_terms WHERE set_id = :set_id)", {:language_id => language_id, :user_id => user_id, :due => Time.now, :set_id => set_id}]).count
+    UserIdiomDueItems.select(:user_idiom_schedule_id).group(:user_idiom_schedule_id).joins(:user_idiom_schedule).find(:all, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due AND idiom_id in (SELECT term_id FROM set_terms WHERE set_id = :set_id)", {:language_id => language_id, :user_id => user_id, :due => Time.now, :set_id => set_id}]).count
   end
 
 
@@ -32,7 +32,7 @@ class UserIdiomSchedule < ActiveRecord::Base
   end
 
   def self.get_due_count_for_user_for_proficiencies language_id, user_id, proficiencies
-    UserIdiomDueItems.order(:due).joins(:user_idiom_schedule).find(:all, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due AND review_type IN (:review_types)", {:language_id => language_id, :user_id => user_id, :due => Time.now, :review_types => proficiencies}]).count
+    UserIdiomDueItems.select(:user_idiom_schedule_id).group(:user_idiom_schedule_id).joins(:user_idiom_schedule).find(:all, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due AND review_type IN (:review_types)", {:language_id => language_id, :user_id => user_id, :due => Time.now, :review_types => proficiencies}]).count
   end
 
 
@@ -41,7 +41,15 @@ class UserIdiomSchedule < ActiveRecord::Base
   end
 
   def self.get_due_count_for_user_for_set_for_proficiencies language_id, user_id, set_id, proficiencies
-    UserIdiomDueItems.order(:due).joins(:user_idiom_schedule).find(:all, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due AND review_type IN (:review_types) AND idiom_id in (SELECT term_id FROM set_terms WHERE set_id = :set_id)", {:language_id => language_id, :user_id => user_id, :due => Time.now, :set_id => set_id, :review_types => proficiencies}]).count
+    sql = <<-SQL
+      language_id = :language_id
+      AND user_id = :user_id
+      AND due <= :due
+      AND review_type IN (:review_types)
+      AND idiom_id in (SELECT term_id FROM set_terms WHERE set_id = :set_id)
+    SQL
+
+    UserIdiomDueItems.select(:user_idiom_schedule_id).group(:user_idiom_schedule_id).joins(:user_idiom_schedule).find(:all, :conditions => [sql, {:language_id => language_id, :user_id => user_id, :due => Time.now, :set_id => set_id, :review_types => proficiencies}]).count
   end
 
   def self.get_first_unscheduled_term_for_user_for_set_for_proficiencies language_id, user_native_language_id, user_id, set_id, proficiencies

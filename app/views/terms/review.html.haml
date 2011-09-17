@@ -46,7 +46,7 @@
               - if review_type == "typing"
                 = f.input review_type.to_sym, :label => "#{@review_text[review_type]}", :required => false, :as => :boolean, :id => "#{review_type}_result", :input_html => { :checked => 'checked' }
               - else
-                = f.input review_type.to_sym, :label => "#{@review_text[review_type]}", :required => false, :as => :boolean, :id => "#{review_type}_result"
+                = f.input review_type.to_sym, :label => "#{@review_text[review_type]}", :required => false, :as => :boolean, :id => "#{review_type}_result", :input_html => { :checked => 'checked' }
             .tiny_pad_from_top
         %li
           = link_to t('actions.review-record-answer'), '#', :class => 'positive large inline-block', :method => :post, :id => "do_results", :style => 'width:12em;'
