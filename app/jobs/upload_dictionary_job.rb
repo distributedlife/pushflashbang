@@ -19,7 +19,6 @@ class UploadDictionaryJob
       end
     end
 
-    #relate translations in root idiom (as they may now share meaning)
     IdiomTranslation.where(:idiom_id => root.id).each do |it1|
       IdiomTranslation.where(:idiom_id => root.id).each do |it2|
         next if it1.translation_id == it2.translation_id
@@ -80,15 +79,14 @@ class UploadDictionaryJob
 
 
       #english
-      english_translation = create_and_attach_translation_to_idiom(potential_idiom[:english][:form], english.id, idiom.id) unless potential_idiom[:english][:form].nil?
+      create_and_attach_translation_to_idiom(potential_idiom[:english][:form], english.id, idiom.id) unless potential_idiom[:english][:form].nil?
 
 
       #definintion
-      definition_translation = create_and_attach_translation_to_idiom(potential_idiom[:definition], definition.id, idiom.id) unless potential_idiom[:definition].nil?
+      create_and_attach_translation_to_idiom(potential_idiom[:definition], definition.id, idiom.id) unless potential_idiom[:definition].nil?
 
 
       #other languages
-      other_translations = []
       unless potential_idiom[language_name.downcase.to_sym].nil?
         potential_idiom[language_name.downcase.to_sym][:definitions].each do |other_language|
           other_language[:form].each do |form|
@@ -108,17 +106,8 @@ class UploadDictionaryJob
                 IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
               end
             end
-
-            other_translations << translation
           end
         end
-      end
-
-      #related translations
-      RelatedTranslations.create_relationships_for_translation(english_translation) unless english_translation.nil?
-      RelatedTranslations.create_relationships_for_translation(definition_translation) unless definition_translation.nil?
-      other_translations.each do |t|
-        RelatedTranslations.create_relationships_for_translation t
       end
     end
   end

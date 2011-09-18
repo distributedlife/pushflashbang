@@ -28,39 +28,41 @@ class RelatedTranslations < ActiveRecord::Base
     RelatedTranslations::create_relationships_for_translation translation
   end
 
-  def self.create_relationships_for_translation translation
-    results = Translation.where("form = :form OR language_id = :language_id OR pronunciation = :pronunciation", :form => translation.form, :language_id => translation.language_id, :pronunciation => translation.pronunciation)
+  def self.create_relationships_for_translation translation, skip_existing = false
+#    results = Translation.where("language_id = :language_id AND (form = :form OR pronunciation = :pronunciation)", :form => translation.form, :language_id => translation.language_id, :pronunciation => translation.pronunciation)
+#    results = Translation.where("language_id = :language_id OR form = :form OR pronunciation = :pronunciation", :form => translation.form, :language_id => translation.language_id, :pronunciation => translation.pronunciation)
+#    results = Translation.where("form = :form OR pronunciation = :pronunciation", :form => translation.form, :pronunciation => translation.pronunciation)
+    results = Translation.where(:language_id => translation.language_id)
     results.each do |t2|
       next if translation.id == t2.id
 
-      RelatedTranslations::create_relationship_if_needed translation, t2
+      RelatedTranslations::create_relationship_if_needed translation, t2, skip_existing
     end
   end
 
-  def self.create_relationship_if_needed t1, t2
-    rt1 = get_relationship t1.id, t2.id
-    rt2 = get_relationship t2.id, t1.id
+  def self.create_relationship_if_needed t1, t2, skip_existing = false
+    rt1 = get_relationship t1.id, t2.id unless skip_existing
+    rt2 = get_relationship t2.id, t1.id unless skip_existing
 
-    rt1 ||= RelatedTranslations.new(:translation1_id => t1.id, :translation2_id => t2.id)
+    return unless t1.language_id == t2.language_id
+
     rt2 ||= RelatedTranslations.new(:translation1_id => t2.id, :translation2_id => t1.id)
+    rt1 ||= RelatedTranslations.new(:translation1_id => t1.id, :translation2_id => t2.id)
 
-    if t1.language_id == t2.language_id
-      if IdiomTranslation.translations_share_idiom? t1.id, t2.id
-        rt1.share_meaning = true
-        rt2.share_meaning = true
-      end
-      if t1.form == t2.form
-        rt1.share_written_form = true
-        rt2.share_written_form = true
-      end
-      if t1.pronunciation == t2.pronunciation and !t1.pronunciation.empty? and !t2.pronunciation.empty?
-        rt1.share_audible_form = true
-        rt2.share_audible_form = true
-      end
+    if IdiomTranslation.translations_share_idiom? t1.id, t2.id
+      rt1.share_meaning = true
+      rt2.share_meaning = true
+    end
+    if t1.form == t2.form
+      rt1.share_written_form = true
+      rt2.share_written_form = true
+    end
+    if t1.pronunciation == t2.pronunciation and !t1.pronunciation.empty? and !t2.pronunciation.empty?
+      rt1.share_audible_form = true
+      rt2.share_audible_form = true
     end
 
     return if rt1.share_meaning.nil? and rt1.share_written_form.nil? and rt1.share_audible_form.nil?
-    return if rt2.share_meaning.nil? and rt2.share_written_form.nil? and rt2.share_audible_form.nil?
 
     rt1.share_meaning ||= false
     rt1.share_written_form ||= false
