@@ -1,3 +1,5 @@
+include ArrayHelper
+
 class RelatedTranslations < ActiveRecord::Base
   attr_accessible :translation1_id, :translation2_id, :share_written_form, :share_audible_form, :share_meaning
 
