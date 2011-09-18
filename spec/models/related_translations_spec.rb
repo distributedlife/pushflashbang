@@ -61,7 +61,7 @@ describe RelatedTranslations do
       RelatedTranslations::get_relationship(@t1.id, @t2.id).nil?.should be false
       RelatedTranslations::get_relationship(@t2.id, @t1.id).nil?.should be false
 
-      RelatedTranslations::delete_relationships_for_transation @t1
+      RelatedTranslations::delete_relationships_for_translation @t1
 
       RelatedTranslations::get_relationship(@t1.id, @t2.id).nil?.should be true
       RelatedTranslations::get_relationship(@t2.id, @t1.id).nil?.should be true

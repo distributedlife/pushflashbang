@@ -14,7 +14,7 @@ class TranslationsController < ApplicationController
         it.delete
       end
 
-      RelatedTranslations::delete_relationships_for_transation Translation.find(params[:id])
+      RelatedTranslations::delete_relationships_for_translation Translation.find(params[:id])
 
       Translation.where(:id => params[:id]).each do |t|
         t.delete

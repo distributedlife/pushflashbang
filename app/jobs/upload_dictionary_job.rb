@@ -48,14 +48,17 @@ class UploadDictionaryJob
       #check for existence (due to failed imports)
       unless potential_idiom[:definition].nil?
         unless Translation.where(:form => potential_idiom[:definition], :language_id => definition.id).empty?
-          puts "skipping... #{potential_idiom[:definition]}"
-          next
+          unless Translation.where(:form => potential_idiom[:english][:form], :language_id => english.id).empty?
+            puts "skipping... #{potential_idiom[:definition]}"
+            next
+          end
         end
-      end
-      unless potential_idiom[:english][:form].nil?
-        unless Translation.where(:form => potential_idiom[:english][:form], :language_id => english.id).empty?
-          puts "skipping... #{potential_idiom[:english][:form]}"
-          next
+      else
+        unless potential_idiom[:english][:form].nil?
+          unless Translation.where(:form => potential_idiom[:english][:form], :language_id => english.id).empty?
+            puts "skipping... #{potential_idiom[:english][:form]}"
+            next
+          end
         end
       end
 

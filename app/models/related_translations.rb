@@ -14,7 +14,7 @@ class RelatedTranslations < ActiveRecord::Base
     end
   end
   
-  def self.delete_relationships_for_transation translation
+  def self.delete_relationships_for_translation translation
     RelatedTranslations.where(:translation1_id => translation.id).each do |rt|
       rt.delete
     end
@@ -24,27 +24,24 @@ class RelatedTranslations < ActiveRecord::Base
   end
 
   def self.rebuild_relationships_for_translation translation
-    RelatedTranslations::delete_relationships_for_transation translation
+    RelatedTranslations::delete_relationships_for_translation translation
     RelatedTranslations::create_relationships_for_translation translation
   end
 
-  def self.create_relationships_for_translation translation, skip_existing = false
-#    results = Translation.where("language_id = :language_id AND (form = :form OR pronunciation = :pronunciation)", :form => translation.form, :language_id => translation.language_id, :pronunciation => translation.pronunciation)
-#    results = Translation.where("language_id = :language_id OR form = :form OR pronunciation = :pronunciation", :form => translation.form, :language_id => translation.language_id, :pronunciation => translation.pronunciation)
-#    results = Translation.where("form = :form OR pronunciation = :pronunciation", :form => translation.form, :pronunciation => translation.pronunciation)
+  def self.create_relationships_for_translation translation
     results = Translation.where(:language_id => translation.language_id)
     results.each do |t2|
       next if translation.id == t2.id
 
-      RelatedTranslations::create_relationship_if_needed translation, t2, skip_existing
+      RelatedTranslations::create_relationship_if_needed translation, t2
     end
   end
 
-  def self.create_relationship_if_needed t1, t2, skip_existing = false
-    rt1 = get_relationship t1.id, t2.id unless skip_existing
-    rt2 = get_relationship t2.id, t1.id unless skip_existing
-
+  def self.create_relationship_if_needed t1, t2
     return unless t1.language_id == t2.language_id
+
+    rt1 = get_relationship t1.id, t2.id 
+    rt2 = get_relationship t2.id, t1.id 
 
     rt2 ||= RelatedTranslations.new(:translation1_id => t2.id, :translation2_id => t1.id)
     rt1 ||= RelatedTranslations.new(:translation1_id => t1.id, :translation2_id => t2.id)
