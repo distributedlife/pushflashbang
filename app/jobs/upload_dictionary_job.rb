@@ -15,7 +15,7 @@ class UploadDictionaryJob
     idioms.each do |idiom|
       next if root == idiom
 
-      IdiomTranslations.where(:idiom_id => idiom.id).each do |it|
+      IdiomTranslation.where(:idiom_id => idiom.id).each do |it|
         it.idiom_id = root
         it.save!
       end
