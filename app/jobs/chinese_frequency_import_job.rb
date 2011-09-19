@@ -1,6 +1,6 @@
 include ArrayHelper
 
-class UploadDictionaryJob
+class ChineseFrequencyImportJob
   @mandarin
 
   def perform
