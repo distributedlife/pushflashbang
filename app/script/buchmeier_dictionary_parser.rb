@@ -38,6 +38,45 @@ class BuchmeierDictionaryParser
 
     json = []
 
+    allowed_regions = ["Latin America",
+    "Central America",
+    "South America",
+    "South América",
+
+    "Spain",
+    "Dominican Republic",
+    "Puerto Rico",
+    "Cuba",
+    "Costa Rica",
+    "Caribbean",
+
+    "Canary Islands",
+    "California",
+
+    "Mexico",
+    "Mex",
+    "Mexican",
+    "México",
+    "Panama",
+    "El Salvador",
+    "Guatemala",
+    "Honduras",
+    "Nicaragua",
+
+    "Venezuela",
+    "Colombia",
+    "Ecuador",
+    "Peru",
+    "Bolivia",
+    "Paraguay",
+    "Uruguay",
+    "Argentina",
+    "Chile",
+
+    "Castilian",
+    "Basque"
+    ]
+
     skip_until_start_marker = true
     ignore = ["|-", "|}", "{|"]
     idiom = nil
@@ -91,30 +130,16 @@ class BuchmeierDictionaryParser
             note.split(',').each do |note_part|
               note_part.strip!
               next if note_part.empty?
-              next if note_part == "dated"
-              next if note_part == "as seen from the outside"
-              next if note_part == "as seen from the inside"
-              next if note_part == "gums"
-              next if note_part == "specially Spain"
-              next if note_part == "abbreviation"
-              next if note_part == "only plural"
-              next if note_part == "informal"
-              next if note_part == "formal"
-              next if note_part == "polite"
-              next if note_part == "familiar"
-              next if note_part == "only followed by infinitive form"
-              next if note_part == "obsolete"
-              next if note_part == "colloquial"
 
-              note_part = "Venezuela" if note_part == "Venezuelan standard usage"
-              
-              if note_part == "Colombian and Mexican standard usage"
-                definition[:notes] << "Colombia"
-                definition[:notes] << "Mexico"
-                next
+#              used = false
+              allowed_regions.each do |region|
+                if note_part[region]
+                  definition[:notes] << region
+#                  used = true
+                end
               end
 
-              definition[:notes] << note_part
+#              definition[:notes] << note_part unless used
             end
           end
 

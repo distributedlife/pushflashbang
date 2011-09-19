@@ -162,18 +162,37 @@ class UploadDictionaryJob
     parser = BuchmeierDictionaryParser.new
     parser.parse @language, @letter
 
-#    parser.results.each do |result|
-#      next if result[:spanish].nil?
-#      next if result[:spanish][:definitions].empty?
-#
-#      result[:spanish][:definitions].each do |d|
-#        next if d[:notes].empty?
-#
-#        ap result
-#      end
-#
-#    end
     upload_dictionary parser.results, @language
+
+    finish = Time.now
+    puts "*" * 80
+    puts "Completed import."
+    puts "Started at #{start} and finished at #{finish} (#{finish-start} seconds) for #{parser.results.count} records."
+  end
+
+  def check
+    start = Time.now
+
+    parser = BuchmeierDictionaryParser.new
+    parser.parse @language, @letter
+
+    notes = []
+    parser.results.each do |result|
+      next if result[:spanish].nil?
+      next if result[:spanish][:definitions].empty?
+
+      result[:spanish][:definitions].each do |d|
+        next if d[:notes].empty?
+
+        d[:notes].each do |note|
+          unless notes & [note] == [note]
+            notes << note
+          end
+        end
+      end
+    end
+
+    ap notes
 
     finish = Time.now
     puts "*" * 80
