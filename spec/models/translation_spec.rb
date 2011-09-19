@@ -26,4 +26,19 @@ describe Translation do
       translation.valid?.should == true
     end
   end
+
+  context 'delete' do
+    it 'should be tested'
+  end
+
+  context 'search' do
+    it 'should pull out word matches in supported languages'
+    it 'should pull out word types in support matches'
+    it 'should do a partial match'
+    it 'should filter by queried languages'
+    it 'should filter by word types'
+    it 'should return the used query'
+    it 'sohuld return the language matches'
+    it 'should return the word type matches'
+  end
 end

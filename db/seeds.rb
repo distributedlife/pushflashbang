@@ -1,0 +1,1 @@
+UploadDictionaryJob.new("spanish", "en-es-a").perform

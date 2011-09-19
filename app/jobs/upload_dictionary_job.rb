@@ -1,3 +1,5 @@
+include ArrayHelper
+
 class UploadDictionaryJob
   @language
   @letter
@@ -17,14 +19,20 @@ class UploadDictionaryJob
         it.idiom_id = root
         it.save!
       end
-    end
 
-    IdiomTranslation.where(:idiom_id => root.id).each do |it1|
-      IdiomTranslation.where(:idiom_id => root.id).each do |it2|
-        next if it1.translation_id == it2.translation_id
-
-        RelatedTranslations.create_relationship_if_needed Translation.find(it1), Translation.find(it2)
+      #migrate reviews
+      UserIdiomReviews.where(:idiom_id => idiom.id).each do |it|
+        it.idiom_id = root
+        it.save!
       end
+
+      #migrate and merge schedule :TODO
+#      UserIdiomSchedule.where(:idiom_id => idiom.id).each do |it|
+#        it.idiom_id = root
+#        it.save!
+#      end
+
+#      Idiom.delete(idiom)
     end
 
     root
@@ -37,6 +45,24 @@ class UploadDictionaryJob
     translation
   end
 
+  def get_shared_idiom t1, t2
+    IdiomTranslation.where(:translation_id => t1.id).each do |t1it|
+      IdiomTranslation.where(:translation_id => t2.id).each do |t2it|
+        next if t1it.id == t2it.id
+        
+        if t1it.idiom_id == t2it.idiom_id
+          return Idiom.find(t1it.idiom_id)
+        end
+      end
+    end
+
+    return nil
+  end
+
+  def new_idiom type
+    puts "NEW idiom"
+    Idiom.create(:type => type)
+  end
 
   def upload_dictionary full_set, language_name
     full_set.each do |potential_idiom|
@@ -46,25 +72,10 @@ class UploadDictionaryJob
 
 
       #check for existence (due to failed imports)
-      unless potential_idiom[:definition].nil?
-        unless Translation.where(:form => potential_idiom[:definition], :language_id => definition.id).empty?
-          unless Translation.where(:form => potential_idiom[:english][:form], :language_id => english.id).empty?
-            puts "skipping... #{potential_idiom[:definition]}"
-            next
-          end
-        end
-      else
-        unless potential_idiom[:english][:form].nil?
-          unless Translation.where(:form => potential_idiom[:english][:form], :language_id => english.id).empty?
-            puts "skipping... #{potential_idiom[:english][:form]}"
-            next
-          end
-        end
-      end
+      existing_definition = get_first(Translation.where(:form => potential_idiom[:definition], :language_id => definition.id)) unless potential_idiom[:definition].nil?
+      existing_english = get_first(Translation.where(:form => potential_idiom[:english][:form], :language_id => english.id)) unless potential_idiom[:english][:form].nil?
 
-
-      puts "uploading... #{potential_idiom[:english][:form]}" unless potential_idiom[:english][:form].nil?
-
+#      puts "uploading... #{potential_idiom[:english][:form]}" unless potential_idiom[:english][:form].nil?
 
       #create idiom
       unless potential_idiom[:share_meaning].nil?
@@ -77,16 +88,30 @@ class UploadDictionaryJob
         end
 
         idiom = merge_idioms(idioms_to_merge) unless idioms_to_merge.empty?
+#        puts "reusing merged idiom" unless idiom.nil?
       end
-      idiom ||= Idiom.create(:type => potential_idiom[:english][:type])
+      if !existing_definition.nil? and !existing_english.nil?
+        idiom ||= get_shared_idiom existing_definition, existing_english
+#        puts "reusing idiom" unless idiom.nil?
+      end
 
 
-      #english
-      create_and_attach_translation_to_idiom(potential_idiom[:english][:form], english.id, idiom.id) unless potential_idiom[:english][:form].nil?
+      #english, create if one does not already exist
+      if existing_english.nil?
+        idiom ||= new_idiom potential_idiom[:english][:type] unless potential_idiom[:english][:form].nil?
+
+        puts "NEW english translation for #{potential_idiom[:english][:form]}" unless potential_idiom[:english][:form].nil?
+        create_and_attach_translation_to_idiom(potential_idiom[:english][:form], english.id, idiom.id) unless potential_idiom[:english][:form].nil?
+      end
 
 
-      #definintion
-      create_and_attach_translation_to_idiom(potential_idiom[:definition], definition.id, idiom.id) unless potential_idiom[:definition].nil?
+      #definintion, create if one does not already exist
+      if existing_definition.nil?
+        idiom ||= new_idiom potential_idiom[:english][:type] unless potential_idiom[:definition].nil?
+
+        puts "NEW definition translation for #{potential_idiom[:definition]}" unless potential_idiom[:definition].nil?
+        create_and_attach_translation_to_idiom(potential_idiom[:definition], definition.id, idiom.id) unless potential_idiom[:definition].nil?
+      end
 
 
       #other languages
@@ -95,18 +120,34 @@ class UploadDictionaryJob
           other_language[:form].each do |form|
             next if form.empty?
 
-            translation = Translation.new(:form => form, :type => other_language[:type].join(','), :pronunciation => "")
             if other_language[:notes].empty?
-              translation.language_id = language.id
-              translation.save!
-              IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+              translation = get_first(Translation.where(:form => form, :language_id => language.id, :t_type => other_language[:type].join(',')))
+#              puts "reusing existing translation for #{form}" unless translation.nil?
+              puts "NEW base translation for #{form}" if translation.nil?
+              translation ||= Translation.create(:form => form, :t_type => other_language[:type].join(','), :language_id => language.id, :pronunciation => "")
+
+              
+              idiom ||= get_shared_idiom translation, existing_english if existing_definition.nil?
+              idiom ||= get_shared_idiom translation, existing_definition if existing_english.nil?
+              idiom ||= new_idiom potential_idiom[:english][:type]
+              if IdiomTranslation.where(:idiom_id => idiom.id, :translation_id => translation.id).empty?
+                IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+              end
             else
               other_language[:notes].each do |region|
                 regional = Language.get_or_create "#{language_name} (#{region})"
 
-                translation.language_id = regional.id
-                translation.save!
-                IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+                translation = get_first(Translation.where(:form => form, :language_id => regional.id, :t_type => other_language[:type].join(',')))
+#                puts "reusing existing translation for #{form}" unless translation.nil?
+                puts "NEW regional translation for #{form} in #{region}" if translation.nil?
+                translation ||= Translation.create(:form => form, :t_type => other_language[:type].join(','), :language_id => regional.id, :pronunciation => "")
+
+                idiom ||= get_shared_idiom translation, existing_english if existing_definition.nil?
+                idiom ||= get_shared_idiom translation, existing_definition if existing_english.nil?
+                idiom ||= new_idiom potential_idiom[:english][:type]
+                if IdiomTranslation.where(:idiom_id => idiom.id, :translation_id => translation.id).empty?
+                  IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+                end
               end
             end
           end
@@ -121,6 +162,17 @@ class UploadDictionaryJob
     parser = BuchmeierDictionaryParser.new
     parser.parse @language, @letter
 
+#    parser.results.each do |result|
+#      next if result[:spanish].nil?
+#      next if result[:spanish][:definitions].empty?
+#
+#      result[:spanish][:definitions].each do |d|
+#        next if d[:notes].empty?
+#
+#        ap result
+#      end
+#
+#    end
     upload_dictionary parser.results, @language
 
     finish = Time.now

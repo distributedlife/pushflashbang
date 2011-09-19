@@ -19,4 +19,10 @@ class Translation < ActiveRecord::Base
 
     return super
   end
+
+  def search
+    # pull out languages - use as filter
+    # pull out types - use as filter
+    # the remainder is the query
+  end
 end

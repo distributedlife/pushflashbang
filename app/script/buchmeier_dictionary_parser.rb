@@ -91,6 +91,28 @@ class BuchmeierDictionaryParser
             note.split(',').each do |note_part|
               note_part.strip!
               next if note_part.empty?
+              next if note_part == "dated"
+              next if note_part == "as seen from the outside"
+              next if note_part == "as seen from the inside"
+              next if note_part == "gums"
+              next if note_part == "specially Spain"
+              next if note_part == "abbreviation"
+              next if note_part == "only plural"
+              next if note_part == "informal"
+              next if note_part == "formal"
+              next if note_part == "polite"
+              next if note_part == "familiar"
+              next if note_part == "only followed by infinitive form"
+              next if note_part == "obsolete"
+              next if note_part == "colloquial"
+
+              note_part = "Venezuela" if note_part == "Venezuelan standard usage"
+              
+              if note_part == "Colombian and Mexican standard usage"
+                definition[:notes] << "Colombia"
+                definition[:notes] << "Mexico"
+                next
+              end
 
               definition[:notes] << note_part
             end
