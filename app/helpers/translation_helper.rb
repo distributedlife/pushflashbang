@@ -1,6 +1,10 @@
 module TranslationHelper
   def all_translations_sorted_correctly
-    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).all
+    Translation.all_sorted_by_idiom_language_and_form
+  end
+
+  def all_translations_sorted_correctly_with_like_filter filter
+    Translation.all_sorted_by_idiom_language_and_form_with_like_filter filter
   end
 
   def translation_exists? translation_id

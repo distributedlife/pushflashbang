@@ -20,9 +20,24 @@ class Translation < ActiveRecord::Base
     return super
   end
 
-  def search
-    # pull out languages - use as filter
-    # pull out types - use as filter
-    # the remainder is the query
+  def self.all_sorted_by_idiom_language_and_form
+    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).all
+  end
+
+  def self.all_sorted_by_idiom_language_and_form_with_like_filter filter
+    filter_string = "(%#{filter.join('%|%')}%)"
+
+    where = <<-SQL
+      idiom_translations.idiom_id IN
+      (
+        SELECT idiom_id
+        FROM idiom_translations sit
+        JOIN translations st on sit.translation_id = st.id
+        WHERE st.form SIMILAR TO :filter
+        OR st.pronunciation SIMILAR TO :filter
+      )
+    SQL
+
+    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(where, :filter => filter_string).limit(50)
   end
 end

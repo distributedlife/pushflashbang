@@ -2,7 +2,6 @@ include LanguagesHelper
 include IdiomHelper
 include SetHelper
 include TranslationHelper
-include RedirectHelper
 
 class TermsController < ApplicationController
   before_filter :authenticate_user!
@@ -10,7 +9,17 @@ class TermsController < ApplicationController
   caches_page :index, :show, :first_review, :review
 
   def index
-    @translations = all_translations_sorted_correctly
+    @translations = []
+    @q = nil
+  end
+
+  def search
+    @q = params[:q]
+    @q.gsub!("%", "")
+
+    @translations = all_translations_sorted_correctly_with_like_filter @q.split(' ')
+
+    render :index
   end
 
   def new
@@ -509,7 +518,11 @@ class TermsController < ApplicationController
         end
 
         if review.success
-          due_item.interval = CardTiming.get_next(due_item.interval).seconds
+          if params[:skip].nil?
+            due_item.interval = CardTiming.get_next(due_item.interval).seconds
+          else
+            due_item.interval = CardTiming.get_next(CardTiming.get_next(due_item.interval).seconds).seconds
+          end
         else
           due_item.interval = CardTiming.get_first.seconds
         end

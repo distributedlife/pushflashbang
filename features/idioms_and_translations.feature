@@ -70,30 +70,6 @@ Feature: users can add new terms to the system
       | 一点儿          | Chinese (Simplified) | yì diǎnr      |
 
   @user
-  Scenario: terms are shown grouped and sorted
-    Given the following related translations:
-      | form         | language             | pronunciation |
-      | un poco de   | Spanish              |               |
-      | a little bit | English              |               |
-      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
-    And the following related translations:
-      | form  | language             | pronunciation |
-      | Hello | English              |               |
-      | 你好    | Chinese (Simplified) | nǐ hǎo        |
-    And the following related translations:
-      | form  | language | pronunciation |
-      | Adios | Spanish  |               |
-    When I view all terms
-    Then all translations are shown grouped and sorted alphabetically by language:
-      | form         | language             | pronunciation |
-      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
-      | a little bit | English              |               |
-      | un poco de   | Spanish              |               |
-      | 你好           | Chinese (Simplified) | nǐ hǎo        |
-      | Hello        | English              |               |
-      | Adios        | Spanish              |               |
-
-  @user
   Scenario Outline: user can't delete a term from an idiom if there are only two left
     Given a term with <translation count> translations
     When I delete a translation

@@ -149,6 +149,7 @@ en:
     change-password: "Change my password"
     reset-password: "Send me password reset instructions"
     create-account: "Create Account"
+    search: "Search"
   form:
     user-email: "my email"
     user-change-email: "change email address?"
@@ -257,6 +258,7 @@ en:
     loading: "Loading..."
     no-languages-remaining: "There are no languages left for you to learn."
     no-user-languages: "You have not started learning a language yet."
+    no-results: "You search returned no results."
   titles:
     about:
       title: "PushFlashBang"
@@ -301,6 +303,9 @@ en:
     new-term-review:
       title: "New Term!"
       subtitle: "Congralutions, here is a new term for you to learn"
+    search-index:
+      title: "Search"
+      subtitle: "Search accross all languages"
     set-completed:
       title: "Set Complete!"
       subtitle: ""

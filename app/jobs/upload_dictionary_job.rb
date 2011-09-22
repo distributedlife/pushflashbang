@@ -3,10 +3,12 @@ include ArrayHelper
 class UploadDictionaryJob
   @language
   @letter
+  @skip
 
-  def initialize language, letter
+  def initialize language, letter, skip = false
     @language = language
     @letter = letter
+    @skip = skip
   end
 
   def merge_idioms idioms = []

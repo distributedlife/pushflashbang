@@ -31,14 +31,15 @@ describe Translation do
     it 'should be tested'
   end
 
-  context 'search' do
-    it 'should pull out word matches in supported languages'
-    it 'should pull out word types in support matches'
-    it 'should do a partial match'
-    it 'should filter by queried languages'
-    it 'should filter by word types'
-    it 'should return the used query'
-    it 'sohuld return the language matches'
-    it 'should return the word type matches'
+  context 'all_sorted_by_idiom_language_and_form' do
+    it 'should be tested'
+  end
+
+  context 'all_sorted_by_idiom_language_and_form_with_like_filter' do
+    it 'should support a single filter'
+    it 'should do partial matches'
+    it 'should support multiple filters'
+    it 'should be case insensitive'
+    it 'should search by pronunciation'
   end
 end

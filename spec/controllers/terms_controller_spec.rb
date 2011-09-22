@@ -7,7 +7,7 @@ describe TermsController do
   end
 
   context '"GET" index' do
-    it 'should return all terms grouped by idiom and order by language and form' do
+    it 'should return no translations by default' do
       idiom1 = Idiom.make
       idiom2 = Idiom.make
 
@@ -31,31 +31,58 @@ describe TermsController do
 
       get :index
 
-      assigns[:translations][0].idiom_translations.idiom_id.should == idiom1.id
-      assigns[:translations][0].language_id.should == chinese.id
-      assigns[:translations][0].form.should == "ce"
-
-      assigns[:translations][1].idiom_translations.idiom_id.should == idiom1.id
-      assigns[:translations][1].language_id.should == english.id
-      assigns[:translations][1].form.should == "Zebra"
-
-      assigns[:translations][2].idiom_translations.idiom_id.should == idiom1.id
-      assigns[:translations][2].language_id.should == spanish.id
-      assigns[:translations][2].form.should == "Cabron"
-
-
-      assigns[:translations][3].idiom_translations.idiom_id.should == idiom2.id
-      assigns[:translations][3].language_id.should == english.id
-      assigns[:translations][3].form.should == "Hobo"
-
-      assigns[:translations][4].idiom_translations.idiom_id.should == idiom2.id
-      assigns[:translations][4].language_id.should == spanish.id
-      assigns[:translations][4].form.should == "Abanana"
-
-      assigns[:translations][5].idiom_translations.idiom_id.should == idiom2.id
-      assigns[:translations][5].language_id.should == spanish.id
-      assigns[:translations][5].form.should == "Allegra"
+      assigns[:translations].empty?.should == true
     end
+
+#    it 'should return all terms grouped by idiom and order by language and form' do
+#      idiom1 = Idiom.make
+#      idiom2 = Idiom.make
+#
+#      english = Language.create(:name => "English")
+#      spanish = Language.create(:name => "Spanish")
+#      chinese = Language.create(:name => "Chinese")
+#
+#      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
+#      term2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
+#      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
+#      term4 = Translation.make(:language_id => english.id, :form => "Hobo")
+#      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
+#      term6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
+#
+#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
+#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
+#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term3.id)
+#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term4.id)
+#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term5.id)
+#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term6.id)
+#
+#      get :index
+#
+#      assigns[:translations][0].idiom_translations.idiom_id.should == idiom1.id
+#      assigns[:translations][0].language_id.should == chinese.id
+#      assigns[:translations][0].form.should == "ce"
+#
+#      assigns[:translations][1].idiom_translations.idiom_id.should == idiom1.id
+#      assigns[:translations][1].language_id.should == english.id
+#      assigns[:translations][1].form.should == "Zebra"
+#
+#      assigns[:translations][2].idiom_translations.idiom_id.should == idiom1.id
+#      assigns[:translations][2].language_id.should == spanish.id
+#      assigns[:translations][2].form.should == "Cabron"
+#
+#
+#      assigns[:translations][3].idiom_translations.idiom_id.should == idiom2.id
+#      assigns[:translations][3].language_id.should == english.id
+#      assigns[:translations][3].form.should == "Hobo"
+#
+#      assigns[:translations][4].idiom_translations.idiom_id.should == idiom2.id
+#      assigns[:translations][4].language_id.should == spanish.id
+#      assigns[:translations][4].form.should == "Abanana"
+#
+#      assigns[:translations][5].idiom_translations.idiom_id.should == idiom2.id
+#      assigns[:translations][5].language_id.should == spanish.id
+#      assigns[:translations][5].form.should == "Allegra"
+#    end
   end
 
   context '"GET" new' do
@@ -1359,6 +1386,7 @@ describe TermsController do
       CardTiming.create(:seconds => 600)
       CardTiming.create(:seconds => 3600)
       CardTiming.create(:seconds => 15400)
+      CardTiming.create(:seconds => 86400)
     end
 
     it 'should redirect to review set if term is not valid' do
@@ -1566,11 +1594,11 @@ describe TermsController do
           :listening => false, :reading => false, :writing => false, :speaking => false, :typing => false,
           :review_mode => "listening,reading,writing,speaking,typing", :skip => true
 
-        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING).first.interval.should == 25
-        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::WRITING).first.interval.should == 120
-        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::TYPING).first.interval.should == 600
-        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::SPEAKING).first.interval.should == 3600
-        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::HEARING).first.interval.should == 15400
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::READING).first.interval.should == 120
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::WRITING).first.interval.should == 600
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::TYPING).first.interval.should == 3600
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::SPEAKING).first.interval.should == 15400
+        UserIdiomDueItems.where(:user_idiom_schedule_id => @schedule.id, :review_type => UserIdiomReview::HEARING).first.interval.should == 86400
       end
     end
   end

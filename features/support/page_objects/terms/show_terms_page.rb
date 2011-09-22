@@ -20,4 +20,9 @@ module ShowTermsPage
   def add_to_set index
     @session.find_link("term_#{index}_add_to_set").click
   end
+
+  def search_for term
+    @session.fill_in(:q, :with => term)
+    @session.click_link_or_button("search_query")
+  end
 end

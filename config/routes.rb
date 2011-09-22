@@ -5,7 +5,7 @@ PushFlashBang::Application.routes.draw do
 
   match 'info/check_style' => 'info#check_style'
   match 'info/about' => 'info#about'
-
+  
   resources :users, :as => "user" do
     collection do
       resources :languages, :as => "user_languages" do
@@ -117,6 +117,7 @@ PushFlashBang::Application.routes.draw do
     collection do
       get 'add_translation'
       post 'select'
+      get 'search'
     end
 
     resources :sets, :as => "term_sets" do
