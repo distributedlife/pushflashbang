@@ -11,13 +11,23 @@ class TermsController < ApplicationController
   def index
     @translations = []
     @q = nil
+    @page = 1
   end
 
   def search
+    @page = params[:page]
     @q = params[:q]
-    @q.gsub!("%", "")
+    return redirect_to terms_path if @q.blank?
 
-    @translations = all_translations_sorted_correctly_with_like_filter @q.split(' ')
+    @q.gsub!("%", "")
+    @page ||= 1
+
+
+    #TODO: put this into configuration
+    @limit = 10 + 1
+    offset = (@page.to_i - 1) * 10
+
+    @translations = all_translations_sorted_correctly_with_like_filter @q.split(','), @limit, offset
 
     render :index
   end

@@ -4,7 +4,7 @@
 %section{:class => ["panel"]}
   = form_tag('/terms/search', :method => "get") do
     = label_tag(:q, "")
-    = text_field_tag(:q, @q)
+    = text_field_tag(:q, @q, :placeholder => t('text.search-input'), :style => 'display: inline;')
     = submit_tag t('actions.search'), :class => 'positive', :id => 'search_query'
 
 - if current_user.in_edit_mode?
@@ -12,9 +12,15 @@
     %span.menu= link_to t('actions.new-term'), new_term_path, :class => 'neutral'
 %section{:class => ["panel"]}
   #translations
+    - idiom_count = 0
     - @translations.each do |translation|
+      - if idiom_count == @limit
+        .button{:class => "centre large_button"}
+          = link_to t('actions.more'), search_terms_path(:q => @q, :page => @page.to_i + 1), :class => 'positive inline-block',  :id => "next_page"
+          - break
       - if translation.idiom_translations.idiom_id != current_idiom and !current_idiom.nil?
         - current_idiom = translation.idiom_translations.idiom_id
+        - idiom_count = idiom_count + 1
         .pad_from_top
         - if current_user.in_edit_mode?
           %span.subscript{:style => "float: right;"}

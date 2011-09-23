@@ -93,10 +93,12 @@ en:
     move-translation: "Move translation"
     move-translation-here: "Move translation here"
     mute: "mute"
+    more: "more"
     new-deck: "new deck"
     new-set-name: "Add name"
     new-term: "create new term"
     next: "Next"
+    next-page: "next page"
     next-chapter: "next chapter"
     next-position: "next position"
     ok: "ok"
@@ -259,6 +261,7 @@ en:
     no-languages-remaining: "There are no languages left for you to learn."
     no-user-languages: "You have not started learning a language yet."
     no-results: "You search returned no results."
+    search-input: "search using comma, separated, terms..."
   titles:
     about:
       title: "PushFlashBang"

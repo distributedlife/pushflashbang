@@ -24,20 +24,22 @@ class Translation < ActiveRecord::Base
     Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).all
   end
 
-  def self.all_sorted_by_idiom_language_and_form_with_like_filter filter
+  def self.all_sorted_by_idiom_language_and_form_with_like_filter filter, limit, offset
     filter_string = "(%#{filter.join('%|%')}%)"
+    filter_string.downcase!
 
     where = <<-SQL
-      idiom_translations.idiom_id IN
+      id IN
       (
         SELECT idiom_id
         FROM idiom_translations sit
         JOIN translations st on sit.translation_id = st.id
-        WHERE st.form SIMILAR TO :filter
-        OR st.pronunciation SIMILAR TO :filter
+        WHERE lower(st.form) SIMILAR TO :filter
+        OR lower(st.pronunciation) SIMILAR TO :filter
       )
     SQL
 
-    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(where, :filter => filter_string).limit(50)
+    idioms = Idiom.where(where, :filter => filter_string).limit(limit).offset(offset)
+    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(:idiom_translations => {:idiom_id => idioms})
   end
 end
