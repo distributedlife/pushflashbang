@@ -327,8 +327,11 @@ class TermsController < ApplicationController
       if detect_browser == "mobile_application"
         render "learn.mobile"
       end
-    rescue
+    rescue Exception => e
       puts "An unknown error occurred for user #{current_user.email} with params: #{params}"
+      puts e.message
+      puts e.backtrace.inspect
+      puts "*" * 80
     end
   end
 

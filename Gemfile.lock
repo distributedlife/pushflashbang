@@ -313,7 +313,6 @@ DEPENDENCIES
   paperclip
   pg
   rails (= 3.0.5)
-  rake (= 0.9.2)
   rspec-rails
   ruby-debug
   sass
