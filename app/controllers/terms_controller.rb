@@ -323,10 +323,6 @@ class TermsController < ApplicationController
       @review_text["typing"] = "I correctly typed this"
       @review_text["listening"] = "I knew what this meant in #{@native_language.name}"
       @review_text["translating"] = "I knew what this meant in #{@learned_language.name}"
-      
-      if detect_browser == "mobile_application"
-        render "learn.mobile"
-      end
     rescue Exception => e
       puts "An unknown error occurred for user #{current_user.email} with params: #{params}"
       puts e.message
