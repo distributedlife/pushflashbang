@@ -37,7 +37,7 @@ gem 'validate_url'
 gem 'aws-s3'
 gem 'mechanize'
 gem 'delayed_job'
-gem 'rake', '0.8.7'
+gem 'rake', '0.9.2'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
