@@ -608,6 +608,48 @@ describe SetsController do
       UserIdiomDueItems.last.interval.should == 5
     end
 
+    it 'it should not duplicate user idiom schedules for migrated users' do
+      UserIdiomSchedule.count.should == 0
+      UserIdiomDueItems.count.should == 0
+
+      start = Time.now
+      get :review, :language_id => @language.id, :id => @set.id, :review_mode => 'reading, speaking'
+      finish = Time.now
+
+      UserIdiomSchedule.count.should == 1
+      UserIdiomDueItems.count.should == 2
+
+      UserIdiomDueItems.all.each do |di|
+        di.due = 1.day.ago
+        di.save!
+      end
+
+
+
+      start = Time.now
+      get :review, :language_id => @language.id, :id => @set.id, :review_mode => 'reading, speaking, typing'
+      finish = Time.now
+
+
+      UserIdiomSchedule.count.should == 1
+      UserIdiomDueItems.count.should == 3
+
+      UserIdiomDueItems.all.each do |di|
+        di.due = 1.day.ago
+        di.save!
+      end
+
+      
+
+      start = Time.now
+      get :review, :language_id => @language.id, :id => @set.id, :review_mode => 'listening'
+      finish = Time.now
+
+
+      UserIdiomSchedule.count.should == 1
+      UserIdiomDueItems.count.should == 4
+    end
+
     it 'should show the next due term for the specified review types if there are due terms' do
       schedule = UserIdiomSchedule.create(:idiom_id => @idiom1.id, :language_id => @language.id, :user_id => @user.id)
       UserIdiomDueItems.create(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.ago, :interval => 5)

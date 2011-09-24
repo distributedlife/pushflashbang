@@ -241,7 +241,10 @@ class SetsController < ApplicationController
       redirect_to next_chapter_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode]) and return
     else
       #show the new card to the user
-      scheduled_term = UserIdiomSchedule.create(:user_id => current_user.id, :language_id => params[:language_id], :idiom_id => next_term.term_id)
+
+      # only create a schedule if it does not exist; we can get to this place with migrated users
+      scheduled_term = get_first UserIdiomSchedule.where(:user_id => current_user.id, :language_id => params[:language_id], :idiom_id => next_term.term_id)
+      scheduled_term ||= UserIdiomSchedule.create(:user_id => current_user.id, :language_id => params[:language_id], :idiom_id => next_term.term_id)
       review_types.each do |review_type|
         if UserIdiomDueItems.where(:user_idiom_schedule_id => scheduled_term.id, :review_type => review_type).empty?
           UserIdiomDueItems.create(:user_idiom_schedule_id => scheduled_term.id, :due => Time.now, :interval => CardTiming.get_first.seconds, :review_type => review_type)
