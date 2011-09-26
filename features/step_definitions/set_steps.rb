@@ -114,6 +114,7 @@ When /^I add the group containing "([^"]*)" to the current set$/ do |containing_
   end
 
   on_page :SelectTermForSetPage, Capybara.current_session do |page|
+    page.search_for "a little bit"
     page.select_term idiom.id
   end
 end

@@ -888,7 +888,7 @@ describe TermsController do
   end
 
   context '"GET" select_for_set' do
-    it 'should return all terms grouped by idiom and order by language and form except the specified set' do
+    it 'should return an empty set by default' do
       idiom1 = Idiom.make
       idiom2 = Idiom.make
 
@@ -912,24 +912,60 @@ describe TermsController do
       IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t6.id)
 
       set = Sets.make
-      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom1.id)
+      SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      SetTerms.make(:set_id => set.id, :term_id => idiom1.id)
 
       get :select_for_set, :set_id => set.id
 
 
-      assigns[:translations][0].idiom_translations.idiom_id.should == idiom2.id
-      assigns[:translations][0].language_id.should == english.id
-      assigns[:translations][0].form.should == "Hobo"
-
-      assigns[:translations][1].idiom_translations.idiom_id.should == idiom2.id
-      assigns[:translations][1].language_id.should == spanish.id
-      assigns[:translations][1].form.should == "Abanana"
-
-      assigns[:translations][2].idiom_translations.idiom_id.should == idiom2.id
-      assigns[:translations][2].language_id.should == spanish.id
-      assigns[:translations][2].form.should == "Allegra"
+      assigns[:translations].empty?.should == true
     end
+
+    context 'when searching' do
+      it 'should be tested'
+    end
+#    it 'should return all terms grouped by idiom and order by language and form except the specified set' do
+#      idiom1 = Idiom.make
+#      idiom2 = Idiom.make
+#
+#      english = Language.create(:name => "English")
+#      spanish = Language.create(:name => "Spanish")
+#      chinese = Language.create(:name => "Chinese")
+#
+#      t1 = Translation.make(:language_id => english.id, :form => "Zebra")
+#      t2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
+#      t3 = Translation.make(:language_id => chinese.id, :form => "ce")
+#      t4 = Translation.make(:language_id => english.id, :form => "Hobo")
+#      t5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
+#      t6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
+#
+#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t1.id)
+#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t3.id)
+#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t5.id)
+#
+#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t2.id)
+#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t4.id)
+#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t6.id)
+#
+#      set = Sets.make
+#      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+#      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom1.id)
+#
+#      get :select_for_set, :set_id => set.id
+#
+#
+#      assigns[:translations][0].idiom_translations.idiom_id.should == idiom2.id
+#      assigns[:translations][0].language_id.should == english.id
+#      assigns[:translations][0].form.should == "Hobo"
+#
+#      assigns[:translations][1].idiom_translations.idiom_id.should == idiom2.id
+#      assigns[:translations][1].language_id.should == spanish.id
+#      assigns[:translations][1].form.should == "Abanana"
+#
+#      assigns[:translations][2].idiom_translations.idiom_id.should == idiom2.id
+#      assigns[:translations][2].language_id.should == spanish.id
+#      assigns[:translations][2].form.should == "Allegra"
+#    end
 
     it 'should redirect to sets_path if the set does not exist' do
       get :select_for_set, :set_id => 100
@@ -940,6 +976,10 @@ describe TermsController do
   end
 
   context '"PUT" add_to_set' do
+    before(:each) do
+      request.env["HTTP_REFERER"] = "http://pushflashbang.com"
+    end
+
     it 'should link the term to the set' do
       set = Sets.make
       set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")

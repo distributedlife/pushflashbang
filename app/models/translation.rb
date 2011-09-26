@@ -42,4 +42,34 @@ class Translation < ActiveRecord::Base
     idioms = Idiom.where(where, :filter => filter_string).limit(limit).offset(offset)
     Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(:idiom_translations => {:idiom_id => idioms})
   end
+
+  def self.all_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, filter, limit, offset
+    filter_string = "(%#{filter.join('%|%')}%)"
+    filter_string.downcase!
+
+    terms_matching_filter = <<-SQL
+      SELECT idiom_id
+      FROM idiom_translations sit
+      JOIN translations st on sit.translation_id = st.id
+      WHERE lower(st.form) SIMILAR TO :filter
+      OR lower(st.pronunciation) SIMILAR TO :filter
+    SQL
+    terms_already_in_set = <<-SQL
+      SELECT term_id
+      FROM set_terms
+      WHERE set_terms.set_id = :set_id
+    SQL
+
+    where = <<-SQL
+      id IN
+      (
+        #{terms_matching_filter}
+        EXCEPT
+        #{terms_already_in_set}
+      )
+    SQL
+
+    idioms = Idiom.where(where, :filter => filter_string, :set_id => set_id).limit(limit).offset(offset)
+    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(:idiom_translations => {:idiom_id => idioms})
+  end
 end

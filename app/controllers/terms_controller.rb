@@ -206,11 +206,22 @@ class TermsController < ApplicationController
     set_id = params[:set_id]
     error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? set_id
 
-    @translations = []
-    all_translations_sorted_correctly.each do |translation|
-      next if SetTerms.where(:set_id => set_id, :term_id => translation.idiom_translations.idiom_id).count > 0
 
-      @translations << translation
+    @page = params[:page]
+    @page ||= 1
+    @q = params[:q]
+
+
+    #TODO: put this into configuration
+    @limit = 10 + 1
+    offset = (@page.to_i - 1) * 10
+
+
+    if @q.nil?
+      @translations = []
+    else
+      @q.gsub!("%", "")
+      @translations = Translation.all_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, @q.split(','), @limit, offset
     end
   end
 
@@ -340,7 +351,7 @@ class TermsController < ApplicationController
     add_term_to_set set_id, term_id
 
     expire_page(:controller => 'sets', :action => 'show' ,:id => set_id)
-    success_redirect_to t('notice.set-idiom-added'), set_path(set_id)
+    success_redirect_to t('notice.set-idiom-added'), :back
   end
 
   def remove_from_set
