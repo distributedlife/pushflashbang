@@ -143,24 +143,9 @@
       {
         $j('#do_reveal').click();
       }
-    }
-    if ($j('#do_reveal').is(":hidden"))
-    {
-      if (event.which == '49')
+      else
       {
-        $j('#do_dont_know').click();
-      }
-      if (event.which == '50')
-      {
-        $j('#do_partial_answer').click();
-      }
-      if (event.which == '51')
-      {
-        $j('#do_shaky_good').click();
-      }
-      if (event.which == '52')
-      {
-        $j('#do_good').click();
+        $j('#do_results').click();
       }
     }
   });
@@ -195,30 +180,6 @@
 
     
     duration.value = end - start_time.value;
-    if (duration.value <= 2000)
-    {
-      //set all checkboxes as ticked
-      if ($j("#review_result_listening").length != 0)
-      {
-        $j("#review_result_listening").attr('checked', true);
-      }
-      if ($j("#review_result_reading").length != 0)
-      {
-        $j("#review_result_reading").attr('checked', true);
-      }
-      if ($j("#review_result_speaking").length != 0)
-      {
-        $j("#review_result_speaking").attr('checked', true);
-      }
-      if ($j("#review_result_writing").length != 0)
-      {
-        $j("#review_result_writing").attr('checked', true);
-      }
-      if ($j("#review_result_translating").length != 0)
-      {
-        $j("#review_result_translating").attr('checked', true);
-      }
-    }
 
 
     if (user_answer)

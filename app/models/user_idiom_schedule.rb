@@ -28,7 +28,7 @@ class UserIdiomSchedule < ActiveRecord::Base
 
 
   def self.get_next_due_for_user_for_proficiencies language_id, user_id, proficiencies
-    UserIdiomDueItems.order(:due).joins(:user_idiom_schedule).find(:first, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due AND review_type IN (:review_types)", {:language_id => language_id, :user_id => user_id, :due => Time.now, :review_types => proficiencies}])
+    UserIdiomDueItems.joins(:user_idiom_schedule).find(:first, :order => "due ASC", :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due AND review_type IN (:review_types)", {:language_id => language_id, :user_id => user_id, :due => Time.now, :review_types => proficiencies}])
   end
 
   def self.get_due_count_for_user_for_proficiencies language_id, user_id, proficiencies
@@ -37,7 +37,15 @@ class UserIdiomSchedule < ActiveRecord::Base
 
 
   def self.get_next_due_for_user_for_set_for_proficiencies language_id, user_id, set_id, proficiencies
-    UserIdiomDueItems.order(:due).joins(:user_idiom_schedule).find(:first, :conditions => ["language_id = :language_id AND user_id = :user_id AND due <= :due AND review_type IN (:review_types) AND idiom_id in (SELECT term_id FROM set_terms WHERE set_id = :set_id)", {:language_id => language_id, :user_id => user_id, :due => Time.now, :set_id => set_id, :review_types => proficiencies}])
+    sql = <<-SQL
+      language_id = :language_id
+      AND user_id = :user_id
+      AND due <= :due
+      AND review_type IN (:review_types)
+      AND idiom_id in (SELECT term_id FROM set_terms WHERE set_id = :set_id)
+    SQL
+
+    UserIdiomDueItems.joins(:user_idiom_schedule).find(:first, :order => "due ASC", :conditions => [sql, {:language_id => language_id, :user_id => user_id, :due => Time.now, :set_id => set_id, :review_types => proficiencies}])
   end
 
   def self.get_due_count_for_user_for_set_for_proficiencies language_id, user_id, set_id, proficiencies

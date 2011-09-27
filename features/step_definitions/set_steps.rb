@@ -97,7 +97,7 @@ When /^I add the group containing "([^"]*)" to the set "([^"]*)"$/ do |term_tran
   idiom = get_idiom_containing_form term_translation
 
   goto_page :ShowTermsPage, Capybara.current_session, sut do |page|
-    page.search_for "a little bit"
+    page.search_for term_translation
     page.add_to_set idiom.id
   end
 

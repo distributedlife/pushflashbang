@@ -319,7 +319,7 @@ class SetsController < ApplicationController
 
     #TODO: move somewhere testable
     sql = <<-SQL
-      select due_item.due
+      select due_item.due as due
       from user_idiom_due_items due_item
       inner join user_idiom_schedules s
         on s.id = due_item.user_idiom_schedule_id
