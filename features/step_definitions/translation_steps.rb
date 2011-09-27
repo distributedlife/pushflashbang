@@ -81,12 +81,11 @@ end
 When /^translations will all linked to the same idiom$/ do
   idiom = Idiom.first
 
-  IdiomTranslation.joins(:translation).each do |link|
+  Translation.all.each do |link|
     link.idiom_id.should == idiom.id
   end
 
   Translation.count.should_not be 0
-  IdiomTranslation.count.should_not be 0
   Idiom.count.should_not be 0
 end
 
@@ -190,7 +189,7 @@ Then /^the group containing "([^"]*)" should have the following translations:$/ 
     translation_found_in_view = false
 
     table.hashes.each do |hash|
-      if idiom_translation.translation.form == hash[:form]
+      if idiom_translation.form == hash[:form]
         translation_found_in_view = true
       end
 
@@ -219,7 +218,7 @@ Then /^all translations are shown grouped and sorted alphabetically by language:
 end
 
 Then /^the term will have (\d+) translations/ do |count|
-  IdiomTranslation.where(:idiom_id => get(:idiom).id).count.should == count.to_i
+  Translation.where(:idiom_id => get(:idiom).id).count.should == count.to_i
 end
 
 Then /^I should see the following in the form:$/ do |table|

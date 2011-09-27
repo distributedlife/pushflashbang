@@ -17,7 +17,7 @@ class UploadDictionaryJob
     idioms.each do |idiom|
       next if root == idiom
 
-      IdiomTranslation.where(:idiom_id => idiom.id).each do |it|
+      Translation.where(:idiom_id => idiom.id).each do |it|
         it.idiom_id = root
         it.save!
       end
@@ -41,15 +41,14 @@ class UploadDictionaryJob
   end
 
   def create_and_attach_translation_to_idiom form, language_id, idiom_id
-    translation = Translation.create(:form =>form, :language_id => language_id, :pronunciation => "")
-    IdiomTranslation.create(:idiom_id => idiom_id, :translation_id => translation.id)
+    translation = Translation.create(:idiom_id => idiom_id, :form =>form, :language_id => language_id, :pronunciation => "")
 
     translation
   end
 
   def get_shared_idiom t1, t2
-    IdiomTranslation.where(:translation_id => t1.id).each do |t1it|
-      IdiomTranslation.where(:translation_id => t2.id).each do |t2it|
+    Translation.where(:id => t1.id).each do |t1it|
+      Translation.where(:id => t2.id).each do |t2it|
         next if t1it.id == t2it.id
         
         if t1it.idiom_id == t2it.idiom_id
@@ -132,8 +131,8 @@ class UploadDictionaryJob
               idiom ||= get_shared_idiom translation, existing_english if existing_definition.nil?
               idiom ||= get_shared_idiom translation, existing_definition if existing_english.nil?
               idiom ||= new_idiom potential_idiom[:english][:type]
-              if IdiomTranslation.where(:idiom_id => idiom.id, :translation_id => translation.id).empty?
-                IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+              if Translation.where(:idiom_id => idiom.id, :id => translation.id).empty?
+                Translation.create(:idiom_id => idiom.id, :id => translation.id)
               end
             else
               other_language[:notes].each do |region|
@@ -147,8 +146,8 @@ class UploadDictionaryJob
                 idiom ||= get_shared_idiom translation, existing_english if existing_definition.nil?
                 idiom ||= get_shared_idiom translation, existing_definition if existing_english.nil?
                 idiom ||= new_idiom potential_idiom[:english][:type]
-                if IdiomTranslation.where(:idiom_id => idiom.id, :translation_id => translation.id).empty?
-                  IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+                if Translation.where(:idiom_id => idiom.id, :id => translation.id).empty?
+                  Translation.create(:idiom_id => idiom.id, :id => translation.id)
                 end
               end
             end

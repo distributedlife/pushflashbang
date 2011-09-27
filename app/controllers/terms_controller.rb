@@ -53,8 +53,9 @@ class TermsController < ApplicationController
       unless t.language_id.nil? and t.form.nil? and t.pronunciation.nil?
         unless t.form.empty? and t.pronunciation.empty?
           @translations << t
-          if t.valid?
-          else
+
+          t.valid?
+          unless t.errors.count <= 1
             invalid_count = invalid_count + 1
           end
         end
@@ -67,9 +68,8 @@ class TermsController < ApplicationController
       idiom = Idiom.create
 
       @translations.each do |to|
+        to.idiom_id = idiom.id
         to.save!
-
-        IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => to.id)
       end
 
 
@@ -127,9 +127,15 @@ class TermsController < ApplicationController
       unless t.language_id.nil? and t.form.nil? and t.pronunciation.nil?
         unless t.language_id == 0 and t.form.empty? and t.pronunciation.empty?
           @translations << t
-          if t.valid?
-          else
-            invalid_count = invalid_count + 1
+          if t.invalid?
+            ap t
+            ap t.invalid?
+            ap t.errors
+            ap t.errors[:idiom_id].empty?
+            ap (t.errors.count == 1 and !t.errors[:idiom_id].nil?)
+            if (t.errors.count == 1 and t.errors[:idiom_id].empty?) or (t.errors.count > 1)
+              invalid_count = invalid_count + 1
+            end
           end
         end
       end
@@ -140,11 +146,8 @@ class TermsController < ApplicationController
       idiom = Idiom.find(params[:id])
 
       @translations.each do |to|
+        to.idiom_id = idiom.id
         to.save!
-
-        if IdiomTranslation.where(:idiom_id => idiom.id, :translation_id => to.id).empty?
-          IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => to.id)
-        end
       end
 
 
@@ -199,7 +202,7 @@ class TermsController < ApplicationController
     return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:idiom_id]
     return error_redirect_to t('notice.not-found'), terms_path unless translation_exists? params[:translation_id]
 
-    @translations = Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(['idiom_translations.idiom_id != ?', params[:idiom_id]])
+    @translations = Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where(['idiom_id != ?', params[:idiom_id]])
   end
 
   def select_for_set
@@ -236,12 +239,12 @@ class TermsController < ApplicationController
       @term = Idiom.find(params[:id])
 
       # get all translations in the term, that match the learned language
-      @learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+      @learned_translations_in_idiom = Translation.joins(:languages).order(:form).where(:language_id => params[:language_id], :idiom_id => params[:id])
       learned_translations_in_idiom = @learned_translations_in_idiom.map{|t| t.id}
       redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?
 
       # get all translations in the term, that match the users native language
-      @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => native_language_id, :idiom_translations => {:idiom_id => params[:id]})
+      @native_translations = Translation.joins(:languages).order(:form).where(:language_id => native_language_id, :idiom_id => params[:id])
 
 
       @audio = "front"
@@ -278,12 +281,12 @@ class TermsController < ApplicationController
       @term = Idiom.find(params[:id])
 
       # get all translations in the term, that match the learned language
-      @learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+      @learned_translations_in_idiom = Translation.joins(:languages).order(:form).where(:language_id => params[:language_id], :idiom_id => params[:id])
       learned_translations_in_idiom = @learned_translations_in_idiom.map{|t| t.id}
       redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?
       
       # get all translations in the term, that match the users native language
-      @native_translations = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => native_language_id, :idiom_translations => {:idiom_id => params[:id]})
+      @native_translations = Translation.joins(:languages).order(:form).where(:language_id => native_language_id, :idiom_id => params[:id])
 
 
       # configure display based on review mode
@@ -474,7 +477,7 @@ class TermsController < ApplicationController
     related_translation_link = {:written => true} if params[:review_mode]["reading"]
     related_translation_link = {:meaning => true} if params[:review_mode]["translating"]
 
-    learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+    learned_translations_in_idiom = Translation.joins(:languages).order(:form).where(:language_id => params[:language_id], :idiom_id => params[:id])
     learned_translations_in_idiom = learned_translations_in_idiom.map{|t| t.id}
 
     redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?
@@ -566,7 +569,7 @@ class TermsController < ApplicationController
     redirect_to review_language_set_path(params[:language_id], params[:set_id]) and return if params[:review_mode].nil?
 
 
-    learned_translations_in_idiom = Translation.joins(:languages, :idiom_translations).order(:form).where(:language_id => params[:language_id], :idiom_translations => {:idiom_id => params[:id]})
+    learned_translations_in_idiom = Translation.joins(:languages).order(:form).where(:language_id => params[:language_id], :idiom_id => params[:id])
     learned_translations_in_idiom = learned_translations_in_idiom.map{|t| t.id}
 
     redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode]) and return if learned_translations_in_idiom.empty?

@@ -259,8 +259,8 @@ Then /^before the reveal the native language is displayed$/ do
 
   on_page :ReviewTermPage, Capybara.current_session do |page|
     idiom_translations.each do |idiom_translation|
-      if idiom_translation.translation.language_id == get(:user).native_language_id
-        page.native_language_contains?(idiom_translation.translation.form).should be true
+      if idiom_translation.language_id == get(:user).native_language_id
+        page.native_language_contains?(idiom_translation.form).should be true
       end
     end
   end
@@ -274,8 +274,8 @@ Then /^before the reveal the learned language is displayed$/ do
 
   on_page :ReviewTermPage, Capybara.current_session do |page|
     idiom_translations.each do |idiom_translation|
-      if idiom_translation.translation.language_id == language.id
-        page.learned_language_contains?(idiom_translation.translation.form).should be true
+      if idiom_translation.language_id == language.id
+        page.learned_language_contains?(idiom_translation.form).should be true
       end
     end
   end
@@ -290,8 +290,8 @@ Then /^after the reveal the native language is displayed$/ do
     page.reveal!
 
     idiom_translations.each do |idiom_translation|
-      if idiom_translation.translation.language_id == get(:user).native_language_id
-        page.native_language_contains?(idiom_translation.translation.form).should be true
+      if idiom_translation.language_id == get(:user).native_language_id
+        page.native_language_contains?(idiom_translation.form).should be true
       end
     end
   end
@@ -306,8 +306,8 @@ Then /^after the reveal the learned language is displayed$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.reveal!
     idiom_translations.each do |idiom_translation|
-      if idiom_translation.translation.language_id == language.id
-        page.learned_language_contains?(idiom_translation.translation.form).should be true
+      if idiom_translation.language_id == language.id
+        page.learned_language_contains?(idiom_translation.form).should be true
       end
     end
   end

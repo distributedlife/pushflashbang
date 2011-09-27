@@ -56,7 +56,7 @@ class RelatedTranslations < ActiveRecord::Base
     rt2 ||= RelatedTranslations.new(:translation1_id => t2.id, :translation2_id => t1.id)
     rt1 ||= RelatedTranslations.new(:translation1_id => t1.id, :translation2_id => t2.id)
 
-    if IdiomTranslation.translations_share_idiom? t1.id, t2.id
+    if t1.idiom_id == t2.idiom_id
       rt1.share_meaning = true
       rt2.share_meaning = true
     end
@@ -90,7 +90,7 @@ class RelatedTranslations < ActiveRecord::Base
     get_related_sql = <<-SQL
       SELECT distinct(rt.translation2_id)
       FROM related_translations rt
-      JOIN idiom_translations it ON rt.translation2_id = it.translation_id
+      JOIN translations it ON rt.translation2_id = it.id
       JOIN user_idiom_schedules uis ON it.idiom_id = uis.idiom_id AND uis.user_id = #{user_id} AND uis.language_id = #{language_id}
       WHERE rt.translation1_id IN (#{translation_ids.join(',')})
         AND rt.share_meaning IN (#{options[:meaning]})
@@ -165,15 +165,14 @@ class RelatedTranslations < ActiveRecord::Base
   def self.relate_all_that_share_meaning
     share_meaning_sql = <<-SQL
       SELECT it.idiom_id as idiom_id, t.language_id as language_id, count(*)
-      FROM idiom_translations it
-      JOIN translations t on t.id = it.translation_id
+      FROM translations
       GROUP BY it.idiom_id, t.language_id
       HAVING count(*) > 1
     SQL
 
     share_meaning_results = ActiveRecord::Base.connection.execute(share_meaning_sql)
     share_meaning_results.each do |share_meaning|
-      t1_set = IdiomTranslation.joins(:translation).where(:idiom_id => share_meaning["idiom_id"], :translations => {:language_id => share_meaning["language_id"]})
+      t1_set = Translation.where(:idiom_id => share_meaning["idiom_id"], :language_id => share_meaning["language_id"])
       t2_set = t1_set
 
       t1_set.each do |t1|

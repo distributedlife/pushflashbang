@@ -34,17 +34,14 @@ class ChineseFrequencyImportJob
           pronunciation ||= ""
 
           translation = get_first(Translation.where(:form => form, :language_id => chinese.id))
-          translation ||= Translation.create(:form => form, :language_id => chinese.id, :pronunciation => pronunciation)
-          IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+          translation ||= Translation.create(:idiom_id => idiom.id, :form => form, :language_id => chinese.id, :pronunciation => pronunciation)
         end
         if pronunciations.empty?
           translation = get_first(Translation.where(:form => form, :language_id => chinese.id))
-          translation ||= Translation.create(:form => form, :language_id => chinese.id, :pronunciation => "")
-          IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+          translation ||= Translation.create(:idiom_id => idiom.id, :form => form, :language_id => chinese.id, :pronunciation => "")
         end
 
-        translation = Translation.create(:form => meaning, :language_id => english.id, :pronunciation => "")
-        IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => translation.id)
+        translation = Translation.create(:idiom_id => idiom.id, :form => meaning, :language_id => english.id, :pronunciation => "")
 
         SetTerms.create(:set_id => set.id, :term_id => idiom.id, :position => position, :chapter => (position / chapter_size) + 1)
         position = position + 1

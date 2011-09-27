@@ -29,8 +29,7 @@ describe UserIdiomSchedule do
       @user = User.make
 
       @idiom = Idiom.make
-      @t1 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t1.id)
+      @t1 = Translation.make(:idiom_id => @idiom.id)
 
       @set = Sets.make
       SetTerms.make(:set_id => @set.id, :term_id => @idiom.id)
@@ -91,12 +90,10 @@ describe UserIdiomSchedule do
       @user = User.make
 
       @idiom1 = Idiom.make
-      @t1 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t1.id)
+      @t1 = Translation.make(:idiom_id => @idiom1.id)
 
       @idiom2 = Idiom.make
-      @t2 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t2.id)
+      @t2 = Translation.make(:idiom_id => @idiom2.id)
 
       @set1 = Sets.make
       SetTerms.make(:set_id => @set1.id, :term_id => @idiom1.id)
@@ -162,8 +159,7 @@ describe UserIdiomSchedule do
       @user = User.make
 
       @idiom = Idiom.make
-      @t1 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t1.id)
+      @t1 = Translation.make(:idiom_id => @idiom.id)
 
       @set = Sets.make
       SetTerms.make(:set_id => @set.id, :term_id => @idiom.id)
@@ -224,12 +220,10 @@ describe UserIdiomSchedule do
       @user = User.make
 
       @idiom1 = Idiom.make
-      @t1 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t1.id)
+      @t1 = Translation.make(:idiom_id => @idiom1.id)
 
       @idiom2 = Idiom.make
-      @t2 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t2.id)
+      @t2 = Translation.make(:idiom_id => @idiom2.id)
 
       @set1 = Sets.make
       SetTerms.make(:set_id => @set1.id, :term_id => @idiom1.id)
@@ -295,12 +289,10 @@ describe UserIdiomSchedule do
       @user = User.make
 
       @idiom1 = Idiom.make
-      @t1 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t1.id)
+      @t1 = Translation.make(:idiom_id => @idiom1.id)
 
       @idiom2 = Idiom.make
-      @t2 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t2.id)
+      @t2 = Translation.make(:idiom_id => @idiom2.id)
 
       @set1 = Sets.make
       SetTerms.make(:set_id => @set1.id, :term_id => @idiom1.id)
@@ -387,12 +379,10 @@ describe UserIdiomSchedule do
       @user = User.make
 
       @idiom1 = Idiom.make
-      @t1 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t1.id)
+      @t1 = Translation.make(:idiom_id => @idiom1.id)
 
       @idiom2 = Idiom.make
-      @t2 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t2.id)
+      @t2 = Translation.make(:idiom_id => @idiom2.id)
 
       @set1 = Sets.make
       SetTerms.make(:set_id => @set1.id, :term_id => @idiom1.id)
@@ -480,8 +470,7 @@ describe UserIdiomSchedule do
       @user = User.make
 
       @idiom = Idiom.make
-      @t1 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom.id, :translation_id => @t1.id)
+      @t1 = Translation.make(:idiom_id => @idiom.id)
 
       @set = Sets.make
       SetTerms.make(:set_id => @set.id, :term_id => @idiom.id)
@@ -564,12 +553,10 @@ describe UserIdiomSchedule do
       @user = User.make
 
       @idiom1 = Idiom.make
-      @t1 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t1.id)
+      @t1 = Translation.make(:idiom_id => @idiom1.id)
 
       @idiom2 = Idiom.make
-      @t2 = Translation.make
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t2.id)
+      @t2 = Translation.make(:idiom_id => @idiom2.id)
 
       @set1 = Sets.make
       SetTerms.make(:set_id => @set1.id, :term_id => @idiom1.id)
@@ -684,40 +671,29 @@ describe UserIdiomSchedule do
 
       #an idiom with spanish, english and chinese
       @idiom1 = Idiom.make
-      @t11 = Translation.make(:language_id => @english.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t11.id)
-      @t12 = Translation.make(:language_id => @spanish.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t12.id)
-      @t13 = Translation.make(:language_id => @chinese.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => @t12.id)
+      @t11 = Translation.make(:idiom_id => @idiom1.id, :language_id => @english.id)
+      @t12 = Translation.make(:idiom_id => @idiom1.id, :language_id => @spanish.id)
+      @t13 = Translation.make(:idiom_id => @idiom1.id, :language_id => @chinese.id)
 
       #english and chinese
       @idiom2 = Idiom.make
-      @t21 = Translation.make(:language_id => @english.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t21.id)
-      @t22 = Translation.make(:language_id => @chinese.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => @t22.id)
+      @t21 = Translation.make(:idiom_id => @idiom2.id, :language_id => @english.id)
+      @t22 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id)
 
       #spanish and chinese
       @idiom3 = Idiom.make
-      @t31 = Translation.make(:language_id => @spanish.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => @t31.id)
-      @t32 = Translation.make(:language_id => @chinese.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => @t32.id)
+      @t31 = Translation.make(:idiom_id => @idiom3.id, :language_id => @spanish.id)
+      @t32 = Translation.make(:idiom_id => @idiom3.id, :language_id => @chinese.id)
 
       #an idiom with spanish, english
       @idiom4 = Idiom.make
-      @t41 = Translation.make(:language_id => @english.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => @t41.id)
-      @t42 = Translation.make(:language_id => @spanish.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => @t42.id)
+      @t41 = Translation.make(:idiom_id => @idiom4.id, :language_id => @english.id)
+      @t42 = Translation.make(:idiom_id => @idiom4.id, :language_id => @spanish.id)
 
       #an idiom with spanish, english
       @idiom5 = Idiom.make
-      @t51 = Translation.make(:language_id => @english.id)
-      IdiomTranslation.make(:idiom_id => @idiom5.id, :translation_id => @t51.id)
-      @t52 = Translation.make(:language_id => @spanish.id)
-      IdiomTranslation.make(:idiom_id => @idiom5.id, :translation_id => @t52.id)
+      @t51 = Translation.make(:idiom_id => @idiom5.id, :language_id => @english.id)
+      @t52 = Translation.make(:idiom_id => @idiom5.id, :language_id => @spanish.id)
 
 
       @set1 = Sets.make

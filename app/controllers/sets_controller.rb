@@ -17,8 +17,8 @@ class SetsController < ApplicationController
     @sets = []
     set_ids = []
 
-    IdiomTranslation.joins(:translation).where(:translations => {:language_id => @language.id}).each do |idiom_translation|
-      SetTerms.where(:term_id => idiom_translation.idiom_id).each do |set_terms|
+    Translation.where(:language_id => @language.id).each do |translation|
+      SetTerms.where(:term_id => translation.idiom_id).each do |set_terms|
         if set_ids[set_terms.set_id].nil?
           set_ids[set_terms.set_id] = set_terms.set_id
 

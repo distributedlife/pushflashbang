@@ -24,7 +24,6 @@ describe Sets do
       english = Language.where(:name => "English").first
 
       Idiom.count.should == 5
-      IdiomTranslation.count.should == 10
       Translation.count.should == 10
 
       # each card should be linked to the idiom that the back of the card has
@@ -51,7 +50,6 @@ describe Sets do
       @set.migrate_from_deck(@deck.id)
 
       Idiom.count.should == 1
-      IdiomTranslation.count.should == 4
       Translation.count.should == 4
 
       chinese = Language.where(:name => "Chinese (Simplified)").first
@@ -106,19 +104,16 @@ describe Sets do
 
       Card.all.each do |card|
         Translation.where(:form => card.front).each do |translation|
-          IdiomTranslation.where(:translation_id => translation.id).each do |idiom_translation|
-            SetTerms.where(:term_id => idiom_translation.idiom_id).each do |set_term|
-              set_term.chapter.should == card.chapter
-            end
+          SetTerms.where(:term_id => translation.idiom_id).each do |set_term|
+            set_term.chapter.should == card.chapter
           end
         end
 
         Translation.where(:form => card.back).each do |translation|
-          IdiomTranslation.where(:translation_id => translation.id).each do |idiom_translation|
-            SetTerms.where(:term_id => idiom_translation.idiom_id).each do |set_term|
-              set_term.chapter.should == card.chapter
-            end
+          SetTerms.where(:term_id => translation.idiom_id).each do |set_term|
+            set_term.chapter.should == card.chapter
           end
+
         end
       end
     end
@@ -128,10 +123,8 @@ describe Sets do
 
       Card.order(:id).all.each_with_index do |card, i|
         Translation.where(:form => card.front).each do |translation|
-          IdiomTranslation.where(:translation_id => translation.id).each do |idiom_translation|
-            SetTerms.where(:term_id => idiom_translation.idiom_id).each do |set_term|
-              set_term.position.should == i + 1
-            end
+          SetTerms.where(:term_id => translation.idiom_id).each do |set_term|
+            set_term.position.should == i + 1
           end
         end
       end
@@ -158,7 +151,7 @@ describe Sets do
 
         t = Translation.where(:form => @cards.first.front)
 
-        user_idiom_review.idiom_id.should == IdiomTranslation.where(:translation_id => t.first.id).first.idiom_id
+        user_idiom_review.idiom_id.should == Translation.where(:id => t.first.id).first.idiom_id
         user_idiom_review.language_id.should == Language::get_or_create("Chinese (Simplified)").id
       end
 
@@ -222,7 +215,7 @@ describe Sets do
 
         t = Translation.where(:form => @cards.first.front)
 
-        new_schedule.idiom_id.should == IdiomTranslation.where(:translation_id => t.first.id).first.idiom_id
+        new_schedule.idiom_id.should == Translation.where(:id => t.first.id).first.idiom_id
         new_schedule.language_id.should == Language::get_or_create("Chinese (Simplified)").id
       end
 

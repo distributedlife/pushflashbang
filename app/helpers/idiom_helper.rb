@@ -10,14 +10,14 @@ module IdiomHelper
   end
 
   def get_idioms_from_translations translations
-    idiom_translations = IdiomTranslation.find(:all, :conditions => ['translation_id in (?)', translations])
-    idiom_translations = idiom_translations.map{|t| t.idiom_id}
-    Idiom.find(idiom_translations)
+    translations = Translation.find(:all, :conditions => ['id in (?)', translations])
+    translations = translations.map {|t| t.idiom_id}
+    Idiom.find(translations)
   end
 
   def get_idiom_translations
     if idiom_exists? params[:id]
-      @translations = Translation.joins(:languages, :idiom_translations).order(:name).order(:form).where(:idiom_translations => {:idiom_id => params[:id]})
+      @translations = Translation.joins(:languages).order(:name).order(:form).where(:idiom_id => params[:id])
 
       if @translations.empty?
         error_redirect_to t('notice.term-no-translations'), terms_path

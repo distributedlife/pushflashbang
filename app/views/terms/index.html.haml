@@ -18,8 +18,8 @@
         .button{:class => "centre large_button"}
           = link_to t('actions.more'), search_terms_path(:q => @q, :page => @page.to_i + 1), :class => 'positive inline-block',  :id => "next_page"
           - break
-      - if translation.idiom_translations.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = translation.idiom_translations.idiom_id
+      - if translation.idiom_id != current_idiom and !current_idiom.nil?
+        - current_idiom = translation.idiom_id
         - idiom_count = idiom_count + 1
         .pad_from_top
         - if current_user.in_edit_mode?

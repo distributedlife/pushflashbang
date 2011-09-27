@@ -1,17 +1,9 @@
 require 'spec_helper'
 
 describe DeckHelper do
-  describe 'is_pronunciation_on_front?' do
-
-  end
-
-  describe 'is_pronunciation_on_back?' do
-
-  end
-
-  describe 'deck_subtitle' do
-
-  end
+  describe 'is_pronunciation_on_front?' 
+  describe 'is_pronunciation_on_back?' 
+  describe 'deck_subtitle' 
 
   describe 'string_in_array' do
     it 'should return false is string is empty' do

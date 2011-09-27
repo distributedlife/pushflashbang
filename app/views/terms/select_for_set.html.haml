@@ -20,8 +20,8 @@
         .button{:class => "centre large_button"}
           = link_to t('actions.more'), select_for_set_set_set_terms_path(:set_id => params[:set_id], :q => @q, :page => @page.to_i + 1), :class => 'positive inline-block',  :id => "next_page"
           - break
-      - if translation.idiom_translations.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = translation.idiom_translations.idiom_id
+      - if translation.idiom_id != current_idiom and !current_idiom.nil?
+        - current_idiom = translation.idiom_id
         - idiom_count = idiom_count + 1
         .pad_from_top
         %span.subscript{:style => "float: right;"}

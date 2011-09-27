@@ -17,12 +17,10 @@ describe RelatedTranslations do
   describe 'get_relationship' do
     before(:each) do
       idiom = Idiom.make
-      @t1 = Translation.make(:language_id => 1)
-      @t2 = Translation.make(:language_id => 1)
-      @t3 = Translation.make(:language_id => 1)
-
-      add_translation_to_idiom idiom.id, @t1.id
-      add_translation_to_idiom idiom.id, @t2.id
+      idiom2 = Idiom.make
+      @t1 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t2 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t3 = Translation.make(:idiom_id => idiom2.id, :language_id => 1)
 
       relate_translation_to_others @t1.id, idiom.id
       relate_translation_to_others @t2.id, idiom.id
@@ -45,12 +43,10 @@ describe RelatedTranslations do
   describe 'delete_relationships_for_transation' do
     before(:each) do
       idiom = Idiom.make
-      @t1 = Translation.make(:language_id => 1)
-      @t2 = Translation.make(:language_id => 1)
-      @t3 = Translation.make(:language_id => 1)
-
-      add_translation_to_idiom idiom.id, @t1.id
-      add_translation_to_idiom idiom.id, @t2.id
+      idiom2 = Idiom.make
+      @t1 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t2 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t3 = Translation.make(:idiom_id => idiom2.id, :language_id => 1)
 
       relate_translation_to_others @t1.id, idiom.id
       relate_translation_to_others @t2.id, idiom.id
@@ -71,12 +67,10 @@ describe RelatedTranslations do
   describe 'rebuild_relationships_for_translation' do
     before(:each) do
       idiom = Idiom.make
-      @t1 = Translation.make(:language_id => 1)
-      @t2 = Translation.make(:language_id => 1)
-      @t3 = Translation.make(:language_id => 1)
-
-      add_translation_to_idiom idiom.id, @t1.id
-      add_translation_to_idiom idiom.id, @t2.id
+      idiom2 = Idiom.make
+      @t1 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t2 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t3 = Translation.make(:idiom_id => idiom2.id, :language_id => 1)
 
       RelatedTranslations.make(:translation1_id => @t1.id, :translation2_id => @t2.id, :share_meaning => false, :share_written_form => true, :share_audible_form => true)
     end
@@ -98,12 +92,10 @@ describe RelatedTranslations do
   describe 'create_relationships_for_translation' do
     before(:each) do
       idiom = Idiom.make
-      @t1 = Translation.make(:language_id => 1)
-      @t2 = Translation.make(:language_id => 1)
-      @t3 = Translation.make(:language_id => 1)
-
-      add_translation_to_idiom idiom.id, @t1.id
-      add_translation_to_idiom idiom.id, @t2.id
+      idiom2 = Idiom.make
+      @t1 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t2 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t3 = Translation.make(:idiom_id => idiom2.id, :language_id => 1)
     end
 
     it 'should create relationships that now exist' do
@@ -117,12 +109,10 @@ describe RelatedTranslations do
   describe 'create_relationship_if_needed' do
     before(:each) do
       idiom = Idiom.make
-      @t1 = Translation.make(:language_id => 1)
-      @t2 = Translation.make(:language_id => 1)
-      @t3 = Translation.make(:language_id => 1)
-
-      add_translation_to_idiom idiom.id, @t1.id
-      add_translation_to_idiom idiom.id, @t2.id
+      idiom2 = Idiom.make
+      @t1 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t2 = Translation.make(:idiom_id => idiom.id, :language_id => 1)
+      @t3 = Translation.make(:idiom_id => idiom2.id, :language_id => 1)
     end
 
     it 'should create a relationship if one is needed' do
@@ -151,22 +141,17 @@ describe RelatedTranslations do
       # 1,3 share written form
       # 2,5 share audible form
       @idiom1 = Idiom.make
-      @t1 = Translation.make(:language_id => @chinese.id, :form => "a")
-      @t2 = Translation.make(:language_id => @chinese.id, :pronunciation => "p")
-      @t3 = Translation.make(:language_id => @spanish.id)
-      add_translation_to_idiom @idiom1.id, @t1.id
-      add_translation_to_idiom @idiom1.id, @t2.id
-      add_translation_to_idiom @idiom1.id, @t3.id
+      @t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @chinese.id, :form => "a")
+      @t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @chinese.id, :pronunciation => "p")
+      @t3 = Translation.make(:idiom_id => @idiom1.id, :language_id => @spanish.id)
       relate_translation_to_others @t1.id, @idiom1.id
       relate_translation_to_others @t2.id, @idiom1.id
       relate_translation_to_others @t3.id, @idiom1.id
 
       @idiom2 = Idiom.make
-      @t4 = Translation.make(:language_id => @chinese.id, :form => "a")
-      @t5 = Translation.make(:language_id => @chinese.id, :pronunciation => "p")
+      @t4 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "a")
+      @t5 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :pronunciation => "p")
 
-      add_translation_to_idiom @idiom2.id, @t4.id
-      add_translation_to_idiom @idiom2.id, @t5.id
       relate_translation_to_others @t4.id, @idiom2.id
       relate_translation_to_others @t5.id, @idiom2.id
 

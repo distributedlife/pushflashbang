@@ -1,16 +1,16 @@
 class Translation < ActiveRecord::Base
   belongs_to :languages, :class_name => "Language", :foreign_key => "language_id"
-  belongs_to :idiom_translations, :class_name => "IdiomTranslation", :foreign_key => "id", :primary_key => "translation_id"
   
-  has_paper_trail
+#  has_paper_trail
   has_attached_file :audio,
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
     :path => "audio/:id/#{Digest::MD5::hexdigest(":id").upcase}.:extension"
 
-  attr_accessible :language_id, :form, :pronunciation, :audio, :t_type
+  attr_accessible :language_id, :form, :pronunciation, :audio, :t_type, :idiom_id
 
   validates :language_id, :presence => true
+  validates :idiom_id, :presence => true
   validates :form, :presence => true
   validates_attachment_size :audio, :less_than => 1.megabytes,  :unless => Proc.new {|model| model.audio }
 
@@ -21,7 +21,7 @@ class Translation < ActiveRecord::Base
   end
 
   def self.all_sorted_by_idiom_language_and_form
-    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).all
+    Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).all
   end
 
   def self.all_sorted_by_idiom_language_and_form_with_like_filter filter, limit, offset
@@ -31,16 +31,15 @@ class Translation < ActiveRecord::Base
     where = <<-SQL
       id IN
       (
-        SELECT idiom_id
-        FROM idiom_translations sit
-        JOIN translations st on sit.translation_id = st.id
-        WHERE lower(st.form) SIMILAR TO :filter
-        OR lower(st.pronunciation) SIMILAR TO :filter
+        SELECT t.idiom_id
+        FROM translations t
+        WHERE lower(t.form) SIMILAR TO :filter
+        OR lower(t.pronunciation) SIMILAR TO :filter
       )
     SQL
 
     idioms = Idiom.where(where, :filter => filter_string).limit(limit).offset(offset)
-    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(:idiom_translations => {:idiom_id => idioms})
+    Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where(:idiom_id => idioms)
   end
 
   def self.all_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, filter, limit, offset
@@ -48,11 +47,10 @@ class Translation < ActiveRecord::Base
     filter_string.downcase!
 
     terms_matching_filter = <<-SQL
-      SELECT idiom_id
-      FROM idiom_translations sit
-      JOIN translations st on sit.translation_id = st.id
-      WHERE lower(st.form) SIMILAR TO :filter
-      OR lower(st.pronunciation) SIMILAR TO :filter
+      SELECT t.idiom_id
+      FROM translations t
+      WHERE lower(t.form) SIMILAR TO :filter
+      OR lower(t.pronunciation) SIMILAR TO :filter
     SQL
     terms_already_in_set = <<-SQL
       SELECT term_id
@@ -70,6 +68,6 @@ class Translation < ActiveRecord::Base
     SQL
 
     idioms = Idiom.where(where, :filter => filter_string, :set_id => set_id).limit(limit).offset(offset)
-    Translation.joins(:languages, :idiom_translations).order(:idiom_id).order(:name).order(:form).where(:idiom_translations => {:idiom_id => idioms})
+    Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where(:idiom_id => idioms)
   end
 end

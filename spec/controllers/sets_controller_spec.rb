@@ -13,10 +13,8 @@ describe SetsController do
       idiom = Idiom.make
       english = Language.make(:name =>"English")
       spanish = Language.make(:name =>"Spanish")
-      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
       set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
 
       xhr :get, :user_sets, :language_id => english.id
@@ -33,10 +31,8 @@ describe SetsController do
       idiom = Idiom.make
       english = Language.make(:name =>"English")
       spanish = Language.make(:name =>"Spanish")
-      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
       set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
       set_term2 = SetTerms.make(:set_id => set2.id, :term_id => idiom.id)
 
@@ -502,42 +498,32 @@ describe SetsController do
       
       #first idiom is in language and set
       @idiom1 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set (has user native; but not learn)
       @idiom2 = Idiom.make
-      t1 = Translation.make(:language_id => @language2.id)
-      t2 = Translation.make(:language_id => @language3.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
 
       #third idiom is not in set but is in language
       @idiom3 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
 
       #fourth idiom is in language and set
       @idiom4 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
 
       #Nth idiom is in the language and set but in a subsequent chapter
       @idiomN = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
     end
 
@@ -781,42 +767,32 @@ describe SetsController do
 
       #first idiom is in language and set
       @idiom1 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set
       @idiom2 = Idiom.make
-      t1 = Translation.make(:language_id => @language2.id)
-      t2 = Translation.make(:language_id => @language3.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
 
       #third idiom is not in set but is in language
       @idiom3 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
 
       #fourth idiom is in language and set
       @idiom4 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
 
       #Nth idiom is in the language and set but in a subsequent chapter
       @idiomN = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
     end
 
@@ -941,42 +917,32 @@ describe SetsController do
 
       #first idiom is in language and set
       @idiom1 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set
       @idiom2 = Idiom.make
-      t1 = Translation.make(:language_id => @language2.id)
-      t2 = Translation.make(:language_id => @language3.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
 
       #third idiom is not in set but is in language
       @idiom3 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
 
       #fourth idiom is in language and set
       @idiom4 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
 
       #Nth idiom is in the language and set but in a subsequent chapter
       @idiomN = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
     end
 
@@ -1111,42 +1077,32 @@ describe SetsController do
 
       #first idiom is in language and set
       @idiom1 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set
       @idiom2 = Idiom.make
-      t1 = Translation.make(:language_id => @language2.id)
-      t2 = Translation.make(:language_id => @language3.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
 
       #third idiom is not in set but is in language
       @idiom3 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom3.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
 
       #fourth idiom is in language and set
       @idiom4 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom4.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
 
       #Nth idiom is in the language and set but in a subsequent chapter
       @idiomN = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiomN.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
     end
 
@@ -1267,18 +1223,14 @@ describe SetsController do
 
       #first idiom is in language and set
       @idiom1 = Idiom.make
-      t1 = Translation.make(:language_id => @language.id)
-      t2 = Translation.make(:language_id => @language2.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom1.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set (has user native; but not learn)
       @idiom2 = Idiom.make
-      t1 = Translation.make(:language_id => @language2.id)
-      t2 = Translation.make(:language_id => @language3.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t1.id)
-      IdiomTranslation.make(:idiom_id => @idiom2.id, :translation_id => t2.id)
+      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
       SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
     end
 

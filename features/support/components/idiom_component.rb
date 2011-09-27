@@ -23,7 +23,7 @@ module IdiomComponent
   end
 
   def get_idiom idiom_id, translation_id
-    IdiomTranslation.where(:idiom_id => idiom_id, :translation_id => translation_id).first
+    Translation.where(:idiom_id => idiom_id, :id => translation_id).first
   end
 
   def user_has_reviewed_idiom idiom_id, language_id, user_id

@@ -37,9 +37,9 @@ module SetHelper
     set_id = set_id.to_i
 
     SetTerms.where(:set_id => set_id).each do |set_terms|
-      IdiomTranslation.joins(:translation).where(:idiom_id => set_terms.term_id).each do |idiom_translation|
+      Translation.where(:idiom_id => set_terms.term_id).each do |translation|
         begin
-          language = Language.find(idiom_translation.translation.language_id)
+          language = Language.find(translation.language_id)
         rescue
           next
         end

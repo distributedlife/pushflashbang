@@ -8,13 +8,9 @@ describe Idiom do
       @spanish = Language.make
 
       @idiom = Idiom.create
-      @translation1 = Translation.create(:language_id => @english.id, :form => "a")
-      @translation2 = Translation.create(:language_id => @chinese.id, :form => "b")
-      @translation3 = Translation.create(:language_id => @chinese.id, :form => "c")
-
-      IdiomTranslation.create(:idiom_id => @idiom.id, :translation_id => @translation1.id)
-      IdiomTranslation.create(:idiom_id => @idiom.id, :translation_id => @translation2.id)
-      IdiomTranslation.create(:idiom_id => @idiom.id, :translation_id => @translation3.id)
+      @translation1 = Translation.create(:idiom_id => @idiom.id, :language_id => @english.id, :form => "a")
+      @translation2 = Translation.create(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "b")
+      @translation3 = Translation.create(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "c")
     end
 
     it 'should return an empty set if no translations are in the language' do

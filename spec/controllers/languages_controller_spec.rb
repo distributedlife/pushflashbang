@@ -124,10 +124,8 @@ describe LanguagesController do
       english = Language.make(:name =>"English")
       spanish = Language.make(:name =>"Spanish")
       esperanto = Language.make(:name => "Esperanto")
-      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
 
@@ -148,10 +146,8 @@ describe LanguagesController do
       english = Language.make(:name =>"English")
       spanish = Language.make(:name =>"Spanish")
       esperanto = Language.make(:name => "Esperanto")
-      translation1 = Translation.make(:language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:language_id => spanish.id, :form => "hola", :pronunciation => "")
-      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation1.id)
-      idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation2.id)
+      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
 

@@ -32,13 +32,11 @@ class Sets < ActiveRecord::Base
         chinese_translation.audio = card.audio
         chinese_translation.save!
       end
-      IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => chinese_translation.id)
 
       card.back.split(',').each do |form|
         form.strip!
 
         english_translation = Translation.create(:idiom_id => idiom.id, :language_id => english.id, :form => form, :pronunciation => "")
-        IdiomTranslation.create(:idiom_id => idiom.id, :translation_id => english_translation.id)
 
         RelatedTranslations::create_relationships_for_translation english_translation
       end

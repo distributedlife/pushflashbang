@@ -6,8 +6,8 @@
 %section{:class => ["panel left"]}
   #translations
     - @translations.each_with_index do |translation, i|
-      - if translation.idiom_translations.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = translation.idiom_translations.idiom_id
+      - if translation.idiom_id != current_idiom and !current_idiom.nil?
+        - current_idiom = translation.idiom_id
         .pad_from_top
       #translation{:id => i}
         %span#language{:style => "width: 10em; display: inline-block;"}= translation.languages.name
@@ -17,5 +17,5 @@
           #audio
             =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
         = link_to 'attach translation', attach_term_translation_path(:term_id => params[:term_id], :id => translation.id), :class => 'neutral', :method => :post, :id => "translation_#{translation.id}_select"
-        = link_to 'move translation', attach_and_detach_term_translation_path(:term_id => params[:term_id], :id => translation.id, :remove_from_idiom_id => translation.idiom_translations.idiom_id), :class => 'neutral', :method => :post, :id => "translation_#{translation.id}_select_and_remove"
+        = link_to 'move translation', attach_and_detach_term_translation_path(:term_id => params[:term_id], :id => translation.id, :remove_from_idiom_id => translation.idiom_id), :class => 'neutral', :method => :post, :id => "translation_#{translation.id}_select_and_remove"
         .pad_from_top

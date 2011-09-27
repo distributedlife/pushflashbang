@@ -12,11 +12,11 @@ module TranslationComponent
     end
 
     translation = Translation.make hash
-    idiom_translation = IdiomTranslation.make(:idiom_id => get(:idiom).id, :translation_id => translation.id)
+    translation.idiom_id = get(:idiom).id
+    translation.save!
     relate_translation_to_others translation.id, get(:idiom).id
 
     add(:translation, translation)
-    add(:idiom_translation, idiom_translation)
   end
 
   def create_translation_attached_to_idiom idiom, hash
@@ -26,15 +26,11 @@ module TranslationComponent
     hash = swap_language_for_id hash, language.id
 
     translation = Translation.make hash
-    idiom_translation = IdiomTranslation.make(:idiom_id => idiom.id, :translation_id => translation.id)
+    translation.idiom_id = idiom.id
+    translation.save!
     relate_translation_to_others translation.id, idiom.id
 
     add(:translation, translation)
-    add(:idiom_translation, idiom_translation)
-  end
-
-  def add_translation_to_idiom idiom_id, translation_id
-    IdiomTranslation.make(:idiom_id => idiom_id, :translation_id => translation_id)
   end
 
   def relate_translation_to_others translation_id, idiom_id
@@ -46,11 +42,11 @@ module TranslationComponent
       relate_translations t, other
     end
 
-    IdiomTranslation.where(:idiom_id => idiom_id).each do |other|
-      next if other.translation_id == t.id
-      next if t.language_id != Translation.find(other.translation_id).language_id
+    Translation.where(:idiom_id => idiom_id).each do |other|
+      next if other.id == t.id
+      next if t.language_id != Translation.find(other.id).language_id
 
-      relate_translations_by_meaning t.id, other.translation_id
+      relate_translations_by_meaning t.id, other.id
     end
   end
 
@@ -114,11 +110,11 @@ module TranslationComponent
   end
 
   def get_translation_group_using_form form
-    return IdiomTranslation.joins(:translation).where(:translations => {:form => form})
+    return Translation.where(:form => form)
   end
 
   def get_translation_group_using_idiom idiom
-    return IdiomTranslation.joins(:translation).where(:idiom_id => idiom.id)
+    return Translation.where(:idiom_id => idiom.id)
   end
 
   def related_translations_are_the_same t1_id, t2_id

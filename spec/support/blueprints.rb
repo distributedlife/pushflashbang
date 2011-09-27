@@ -95,14 +95,10 @@ Idiom.blueprint do
 end
 
 Translation.blueprint do
+  idiom_id
   language_id
   form
   pronunciation
-end
-
-IdiomTranslation.blueprint do
-  idiom_id
-  translation_id
 end
 
 Language.blueprint do

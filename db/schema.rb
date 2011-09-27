@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110916230354) do
+ActiveRecord::Schema.define(:version => 20110927024812) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -57,13 +57,6 @@ ActiveRecord::Schema.define(:version => 20110916230354) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
-
-  create_table "idiom_translations", :force => true do |t|
-    t.integer  "idiom_id"
-    t.integer  "translation_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "idioms", :force => true do |t|
     t.string "idiom_type"
@@ -115,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20110916230354) do
     t.integer  "language_id"
     t.string   "audio_file_name"
     t.string   "t_type"
+    t.integer  "idiom_id"
   end
 
   create_table "user_card_reviews", :force => true do |t|

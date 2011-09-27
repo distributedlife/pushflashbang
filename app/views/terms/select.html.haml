@@ -6,8 +6,8 @@
 %section{:class => ["panel left"], :style => "width: 70%"}
   #translations
     - @translations.each_with_index do |translation, i|
-      - if translation.idiom_translations.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = translation.idiom_translations.idiom_id
+      - if translation.idiom_id != current_idiom and !current_idiom.nil?
+        - current_idiom = translation.idiom_id
         .pad_from_top
         %span.subscript{:style => "float: right;"}
           [

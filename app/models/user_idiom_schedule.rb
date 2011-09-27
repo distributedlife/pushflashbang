@@ -69,10 +69,8 @@ class UserIdiomSchedule < ActiveRecord::Base
     terms_the_user_can_learn = <<-SQL
       SELECT term_id
       FROM set_terms
-      JOIN idiom_translations
-        ON set_terms.term_id = idiom_translations.idiom_id
       JOIN translations
-        ON idiom_translations.translation_id = translations.id
+        ON set_terms.term_id = translations.idiom_id
         AND translations.language_id = #{language_id}
       WHERE set_id = #{set_id}
     SQL
@@ -89,10 +87,8 @@ class UserIdiomSchedule < ActiveRecord::Base
     terms_that_support_the_users_native_language = <<-SQL
       SELECT term_id
       FROM set_terms
-      JOIN idiom_translations
-        ON set_terms.term_id = idiom_translations.idiom_id
       JOIN translations
-        ON idiom_translations.translation_id = translations.id
+        ON set_terms.term_id = translations.idiom_id
         AND translations.language_id = #{user_native_language_id}
       WHERE set_id = #{set_id}
     SQL
