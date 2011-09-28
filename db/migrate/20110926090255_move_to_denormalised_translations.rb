@@ -6,7 +6,7 @@ class MoveToDenormalisedTranslations < ActiveRecord::Migration
     # for each translation
     all_translations = Translation.all
     all_translations.each_with_index do |translation, translation_index|
-      puts "#{translation_index}/#{all_translations}"
+      puts "#{translation_index}/#{all_translations.count}"
       
       idiom_translations = IdiomTranslation.where(:translation_id => translation.id)
       if idiom_translations.empty?
