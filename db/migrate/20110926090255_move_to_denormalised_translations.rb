@@ -4,9 +4,8 @@ class MoveToDenormalisedTranslations < ActiveRecord::Migration
     add_column :translations, :idiom_id, :integer
 
     # for each translation
-    all_translations = Translation.all
-    all_translations.each_with_index do |translation, translation_index|
-      puts "#{translation_index}/#{all_translations.count}"
+    Translation.all.each_with_index do |translation, translation_index|
+      puts "#{translation_index}"
       
       idiom_translations = IdiomTranslation.where(:translation_id => translation.id)
       if idiom_translations.empty?
@@ -38,6 +37,6 @@ class MoveToDenormalisedTranslations < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :translations, :idiom_id, :integer
+    remove_column :translations, :idiom_id
   end
 end
