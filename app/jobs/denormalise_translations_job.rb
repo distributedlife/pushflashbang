@@ -2,10 +2,7 @@ class DenormaliseTranslationsJob
   def perform
     start = Time.now
 
-    all_translations = Translation.all
-    all_translations.each_with_index do |translation, translation_index|
-      puts "#{translation_index}/#{all_translations.count}"
-
+    Translation.find_each do |translation|
       idiom_translations = IdiomTranslation.where(:translation_id => translation.id)
       if idiom_translations.empty?
         puts "Translation #{translation.id} is an orphan"
