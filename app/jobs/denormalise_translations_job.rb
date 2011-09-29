@@ -1,8 +1,18 @@
 class DenormaliseTranslationsJob
+  @start
+  @finish
+
+  def initialize start, finish
+    @start = start
+    @finish = finish
+  end
+
   def perform
     start = Time.now
 
-    Translation.find_each(:batch_size => 10000) do |translation|
+    Translation.where('id >= :start and id <= :finish AND idiom_id IS NULL', :start => @start, :finish => @finish).each do |translation|
+      puts "Translation Id: #{translation.id}"
+
       idiom_translations = IdiomTranslation.where(:translation_id => translation.id)
       if idiom_translations.empty?
         puts "Translation #{translation.id} is an orphan"
@@ -33,7 +43,7 @@ class DenormaliseTranslationsJob
 
     finish = Time.now
     puts "*" * 80
-    puts "Started DenormaliseTranslationsJob at #{start} and finished at #{finish} (#{finish-start} seconds)."
+    puts "Started DenormaliseTranslationsJob(#{@start}-#{@finish}) at #{start} and finished at #{finish} (#{finish-start} seconds)."
     puts "*" * 80
   end
 end
