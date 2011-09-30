@@ -79,8 +79,8 @@ header {
   margin-left: 0.3em;
   margin-right: 0.3em;
   text-align: center; }
-  .top_menu_panel span {
-    font-size: 0.6em; }
+.top_menu_panel span {
+  font-size: 0.6em; }
 
 .created_item {
   background-color: #eeffee;
@@ -111,8 +111,8 @@ legend.label {
   margin-right: auto;
   margin-left: auto;
   text-align: center; }
-  .definition p {
-    font-size: 0.6em !important; }
+.definition p {
+  font-size: 0.6em !important; }
 
 .hidden {
   display: none; }
@@ -230,69 +230,69 @@ select {
 
 form {
   width: 100% !important; }
-  form li {
-    list-style: none; }
-    form li p {
-      display: inline !important;
-      padding: 0 !important;
-      margin: 0 !important; }
-  form li.width60 {
-    width: 60%; }
-  form li.full_width {
-    width: 100%; }
-  form a {
-    margin: auto;
-    font-size: 0.6em;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 2px solid #eeeeee;
-    height: 6em;
-    padding: 0.6em;
-    color: black; }
-  form a:hover {
-    color: white; }
-  form a.positive {
-    background: lightgreen;
-    border: 1px solid green; }
-  form a.positive:hover {
-    background: darkgreen; }
-  form a.negative {
-    background: indianred;
-    border: 1px solid red; }
-  form a.negative:hover {
-    background: red; }
-  form a.neutral {
-    background: white;
-    border: 1px solid black; }
-  form a.neutral:hover {
-    background: black; }
-  form label.unchecked {
-    margin: auto;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 2px solid #eeeeee;
-    padding-top: 0.6em;
-    padding-bottom: 0.6em;
-    padding-left: 1.2em;
-    padding-right: 1.2em;
-    display: block;
-    width: 12em;
-    font-size: 0.8em; }
-  form label.checked {
-    margin: auto;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 2px solid #eeeeee;
-    padding-top: 0.6em;
-    padding-bottom: 0.6em;
-    padding-left: 1.2em;
-    padding-right: 1.2em;
-    display: block;
-    width: 12em;
-    font-size: 0.8em; }
+form li {
+  list-style: none; }
+form li p {
+  display: inline !important;
+  padding: 0 !important;
+  margin: 0 !important; }
+form li.width60 {
+  width: 60%; }
+form li.full_width {
+  width: 100%; }
+form a {
+  margin: auto;
+  font-size: 0.6em;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 2px solid #eeeeee;
+  height: 6em;
+  padding: 0.6em;
+  color: black; }
+form a:hover {
+  color: white; }
+form a.positive {
+  background: lightgreen;
+  border: 1px solid green; }
+form a.positive:hover {
+  background: darkgreen; }
+form a.negative {
+  background: indianred;
+  border: 1px solid red; }
+form a.negative:hover {
+  background: red; }
+form a.neutral {
+  background: white;
+  border: 1px solid black; }
+form a.neutral:hover {
+  background: black; }
+form label.unchecked {
+  margin: auto;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 2px solid #eeeeee;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 1.2em;
+  padding-right: 1.2em;
+  display: block;
+  width: 12em;
+  font-size: 0.8em; }
+form label.checked {
+  margin: auto;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 2px solid #eeeeee;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 1.2em;
+  padding-right: 1.2em;
+  display: block;
+  width: 12em;
+  font-size: 0.8em; }
 
 .button a {
   margin: auto;
@@ -435,14 +435,14 @@ nav.filter {
   clear: right;
   float: right;
   width: 30%; }
-  nav.filter ul {
-    margin-top: 0.6em;
-    margin-bottom: 0.6em; }
-    nav.filter ul li {
-      font-size: 0.6em;
-      padding: 0;
-      margin: 0;
-      text-align: right; }
+nav.filter ul {
+  margin-top: 0.6em;
+  margin-bottom: 0.6em; }
+nav.filter ul li {
+  font-size: 0.6em;
+  padding: 0;
+  margin: 0;
+  text-align: right; }
 
 .card_panel {
   background-color: white;
@@ -535,71 +535,71 @@ img.btn_close {
 
 .jp-audio {
   padding-top: 0.6em; }
-  .jp-audio .jp-type-play-only {
-    padding-left: 0% !important;
-    padding-right: 0% !important; }
-    .jp-audio .jp-type-play-only .jp-interface {
-      border-radius: 5px;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      height: 36px;
-      border-bottom: none; }
-    .jp-audio .jp-type-play-only a.jp-play {
-      top: 7px;
-      left: 7px; }
-    .jp-audio .jp-type-play-only a.jp-pause {
-      top: 7px;
-      left: 7px; }
-  .jp-audio .jp-type-single {
-    padding-left: 22%;
-    padding-right: 22%; }
-    .jp-audio .jp-type-single .jp-interface {
-      border-radius: 5px;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      height: 36px;
-      border-bottom: none; }
-    .jp-audio .jp-type-single a.jp-play {
-      top: 7px;
-      left: 7px; }
-    .jp-audio .jp-type-single a.jp-pause {
-      top: 7px;
-      left: 7px; }
-    .jp-audio .jp-type-single .jp-current-time {
-      top: 10px;
-      left: 42px; }
-    .jp-audio .jp-type-single .jp-progress {
-      top: 9px;
-      left: 96px;
-      width: 100px;
-      height: 18px; }
-    .jp-audio .jp-type-single .jp-duration {
-      top: 10px;
-      left: 206px; }
-    .jp-audio .jp-type-single a.jp-mute {
-      top: 7px;
-      left: 256px; }
-    .jp-audio .jp-type-single a.jp-unmute {
-      top: 7px;
-      left: 256px; }
-    .jp-audio .jp-type-single .jp-volume-bar {
-      top: 14px;
-      left: 280px; }
+.jp-audio .jp-type-play-only {
+  padding-left: 0% !important;
+  padding-right: 0% !important; }
+.jp-audio .jp-type-play-only .jp-interface {
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  height: 36px;
+  border-bottom: none; }
+.jp-audio .jp-type-play-only a.jp-play {
+  top: 7px;
+  left: 7px; }
+.jp-audio .jp-type-play-only a.jp-pause {
+  top: 7px;
+  left: 7px; }
+.jp-audio .jp-type-single {
+  padding-left: 22%;
+  padding-right: 22%; }
+.jp-audio .jp-type-single .jp-interface {
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  height: 36px;
+  border-bottom: none; }
+.jp-audio .jp-type-single a.jp-play {
+  top: 7px;
+  left: 7px; }
+.jp-audio .jp-type-single a.jp-pause {
+  top: 7px;
+  left: 7px; }
+.jp-audio .jp-type-single .jp-current-time {
+  top: 10px;
+  left: 42px; }
+.jp-audio .jp-type-single .jp-progress {
+  top: 9px;
+  left: 96px;
+  width: 100px;
+  height: 18px; }
+.jp-audio .jp-type-single .jp-duration {
+  top: 10px;
+  left: 206px; }
+.jp-audio .jp-type-single a.jp-mute {
+  top: 7px;
+  left: 256px; }
+.jp-audio .jp-type-single a.jp-unmute {
+  top: 7px;
+  left: 256px; }
+.jp-audio .jp-type-single .jp-volume-bar {
+  top: 14px;
+  left: 280px; }
 
 div.jp-interface {
   position: relative;
   background-color: #777; }
-  div.jp-interface ul.jp-controls {
-    list-style-type: none;
-    padding: 0;
-    margin: 0; }
-    div.jp-interface ul.jp-controls li {
-      position: absolute;
-      display: inline; }
-    div.jp-interface ul.jp-controls a {
-      position: absolute;
-      overflow: hidden;
-      text-indent: -9999px; }
+div.jp-interface ul.jp-controls {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+div.jp-interface ul.jp-controls li {
+  position: absolute;
+  display: inline; }
+div.jp-interface ul.jp-controls a {
+  position: absolute;
+  overflow: hidden;
+  text-indent: -9999px; }
 
 a.jp-play {
   width: 22px;
@@ -719,7 +719,7 @@ div.jp-duration {
   background-position: center left; }
 
 p.pronunciation {
-  padding-top: 0.6em;
-  font-size: 0.6em;
+  padding-top: 1.2em;
+  font-size: 0.8em;
   font-face: "courier-new";
   color: #999999; }
