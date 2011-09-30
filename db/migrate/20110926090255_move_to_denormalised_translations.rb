@@ -3,7 +3,10 @@ class MoveToDenormalisedTranslations < ActiveRecord::Migration
     # add idiom to translation
     add_column :translations, :idiom_id, :integer
 
-    Delayed::Job.enqueue DenormaliseTranslationsJob.new
+    step_size = 20000
+    (1 .. 499_999).step(step_size) do |i|
+      Delayed::Job.enqueue DenormaliseTranslationsJob.new(i, i + step_size)
+    end
   end
 
   def self.down
