@@ -90,7 +90,6 @@ describe SetsController do
   end
 
   context '"GET" show_chapter' do
-    it 'shoudl be tested'
   end
   
   context '"GET" user_goals' do

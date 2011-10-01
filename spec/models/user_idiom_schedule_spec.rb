@@ -763,9 +763,5 @@ describe UserIdiomSchedule do
 
       first.should == @st11
     end
-
-    it 'should return terms that do not have audio when the review mode is not HEARING' 
-    it 'should not return terms that do not have audio when the review mode is HEARING'
-    it 'should not terms that have audio when the review mode is HEARING'
   end
 end

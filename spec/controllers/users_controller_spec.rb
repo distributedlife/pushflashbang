@@ -108,7 +108,27 @@ describe UsersController do
   end
 
   context 'flash_messages' do
-    it 'should delete session messages when read'
-    it 'should return session messages when set'
+    before(:each) do
+      @user = User.make
+      sign_in :user, @user
+
+      request.env["HTTP_REFERER"] = "http://whereiwasbefore.com"
+    end
+
+    it 'should delete session messages when read' do
+      session[:warning] = "message"
+
+      get :flash_messages
+
+      session[:warning].nil?.should == true
+    end
+
+    it 'should return session messages when set' do
+      session[:warning] = "message"
+
+      get :flash_messages, :format => :json
+
+      JSON.parse(response.body)["warning"].should == "message"
+    end
   end
 end

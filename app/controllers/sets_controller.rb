@@ -255,7 +255,7 @@ class SetsController < ApplicationController
   end
 
   def next_chapter
-    redirect_target = is_user_at_end_of_chapter current_user.id, params[:id], params[:language_id], params[:review_mode]
+    redirect_target = is_user_at_end_of_chapter? current_user.id, params[:id], params[:language_id], params[:review_mode]
     redirect_to redirect_target and return unless redirect_target.nil?
 
     review_types = parse_review_types params[:review_mode]
@@ -340,7 +340,7 @@ class SetsController < ApplicationController
   end
 
   def advance_chapter
-    redirect_target = is_user_at_end_of_chapter current_user.id, params[:id], params[:language_id], params[:review_mode]
+    redirect_target = is_user_at_end_of_chapter? current_user.id, params[:id], params[:language_id], params[:review_mode]
     redirect_to redirect_target and return unless redirect_target.nil?
 
     #advance user chapter

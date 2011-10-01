@@ -193,8 +193,6 @@ class UploadDictionaryJob
       end
     end
 
-    ap notes
-
     finish = Time.now
     puts "*" * 80
     puts "Completed import."

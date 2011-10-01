@@ -1,7 +1,6 @@
 class Translation < ActiveRecord::Base
   belongs_to :languages, :class_name => "Language", :foreign_key => "language_id"
   
-#  has_paper_trail
   has_attached_file :audio,
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
@@ -17,15 +16,22 @@ class Translation < ActiveRecord::Base
   def delete
     self.audio.destroy unless self.audio.file?
 
+    RelatedTranslations.where(:translation1_id => self.id).each do |rt|
+      rt.delete
+    end
+    RelatedTranslations.where(:translation2_id => self.id).each do |rt|
+      rt.delete
+    end
+
     return super
   end
 
-  def self.all_sorted_by_idiom_language_and_form
-    Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).all
-  end
-
-  def self.all_sorted_by_idiom_language_and_form_with_like_filter filter, limit, offset
-    filter_string = "(%#{filter.join('%|%')}%)"
+  def self.all_sorted_by_idiom_language_and_form_with_like_filter filter, page = 1, limit = Rails.application.config.search_page_size
+    if filter.kind_of? Array
+      filter_string = "(%#{filter.join('%|%')}%)"
+    else
+      filter_string = "(%#{filter.strip}%)"
+    end
     filter_string.downcase!
 
     where = <<-SQL
@@ -38,12 +44,19 @@ class Translation < ActiveRecord::Base
       )
     SQL
 
-    idioms = Idiom.where(where, :filter => filter_string).limit(limit).offset(offset)
-    Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where(:idiom_id => idioms)
+    offset = (page - 1) * limit
+    offset = 0 if offset < 0
+
+    idioms = Idiom.order("id asc").where(where, :filter => filter_string).limit(limit).offset(offset)
+    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms)
   end
 
-  def self.all_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, filter, limit, offset
-    filter_string = "(%#{filter.join('%|%')}%)"
+  def self.all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, filter, page = 1, limit = Rails.application.config.search_page_size
+    if filter.kind_of? Array
+      filter_string = "(%#{filter.join('%|%')}%)"
+    else
+      filter_string = "(%#{filter.strip}%)"
+    end
     filter_string.downcase!
 
     terms_matching_filter = <<-SQL
@@ -67,7 +80,32 @@ class Translation < ActiveRecord::Base
       )
     SQL
 
-    idioms = Idiom.where(where, :filter => filter_string, :set_id => set_id).limit(limit).offset(offset)
-    Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where(:idiom_id => idioms)
+    offset = (page - 1) * limit
+    offset = 0 if offset < 0
+
+    idioms = Idiom.order("id asc").where(where, :filter => filter_string, :set_id => set_id).limit(limit).offset(offset)
+    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms)
+  end
+
+  def self.remove_duplicates
+    identical_sql = <<-SQL
+      SELECT form, language_id, idiom_id, t_type, count(*)
+      FROM translations
+      GROUP BY form, language_id, idiom_id, t_type
+      HAVING count(*) > 1
+    SQL
+
+    identical = ActiveRecord::Base.connection.execute(identical_sql)
+    puts "#{identical.count} duplicates found"
+
+    
+    identical.each do |record|
+      identical_translations = Translation.where(:form => record["form"], :language_id => record["language_id"], :idiom_id => record["idiom_id"], :t_type => record["t_type"])
+        identical_translations.each_with_index do |translation, index|
+        next if index == 0
+
+        translation.delete
+      end
+    end
   end
 end

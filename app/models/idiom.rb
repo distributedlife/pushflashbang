@@ -17,4 +17,20 @@ class Idiom < ActiveRecord::Base
 
     Idiom.find(translation.idiom_id)
   end
+
+  def self.exists? id
+    begin
+      Idiom.find(id)
+
+      true
+    rescue
+      false
+    end
+  end
+
+  def self.get_from_translations translation_ids
+    translations = Translation.find(:all, :conditions => ['id in (?)', translation_ids])
+    translations = translations.map {|t| t.idiom_id}
+    Idiom.find(translations)
+  end
 end

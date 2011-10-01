@@ -34,6 +34,7 @@ RSpec.configure do |config|
 
   #devise helpers
   config.include Devise::TestHelpers, :type => :controller
+  config.include Devise::TestHelpers, :type => :helper
 
   #cucumber test helpers
   config.include UserComponent

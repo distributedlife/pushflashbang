@@ -34,4 +34,10 @@ PushFlashBang::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  #devise performance for test and dev
+  config.stretches = Rails.env.test? 1
+
+  #disable craploads of paperclip logging
+  Paperclip.options[:log] = false
 end

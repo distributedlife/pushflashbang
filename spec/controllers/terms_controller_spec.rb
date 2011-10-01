@@ -27,55 +27,39 @@ describe TermsController do
       assigns[:translations].empty?.should == true
     end
 
-#    it 'should return all terms grouped by idiom and order by language and form' do
-#      idiom1 = Idiom.make
-#      idiom2 = Idiom.make
-#
-#      english = Language.create(:name => "English")
-#      spanish = Language.create(:name => "Spanish")
-#      chinese = Language.create(:name => "Chinese")
-#
-#      term1 = Translation.make(:language_id => english.id, :form => "Zebra")
-#      term2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
-#      term3 = Translation.make(:language_id => chinese.id, :form => "ce")
-#      term4 = Translation.make(:language_id => english.id, :form => "Hobo")
-#      term5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
-#      term6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
-#
-#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term1.id)
-#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term2.id)
-#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term3.id)
-#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term4.id)
-#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => term5.id)
-#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => term6.id)
-#
-#      get :index
-#
-#      assigns[:translations][0].idiom_translations.idiom_id.should == idiom1.id
-#      assigns[:translations][0].language_id.should == chinese.id
-#      assigns[:translations][0].form.should == "ce"
-#
-#      assigns[:translations][1].idiom_translations.idiom_id.should == idiom1.id
-#      assigns[:translations][1].language_id.should == english.id
-#      assigns[:translations][1].form.should == "Zebra"
-#
-#      assigns[:translations][2].idiom_translations.idiom_id.should == idiom1.id
-#      assigns[:translations][2].language_id.should == spanish.id
-#      assigns[:translations][2].form.should == "Cabron"
-#
-#
-#      assigns[:translations][3].idiom_translations.idiom_id.should == idiom2.id
-#      assigns[:translations][3].language_id.should == english.id
-#      assigns[:translations][3].form.should == "Hobo"
-#
-#      assigns[:translations][4].idiom_translations.idiom_id.should == idiom2.id
-#      assigns[:translations][4].language_id.should == spanish.id
-#      assigns[:translations][4].form.should == "Abanana"
-#
-#      assigns[:translations][5].idiom_translations.idiom_id.should == idiom2.id
-#      assigns[:translations][5].language_id.should == spanish.id
-#      assigns[:translations][5].form.should == "Allegra"
-#    end
+    context 'when searching' do
+      it 'should return matching results group by idiom and order by language and form' do
+        idiom1 = Idiom.make
+        idiom2 = Idiom.make
+
+        english = Language.create(:name => "English")
+        spanish = Language.create(:name => "Spanish")
+        chinese = Language.create(:name => "Chinese")
+
+        term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+        term2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+        term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+        term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+        term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+        term6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+
+        get :search, :q => "ce"
+
+        assigns[:translations].count.should == 3
+
+        assigns[:translations][0].idiom_id.should == idiom1.id
+        assigns[:translations][0].language_id.should == chinese.id
+        assigns[:translations][0].form.should == "ce"
+
+        assigns[:translations][1].idiom_id.should == idiom1.id
+        assigns[:translations][1].language_id.should == english.id
+        assigns[:translations][1].form.should == "Zebra"
+
+        assigns[:translations][2].idiom_id.should == idiom1.id
+        assigns[:translations][2].language_id.should == spanish.id
+        assigns[:translations][2].form.should == "Cabron"
+      end
+    end
   end
 
   context '"GET" new' do
@@ -796,14 +780,6 @@ describe TermsController do
     it 'should redirect to terms_path if the translation does not exist' do
       idiom1 = Idiom.make
 
-      english = Language.create(:name => "English")
-      spanish = Language.create(:name => "Spanish")
-      chinese = Language.create(:name => "Chinese")
-
-      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-      term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-      term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
-
       get :select, :idiom_id => idiom1.id, :translation_id => 100
 
       response.should be_redirect
@@ -838,50 +814,49 @@ describe TermsController do
     end
 
     context 'when searching' do
-      it 'should be tested'
+      it 'should return matching results group by idiom and order by language and form where the idiom is not already in the set' do
+        idiom1 = Idiom.make
+        idiom2 = Idiom.make
+
+        english = Language.create(:name => "English")
+        spanish = Language.create(:name => "Spanish")
+        chinese = Language.create(:name => "Chinese")
+
+        term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+        term2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+        term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+        term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+        term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+        term6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+
+        set = Sets.make
+        SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+
+        get :select_for_set, :set_id => set.id, :q => "a"
+
+        assigns[:translations].count.should == 6
+
+
+
+        SetTerms.make(:set_id => set.id, :term_id => idiom2.id)
+
+        get :select_for_set, :set_id => set.id, :q => "a"
+        
+        assigns[:translations].count.should == 3
+        
+        assigns[:translations][0].idiom_id.should == idiom1.id
+        assigns[:translations][0].language_id.should == chinese.id
+        assigns[:translations][0].form.should == "ce"
+
+        assigns[:translations][1].idiom_id.should == idiom1.id
+        assigns[:translations][1].language_id.should == english.id
+        assigns[:translations][1].form.should == "Zebra"
+
+        assigns[:translations][2].idiom_id.should == idiom1.id
+        assigns[:translations][2].language_id.should == spanish.id
+        assigns[:translations][2].form.should == "Cabron"
+      end
     end
-#    it 'should return all terms grouped by idiom and order by language and form except the specified set' do
-#      idiom1 = Idiom.make
-#      idiom2 = Idiom.make
-#
-#      english = Language.create(:name => "English")
-#      spanish = Language.create(:name => "Spanish")
-#      chinese = Language.create(:name => "Chinese")
-#
-#      t1 = Translation.make(:language_id => english.id, :form => "Zebra")
-#      t2 = Translation.make(:language_id => spanish.id, :form => "Allegra")
-#      t3 = Translation.make(:language_id => chinese.id, :form => "ce")
-#      t4 = Translation.make(:language_id => english.id, :form => "Hobo")
-#      t5 = Translation.make(:language_id => spanish.id, :form => "Cabron")
-#      t6 = Translation.make(:language_id => spanish.id, :form => "Abanana")
-#
-#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t1.id)
-#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t3.id)
-#      IdiomTranslation.make(:idiom_id => idiom1.id, :translation_id => t5.id)
-#
-#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t2.id)
-#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t4.id)
-#      IdiomTranslation.make(:idiom_id => idiom2.id, :translation_id => t6.id)
-#
-#      set = Sets.make
-#      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-#      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom1.id)
-#
-#      get :select_for_set, :set_id => set.id
-#
-#
-#      assigns[:translations][0].idiom_translations.idiom_id.should == idiom2.id
-#      assigns[:translations][0].language_id.should == english.id
-#      assigns[:translations][0].form.should == "Hobo"
-#
-#      assigns[:translations][1].idiom_translations.idiom_id.should == idiom2.id
-#      assigns[:translations][1].language_id.should == spanish.id
-#      assigns[:translations][1].form.should == "Abanana"
-#
-#      assigns[:translations][2].idiom_translations.idiom_id.should == idiom2.id
-#      assigns[:translations][2].language_id.should == spanish.id
-#      assigns[:translations][2].form.should == "Allegra"
-#    end
 
     it 'should redirect to sets_path if the set does not exist' do
       get :select_for_set, :set_id => 100

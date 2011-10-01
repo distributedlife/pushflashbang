@@ -1,59 +1,21 @@
 module SetHelper
   def set_exists? id
-    begin
-      Sets.find(id)
-
-      true
-    rescue
-      false
-    end
+    Sets::exists? id
   end
 
   def set_name_exists? set_id, set_name_id
-    begin
-      # set name exists
-      set_name = SetName.find(set_name_id)
-
-      # and set name belongs to set
-      return set_name.sets_id == set_id.to_i
-    rescue
-      false
-    end
+    SetName::exists? set_id, set_name_id
   end
 
   def add_term_to_set set_id, term_id
-    if SetTerms.where(:set_id => set_id, :term_id => term_id).empty?
-      max_position = SetTerms.where(:set_id => set_id).maximum(:position)
-      max_position ||= 0
-      max_chapter = SetTerms.where(:set_id => set_id).maximum(:chapter)
-      max_chapter ||= 1
-
-      SetTerms.create(:set_id => set_id, :term_id => term_id, :chapter => max_chapter, :position => max_position + 1)
-    end
+    Sets.find(set_id).add_term term_id
   end
 
   def set_has_at_least_one_idiom_for_language? language_id, set_id
-    language_id = language_id.to_i
-    set_id = set_id.to_i
-
-    SetTerms.where(:set_id => set_id).each do |set_terms|
-      Translation.where(:idiom_id => set_terms.term_id).each do |translation|
-        begin
-          language = Language.find(translation.language_id)
-        rescue
-          next
-        end
-
-        if language.id == language_id
-          return true
-        end
-      end
-    end
-
-    false
+    Sets.find(set_id).has_at_least_one_idiom_for_language language_id
   end
 
-  def is_user_at_end_of_chapter user_id, set_id, language_id, review_mode
+  def is_user_at_end_of_chapter? user_id, set_id, language_id, review_mode
     unless language_is_valid? language_id
       error t('notice.not-found')
       return languages_path

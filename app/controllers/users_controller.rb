@@ -7,7 +7,6 @@ class UsersController < ApplicationController
     messages["error"] = session[:error] unless session[:error].nil?
     messages["warning"] = session[:warning] unless session[:warning].nil?
     messages["info"] = session[:info] unless session[:info].nil?
-
     session.delete :success
     session.delete :warning
     session.delete :error

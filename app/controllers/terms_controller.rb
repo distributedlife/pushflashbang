@@ -22,12 +22,7 @@ class TermsController < ApplicationController
     @q.gsub!("%", "")
     @page ||= 1
 
-
-    #TODO: put this into configuration
-    @limit = 10 + 1
-    offset = (@page.to_i - 1) * 10
-
-    @translations = all_translations_sorted_correctly_with_like_filter @q.split(','), @limit, offset
+    @translations = Translation.all_sorted_by_idiom_language_and_form_with_like_filter @q.split(','), @page.to_i
 
     render :index
   end
@@ -128,11 +123,6 @@ class TermsController < ApplicationController
         unless t.language_id == 0 and t.form.empty? and t.pronunciation.empty?
           @translations << t
           if t.invalid?
-            ap t
-            ap t.invalid?
-            ap t.errors
-            ap t.errors[:idiom_id].empty?
-            ap (t.errors.count == 1 and !t.errors[:idiom_id].nil?)
             if (t.errors.count == 1 and t.errors[:idiom_id].empty?) or (t.errors.count > 1)
               invalid_count = invalid_count + 1
             end
@@ -186,14 +176,28 @@ class TermsController < ApplicationController
   end
 
   def show
-    get_idiom_translations
+    if Idiom::exists? params[:id]
+      @translations = all_translations_sorted_correctly_for_idiom params[:id]
+      if @translations.empty?
+        error_redirect_to t('notice.term-no-translations'), terms_path
+      end
+    else
+      error_redirect_to t('notice.not-found'), terms_path
+    end
   end
 
   def edit
     error_redirect_to t('notice.not-found'), terms_path and return unless idiom_exists? params[:id]
     
     @idiom = Idiom.find(params[:id])
-    get_idiom_translations
+    if Idiom::exists? params[:id]
+      @translations = all_translations_sorted_correctly_for_idiom params[:id]
+      if @translations.empty?
+        error_redirect_to t('notice.term-no-translations'), terms_path
+      end
+    else
+      error_redirect_to t('notice.not-found'), terms_path
+    end
 
     @languages = Language.all
   end
@@ -215,16 +219,11 @@ class TermsController < ApplicationController
     @q = params[:q]
 
 
-    #TODO: put this into configuration
-    @limit = 10 + 1
-    offset = (@page.to_i - 1) * 10
-
-
     if @q.nil?
       @translations = []
     else
       @q.gsub!("%", "")
-      @translations = Translation.all_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, @q.split(','), @limit, offset
+      @translations = Translation.all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, @q.split(','), @page
     end
   end
 

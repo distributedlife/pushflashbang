@@ -35,5 +35,11 @@ PushFlashBang::Application.configure do
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
+
+  #devise performance for test and dev
+  config.stretches = 1
+
+  #disable craploads of paperclip logging
+  Paperclip.options[:log] = false
 end
 

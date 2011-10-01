@@ -221,7 +221,9 @@ When /^I choose to unset "([^"]*)" for the "([^"]*)" language as a goal$/ do |se
   end
 end
 
-
+################################################################################
+################################################################################
+################################################################################
 
 Then /^the following will be visible on the show sets page$/ do |table|
   goto_page :ShowSetsPage, Capybara.current_session, sut do |page|
@@ -267,18 +269,14 @@ Then /^the term containing "([^"]*)" set should be in chapter "([^"]*)" of the "
   set = get_set_from_name set_name
   idiom = get_idiom_containing_form containing_form
 
-  sleep 0.25
-
-  SetTerms.where(:set_id => set.id, :term_id => idiom.id, :chapter => chapter.to_i).count.should == 1
+  retryable {SetTerms.where(:set_id => set.id, :term_id => idiom.id, :chapter => chapter.to_i).count == 1}
 end
 
 Then /^the term containing "([^"]*)" set should be in position "([^"]*)" of the "([^"]*)" set$/ do |containing_form, position, set_name|
   set = get_set_from_name set_name
   idiom = get_idiom_containing_form containing_form
 
-  sleep 0.25
-
-  SetTerms.where(:set_id => set.id, :term_id => idiom.id, :position => position.to_i).count.should == 1
+  retryable {SetTerms.where(:set_id => set.id, :term_id => idiom.id, :position => position.to_i).count == 1}
 end
 
 Then /^the following sets are listed as user goals on the "([^"]*)" language page:$/ do |language_name, table|
@@ -305,16 +303,12 @@ Then /^the term containing "([^"]*)" will be in the "([^"]*)" set$/ do |containi
   set = get_set_from_name set_name
   idiom = get_idiom_containing_form containing_form
 
-  sleep 0.25
-  
-  SetTerms.where(:set_id => set.id, :term_id => idiom.id).count.should == 1
+  retryable {SetTerms.where(:set_id => set.id, :term_id => idiom.id).count == 1}
 end
 
 Then /^the term containing "([^"]*)" will not be in the "([^"]*)" set$/ do |containing_form, set_name|
   set = get_set_from_name set_name
   idiom = get_idiom_containing_form containing_form
 
-  sleep 0.25
-
-  SetTerms.where(:set_id => set.id, :term_id => idiom.id).count.should == 0
+  retryable {SetTerms.where(:set_id => set.id, :term_id => idiom.id).count == 0}
 end
