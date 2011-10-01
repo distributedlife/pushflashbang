@@ -1,5 +1,5 @@
 3.1.7 (Brainy Betty)
-cdec7c8263dbc7b18cd5af037eea6c7cbadac71a
+05e48e114bc7d709435e6c6fe5fc1d5330eae812
 o:Sass::Tree::RootNode
 :@has_childrenT:
 @linei:@template"¢B$table_row_base : #fff ;
@@ -884,8 +884,8 @@ div.jp-duration
 
 p.pronunciation
 {
-  padding-top: 0.6em;
-  font-size: 0.6em;
+  padding-top: 1.2em;
+  font-size: 0.8em;
   font-face: "courier-new";
   color: #999999;
 }
@@ -1879,9 +1879,9 @@ right;	@;;;iN;	@;
 [ ;$;%o;";#i ;["background-position;o;;"center left;	@;;;in;	@;
 [ ;$;%o;*;#i ;T;+["p.pronunciation;ir;,o;-;." ;/[o;0;/[o;1;.@C;/[o;2	;30;.@C;["p;iro;6;.@C;["pronunciation;ir;ir;ir;	@;
 [	o;";#i ;["padding-top;o;;"
-0.6em;	@;;;is;	@;
+1.2em;	@;;;is;	@;
 [ ;$;%o;";#i ;["font-size;o;;"
-0.6em;	@;;;it;	@;
+0.8em;	@;;;it;	@;
 [ ;$;%o;";#i ;["font-face;o;;""courier-new";	@;;;iu;	@;
 [ ;$;%o;";#i ;["
 color;o;;"#999999;	@;;;iv;	@;
