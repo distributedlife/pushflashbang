@@ -17,18 +17,17 @@ class SetsController < ApplicationController
     @sets = []
     set_ids = []
 
-    Translation.where(:language_id => @language.id).each do |translation|
-      SetTerms.where(:term_id => translation.idiom_id).each do |set_terms|
-        if set_ids[set_terms.set_id].nil?
-          set_ids[set_terms.set_id] = set_terms.set_id
+    Sets.all.each do |set|
+      next unless set_ids[set.id].nil?
+      set_ids[set.id] = set.id
 
-          Sets.where(:id => set_terms.set_id).each do |set|
-            if UserSets.where(:set_id => set.id, :user_id => current_user.id, :language_id => @language.id).empty?
-              @sets << set
-            else
-              @user_sets << set
-            end
-          end
+      SetTerms.where(:set_id => set.id).each do |set_terms|
+        next if Translation.where(:language_id => @language.id, :idiom_id => set_terms.term_id).empty?
+
+        if UserSets.where(:set_id => set.id, :user_id => current_user.id, :language_id => @language.id).empty?
+          @sets << set
+        else
+          @user_sets << set
         end
       end
     end
