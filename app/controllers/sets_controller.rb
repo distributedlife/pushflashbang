@@ -30,7 +30,7 @@ class SetsController < ApplicationController
           @user_sets << set
         end
 
-        break;
+        break
       end
     end
   end
