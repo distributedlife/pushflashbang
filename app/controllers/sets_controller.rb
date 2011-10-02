@@ -29,6 +29,8 @@ class SetsController < ApplicationController
         else
           @user_sets << set
         end
+
+        break;
       end
     end
   end
