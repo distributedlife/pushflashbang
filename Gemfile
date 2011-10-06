@@ -57,10 +57,15 @@ group :development, :test do
   gem 'machinist'
   gem 'faker'
   gem 'ruby-debug'
-  gem 'metric_fu'
   gem 'bermuda'
   gem 'blueprints'
   gem 'fakeweb'
   gem 'silent-postgres'
   gem 'capybara-webkit'
+
+#  gem 'metric_fu'
+#    gem 'fattr'
+#    gem 'arrayfields'
+#    gem 'test_helper'
+#    gem 'map'
 end
