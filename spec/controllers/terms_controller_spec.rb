@@ -2,25 +2,25 @@ require 'spec_helper'
 
 describe TermsController do
   before(:each) do
-    @user = User.make
+    @user = User.make!
     sign_in :user, @user
   end
 
   context '"GET" index' do
     it 'should return no translations by default' do
-      idiom1 = Idiom.make
-      idiom2 = Idiom.make
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
 
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
       chinese = Language.create(:name => "Chinese")
 
-      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-      term2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
-      term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-      term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
-      term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
-      term6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
 
       get :index
 
@@ -29,19 +29,19 @@ describe TermsController do
 
     context 'when searching' do
       it 'should return matching results group by idiom and order by language and form' do
-        idiom1 = Idiom.make
-        idiom2 = Idiom.make
+        idiom1 = Idiom.make!
+        idiom2 = Idiom.make!
 
         english = Language.create(:name => "English")
         spanish = Language.create(:name => "Spanish")
         chinese = Language.create(:name => "Chinese")
 
-        term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-        term2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
-        term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-        term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
-        term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
-        term6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+        term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+        term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+        term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+        term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+        term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+        term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
 
         get :search, :q => "ce"
 
@@ -83,7 +83,7 @@ describe TermsController do
       Idiom.count.should == 0
       Translation.count.should == 0
 
-      l = Language.make
+      l = Language.make!
 
       post :create, :translation =>
         {
@@ -103,7 +103,7 @@ describe TermsController do
       Idiom.count.should == 0
       Translation.count.should == 0
 
-      l = Language.make
+      l = Language.make!
       
       post :create, :translation =>
         {
@@ -139,7 +139,7 @@ describe TermsController do
       Idiom.count.should == 0
       Translation.count.should == 0
 
-      l = Language.make
+      l = Language.make!
 
       post :create, :translation =>
         {
@@ -185,7 +185,7 @@ describe TermsController do
       Idiom.count.should == 0
       Translation.count.should == 0
 
-      l = Language.make
+      l = Language.make!
 
       post :create, :translation =>
         {
@@ -206,13 +206,13 @@ describe TermsController do
     end
 
 #    it 'should relate translations within a language within the idiom by meaning' do
-#      idiom1 = Idiom.make
+#      idiom1 = Idiom.make!
 #
 #      english = Language.create(:name => "English")
 #      spanish = Language.create(:name => "Spanish")
 #
-#      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-#      term2 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
+#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
 #
 #      post :create, :translation =>
 #        {
@@ -259,13 +259,13 @@ describe TermsController do
 #    end
 
 #    it 'should relate translations within a language that share form by written form' do
-#      idiom1 = Idiom.make
+#      idiom1 = Idiom.make!
 #
 #      english = Language.create(:name => "English")
 #      spanish = Language.create(:name => "Spanish")
 #
-#      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-#      term2 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
+#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
 #
 #      post :create, :translation =>
 #        {
@@ -301,13 +301,13 @@ describe TermsController do
 #    end
 #
 #    it 'should relate translations within a language that share pronunciation by audible form' do
-#      idiom1 = Idiom.make
+#      idiom1 = Idiom.make!
 #
 #      english = Language.create(:name => "English")
 #      spanish = Language.create(:name => "Spanish")
 #
-#      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
-#      term2 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
+#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
+#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
 #
 #      post :create, :translation =>
 #        {
@@ -343,19 +343,19 @@ describe TermsController do
 
   context '"GET" show' do
     it 'should return the idiom translation terms order by language and form' do
-      idiom1 = Idiom.make
-      idiom2 = Idiom.make
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
 
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
       chinese = Language.create(:name => "Chinese")
 
-      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-      term2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
-      term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-      term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
-      term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
-      term6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
 
       get :show, :id => idiom1.id
 
@@ -380,7 +380,7 @@ describe TermsController do
     end
 
     it 'should redirect to the show all terms path if the idiom has no translations' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
 
       get :show, :id => idiom.id
       
@@ -398,7 +398,7 @@ describe TermsController do
     end
 
     it 'should redirect to the show all terms path if the idiom has no translations' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
 
       get :edit, :id => idiom.id
 
@@ -406,19 +406,19 @@ describe TermsController do
     end
 
     it 'should return the idiom translation terms order by language and form' do
-      idiom1 = Idiom.make
-      idiom2 = Idiom.make
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
 
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
       chinese = Language.create(:name => "Chinese")
 
-      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-      term2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
-      term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-      term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
-      term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
-      term6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
 
       get :edit, :id => idiom1.id
 
@@ -438,11 +438,11 @@ describe TermsController do
 
   context '"PUT" update' do
     it 'should update the translations' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -471,11 +471,11 @@ describe TermsController do
     end
 
     it 'should notify user that two valid translations need to be provided' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -495,11 +495,11 @@ describe TermsController do
     end
 
     it 'should ignore completely empty objects' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -538,12 +538,12 @@ describe TermsController do
     end
 
     it 'should allow for the creation of new translations' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
       chinese = Language.create(:name => "Chinese")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -580,11 +580,11 @@ describe TermsController do
     end
 
     it 'should fail on any incomplete objects' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       put :update, :id => idiom.id, :translation =>
         {
@@ -610,16 +610,16 @@ describe TermsController do
     end
 
 #    it 'should remove relationships that are no longer true' do
-#      idiom1 = Idiom.make
-#      idiom2 = Idiom.make
+#      idiom1 = Idiom.make!
+#      idiom2 = Idiom.make!
 #
 #      english = Language.create(:name => "English")
 #      spanish = Language.create(:name => "Spanish")
 #
-#      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
-#      term2 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "ce", :pronunciation => "zzzz")
-#      term3 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Zebra", :pronunciation => "zzzz")
-#      term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "elephant", :pronunciation => "zigga")
+#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
+#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "ce", :pronunciation => "zzzz")
+#      term3 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Zebra", :pronunciation => "zzzz")
+#      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "elephant", :pronunciation => "zigga")
 #
 #      RelatedTranslations::create_relationship_if_needed term1, term2
 #      RelatedTranslations::create_relationship_if_needed term1, term3
@@ -659,13 +659,13 @@ describe TermsController do
 #    end
 #
 #    it 'should relate new translations to existing ones' do
-#      idiom1 = Idiom.make
+#      idiom1 = Idiom.make!
 #
 #      english = Language.create(:name => "English")
 #      spanish = Language.create(:name => "Spanish")
 #
-#      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
-#      term2 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "ce", :pronunciation => "zzzz")
+#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
+#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "ce", :pronunciation => "zzzz")
 #
 #
 #      RelatedTranslations::create_relationship_if_needed term1, term2
@@ -730,19 +730,19 @@ describe TermsController do
 
   context '"POST" select' do
     it 'should return all terms grouped by idiom and order by language and form except the specified term' do
-      idiom1 = Idiom.make
-      idiom2 = Idiom.make
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
 
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
       chinese = Language.create(:name => "Chinese")
 
-      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-      term2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
-      term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-      term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
-      term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
-      term6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
 
       get :select, :idiom_id => idiom1.id, :translation_id => term3.id
       
@@ -761,15 +761,15 @@ describe TermsController do
     end
 
     it 'should redirect to terms_path if the idiom does not exist' do
-      idiom1 = Idiom.make
+      idiom1 = Idiom.make!
 
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
       chinese = Language.create(:name => "Chinese")
 
-      term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-      term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-      term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
 
       get :select, :idiom_id => 100, :translation_id => term3.id
 
@@ -778,7 +778,7 @@ describe TermsController do
     end
 
     it 'should redirect to terms_path if the translation does not exist' do
-      idiom1 = Idiom.make
+      idiom1 = Idiom.make!
 
       get :select, :idiom_id => idiom1.id, :translation_id => 100
 
@@ -789,23 +789,23 @@ describe TermsController do
 
   context '"GET" select_for_set' do
     it 'should return an empty set by default' do
-      idiom1 = Idiom.make
-      idiom2 = Idiom.make
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
 
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
       chinese = Language.create(:name => "Chinese")
 
-      t1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-      t2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
-      t3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-      t4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
-      t5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
-      t6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+      t1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      t2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      t3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      t4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      t5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      t6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
 
-      set = Sets.make
-      SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      SetTerms.make(:set_id => set.id, :term_id => idiom1.id)
+      set = Sets.make!
+      SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      SetTerms.make!(:set_id => set.id, :term_id => idiom1.id)
 
       get :select_for_set, :set_id => set.id
 
@@ -815,22 +815,22 @@ describe TermsController do
 
     context 'when searching' do
       it 'should return matching results group by idiom and order by language and form where the idiom is not already in the set' do
-        idiom1 = Idiom.make
-        idiom2 = Idiom.make
+        idiom1 = Idiom.make!
+        idiom2 = Idiom.make!
 
         english = Language.create(:name => "English")
         spanish = Language.create(:name => "Spanish")
         chinese = Language.create(:name => "Chinese")
 
-        term1 = Translation.make(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-        term2 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
-        term3 = Translation.make(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
-        term4 = Translation.make(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
-        term5 = Translation.make(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
-        term6 = Translation.make(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+        term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+        term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+        term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+        term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+        term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+        term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
 
-        set = Sets.make
-        SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+        set = Sets.make!
+        SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
 
         get :select_for_set, :set_id => set.id, :q => "a"
 
@@ -838,7 +838,7 @@ describe TermsController do
 
 
 
-        SetTerms.make(:set_id => set.id, :term_id => idiom2.id)
+        SetTerms.make!(:set_id => set.id, :term_id => idiom2.id)
 
         get :select_for_set, :set_id => set.id, :q => "a"
         
@@ -872,13 +872,13 @@ describe TermsController do
     end
 
     it 'should link the term to the set' do
-      set = Sets.make
-      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.make
+      set = Sets.make!
+      set_name = SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       put :add_to_set, :set_id => set.id, :id => idiom.id
 
@@ -888,7 +888,7 @@ describe TermsController do
     end
 
     it 'should return to user home if the set does not exist' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
 
       put :add_to_set, :set_id => 1, :id => idiom.id
 
@@ -897,7 +897,7 @@ describe TermsController do
     end
 
     it 'should return to the set home if the term does not exist' do
-      set = Sets.make
+      set = Sets.make!
 
       put :add_to_set, :set_id => set.id, :id => 1
 
@@ -906,13 +906,13 @@ describe TermsController do
     end
 
     it 'should not add a term twice if it already exists' do
-      set = Sets.make
-      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.make
+      set = Sets.make!
+      set_name = SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
 
       put :add_to_set, :set_id => set.id, :id => idiom.id
       put :add_to_set, :set_id => set.id, :id => idiom.id
@@ -925,14 +925,14 @@ describe TermsController do
 
   context '"PUT" remove_from_set' do
     it 'should remove the term from the set' do
-      set = Sets.make
-      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.make
+      set = Sets.make!
+      set_name = SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
-      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      set_term = SetTerms.make!(:set_id => set.id, :term_id => idiom.id)
 
       put :remove_from_set, :set_id => set.id, :id => idiom.id
 
@@ -940,7 +940,7 @@ describe TermsController do
     end
 
     it 'should return to user home if the set does not exist' do
-      idiom = Idiom.make
+      idiom = Idiom.make!
 
       put :remove_from_set, :set_id => 1, :id => idiom.id
 
@@ -949,7 +949,7 @@ describe TermsController do
     end
 
     it 'should return to the set home if the term does not exist' do
-      set = Sets.make
+      set = Sets.make!
 
       put :remove_from_set, :set_id => set.id, :id => 1
 
@@ -958,14 +958,14 @@ describe TermsController do
     end
 
     it 'should not error a term twice is not linked' do
-      set = Sets.make
-      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.make
+      set = Sets.make!
+      set_name = SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make!
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
-      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      set_term = SetTerms.make!(:set_id => set.id, :term_id => idiom.id)
 
       put :remove_from_set, :set_id => set.id, :id => idiom.id
       put :remove_from_set, :set_id => set.id, :id => idiom.id
@@ -976,20 +976,20 @@ describe TermsController do
 
   context '"POST" next_chapter' do
     before(:each) do
-      @set = Sets.make
-      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+      @set = Sets.make!
+      SetName.make!(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
 
-      @idiom1 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id)
+      @idiom1 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id)
 
-      @idiom2 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 2)
+      @idiom2 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 2)
 
-      @idiom3 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1)
+      @idiom3 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1)
 
-      @idiom4 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 2)
+      @idiom4 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 2)
     end
 
     it 'should move the term into the next chapter' do
@@ -1000,7 +1000,7 @@ describe TermsController do
       SetTerms.where(:term_id => @idiom1.id).first.chapter.should be 2
     end
 
-    it 'should make a new chapter if the next does not exist' do
+    it 'should make! a new chapter if the next does not exist' do
       SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 2
 
       post :next_chapter, :set_id => @set.id, :id => @idiom2.id
@@ -1040,10 +1040,10 @@ describe TermsController do
 
     it 'should renormalise the chapters if a chapter is left empty' do
       SetTerms.delete_all
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 2)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 2)
 
       post :next_chapter, :set_id => @set.id, :id => @idiom4.id
 
@@ -1056,22 +1056,22 @@ describe TermsController do
 
   context '"POST" prev_chapter' do
     before(:each) do
-      @set = Sets.make
-      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+      @set = Sets.make!
+      SetName.make!(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
 
       english = Language.create(:name => "English")
       spanish = Language.create(:name => "Spanish")
 
-      @idiom1 = Idiom.make
-      translation1 = Translation.make(:idiom_id => @idiom1.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => @idiom1.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id)
+      @idiom1 = Idiom.make!
+      translation1 = Translation.make!(:idiom_id => @idiom1.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => @idiom1.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id)
 
 
-      @idiom2 = Idiom.make
-      translation21 = Translation.make(:idiom_id => @idiom2.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation22 = Translation.make(:idiom_id => @idiom2.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 2)
+      @idiom2 = Idiom.make!
+      translation21 = Translation.make!(:idiom_id => @idiom2.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation22 = Translation.make!(:idiom_id => @idiom2.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 2)
     end
 
     it 'should move the term into the next chapter' do
@@ -1082,7 +1082,7 @@ describe TermsController do
       SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 1
     end
 
-    it 'should make a new chapter if the current chapter is 1 does not exist' do
+    it 'should make! a new chapter if the current chapter is 1 does not exist' do
       SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 2
       post :prev_chapter, :set_id => @set.id, :id => @idiom2.id
       SetTerms.where(:term_id => @idiom2.id).first.chapter.should be 1
@@ -1126,8 +1126,8 @@ describe TermsController do
 
     it 'should renormalise the chapters if a chapter is left empty' do
       SetTerms.delete_all
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1)
 
       post :prev_chapter, :set_id => @set.id, :id => @idiom1.id
 
@@ -1138,20 +1138,20 @@ describe TermsController do
 
   context '"POST" next_position' do
     before(:each) do
-      @set = Sets.make
-      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+      @set = Sets.make!
+      SetName.make!(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
 
-      @idiom1 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
+      @idiom1 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
 
-      @idiom2 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1, :position => 2)
+      @idiom2 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1, :position => 2)
 
-      @idiom3 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1, :position => 3)
+      @idiom3 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1, :position => 3)
 
-      @idiom4 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 1, :position => 4)
+      @idiom4 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 1, :position => 4)
     end
 
     it 'should move the term into the next position, swapping with whatever is there' do
@@ -1209,20 +1209,20 @@ describe TermsController do
 
   context '"POST" prev_position' do
     before(:each) do
-      @set = Sets.make
-      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+      @set = Sets.make!
+      SetName.make!(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
 
-      @idiom1 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
+      @idiom1 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
 
-      @idiom2 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1, :position => 2)
+      @idiom2 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :chapter => 1, :position => 2)
 
-      @idiom3 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1, :position => 3)
+      @idiom3 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom3.id, :chapter => 1, :position => 3)
 
-      @idiom4 = Idiom.make
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 1, :position => 4)
+      @idiom4 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom4.id, :chapter => 1, :position => 4)
     end
 
     it 'should move the term into the next position, swapping with whatever is there' do
@@ -1281,17 +1281,17 @@ describe TermsController do
 
   context '"POST" record_review' do
     before(:each) do
-      @set = Sets.make
-      @english = Language.make(:name => "English")
-      @spanish = Language.make(:name => "Spanish")
-      @idiom = Idiom.make
+      @set = Sets.make!
+      @english = Language.make!(:name => "English")
+      @spanish = Language.make!(:name => "Spanish")
+      @idiom = Idiom.make!
 
-      SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
-      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
-      UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
+      SetTerms.make!(:term_id => @idiom.id, :set_id => @set.id)
+      UserSets.make!(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @spanish.id)
 
-      t1 = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id)
-      t2 = Translation.make(:idiom_id => @idiom.id, :language_id => @spanish.id)
+      t1 = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id)
+      t2 = Translation.make!(:idiom_id => @idiom.id, :language_id => @spanish.id)
 
       relate_translation_to_others t1.id, @idiom.id
       relate_translation_to_others t2.id, @idiom.id
@@ -1521,25 +1521,25 @@ describe TermsController do
 
   context '"GET" review' do
     before(:each) do
-      @set = Sets.make
-      @english = Language.make(:name => "English")
-      @spanish = Language.make(:name => "Spanish")
-      @chinese = Language.make(:name => "Chinese")
-      @idiom = Idiom.make
-      @idiom2 = Idiom.make
-      @idiom3 = Idiom.make
-      @t1 = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "zee")
-      @t2 = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "yee")
-      @t3 = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "wee")
-      @t4 = Translation.make(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "vee")
-      @t5 = Translation.make(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "uee")
-      @t6 = Translation.make(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "xee")
-      SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
-      SetTerms.make(:term_id => @idiom2.id, :set_id => @set.id)
-      SetTerms.make(:term_id => @idiom3.id, :set_id => @set.id)
-      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
-      UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
-      UserLanguages.make(:user_id => @user.id, :language_id => @chinese.id)
+      @set = Sets.make!
+      @english = Language.make!(:name => "English")
+      @spanish = Language.make!(:name => "Spanish")
+      @chinese = Language.make!(:name => "Chinese")
+      @idiom = Idiom.make!
+      @idiom2 = Idiom.make!
+      @idiom3 = Idiom.make!
+      @t1 = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "zee")
+      @t2 = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "yee")
+      @t3 = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "wee")
+      @t4 = Translation.make!(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "vee")
+      @t5 = Translation.make!(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "uee")
+      @t6 = Translation.make!(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "xee")
+      SetTerms.make!(:term_id => @idiom.id, :set_id => @set.id)
+      SetTerms.make!(:term_id => @idiom2.id, :set_id => @set.id)
+      SetTerms.make!(:term_id => @idiom3.id, :set_id => @set.id)
+      UserSets.make!(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @spanish.id)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @chinese.id)
 
       @user.native_language_id = @english.id
       @user.save!
@@ -1613,12 +1613,12 @@ describe TermsController do
       end
 
       it 'should not return idioms the user has not learned' do
-        @fur_e = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "fur", :pronunciation => "fur")
-        @fur_c = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+        @fur_e = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "fur", :pronunciation => "fur")
+        @fur_c = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
 
-        @hair_e = Translation.make(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "hair", :pronunciation => "hair")
-        @hair_c1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
-        @hair_c2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+        @hair_e = Translation.make!(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "hair", :pronunciation => "hair")
+        @hair_c1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+        @hair_c2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
 
 
         relate_translation_to_others @fur_e.id, @idiom.id
@@ -1640,10 +1640,10 @@ describe TermsController do
 
       describe 'when the review mode is listening' do
         it 'should return all related translations that share pronunciation' do
-          @hi = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "he", :pronunciation => "he")
-          @hello = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "hello", :pronunciation => "hello")
-          @nihao = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "你好", :pronunciation => "ni hao")
-          @wei = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "喂", :pronunciation => "wei")
+          @hi = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "he", :pronunciation => "he")
+          @hello = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "hello", :pronunciation => "hello")
+          @nihao = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "你好", :pronunciation => "ni hao")
+          @wei = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "喂", :pronunciation => "wei")
 
           relate_translation_to_others @hi.id, @idiom.id
           relate_translation_to_others @hello.id, @idiom.id
@@ -1665,12 +1665,12 @@ describe TermsController do
         end
         
         it 'should return all related translations that share form' do
-          @idiom4 = Idiom.make
-          @idiom5 = Idiom.make
+          @idiom4 = Idiom.make!
+          @idiom5 = Idiom.make!
 
-          @hair_e = Translation.make(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "hair", :pronunciation => "hair")
-          @hair_c1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
-          @hair_c2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+          @hair_e = Translation.make!(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "hair", :pronunciation => "hair")
+          @hair_c1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+          @hair_c2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
 
           relate_translation_to_others @hair_e.id, @idiom2.id
           relate_translation_to_others @hair_c1.id, @idiom2.id
@@ -1693,12 +1693,12 @@ describe TermsController do
 
       describe 'when the review mode is translating' do
         before(:each) do
-          @he_e = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "hi", :pronunciation => "hi")
-          @he_c = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "他", :pronunciation => "ta1")
-          @she_e = Translation.make(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "she", :pronunciation => "she")
-          @she_c = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "她", :pronunciation => "ta1")
-          @it_e = Translation.make(:idiom_id => @idiom3.id, :language_id => @english.id, :form => "it", :pronunciation => "it")
-          @it_c = Translation.make(:idiom_id => @idiom3.id, :language_id => @chinese.id, :form => "它", :pronunciation => "ta1")
+          @he_e = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "hi", :pronunciation => "hi")
+          @he_c = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "他", :pronunciation => "ta1")
+          @she_e = Translation.make!(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "she", :pronunciation => "she")
+          @she_c = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "她", :pronunciation => "ta1")
+          @it_e = Translation.make!(:idiom_id => @idiom3.id, :language_id => @english.id, :form => "it", :pronunciation => "it")
+          @it_c = Translation.make!(:idiom_id => @idiom3.id, :language_id => @chinese.id, :form => "它", :pronunciation => "ta1")
 
           
           relate_translation_to_others @he_e.id, @idiom.id
@@ -1730,24 +1730,24 @@ describe TermsController do
 
       describe 'when the review mode is reading' do
         before(:each) do
-          @idiom4 = Idiom.make
-          @idiom5 = Idiom.make
+          @idiom4 = Idiom.make!
+          @idiom5 = Idiom.make!
 
-          @fur_e = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "fur", :pronunciation => "fur")
-          @fur_c = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+          @fur_e = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "fur", :pronunciation => "fur")
+          @fur_c = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
 
-          @hair_e = Translation.make(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "hair", :pronunciation => "hair")
-          @hair_c1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
-          @hair_c2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+          @hair_e = Translation.make!(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "hair", :pronunciation => "hair")
+          @hair_c1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+          @hair_c2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
 
-          @feathers_e = Translation.make(:idiom_id => @idiom3.id, :language_id => @english.id, :form => "feathers", :pronunciation => "feathers")
-          @feathers_c = Translation.make(:idiom_id => @idiom3.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+          @feathers_e = Translation.make!(:idiom_id => @idiom3.id, :language_id => @english.id, :form => "feathers", :pronunciation => "feathers")
+          @feathers_c = Translation.make!(:idiom_id => @idiom3.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
 
-          @tail_e = Translation.make(:idiom_id => @idiom4.id, :language_id => @english.id, :form => "tail", :pronunciation => "tail")
-          @tail_c = Translation.make(:idiom_id => @idiom4.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+          @tail_e = Translation.make!(:idiom_id => @idiom4.id, :language_id => @english.id, :form => "tail", :pronunciation => "tail")
+          @tail_c = Translation.make!(:idiom_id => @idiom4.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
 
-          @yak_e = Translation.make(:idiom_id => @idiom5.id, :language_id => @english.id, :form => "yak", :pronunciation => "yak")
-          @yak_c = Translation.make(:idiom_id => @idiom5.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+          @yak_e = Translation.make!(:idiom_id => @idiom5.id, :language_id => @english.id, :form => "yak", :pronunciation => "yak")
+          @yak_c = Translation.make!(:idiom_id => @idiom5.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
 
           relate_translation_to_others @fur_e.id, @idiom.id
           relate_translation_to_others @fur_c.id, @idiom.id
@@ -1783,25 +1783,25 @@ describe TermsController do
 
   context '"GET" first_review' do
     before(:each) do
-      @set = Sets.make
-      @english = Language.make(:name => "English")
-      @spanish = Language.make(:name => "Spanish")
-      @chinese = Language.make(:name => "Chinese")
-      @idiom = Idiom.make
-      @idiom2 = Idiom.make
-      @idiom3 = Idiom.make
-      @t1 = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "zee")
-      @t2 = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "yee")
-      @t3 = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "wee")
-      @t4 = Translation.make(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "vee")
-      @t5 = Translation.make(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "uee")
-      @t6 = Translation.make(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "xee")
-      SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
-      SetTerms.make(:term_id => @idiom2.id, :set_id => @set.id)
-      SetTerms.make(:term_id => @idiom3.id, :set_id => @set.id)
-      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
-      UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
-      UserLanguages.make(:user_id => @user.id, :language_id => @chinese.id)
+      @set = Sets.make!
+      @english = Language.make!(:name => "English")
+      @spanish = Language.make!(:name => "Spanish")
+      @chinese = Language.make!(:name => "Chinese")
+      @idiom = Idiom.make!
+      @idiom2 = Idiom.make!
+      @idiom3 = Idiom.make!
+      @t1 = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "zee")
+      @t2 = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "yee")
+      @t3 = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "wee")
+      @t4 = Translation.make!(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "vee")
+      @t5 = Translation.make!(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "uee")
+      @t6 = Translation.make!(:idiom_id => @idiom.id, :language_id => @spanish.id, :form => "xee")
+      SetTerms.make!(:term_id => @idiom.id, :set_id => @set.id)
+      SetTerms.make!(:term_id => @idiom2.id, :set_id => @set.id)
+      SetTerms.make!(:term_id => @idiom3.id, :set_id => @set.id)
+      UserSets.make!(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @spanish.id)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @chinese.id)
 
       @user.native_language_id = @english.id
       @user.save!
@@ -1848,12 +1848,12 @@ describe TermsController do
       end
 
       it 'should not return idioms the user has not learned' do
-        @fur_e = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "fur", :pronunciation => "fur")
-        @fur_c = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+        @fur_e = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "fur", :pronunciation => "fur")
+        @fur_c = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
 
-        @hair_e = Translation.make(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "hair", :pronunciation => "hair")
-        @hair_c1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
-        @hair_c2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
+        @hair_e = Translation.make!(:idiom_id => @idiom2.id, :language_id => @english.id, :form => "hair", :pronunciation => "hair")
+        @hair_c1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "毛", :pronunciation => "mao2")
+        @hair_c2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "牦", :pronunciation => "mao2")
 
         relate_translation_to_others @fur_e.id, @idiom.id
         relate_translation_to_others @fur_c.id, @idiom.id
@@ -1873,12 +1873,12 @@ describe TermsController do
       end
 
       it 'should return all related translations' do
-        @hi = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "he", :pronunciation => "he")
-        @hello = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id, :form => "hello", :pronunciation => "hello")
-        @nihao = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "你好", :pronunciation => "ni hao")
-        @wei = Translation.make(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "喂", :pronunciation => "wei")
-        @shares_form = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "你好", :pronunciation => "space space")
-        @shares_pronunciation = Translation.make(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "ochre", :pronunciation => "wei")
+        @hi = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "he", :pronunciation => "he")
+        @hello = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id, :form => "hello", :pronunciation => "hello")
+        @nihao = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "你好", :pronunciation => "ni hao")
+        @wei = Translation.make!(:idiom_id => @idiom.id, :language_id => @chinese.id, :form => "喂", :pronunciation => "wei")
+        @shares_form = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "你好", :pronunciation => "space space")
+        @shares_pronunciation = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id, :form => "ochre", :pronunciation => "wei")
 
         relate_translation_to_others @hi.id, @idiom.id
         relate_translation_to_others @hello.id, @idiom.id
@@ -1909,17 +1909,17 @@ describe TermsController do
 
   context '"POST" record_first_review' do
     before(:each) do
-      @set = Sets.make
-      @english = Language.make(:name => "English")
-      @spanish = Language.make(:name => "Spanish")
-      @idiom = Idiom.make
+      @set = Sets.make!
+      @english = Language.make!(:name => "English")
+      @spanish = Language.make!(:name => "Spanish")
+      @idiom = Idiom.make!
 
-      SetTerms.make(:term_id => @idiom.id, :set_id => @set.id)
-      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
-      UserLanguages.make(:user_id => @user.id, :language_id => @spanish.id)
+      SetTerms.make!(:term_id => @idiom.id, :set_id => @set.id)
+      UserSets.make!(:user_id => @user.id, :set_id => @set.id, :language_id => @spanish.id, :chapter => 1)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @spanish.id)
 
-      t1 = Translation.make(:idiom_id => @idiom.id, :language_id => @english.id)
-      t2 = Translation.make(:idiom_id => @idiom.id, :language_id => @spanish.id)
+      t1 = Translation.make!(:idiom_id => @idiom.id, :language_id => @english.id)
+      t2 = Translation.make!(:idiom_id => @idiom.id, :language_id => @spanish.id)
 
       relate_translation_to_others t1.id, @idiom.id
       relate_translation_to_others t2.id, @idiom.id

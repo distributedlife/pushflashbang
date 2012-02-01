@@ -7,23 +7,23 @@ end
 describe SetHelper do
   context 'is_user_at_end_of_chapter' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
       
-      @set = Sets.make
-      @language = Language.make
-      @language2 = Language.make
+      @set = Sets.make!
+      @language = Language.make!
+      @language2 = Language.make!
 
       @user.native_language_id = @language2.id
       @user.save!
 
-      UserLanguages.make(:user_id => @user.id, :language_id => @language.id)
-      UserSets.make(:user_id => @user.id, :set_id => @set.id, :chapter => 1, :language_id => @language.id)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @language.id)
+      UserSets.make!(:user_id => @user.id, :set_id => @set.id, :chapter => 1, :language_id => @language.id)
 
-      @idiom_in_next_chapter = Idiom.make
-      Translation.make(:idiom_id => @idiom_in_next_chapter.id, :language_id => @language.id)
-      Translation.make(:idiom_id => @idiom_in_next_chapter.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom_in_next_chapter.id, :chapter => 2, :position => 1)
+      @idiom_in_next_chapter = Idiom.make!
+      Translation.make!(:idiom_id => @idiom_in_next_chapter.id, :language_id => @language.id)
+      Translation.make!(:idiom_id => @idiom_in_next_chapter.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom_in_next_chapter.id, :chapter => 2, :position => 1)
     end
 
     it 'should return nil if user is at the end of the chapter' do
@@ -61,16 +61,16 @@ describe SetHelper do
 
     it 'should redirect if user has no term left to schedule in set' do
       uis = UserIdiomSchedule.create(:user_id => @user.id, :idiom_id => @idiom_in_next_chapter.id, :language_id => @language.id)
-      UserIdiomDueItems.make(:user_idiom_schedule_id => uis.id, :review_type => UserIdiomReview::READING, :due => 1.day.from_now)
+      UserIdiomDueItems.make!(:user_idiom_schedule_id => uis.id, :review_type => UserIdiomReview::READING, :due => 1.day.from_now)
 
       is_user_at_end_of_chapter?(@user.id, @set.id, @language.id, "reading").nil?.should == false
     end
 
     it 'should redirect if user if next term is in chapter' do
-      @idiom_in_current_chapter = Idiom.make
-      Translation.make(:idiom_id => @idiom_in_current_chapter.id, :language_id => @language.id)
-      Translation.make(:idiom_id => @idiom_in_current_chapter.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom_in_next_chapter.id, :chapter => 1, :position => 1)
+      @idiom_in_current_chapter = Idiom.make!
+      Translation.make!(:idiom_id => @idiom_in_current_chapter.id, :language_id => @language.id)
+      Translation.make!(:idiom_id => @idiom_in_current_chapter.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom_in_next_chapter.id, :chapter => 1, :position => 1)
 
       is_user_at_end_of_chapter?(@user.id, @set.id, @language.id, "reading").nil?.should == false
     end

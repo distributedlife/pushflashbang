@@ -1,7 +1,6 @@
 include ArrayHelper
 
 class Idiom < ActiveRecord::Base
-  has_many :idiom_translation
   has_many :translations
 
   attr_accessible :idiom_type

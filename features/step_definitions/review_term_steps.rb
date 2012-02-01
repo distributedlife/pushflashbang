@@ -41,13 +41,13 @@ Given /^the user has reviewed the idiom "([^"]*)" before in the "([^"]*)" langua
   idiom = get_idiom_containing_form containing_form
   language = get_language language_name
 
-  is = UserIdiomSchedule.make(:user_id => get(:user).id, :idiom_id => idiom.id, :language_id => language.id)
-  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 1, :due => Time.now, :interval => 600)
-  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 2, :due => Time.now, :interval => 600)
-  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 4, :due => Time.now, :interval => 600)
-  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 8, :due => Time.now, :interval => 600)
-  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 16, :due => Time.now, :interval => 600)
-  UserIdiomDueItems.make(:user_idiom_schedule_id => is.id, :review_type => 32, :due => Time.now, :interval => 600)
+  is = UserIdiomSchedule.make!(:user_id => get(:user).id, :idiom_id => idiom.id, :language_id => language.id)
+  UserIdiomDueItems.make!(:user_idiom_schedule_id => is.id, :review_type => 1, :due => Time.now, :interval => 600)
+  UserIdiomDueItems.make!(:user_idiom_schedule_id => is.id, :review_type => 2, :due => Time.now, :interval => 600)
+  UserIdiomDueItems.make!(:user_idiom_schedule_id => is.id, :review_type => 4, :due => Time.now, :interval => 600)
+  UserIdiomDueItems.make!(:user_idiom_schedule_id => is.id, :review_type => 8, :due => Time.now, :interval => 600)
+  UserIdiomDueItems.make!(:user_idiom_schedule_id => is.id, :review_type => 16, :due => Time.now, :interval => 600)
+  UserIdiomDueItems.make!(:user_idiom_schedule_id => is.id, :review_type => 32, :due => Time.now, :interval => 600)
 end
 
 ################################################################################

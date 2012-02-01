@@ -39,7 +39,19 @@ class RelatedTranslations < ActiveRecord::Base
   end
 
   def self.create_relationships_for_translation translation
-    results = Translation.where(:language_id => translation.language_id)
+    results = Translation.where(:language_id => translation.language_id, :form => translation.form)
+    results.each do |t2|
+      next if translation.id == t2.id
+
+      RelatedTranslations::create_relationship_if_needed translation, t2
+    end
+    results = Translation.where(:language_id => translation.language_id, :pronunciation => translation.pronunciation) unless translation.pronunciation.blank?
+    results.each do |t2|
+      next if translation.id == t2.id
+
+      RelatedTranslations::create_relationship_if_needed translation, t2
+    end
+    results = Translation.where(:language_id => translation.language_id, :idiom_id => translation.idiom_id)
     results.each do |t2|
       next if translation.id == t2.id
 
@@ -64,7 +76,7 @@ class RelatedTranslations < ActiveRecord::Base
       rt1.share_written_form = true
       rt2.share_written_form = true
     end
-    if t1.pronunciation == t2.pronunciation and !t1.pronunciation.empty? and !t2.pronunciation.empty?
+    if t1.pronunciation == t2.pronunciation and !t1.pronunciation.blank? and !t2.pronunciation.blank?
       rt1.share_audible_form = true
       rt2.share_audible_form = true
     end

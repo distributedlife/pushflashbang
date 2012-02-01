@@ -36,26 +36,26 @@ Feature: related translations
 
   Scenario: Create term, link translations to existing words in same language if they share form
     Given the following related translations:
-      | form         | language | pronunciation |
-      | to abandon | Spanish  | |
-      | desert         | English  | |
+      | form       | language | pronunciation |
+      | to abandon | Spanish  |               |
+      | desert     | English  |               |
     When I create the following related terms:
-      | form     | language | pronunciation |
-      | desert   | English  |      |
-      | arid | Spanish  |  |
+      | form   | language | pronunciation |
+      | desert | English  |               |
+      | arid   | Spanish  |               |
     Then the translation "desert" is not related to translation "desert" by meaning
     Then the translation "desert" is related to translation "desert" by form
     Then the translation "desert" is not related to translation "desert" by pronunciation
 
   Scenario: Create term, link translations to existing words in same language if they share pronunciation
     Given the following related translations:
-      | form         | language | pronunciation |
-      | to abandon | Spanish  | |
-      | desert         | English  |/dɪˈzɜːt/ |
+      | form       | language | pronunciation |
+      | to abandon | Spanish  |               |
+      | desert     | English  | /dɪˈzɜːt/     |
     When I create the following related terms:
-      | form     | language | pronunciation |
-      | wasteland   | English  |  /dɪˈzɜːt/    |
-      | arid | Spanish  |  |
+      | form      | language | pronunciation |
+      | wasteland | English  | /dɪˈzɜːt/     |
+      | arid      | Spanish  |               |
     Then the translation "desert" is not related to translation "wasteland" by meaning
     Then the translation "desert" is not related to translation "wasteland" by form
     Then the translation "desert" is related to translation "wasteland" by pronunciation

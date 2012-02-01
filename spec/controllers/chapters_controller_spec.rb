@@ -2,18 +2,18 @@ require 'spec_helper'
 
 describe ChaptersController do
   before(:each) do
-    @user = User.make
+    @user = User.make!
     sign_in :user, @user
     
-    @deck = Deck.make(:user_id => @user.id)
+    @deck = Deck.make!(:user_id => @user.id)
 
-    @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
-    @card2 = Card.make(:deck_id => @deck.id, :chapter => 2)
-    @card3 = Card.make(:deck_id => @deck.id, :chapter => 3)
+    @card1 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+    @card2 = Card.make!(:deck_id => @deck.id, :chapter => 2)
+    @card3 = Card.make!(:deck_id => @deck.id, :chapter => 3)
 
-    @user_card_schedule = UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
+    @user_card_schedule = UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
 
-    UserDeckChapter.make(:user_id => @user.id, :deck_id => @deck.id)
+    UserDeckChapter.make!(:user_id => @user.id, :deck_id => @deck.id)
 
     CardTiming.create(:seconds => 5)
     CardTiming.create(:seconds => 25)
@@ -22,8 +22,8 @@ describe ChaptersController do
 
   shared_examples_for "all chapter operations that require a deck" do
     it 'should redirect to user home if the deck does not belong to the user' do
-      user2 = User.make
-      deck = Deck.make(:user_id => user2.id)
+      user2 = User.make!
+      deck = Deck.make!(:user_id => user2.id)
 
       get :show, :deck_id => deck.id, :id => 1
 
@@ -32,9 +32,9 @@ describe ChaptersController do
     end
 
     it 'should not redirect to user home if the deck does not belong to the user but is shared' do
-      user2 = User.make
-      deck = Deck.make(:user_id => user2.id, :shared => true)
-      card = Card.make(:deck_id => deck.id)
+      user2 = User.make!
+      deck = Deck.make!(:user_id => user2.id, :shared => true)
+      card = Card.make!(:deck_id => deck.id)
 
       get :show, :deck_id => deck.id, :id => 1
 
@@ -91,7 +91,7 @@ describe ChaptersController do
       @user_deck_chapter = UserDeckChapter.where(:user_id => @user.id, :deck_id => @deck.id).first
       @user_deck_chapter.chapter.should == 1
 
-      UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 1.day.from_now)
+      UserCardSchedule.make!(:user_id => @user.id, :card_id => @card2.id, :due => 1.day.from_now)
 
 
       get :advance, :deck_id => @deck.id, :id => 1
@@ -146,10 +146,10 @@ describe ChaptersController do
     end
 
     it 'should redirect to each card in the chapter based on the last card' do
-      card12 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      card13 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      card14 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      card15 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      card12 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      card13 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      card14 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      card15 = Card.make!(:deck_id => @deck.id, :chapter => 1)
 
       get :cram, :deck_id => @deck.id, :id => 1, :card_id => @card1.id
       response.should redirect_to(cram_deck_card_path(@deck.id, card12.id))

@@ -1,6 +1,6 @@
 module LanguageComponent
   def ensure_languages_exist table
-    # make sure our languages exist before we go to the page
+    # make! sure our languages exist before we go to the page
     table.hashes.each do |hash|
       ensure_language_exists hash[:language] unless hash[:language].blank?
     end
@@ -10,14 +10,14 @@ module LanguageComponent
     user = ensure_user_exists_and_is_logged_in
     language = ensure_language_exists language_name
 
-    UserLanguages.make(:language_id => language.id, :user_id => user.id)
+    UserLanguages.make!(:language_id => language.id, :user_id => user.id)
   end
 
   def ensure_language_exists language_name
     matches = Language.where(:name => language_name)
 
     if matches.empty?
-      Language.make(:name => language_name)
+      Language.make!(:name => language_name)
     else
       matches.first
     end
@@ -25,11 +25,11 @@ module LanguageComponent
 
   def create_language language_name
     if language_name.nil? or language_name.empty?
-      Language.make
+      Language.make!
     else
       existing = Language.where(:name => language_name)
       if existing.empty?
-        Language.make(:name => language_name)
+        Language.make!(:name => language_name)
       else
         existing.first
       end

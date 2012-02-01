@@ -527,10 +527,10 @@ img.btn_close {
   margin: -55px -55px 0 0; }
 
 /*--Making IE6 Understand Fixed Positioning--*/
-*html #fade {
+* html #fade {
   position: absolute; }
 
-*html .popup_block {
+* html .popup_block {
   position: absolute; }
 
 .jp-audio {
@@ -719,7 +719,7 @@ div.jp-duration {
   background-position: center left; }
 
 p.pronunciation {
-  padding-top: 0.6em;
-  font-size: 0.6em;
+  padding-top: 1.2em;
+  font-size: 0.8em;
   font-face: "courier-new";
   color: #999999; }

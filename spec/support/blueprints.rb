@@ -1,92 +1,58 @@
 require 'machinist/active_record'
-require 'sham'
 require 'faker'
 
-Sham.define do
-  #users
-  email {Faker::Internet.email(Faker::Name.first_name)}
-  password(:unique => false) {'password'}
-  native_language_id(:unique => false) {1}
-
-  #cards and decks
-  name {Faker::Lorem.words(1)}
-  description {Faker::Lorem.sentence(5)}
-  shared(:unique => false) {false}
-  pronunciation_side(:unique => false) {'front'}
-  user_id(:unique => false) {1}
-
-  front {Faker::Lorem.sentence(4)}
-  back {Faker::Lorem.sentence(3)}
-  pronunciation {Faker::Lorem.sentence(2)}
-
-  deck_id(:unique => false) {1}
-  card_id(:unique => false) {1}
-  idiom_id(:unique => false) {1}
-  language_id(:unique => false) {1}
-
-  due(:unique => false) {Time.now}
-  interval(:unique => false) {0}
-  review_start(:unique => false) {Time.now}
-  reveal(:unique => false) {Time.now}
-  result_recorded(:unique => false) {Time.now}
-  result_success(:unique => false) {'good'}
-
-  #terms and idioms
-  form(:unique => false) {Faker::Lorem.sentence(4)}
-end
-
 User.blueprint do
-  email
-  password
-  native_language_id
+  email {Faker::Internet.email(Faker::Name.first_name)}
+  password {'password'}
+  native_language_id {1}
   edit_mode {true}
 end
 
 Deck.blueprint do
-  name
-  description
-  shared
-  pronunciation_side
-  user_id
+  name {Faker::Lorem.words(1)}
+  description {Faker::Lorem.sentence(5)}
+  shared {false}
+  pronunciation_side {'front'}
+  user_id {1}
   review_types {Deck::READING}
 end
 
 Card.blueprint do
-  deck_id
-  front
-  back
-  pronunciation
+  deck_id {1}
+  front {Faker::Lorem.sentence(4)}
+  back {Faker::Lorem.sentence(3)}
+  pronunciation {Faker::Lorem.sentence(2)}
   chapter {1}
 end
 
 UserCardReview.blueprint do
-  card_id
-  user_id
-  due
-  review_start
-  reveal
-  result_recorded
-  result_success
-  interval
+  card_id {1}
+  user_id {1}
+  due {Time.now}
+  review_start {Time.now}
+  reveal {Time.now}
+  result_recorded {Time.now}
+  result_success {'good'}
+  interval {0}
 end
 
 UserCardSchedule.blueprint do
-  user_id
-  card_id
+  user_id {1}
+  card_id {1}
   due {1.day.from_now}
-  interval
+  interval {0}
 end
 
 UserCardSchedule.blueprint(:due) do
-  user_id
-  card_id
+  user_id {1}
+  card_id {1}
   due {1.day.ago}
-  interval
+  interval {0}
 end
 
 UserDeckChapter.blueprint do
-  user_id
-  deck_id
+  user_id {1}
+  deck_id {1}
   chapter {1}
 end
 
@@ -95,10 +61,10 @@ Idiom.blueprint do
 end
 
 Translation.blueprint do
-  idiom_id
-  language_id
-  form
-  pronunciation
+  idiom_id {1}
+  language_id {1}
+  form {Faker::Lorem.sentence(4)}
+  pronunciation {}
 end
 
 Language.blueprint do
@@ -106,12 +72,11 @@ Language.blueprint do
 end
 
 UserLanguages.blueprint do
-  language_id
-  user_id
+  language_id {1}
+  user_id {1}
 end
 
 Sets.blueprint do
-
 end
 
 SetName.blueprint do
@@ -125,40 +90,40 @@ SetTerms.blueprint do
 end
 
 UserIdiomReview.blueprint do
-  user_id
-  idiom_id
-  language_id
+  user_id {1}
+  idiom_id {1}
+  language_id {1}
   review_type {1}
-  due
-  review_start
-  reveal
-  result_recorded
-  success
+  due {Time.now}
+  review_start {Time.now}
+  reveal {Time.now}
+  result_recorded {Time.now}
+  success {false}
   interval {5}
 end
 
 UserIdiomSchedule.blueprint do
-  user_id
-  idiom_id
-  language_id
+  user_id {1}
+  idiom_id {1}
+  language_id {1}
 end
 
 UserIdiomDueItems.blueprint do
   review_type {1}
-  due
-  interval
+  due {Time.now}
+  interval {0}
 end
 
 UserSets.blueprint do
-  user_id
-  set_id
-  language_id
+  user_id {1}
+  set_id {1}
+  language_id {1}
   chapter {1}
 end
 
 RelatedTranslations.blueprint do
-  translation1_id
-  translation2_id
+  translation1_id {1}
+  translation2_id {1}
   share_meaning {false}
   share_written_form {false}
   share_audible_form {false}

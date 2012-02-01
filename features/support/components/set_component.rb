@@ -2,7 +2,7 @@ module SetComponent
   def create_set hash
     verify_set_prerequisites
 
-    set = Sets.make
+    set = Sets.make!
     set_name = SetName.new hash
     set_name.sets_id = set.id
     set_name.save
@@ -49,7 +49,7 @@ module SetComponent
   end
 
   def attach_idiom_to_set idiom, set, chapter = 1, position = 1
-    add(:set_term, SetTerms.make(:set_id => set.id, :term_id => idiom.id, :chapter => chapter, :position => position))
+    add(:set_term, SetTerms.make!(:set_id => set.id, :term_id => idiom.id, :chapter => chapter, :position => position))
   end
 
   private
@@ -59,7 +59,7 @@ module SetComponent
 
   def verify_set_name_prerequisites
     if does_not_exist(:set)
-      add(:set, Sets.make)
+      add(:set, Sets.make!)
     end
   end
 end

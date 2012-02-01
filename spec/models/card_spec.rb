@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Card do
   before(:each) do
-    @user = User.make
-    @deck = Deck.make(:user_id => @user.id)
+    @user = User.make!
+    @deck = Deck.make!(:user_id => @user.id)
   end
 
   context 'to be valid' do
@@ -54,11 +54,11 @@ describe Card do
     end
 
     it 'should return the next upcoming card if there are many to choose' do
-      card1 = Card.make(:deck_id => @deck.id)
-      card2 = Card.make(:deck_id => @deck.id)
-      card3 = Card.make(:deck_id => @deck.id)
+      card1 = Card.make!(:deck_id => @deck.id)
+      card2 = Card.make!(:deck_id => @deck.id)
+      card3 = Card.make!(:deck_id => @deck.id)
 
-      UserCardSchedule.make(:user_id => @user.id, :card_id => card1.id)
+      UserCardSchedule.make!(:user_id => @user.id, :card_id => card1.id)
 
       next_card = Card::get_first_unscheduled_card_for_deck_for_user(@user.id, @deck.id)
 
@@ -67,11 +67,11 @@ describe Card do
     end
 
     it 'should not consider cards in other decks' do
-      deck2 = Deck.make(:user_id => @user.id)
+      deck2 = Deck.make!(:user_id => @user.id)
 
-      card1 = Card.make(:deck_id => deck2.id)
-      card2 = Card.make(:deck_id => @deck.id)
-      card3 = Card.make(:deck_id => @deck.id)
+      card1 = Card.make!(:deck_id => deck2.id)
+      card2 = Card.make!(:deck_id => @deck.id)
+      card3 = Card.make!(:deck_id => @deck.id)
 
       next_card = Card::get_first_unscheduled_card_for_deck_for_user(@user.id, @deck.id)
 
@@ -80,13 +80,13 @@ describe Card do
     end
 
     it 'should not consider cards for other users' do
-      user2 = User.make
+      user2 = User.make!
 
-      card1 = Card.make(:deck_id => @deck.id)
-      card2 = Card.make(:deck_id => @deck.id)
-      card3 = Card.make(:deck_id => @deck.id)
+      card1 = Card.make!(:deck_id => @deck.id)
+      card2 = Card.make!(:deck_id => @deck.id)
+      card3 = Card.make!(:deck_id => @deck.id)
 
-      UserCardSchedule.make(:user_id => user2.id, :card_id => card1.id)
+      UserCardSchedule.make!(:user_id => user2.id, :card_id => card1.id)
 
       next_card = Card::get_first_unscheduled_card_for_deck_for_user(@user.id, @deck.id)
 
@@ -99,7 +99,7 @@ describe Card do
     it 'should delete the card' do
       Card.count.should be 0
 
-      card = Card.make(:deck_id => @deck.id)
+      card = Card.make!(:deck_id => @deck.id)
       Card.count.should be 1
 
 
@@ -110,8 +110,8 @@ describe Card do
     it 'should delete any scheduled cards' do
       UserCardSchedule.count.should be 0
 
-      card = Card.make(:deck_id => @deck.id)
-      UserCardSchedule.make(:card_id => card.id, :user_id => @user.id)
+      card = Card.make!(:deck_id => @deck.id)
+      UserCardSchedule.make!(:card_id => card.id, :user_id => @user.id)
       UserCardSchedule.count.should be 1
 
 
@@ -122,9 +122,9 @@ describe Card do
     it 'should not delete any user card reviews' do
       UserCardReview.count.should be 0
 
-      card = Card.make(:deck_id => @deck.id)
-      UserCardReview.make(:card_id => card.id, :user_id => @user.id)
-      UserCardReview.make(:card_id => card.id, :user_id => @user.id)
+      card = Card.make!(:deck_id => @deck.id)
+      UserCardReview.make!(:card_id => card.id, :user_id => @user.id)
+      UserCardReview.make!(:card_id => card.id, :user_id => @user.id)
       UserCardReview.count.should be 2
 
 

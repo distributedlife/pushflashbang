@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Idiom do
   describe 'translations_in_idiom_and_language' do
     before(:each) do
-      @english = Language.make
-      @chinese = Language.make
-      @spanish = Language.make
+      @english = Language.make!
+      @chinese = Language.make!
+      @spanish = Language.make!
 
       @idiom = Idiom.create
       @translation1 = Translation.create(:idiom_id => @idiom.id, :language_id => @english.id, :form => "a")
@@ -25,7 +25,7 @@ describe Idiom do
 
   describe 'exists?' do
     it 'should return true if the idiom exists' do
-      Idiom::exists?(Idiom.make.id).should == true
+      Idiom::exists?(Idiom.make!.id).should == true
     end
 
     it 'should return false if the idiom does not exist' do
@@ -35,11 +35,11 @@ describe Idiom do
 
   describe 'get_from_translations' do
     before(:each) do
-      @idiom = Idiom.make
-      @idiom2 = Idiom.make
-      @t = Translation.make(:idiom_id => @idiom.id)
-      @t2 = Translation.make(:idiom_id => @idiom2.id)
-      @t3 = Translation.make(:idiom_id => @idiom2.id)
+      @idiom = Idiom.make!
+      @idiom2 = Idiom.make!
+      @t = Translation.make!(:idiom_id => @idiom.id)
+      @t2 = Translation.make!(:idiom_id => @idiom2.id)
+      @t3 = Translation.make!(:idiom_id => @idiom2.id)
     end
 
     it 'should return the idiom refered by the translation' do

@@ -33,9 +33,9 @@ describe SetTerms do
 
   context 'increment_chapter_for_set' do
     it 'should increment all chapters for set' do
-      SetTerms.make(:set_id => 1, :term_id => 2, :chapter => 0)
-      SetTerms.make(:set_id => 1, :term_id => 3, :chapter => 1)
-      SetTerms.make(:set_id => 1, :term_id => 4, :chapter => 2)
+      SetTerms.make!(:set_id => 1, :term_id => 2, :chapter => 0)
+      SetTerms.make!(:set_id => 1, :term_id => 3, :chapter => 1)
+      SetTerms.make!(:set_id => 1, :term_id => 4, :chapter => 2)
 
       SetTerms::increment_chapters_for_set 1
 
@@ -46,7 +46,7 @@ describe SetTerms do
     end
 
     it 'should not touch other chapters' do
-      SetTerms.make(:set_id => 2, :term_id => 5, :chapter => 1)
+      SetTerms.make!(:set_id => 2, :term_id => 5, :chapter => 1)
 
       SetTerms::increment_chapters_for_set 1
       
@@ -56,9 +56,9 @@ describe SetTerms do
 
   context 'decrement_chapters_for_set_after_chapter' do
     it 'should decrement all chapters for set except those equal to or below chapter' do
-      SetTerms.make(:set_id => 1, :term_id => 2, :chapter => 1)
-      SetTerms.make(:set_id => 1, :term_id => 3, :chapter => 2)
-      SetTerms.make(:set_id => 1, :term_id => 4, :chapter => 3)
+      SetTerms.make!(:set_id => 1, :term_id => 2, :chapter => 1)
+      SetTerms.make!(:set_id => 1, :term_id => 3, :chapter => 2)
+      SetTerms.make!(:set_id => 1, :term_id => 4, :chapter => 3)
 
       SetTerms::decrement_chapters_for_set_after_chapter 1, 2
 
@@ -69,7 +69,7 @@ describe SetTerms do
     end
 
     it 'should not touch other chapters' do
-      SetTerms.make(:set_id => 2, :term_id => 5, :chapter => 1)
+      SetTerms.make!(:set_id => 2, :term_id => 5, :chapter => 1)
 
       SetTerms::decrement_chapters_for_set_after_chapter 1, 2
 

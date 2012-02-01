@@ -2,7 +2,7 @@ module UserComponent
   def create_user
     english = ensure_language_exists "English"
     
-    add(:user, User.make(:native_language_id => english.id))
+    add(:user, User.make!(:native_language_id => english.id))
   end
 
   def log_in_user

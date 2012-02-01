@@ -12,7 +12,7 @@ class BasePage
   end
 
   def is_current_page?
-    raise "You haven't implemented a quick check to make sure you are on the page you think you are"
+    raise "You haven't implemented a quick check to make! sure you are on the page you think you are"
   end
 
   def url sut

@@ -21,9 +21,9 @@ describe SetName do
 
   context 'exists?' do
     before(:each) do
-      @set = Sets.make
-      @set_name = SetName.make(:sets_id => @set.id)
-      @set_name2 = SetName.make(:sets_id => 100)
+      @set = Sets.make!
+      @set_name = SetName.make!(:sets_id => @set.id)
+      @set_name2 = SetName.make!(:sets_id => 100)
     end
 
     it 'should return true if the set exists and belongs to the set' do
