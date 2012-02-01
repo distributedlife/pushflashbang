@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111002102618) do
+ActiveRecord::Schema.define(:version => 20120201112653) do
 
   create_table "card_timings", :force => true do |t|
     t.integer  "seconds"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20111002102618) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "enabled",    :default => true
   end
 
   create_table "related_translations", :force => true do |t|

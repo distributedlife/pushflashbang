@@ -69,6 +69,7 @@ end
 
 Language.blueprint do
   name {Faker::Lorem.sentence(2)}
+  enabled {true}
 end
 
 UserLanguages.blueprint do
