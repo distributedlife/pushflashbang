@@ -24,4 +24,9 @@ class Language < ActiveRecord::Base
   def enabled?
     return enabled
   end
+
+  def disable!
+    self.enabled = false
+    self.save!
+  end
 end

@@ -47,4 +47,79 @@ describe LanguagesHelper do
       LanguagesHelper::user_is_learning_language?(@language.id, @user.id + 1).should be false
     end
   end
+
+  describe 'merge_languages' do
+    before(:each) do
+      @l1 = Language.make!
+      @l2 = Language.make!
+    end
+
+    it 'should disable the merged_language' do
+      merge_languages @l1.id, @l2.id
+
+      @l2.reload
+      @l2.enabled?.should == false
+    end
+    
+    it 'should merge all user native languages' do
+      @user.native_language_id = @l2.id
+      @user.save!
+
+      merge_languages @l1.id, @l2.id
+
+      @user.reload
+      @user.native_language_id.should == @l1.id
+    end
+    
+    it 'should merge all user languages' do
+      ul = UserLanguages.make!(:language_id => @l2.id)
+
+      merge_languages @l1.id, @l2.id
+
+      ul.reload
+      ul.language_id.should == @l1.id
+    end
+
+    it 'should merge all user sets' do
+      us = UserSets.make!(:language_id => @l2.id)
+
+      merge_languages @l1.id, @l2.id
+
+      us.reload
+      us.language_id.should == @l1.id
+    end
+
+    it 'should merge all translations' do
+      t = Translation.make!(:language_id => @l2.id)
+
+      merge_languages @l1.id, @l2.id
+
+      t.reload
+      t.language_id.should == @l1.id
+    end
+
+    it 'should rebuild related translations'
+
+    it 'should merge all user idiom schedules' do
+      uis = UserIdiomSchedule.make!(:language_id => @l2.id)
+
+      merge_languages @l1.id, @l2.id
+
+      uis.reload
+      uis.language_id.should == @l1.id
+    end
+
+    it 'should deal with multiple user idiom schedules'
+
+    it 'should merge all user idiom reviews' do
+      uir = UserIdiomReview.make!(:language_id => @l2.id, :success => false)
+
+      merge_languages @l1.id, @l2.id
+
+      uir.reload
+      uir.language_id.should == @l1.id
+    end
+
+    it 'should deal with multiple user idiom reviews'
+  end
 end

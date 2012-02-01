@@ -60,4 +60,14 @@ describe Language do
       r.include?(l2).should == false
     end
   end
+
+  context 'disable!' do
+    it 'should set enabled to false' do
+      l1 = Language.make!(:enabled => true)
+
+      l1.disable!
+      l1.reload
+      l1.enabled?.should == false
+    end
+  end
 end

@@ -99,7 +99,7 @@ UserIdiomReview.blueprint do
   review_start {Time.now}
   reveal {Time.now}
   result_recorded {Time.now}
-  success {false}
+#  success {true}
   interval {5}
 end
 

@@ -25,4 +25,21 @@ module LanguagesHelper
 
     return true
   end
+
+  def merge_languages language_id, language_to_merge_id
+    source = Language.find language_id
+    merged_language = Language.find language_to_merge_id
+
+    return if source.nil? or merged_language.nil?
+
+    User.where(:native_language_id => language_to_merge_id).each {|u| u.native_language_id = language_id; u.save!}
+    UserLanguages.where(:language_id => language_to_merge_id).each {|ul| ul.language_id = language_id; ul.save!}
+    UserSets.where(:language_id => language_to_merge_id).each {|us| us.language_id = language_id; us.save!}
+    Translation.where(:language_id => language_to_merge_id).each {|t| t.language_id = language_id; t.save!}
+    UserIdiomSchedule.where(:language_id => language_to_merge_id).each {|uis| uis.language_id = language_id; uis.save!}
+    UserIdiomReview.where(:language_id => language_to_merge_id).each {|uir| uir.language_id = language_id; uir.save!}
+
+
+    merged_language.disable!
+  end
 end
