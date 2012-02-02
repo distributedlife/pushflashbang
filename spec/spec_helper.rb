@@ -28,10 +28,6 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
-  # blueprints
-  config.before(:all)    { Sham.reset(:before_all)  }
-  config.before(:each)   { Sham.reset(:before_each) }
-
   #devise helpers
   config.include Devise::TestHelpers, :type => :controller
   config.include Devise::TestHelpers, :type => :helper

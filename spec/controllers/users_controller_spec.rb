@@ -3,7 +3,7 @@ require 'spec_helper'
 describe UsersController do
   context 'index' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
     end
 
@@ -17,8 +17,8 @@ describe UsersController do
       get :index
       assigns[:decks].empty?.should == true
 
-      deck = Deck.make(:user_id => @user.id, :name => 'my first deck')
-      deck = Deck.make(:user_id => @user.id, :name => 'a second deck')
+      deck = Deck.make!(:user_id => @user.id, :name => 'my first deck')
+      deck = Deck.make!(:user_id => @user.id, :name => 'a second deck')
 
       get :index
       assigns[:decks].count.should == 2
@@ -27,9 +27,9 @@ describe UsersController do
     end
 
     it 'should return decks created by other users that are shared' do
-      deck = Deck.make(:user_id => @user.id, :name => 'my first deck')
-      deck = Deck.make(:user_id => @user.id + 1, :name => 'a second deck', :shared => true)
-      deck = Deck.make(:user_id => @user.id + 1, :name => 'a third deck', :shared => false)
+      deck = Deck.make!(:user_id => @user.id, :name => 'my first deck')
+      deck = Deck.make!(:user_id => @user.id + 1, :name => 'a second deck', :shared => true)
+      deck = Deck.make!(:user_id => @user.id + 1, :name => 'a third deck', :shared => false)
 
       get :index
       assigns[:decks].count.should == 2
@@ -38,8 +38,8 @@ describe UsersController do
     end
 
     it 'should return the card count for each deck' do
-      deck = Deck.make(:user_id => @user.id)
-      card = Card.make(:deck_id => deck.id)
+      deck = Deck.make!(:user_id => @user.id)
+      card = Card.make!(:deck_id => deck.id)
 
       get :index
 
@@ -47,9 +47,9 @@ describe UsersController do
     end
 
     it 'should return the due card count for each deck' do
-      deck = Deck.make(:user_id => @user.id)
-      card = Card.make(:deck_id => deck.id)
-      scheduled_card = UserCardSchedule.make(:due, :card_id => card.id, :user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
+      card = Card.make!(:deck_id => deck.id)
+      scheduled_card = UserCardSchedule.make!(:due, :card_id => card.id, :user_id => @user.id)
 
       get :index
 
@@ -57,7 +57,7 @@ describe UsersController do
     end
 
     it 'should return the languages being learnt by the user' do
-      2.times {Language.make}
+      2.times {Language.make!}
       UserLanguages.create(:user_id => @user.id, :language_id => Language.first.id)
       UserLanguages.create(:user_id => 100, :language_id => Language.first.id)
 
@@ -69,7 +69,7 @@ describe UsersController do
 
   context '"PUT" start_editing' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
 
       request.env["HTTP_REFERER"] = "http://whereiwasbefore.com"
@@ -89,7 +89,7 @@ describe UsersController do
 
   context '"PUT" stop_editing' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
 
       request.env["HTTP_REFERER"] = "http://whereiwasbefore.com"
@@ -109,7 +109,7 @@ describe UsersController do
 
   context 'flash_messages' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
 
       request.env["HTTP_REFERER"] = "http://whereiwasbefore.com"

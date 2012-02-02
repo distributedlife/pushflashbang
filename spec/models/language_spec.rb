@@ -26,4 +26,48 @@ describe Language do
       Language.first.name.should == "English"
     end
   end
+
+  context 'enabled?' do
+    it 'should return true if language is enabled' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => false)
+
+      l1.enabled?.should == true
+      l2.enabled?.should == false
+    end
+  end
+
+  context 'scope:only_enabled' do
+    it 'should return only enabled languages' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => false)
+
+      r = Language.only_enabled
+      r.count.should == 1
+      r.include?(l1).should == true
+      r.include?(l2).should == false
+    end
+  end
+
+  context 'override:all' do
+    it 'should not return disabled languages' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => false)
+
+      r = Language.all
+      r.count.should == 1
+      r.include?(l1).should == true
+      r.include?(l2).should == false
+    end
+  end
+
+  context 'disable!' do
+    it 'should set enabled to false' do
+      l1 = Language.make!(:enabled => true)
+
+      l1.disable!
+      l1.reload
+      l1.enabled?.should == false
+    end
+  end
 end

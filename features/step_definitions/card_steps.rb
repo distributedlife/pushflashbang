@@ -4,9 +4,9 @@ And /^I am logged in and have created a deck$/ do
 end
 
 And /^I have created multiple cards$/ do
-  add(:card, Card.make(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card"))
+  add(:card, Card.make!(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card"))
   add(:card_id, get(:card).id)
-  add(:card, Card.make(:deck_id => get(:deck_id), :front => "the quick brown fox jumps over the lazy dog", :back => "the time has come for all good men to attend the dance"))
+  add(:card, Card.make!(:deck_id => get(:deck_id), :front => "the quick brown fox jumps over the lazy dog", :back => "the time has come for all good men to attend the dance"))
   add(:card_id, get(:card).id)
 end
 
@@ -24,12 +24,12 @@ And /^I create a card$/ do
 end
 
 And /^I have created a card$/ do
-  add(:card, Card.make(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card"))
+  add(:card, Card.make!(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card"))
   add(:card_id, get(:card).id)
 end
 
 And /^I have created a card with audio$/ do
-  add(:card, Card.make(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card"))
+  add(:card, Card.make!(:deck_id => get(:deck_id), :front => "front of my card", :back => "back of my card"))
   add(:card_id, get(:card).id)
 
   get(:card).audio_file_name = "myfile.mp3"

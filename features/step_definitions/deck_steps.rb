@@ -9,9 +9,9 @@ And /^I create a deck$/ do
 end
 
 And /^a deck created by another user$/ do
-  another_user = User.make
+  another_user = User.make!
 
-  add(:deck, Deck.make(:name => "SimpleDeck", :user_id => another_user.id))
+  add(:deck, Deck.make!(:name => "SimpleDeck", :user_id => another_user.id))
   add(:deck_id, get(:deck).id)
   add(:chapter, 1)
 end
@@ -41,14 +41,14 @@ And /^the deck is configured to show the pronunciation on the back$/ do
 end
 
 And /^I have created a deck$/ do
-  add(:deck, Deck.make(:name => "My Deck", :user_id => get(:user).id))
+  add(:deck, Deck.make!(:name => "My Deck", :user_id => get(:user).id))
   add(:deck_id, get(:deck).id)
   add(:chapter, 1)
 end
 
 And /^I have created many cards in the deck$/ do
   5.times do
-    card = Card.make(:deck_id => get(:deck_id))
+    card = Card.make!(:deck_id => get(:deck_id))
 
     add(:card, card)
     add(:card_id, card.id)
@@ -56,12 +56,12 @@ And /^I have created many cards in the deck$/ do
 end
 
 And /^I have a deck with (\d+) chapters$/ do |chapter_count|
-  deck = Deck.make(:name => "My Deck", :user_id => get(:user).id)
+  deck = Deck.make!(:name => "My Deck", :user_id => get(:user).id)
   add(:deck, deck)
   add(:deck_id, deck.id)
 
   chapter_count.to_i.times do |i|
-    Card.make(:deck_id => deck.id, :chapter => i + 1)
+    Card.make!(:deck_id => deck.id, :chapter => i + 1)
   end
 end
 

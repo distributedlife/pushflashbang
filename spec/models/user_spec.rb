@@ -37,9 +37,9 @@ describe User do
     end
 
     it 'should not update users that have a language' do
-      lang = Language.make
+      lang = Language.make!
 
-      user = User.make(:native_language_id => lang.id)
+      user = User.make!(:native_language_id => lang.id)
 
       User::migrate_all_users_without_language_to_english
 
@@ -70,7 +70,7 @@ describe User do
 
   context 'start_editing' do
     it 'user should be in edit mode' do
-      user = User.make(:edit_mode => false)
+      user = User.make!(:edit_mode => false)
       user.start_editing
       user.in_edit_mode?.should be true
     end
@@ -78,7 +78,7 @@ describe User do
 
   context 'stop_editing' do
     it 'user should be in edit mode' do
-      user = User.make(:edit_mode => true)
+      user = User.make!(:edit_mode => true)
       user.stop_editing
       user.in_edit_mode?.should be false
     end

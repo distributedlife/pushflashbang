@@ -11,7 +11,7 @@ module TranslationComponent
       hash = swap_language_for_id hash, language.id
     end
 
-    translation = Translation.make hash
+    translation = Translation.make! hash
     translation.idiom_id = get(:idiom).id
     translation.save!
     relate_translation_to_others translation.id, get(:idiom).id
@@ -25,7 +25,7 @@ module TranslationComponent
     language = get_language hash[:language]
     hash = swap_language_for_id hash, language.id
 
-    translation = Translation.make hash
+    translation = Translation.make! hash
     translation.idiom_id = idiom.id
     translation.save!
     relate_translation_to_others translation.id, idiom.id
@@ -85,7 +85,7 @@ module TranslationComponent
         rt1.share_written_form = true
         rt2.share_written_form = true
       end
-      if t1.pronunciation == t2.pronunciation and !t1.pronunciation.empty? and !t2.pronunciation.empty?
+      if t1.pronunciation == t2.pronunciation and !t1.pronunciation.blank? and !t2.pronunciation.blank?
         rt1.share_audible_form = true
         rt2.share_audible_form = true
       end

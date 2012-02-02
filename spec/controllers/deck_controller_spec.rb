@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DeckController do
   before(:each) do
-    @user = User.make
+    @user = User.make!
     sign_in :user, @user
   end
 
@@ -10,7 +10,7 @@ describe DeckController do
     it 'should redirect to the login page if user is not logged in' do
       sign_out @user
 
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
 
       get :show, :id => deck.id
       response.should be_redirect
@@ -24,8 +24,8 @@ describe DeckController do
   
   shared_examples_for "all deck operations that require a deck" do
     it 'should redirect to user home if the deck does not belong to the user' do
-      user2 = User.make
-      deck = Deck.make(:user_id => user2.id)
+      user2 = User.make!
+      deck = Deck.make!(:user_id => user2.id)
 
       get :show, :id => deck.id
 
@@ -34,8 +34,8 @@ describe DeckController do
     end
 
     it 'should not redirect to user home if the deck does not belong to the user but is shared' do
-      user2 = User.make
-      deck = Deck.make(:user_id => user2.id, :shared => true)
+      user2 = User.make!
+      deck = Deck.make!(:user_id => user2.id, :shared => true)
 
       get :show, :id => deck.id
 
@@ -89,7 +89,7 @@ describe DeckController do
     it_should_behave_like "all deck operations that require a deck"
 
     it 'should return the deck for the given id' do
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
 
       get :edit, :id => deck.id
 
@@ -101,7 +101,7 @@ describe DeckController do
     it_should_behave_like "all deck operations that require a deck"
 
     it 'should update the deck for the given id' do
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
 
       put :update, :id => deck.id, :deck => {:id => deck.id, :name => "edited name", :description => 'edited description'}
 
@@ -113,9 +113,9 @@ describe DeckController do
     end
 
     it 'should not update the user attribute' do
-      user2 = User.make
+      user2 = User.make!
 
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
 
       put :update, :id => deck.id, :deck => {:user => user2, :name => "edited name", :description => 'edited description'}
 
@@ -127,7 +127,7 @@ describe DeckController do
     end
 
     it 'should not update if the deck is made invalid' do
-      deck = Deck.make(:user_id => @user.id, :name => 'my deck', :description => nil)
+      deck = Deck.make!(:user_id => @user.id, :name => 'my deck', :description => nil)
 
       put :update, :id => deck.id, :deck => {:id => deck.id, :name => "", :description => 'edited description'}
 
@@ -145,7 +145,7 @@ describe DeckController do
     it_should_behave_like "all deck operations that require a deck"
 
     it 'should return the deck for the given id' do
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
 
       get :show, :id => deck.id
 
@@ -153,10 +153,10 @@ describe DeckController do
     end
 
     it 'should return the chapters for the given deck' do
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
 
-      card1 = Card.make(:deck_id => deck.id, :front => 'vvv', :chapter => 1)
-      Card.make(:deck_id => deck.id, :front => 'aaa', :chapter => 2)
+      card1 = Card.make!(:deck_id => deck.id, :front => 'vvv', :chapter => 1)
+      Card.make!(:deck_id => deck.id, :front => 'aaa', :chapter => 2)
 
       card1.front = 'zzz'
       card1.save!
@@ -169,9 +169,9 @@ describe DeckController do
     end
 
     it 'should return a shared deck beloning to another user' do
-      user2 = User.make
+      user2 = User.make!
 
-      deck = Deck.make(:user_id => user2.id, :shared => true)
+      deck = Deck.make!(:user_id => user2.id, :shared => true)
 
       get :show, :id => deck.id
 
@@ -183,7 +183,7 @@ describe DeckController do
     it_should_behave_like "all deck operations that require a deck"
 
     it 'should delete the deck for the given id' do
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
 
       delete :destroy, :id => deck.id
 
@@ -193,9 +193,9 @@ describe DeckController do
     end
 
     it 'should not delete the deck if the id does not belong to the user' do
-      user2 = User.make
+      user2 = User.make!
 
-      deck = Deck.make(:user_id => user2.id)
+      deck = Deck.make!(:user_id => user2.id)
 
       delete :destroy, :id => deck.id
 
@@ -212,15 +212,15 @@ describe DeckController do
     end
 
     it 'should delete all cards and card schedule and not delete the reviews' do
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
 
-      card1 = Card.make(:deck_id => deck.id)
-      card2 = Card.make(:deck_id => deck.id)
-      UserCardSchedule.make(:card_id => card1.id, :user_id => @user.id)
-      UserCardSchedule.make(:card_id => card2.id, :user_id => @user.id)
-      UserCardReview.make(:card_id => card1.id, :user_id => @user.id)
-      UserCardReview.make(:card_id => card2.id, :user_id => @user.id)
-      UserDeckChapter.make(:deck_id => deck.id, :user_id => @user.id)
+      card1 = Card.make!(:deck_id => deck.id)
+      card2 = Card.make!(:deck_id => deck.id)
+      UserCardSchedule.make!(:card_id => card1.id, :user_id => @user.id)
+      UserCardSchedule.make!(:card_id => card2.id, :user_id => @user.id)
+      UserCardReview.make!(:card_id => card1.id, :user_id => @user.id)
+      UserCardReview.make!(:card_id => card2.id, :user_id => @user.id)
+      UserDeckChapter.make!(:deck_id => deck.id, :user_id => @user.id)
 
       delete :destroy, :id => deck.id
 
@@ -238,11 +238,11 @@ describe DeckController do
     it_should_behave_like "all deck operations that require a deck"
 
     before(:each) do
-      @deck = Deck.make(:user_id => @user.id)
+      @deck = Deck.make!(:user_id => @user.id)
 
-      @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      @card2 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      @card3 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card1 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      @card2 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      @card3 = Card.make!(:deck_id => @deck.id, :chapter => 1)
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -293,9 +293,9 @@ describe DeckController do
 
     context "user has cards due" do
       it 'should redirect to the character learn page of the first card due' do
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card3.id, :due => 3.days.ago)
 
         get :learn, :id => @deck.id
 
@@ -306,8 +306,8 @@ describe DeckController do
 
     context "user has no cards due" do
       it 'should redirect to the character learn page of the next card due' do
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 2.days.from_now)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card3.id, :due => 2.days.from_now)
 
         get :learn, :id => @deck.id
 
@@ -319,8 +319,8 @@ describe DeckController do
         @card2.chapter = 2
         @card2.save!
 
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
 
         get :learn, :id => @deck.id
 
@@ -329,9 +329,9 @@ describe DeckController do
       end
 
       it 'should redirect to upcoming cards view if there are no cards to schedule' do
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 1.day.from_now)
-        UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 2.days.from_now)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card2.id, :due => 1.day.from_now)
+        UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 2.days.from_now)
 
         get :learn, :id => @deck.id
 
@@ -345,7 +345,7 @@ describe DeckController do
     it_should_behave_like "all deck operations that require a deck"
 
     before(:each) do
-      @deck = Deck.make(:user_id => @user.id)
+      @deck = Deck.make!(:user_id => @user.id)
     end
 
     it 'should redirect show deck' do
@@ -375,11 +375,11 @@ describe DeckController do
 
   context '"GET" cards_due' do
     before(:each) do
-      @deck = Deck.make(:user_id => @user.id)
+      @deck = Deck.make!(:user_id => @user.id)
 
-      @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      @card2 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      @card3 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card1 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      @card2 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      @card3 = Card.make!(:deck_id => @deck.id, :chapter => 1)
     end
 
     it 'should return 0 if no cards are due' do
@@ -389,9 +389,9 @@ describe DeckController do
     end
 
     it 'should return the number of cards due including the current card' do
-      UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
-      UserCardSchedule.make(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
-      UserCardSchedule.make(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
+      UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+      UserCardSchedule.make!(:user_id => @user.id, :card_id => @card2.id, :due => 2.days.ago)
+      UserCardSchedule.make!(:user_id => @user.id, :card_id => @card3.id, :due => 1.day.from_now)
 
       get :due_count, :id => @deck.id
 
@@ -403,18 +403,18 @@ describe DeckController do
     it_should_behave_like "all deck operations that require a deck"
 
     before(:each) do
-      @user = User.make
+      @user = User.make!
     sign_in :user, @user
 
-    @deck = Deck.make(:user_id => @user.id)
+    @deck = Deck.make!(:user_id => @user.id)
 
-    @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
-    @card2 = Card.make(:deck_id => @deck.id, :chapter => 2)
-    @card3 = Card.make(:deck_id => @deck.id, :chapter => 3)
+    @card1 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+    @card2 = Card.make!(:deck_id => @deck.id, :chapter => 2)
+    @card3 = Card.make!(:deck_id => @deck.id, :chapter => 3)
 
-    @user_card_schedule = UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
+    @user_card_schedule = UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.from_now)
 
-    UserDeckChapter.make(:user_id => @user.id, :deck_id => @deck.id)
+    UserDeckChapter.make!(:user_id => @user.id, :deck_id => @deck.id)
 
     CardTiming.create(:seconds => 5)
     CardTiming.create(:seconds => 25)

@@ -2,17 +2,17 @@ require 'spec_helper'
 
 describe CardController do
   before(:each) do
-    @user = User.make
+    @user = User.make!
     sign_in :user, @user
 
-    @deck = Deck.make(:user_id => @user.id)
+    @deck = Deck.make!(:user_id => @user.id)
   end
   
   shared_examples_for "all shared card operations" do
     it 'should redirect to user home if the deck does not belong to the user' do
-      user2 = User.make
-      deck = Deck.make(:user_id => user2.id)
-      card = Card.make(:deck_id => deck.id)
+      user2 = User.make!
+      deck = Deck.make!(:user_id => user2.id)
+      card = Card.make!(:deck_id => deck.id)
 
       get :show, :deck_id => deck.id, :id => card.id
 
@@ -21,9 +21,9 @@ describe CardController do
     end
     
     it 'should not redirect to user home if the deck does not belong to the user but is shared' do
-      user2 = User.make
-      deck = Deck.make(:user_id => user2.id, :shared => true)
-      card = Card.make(:deck_id => deck.id)
+      user2 = User.make!
+      deck = Deck.make!(:user_id => user2.id, :shared => true)
+      card = Card.make!(:deck_id => deck.id)
 
       get :show, :deck_id => deck.id, :id => card.id
 
@@ -31,7 +31,7 @@ describe CardController do
     end
 
     it 'should redirect to user home if the deck does not exist' do
-      card = Card.make(:deck_id => @deck.id)
+      card = Card.make!(:deck_id => @deck.id)
 
       get :show, :deck_id => 100, :id => card.id
       response.should be_redirect
@@ -41,9 +41,9 @@ describe CardController do
 
   shared_examples_for "all card operations that require an owner" do
     it 'should redirect to user home if the deck does not belong to the user' do
-      user2 = User.make
-      deck = Deck.make(:user_id => user2.id)
-      card = Card.make(:deck_id => deck.id)
+      user2 = User.make!
+      deck = Deck.make!(:user_id => user2.id)
+      card = Card.make!(:deck_id => deck.id)
 
       get :show, :deck_id => deck.id, :id => card.id
 
@@ -52,7 +52,7 @@ describe CardController do
     end
 
     it 'should redirect to user home if the deck does not exist' do
-      card = Card.make(:deck_id => @deck.id)
+      card = Card.make!(:deck_id => @deck.id)
 
       get :show, :deck_id => 100, :id => card.id
       response.should be_redirect
@@ -62,7 +62,7 @@ describe CardController do
 
   shared_examples_for "all card operations that require a card" do
     it 'should redirect to the show deck page if the card does not exist' do
-      card = Card.make(:deck_id => @deck.id)
+      card = Card.make!(:deck_id => @deck.id)
 
       get :show, :deck_id => @deck.id, :id => 100
       response.should be_redirect
@@ -70,8 +70,8 @@ describe CardController do
     end
     
     it 'should redirect to the show deck page if the card does not belong to the deck' do
-      deck2 = Deck.make(:user_id => @user.id)
-      card = Card.make(:deck_id => deck2.id)
+      deck2 = Deck.make!(:user_id => @user.id)
+      card = Card.make!(:deck_id => deck2.id)
 
       get :show, :deck_id => @deck.id, :id => card.id
       response.should be_redirect
@@ -129,7 +129,7 @@ describe CardController do
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @card = Card.make(:deck_id => @deck.id)
+      @card = Card.make!(:deck_id => @deck.id)
     end
 
     it 'should return the card to be edited' do
@@ -144,7 +144,7 @@ describe CardController do
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @card = Card.make(:deck_id => @deck.id, :front => 'front', :back => nil)
+      @card = Card.make!(:deck_id => @deck.id, :front => 'front', :back => nil)
     end
 
     it 'should update the card' do
@@ -182,7 +182,7 @@ describe CardController do
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @card = Card.make(:deck_id => @deck.id)
+      @card = Card.make!(:deck_id => @deck.id)
     end
 
     it 'should delete the card' do
@@ -199,8 +199,8 @@ describe CardController do
     end
 
     it 'should delete the card schedule and not delete the revierws' do
-      UserCardSchedule.make(:card_id => @card.id, :user_id => @user.id)
-      UserCardReview.make(:card_id => @card.id, :user_id => @user.id)
+      UserCardSchedule.make!(:card_id => @card.id, :user_id => @user.id)
+      UserCardReview.make!(:card_id => @card.id, :user_id => @user.id)
 
       delete :destroy, :deck_id => @deck.id, :id => @card.id
 
@@ -215,7 +215,7 @@ describe CardController do
     it_should_behave_like "all card operations that require a card"
     
     before(:each) do
-      @card = Card.make(:deck_id => @deck.id)
+      @card = Card.make!(:deck_id => @deck.id)
     end
 
     it 'should return the card for the given id' do
@@ -230,8 +230,8 @@ describe CardController do
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @card = Card.make(:deck_id => @deck.id)
-      @scheduled_card = UserCardSchedule.make(:due, :card_id => @card.id, :user_id => @user.id)
+      @card = Card.make!(:deck_id => @deck.id)
+      @scheduled_card = UserCardSchedule.make!(:due, :card_id => @card.id, :user_id => @user.id)
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -366,10 +366,10 @@ describe CardController do
     end
 
     it 'should create multiple reviews if the deck supports multiple review types' do
-      deck2 = Deck.make(:user_id => @user.id, :review_types => Deck::READING | Deck::SPEAKING | Deck::TYPING)
+      deck2 = Deck.make!(:user_id => @user.id, :review_types => Deck::READING | Deck::SPEAKING | Deck::TYPING)
 
-      card2 = Card.make(:deck_id => deck2.id)
-      scheduled_card2 = UserCardSchedule.make(:due, :card_id => card2.id, :user_id => @user.id)
+      card2 = Card.make!(:deck_id => deck2.id)
+      scheduled_card2 = UserCardSchedule.make!(:due, :card_id => card2.id, :user_id => @user.id)
 
       start_interval = scheduled_card2.interval
       card_due_date = scheduled_card2.due
@@ -406,13 +406,13 @@ describe CardController do
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @deck = Deck.make(:user_id => @user.id)
+      @deck = Deck.make!(:user_id => @user.id)
 
-      @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      @card2 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      @card3 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card1 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      @card2 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      @card3 = Card.make!(:deck_id => @deck.id, :chapter => 1)
 
-      UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+      UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -439,13 +439,13 @@ describe CardController do
     it_should_behave_like "all card operations that require a card"
 
     before(:each) do
-      @deck = Deck.make(:user_id => @user.id)
+      @deck = Deck.make!(:user_id => @user.id)
 
-      @card1 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      @card2 = Card.make(:deck_id => @deck.id, :chapter => 1)
-      @card3 = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card1 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      @card2 = Card.make!(:deck_id => @deck.id, :chapter => 1)
+      @card3 = Card.make!(:deck_id => @deck.id, :chapter => 1)
 
-      UserCardSchedule.make(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
+      UserCardSchedule.make!(:user_id => @user.id, :card_id => @card1.id, :due => 1.day.ago)
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -462,9 +462,9 @@ describe CardController do
 
   context '"GET" is_new' do
     before(:each) do
-      @deck = Deck.make(:user_id => @user.id)
+      @deck = Deck.make!(:user_id => @user.id)
 
-      @card = Card.make(:deck_id => @deck.id, :chapter => 1)
+      @card = Card.make!(:deck_id => @deck.id, :chapter => 1)
     end
 
     it 'should return false is card does not exist' do
@@ -480,7 +480,7 @@ describe CardController do
     end
 
     it 'should return false if user has reviewed card before' do
-      UserCardReview.make(:user_id => @user.id, :card_id => @card.id)
+      UserCardReview.make!(:user_id => @user.id, :card_id => @card.id)
 
       get :is_new, :deck_id => @deck.id, :id => @card.id
 

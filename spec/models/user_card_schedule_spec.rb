@@ -33,11 +33,11 @@ describe UserCardSchedule do
 
   context 'get_next_due_for_user' do
     before(:each) do
-      @user = User.make
-      @deck = Deck.make(:user_id => @user.id)
+      @user = User.make!
+      @deck = Deck.make!(:user_id => @user.id)
 
-      @card1 = Card.make(:deck_id => @deck.id);
-      @card2 = Card.make(:deck_id => @deck.id);
+      @card1 = Card.make!(:deck_id => @deck.id);
+      @card2 = Card.make!(:deck_id => @deck.id);
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -68,11 +68,11 @@ describe UserCardSchedule do
 
   context 'get_due_count_for_user' do
     before(:each) do
-      @user = User.make
-      @deck = Deck.make(:user_id => @user.id)
+      @user = User.make!
+      @deck = Deck.make!(:user_id => @user.id)
 
-      @card1 = Card.make(:deck_id => @deck.id);
-      @card2 = Card.make(:deck_id => @deck.id);
+      @card1 = Card.make!(:deck_id => @deck.id);
+      @card2 = Card.make!(:deck_id => @deck.id);
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)
@@ -96,13 +96,13 @@ describe UserCardSchedule do
 
   context 'get_due_count_for_user_for_deck' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
 
-      @deck1 = Deck.make(:user_id => @user.id)
-      @deck2 = Deck.make(:user_id => @user.id)
+      @deck1 = Deck.make!(:user_id => @user.id)
+      @deck2 = Deck.make!(:user_id => @user.id)
 
-      @card1 = Card.make(:deck_id => @deck1.id);
-      @card2 = Card.make(:deck_id => @deck2.id);
+      @card1 = Card.make!(:deck_id => @deck1.id);
+      @card2 = Card.make!(:deck_id => @deck2.id);
 
       CardTiming.create(:seconds => 5)
       CardTiming.create(:seconds => 25)

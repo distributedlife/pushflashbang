@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Deck do
   context 'to be valid' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
     end
 
     it 'should be associated with a user' do
@@ -67,7 +67,7 @@ describe Deck do
 
   context 'review types' do
     it 'should allow no review type' do
-      deck = Deck.make
+      deck = Deck.make!
       deck.review_types = 0
       deck.save!
       deck.reload
@@ -76,7 +76,7 @@ describe Deck do
     end
 
     it 'should allow a single review type' do
-      deck = Deck.make
+      deck = Deck.make!
       deck.review_types = Deck::READING
       deck.save!
       deck.reload
@@ -85,7 +85,7 @@ describe Deck do
     end
 
     it 'should allow an array of review types' do
-      deck = Deck.make
+      deck = Deck.make!
       deck.review_types = Deck::READING
       deck.review_types = deck.review_types | Deck::WRITING
       deck.save!
@@ -97,13 +97,13 @@ describe Deck do
 
   context 'delete' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
     end
     
     it 'should delete the deck' do
       Deck.count.should be 0
 
-      deck = Deck.make(:user_id => @user.id)
+      deck = Deck.make!(:user_id => @user.id)
       Deck.count.should be 1
 
       deck.delete
@@ -114,9 +114,9 @@ describe Deck do
     it 'should delete any user deck chapters' do
       UserDeckChapter.count.should be 0
 
-      deck = Deck.make(:user_id => @user.id)
-      UserDeckChapter.make(:deck_id => deck.id, :user_id => 1)
-      UserDeckChapter.make(:deck_id => deck.id, :user_id => 2)
+      deck = Deck.make!(:user_id => @user.id)
+      UserDeckChapter.make!(:deck_id => deck.id, :user_id => 1)
+      UserDeckChapter.make!(:deck_id => deck.id, :user_id => 2)
       UserDeckChapter.count.should be 2
 
       deck.delete
@@ -127,11 +127,11 @@ describe Deck do
     it 'should delete the card' do
       Card.count.should be 0
 
-      deck = Deck.make(:user_id => @user.id)
-      Card.make(:deck_id => deck.id)
-      Card.make(:deck_id => deck.id)
-      Card.make(:deck_id => deck.id)
-      Card.make(:deck_id => deck.id)
+      deck = Deck.make!(:user_id => @user.id)
+      Card.make!(:deck_id => deck.id)
+      Card.make!(:deck_id => deck.id)
+      Card.make!(:deck_id => deck.id)
+      Card.make!(:deck_id => deck.id)
       Card.count.should be 4
 
       deck.delete
@@ -142,8 +142,8 @@ describe Deck do
 
   context 'getChapters' do
     before(:each) do
-      @user = User.make
-      @deck = Deck.make(:user_id => @user.id)
+      @user = User.make!
+      @deck = Deck.make!(:user_id => @user.id)
     end
 
     it 'should return nil if there are no cards in the deck' do
@@ -151,10 +151,10 @@ describe Deck do
     end
 
     it 'should return an array object for each chapter in the deck' do
-      Card.make(:deck_id => @deck.id, :chapter => 1)
-      Card.make(:deck_id => @deck.id, :chapter => 2)
-      Card.make(:deck_id => @deck.id, :chapter => 4)
-      Card.make(:deck_id => @deck.id, :chapter => 8)
+      Card.make!(:deck_id => @deck.id, :chapter => 1)
+      Card.make!(:deck_id => @deck.id, :chapter => 2)
+      Card.make!(:deck_id => @deck.id, :chapter => 4)
+      Card.make!(:deck_id => @deck.id, :chapter => 8)
 
       chapters = @deck.get_chapters
       chapters[0].chapter.should be 1

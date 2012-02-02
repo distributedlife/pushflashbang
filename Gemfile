@@ -37,6 +37,7 @@ gem 'validate_url'
 gem 'aws-s3'
 gem 'mechanize'
 gem 'delayed_job'
+gem 'aws-sdk'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -62,10 +63,5 @@ group :development, :test do
   gem 'fakeweb'
   gem 'silent-postgres'
   gem 'capybara-webkit'
-
-#  gem 'metric_fu'
-#    gem 'fattr'
-#    gem 'arrayfields'
-#    gem 'test_helper'
-#    gem 'map'
+  gem 'bullet'
 end

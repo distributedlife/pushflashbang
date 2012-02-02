@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Sets do
   context 'exists?' do
     it 'should return true if the set exists' do
-      Sets::exists?(Sets.make.id).should == true
+      Sets::exists?(Sets.make!.id).should == true
     end
 
     it 'should return false if the set does not exist' do
@@ -13,8 +13,8 @@ describe Sets do
 
   context 'add_term' do
     before(:each) do
-      @idiom = Idiom.make
-      @set = Sets.make
+      @idiom = Idiom.make!
+      @set = Sets.make!
 
       SetTerms.create(:set_id => @set.id, :term_id => 100, :chapter => 1, :position => 1)
       SetTerms.create(:set_id => @set.id, :term_id => 101, :chapter => 1, :position => 2)
@@ -46,13 +46,13 @@ describe Sets do
 
   context 'has_at_least_one_idiom_for_language' do
     before(:each) do
-      @idiom1 = Idiom.make
-      @idiom2 = Idiom.make
-      @language1 = Language.make
-      @language2 = Language.make
-      @translation1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language1.id)
-      @translation2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
-      @set = Sets.make
+      @idiom1 = Idiom.make!
+      @idiom2 = Idiom.make!
+      @language1 = Language.make!
+      @language2 = Language.make!
+      @translation1 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language1.id)
+      @translation2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      @set = Sets.make!
       @set.add_term @idiom1.id
     end
 

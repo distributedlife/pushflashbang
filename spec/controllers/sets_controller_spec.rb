@@ -2,20 +2,20 @@ require 'spec_helper'
 
 describe SetsController do
   before(:each) do
-    @user = User.make
+    @user = User.make!
     sign_in :user, @user
   end
 
   context '"GET" user_sets' do
     it 'should return all sets associated with the language' do
-      set = Sets.make
-      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.make
-      english = Language.make(:name =>"English")
-      spanish = Language.make(:name =>"Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
-      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
+      set = Sets.make!
+      set_name = SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make!
+      english = Language.make!(:name =>"English")
+      spanish = Language.make!(:name =>"Spanish")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      set_term = SetTerms.make!(:set_id => set.id, :term_id => idiom.id)
 
       xhr :get, :user_sets, :language_id => english.id
 
@@ -24,20 +24,20 @@ describe SetsController do
     end
 
     it 'should break the returned sets into those associated with the user and those that are not' do
-      set = Sets.make
-      set_name = SetName.make(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
-      set2 = Sets.make
-      set2_name = SetName.make(:sets_id => set2.id, :name => "my set", :description => "learn some stuff")
-      idiom = Idiom.make
-      english = Language.make(:name =>"English")
-      spanish = Language.make(:name =>"Spanish")
-      translation1 = Translation.make(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
-      translation2 = Translation.make(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
-      set_term = SetTerms.make(:set_id => set.id, :term_id => idiom.id)
-      set_term2 = SetTerms.make(:set_id => set2.id, :term_id => idiom.id)
+      set = Sets.make!
+      set_name = SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      set2 = Sets.make!
+      set2_name = SetName.make!(:sets_id => set2.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make!
+      english = Language.make!(:name =>"English")
+      spanish = Language.make!(:name =>"Spanish")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      set_term = SetTerms.make!(:set_id => set.id, :term_id => idiom.id)
+      set_term2 = SetTerms.make!(:set_id => set2.id, :term_id => idiom.id)
 
 
-      UserSets.make(:user_id => @user.id, :set_id => set.id, :language_id => english.id)
+      UserSets.make!(:user_id => @user.id, :set_id => set.id, :language_id => english.id)
 
       xhr :get, :user_sets, :language_id => english.id
 
@@ -71,9 +71,9 @@ describe SetsController do
 
   context '"GET" show' do
     it 'should return all set names for the specified set' do
-      set = Sets.make
-      sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
-      sn2 = SetName.make(:name => 'set name b', :sets_id => set.id, :description => "desc b")
+      set = Sets.make!
+      sn1 = SetName.make!(:name => 'set name a', :sets_id => set.id, :description => "desc a")
+      sn2 = SetName.make!(:name => 'set name b', :sets_id => set.id, :description => "desc b")
 
       get :show, :id => set.id
 
@@ -95,10 +95,10 @@ describe SetsController do
   context '"GET" user_goals' do
     it 'should return if the user has the set as a goal and is learning the set language' do
       l = Language::get_or_create("Spanish")
-      set = Sets.make
-      sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
-      UserSets.make(:set_id => set.id, :user_id => @user.id, :language_id => l.id)
-      UserLanguages.make(:user_id => @user.id, :language_id => l.id)
+      set = Sets.make!
+      sn1 = SetName.make!(:name => 'set name a', :sets_id => set.id, :description => "desc a")
+      UserSets.make!(:set_id => set.id, :user_id => @user.id, :language_id => l.id)
+      UserLanguages.make!(:user_id => @user.id, :language_id => l.id)
 
       xhr :get, :user_goals, :id => set.id
 
@@ -107,9 +107,9 @@ describe SetsController do
     end
 
     it 'should not return if the user has the set as a goal if the user is not learning the set language' do
-      set = Sets.make
-      sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
-      UserSets.make(:set_id => set.id, :user_id => @user.id)
+      set = Sets.make!
+      sn1 = SetName.make!(:name => 'set name a', :sets_id => set.id, :description => "desc a")
+      UserSets.make!(:set_id => set.id, :user_id => @user.id)
 
       xhr :get, :user_goals, :id => set.id
 
@@ -119,12 +119,12 @@ describe SetsController do
 
   context '"GET" index' do
     it 'should return all set names for all sets' do
-      set1 = Sets.make
-      sn11 = SetName.make(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
-      sn12 = SetName.make(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
-      set2 = Sets.make
-      sn21 = SetName.make(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
-      sn22 = SetName.make(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
+      set1 = Sets.make!
+      sn11 = SetName.make!(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
+      sn12 = SetName.make!(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
+      set2 = Sets.make!
+      sn21 = SetName.make!(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
+      sn22 = SetName.make!(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
 
 
       get :index
@@ -141,9 +141,9 @@ describe SetsController do
 
   context '"GET" edit' do
     it 'should return all set names for the specified set' do
-      set = Sets.make
-      sn1 = SetName.make(:name => 'set name a', :sets_id => set.id, :description => "desc a")
-      sn2 = SetName.make(:name => 'set name b', :sets_id => set.id, :description => "desc b")
+      set = Sets.make!
+      sn1 = SetName.make!(:name => 'set name a', :sets_id => set.id, :description => "desc a")
+      sn2 = SetName.make!(:name => 'set name b', :sets_id => set.id, :description => "desc b")
 
       get :edit, :id => set.id
 
@@ -161,8 +161,8 @@ describe SetsController do
 
   context '"PUT" update' do
     before(:each) do
-      @set = Sets.make
-      @sn1 = SetName.make(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
+      @set = Sets.make!
+      @sn1 = SetName.make!(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
     end
     
     it 'should create new set names if they are supplied' do
@@ -253,11 +253,11 @@ describe SetsController do
 
   context '"DELETE" delete_set_name' do
     before(:each) do
-      @set = Sets.make
-      @sn1 = SetName.make(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
+      @set = Sets.make!
+      @sn1 = SetName.make!(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
 
-      @set2 = Sets.make
-      @sn2 = SetName.make(:name => 'w00t sauce', :sets_id => @set2.id, :description => "desc a")
+      @set2 = Sets.make!
+      @sn2 = SetName.make!(:name => 'w00t sauce', :sets_id => @set2.id, :description => "desc a")
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
@@ -302,7 +302,7 @@ describe SetsController do
     end
 
     it 'should delete the specified set name' do
-      @sn3 = SetName.make(:name => 'second set name', :sets_id => @set.id, :description => "desc a")
+      @sn3 = SetName.make!(:name => 'second set name', :sets_id => @set.id, :description => "desc a")
 
 
       delete :delete_set_name, :id => @set.id, :set_name_id => @sn1.id
@@ -322,11 +322,11 @@ describe SetsController do
 
   context '"DELETE" destroy' do
     before(:each) do
-      @set = Sets.make
-      @sn1 = SetName.make(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
+      @set = Sets.make!
+      @sn1 = SetName.make!(:name => 'set name a', :sets_id => @set.id, :description => "desc a")
 
-      @set2 = Sets.make
-      @sn2 = SetName.make(:name => 'w00t sauce', :sets_id => @set2.id, :description => "desc a")
+      @set2 = Sets.make!
+      @sn2 = SetName.make!(:name => 'w00t sauce', :sets_id => @set2.id, :description => "desc a")
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
@@ -358,12 +358,12 @@ describe SetsController do
 
   context '"GET" select' do
     it 'should return all set names for all sets' do
-      set1 = Sets.make
-      sn11 = SetName.make(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
-      sn12 = SetName.make(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
-      set2 = Sets.make
-      sn21 = SetName.make(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
-      sn22 = SetName.make(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
+      set1 = Sets.make!
+      sn11 = SetName.make!(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
+      sn12 = SetName.make!(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
+      set2 = Sets.make!
+      sn21 = SetName.make!(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
+      sn22 = SetName.make!(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
 
 
       get :select, :term_id => 1
@@ -387,10 +387,10 @@ describe SetsController do
 
   context '"PUT" set_goal' do
     before(:each) do
-      @set = Sets.make
-      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+      @set = Sets.make!
+      SetName.make!(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
 
-      @language = Language.make
+      @language = Language.make!
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
@@ -423,7 +423,7 @@ describe SetsController do
     end
 
     it 'should do nothing if the user set relationship already exists' do
-      UserSets.make(:set_id => @set.id, :user_id => @user.id, :language_id => @language.id)
+      UserSets.make!(:set_id => @set.id, :user_id => @user.id, :language_id => @language.id)
       UserSets.count.should be 1
 
       put :set_goal, :id => @set.id, :language_id => @language.id
@@ -437,10 +437,10 @@ describe SetsController do
 
   context '"PUT" unset_goal' do
     before(:each) do
-      @set = Sets.make
-      SetName.make(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
+      @set = Sets.make!
+      SetName.make!(:sets_id => @set.id, :name => "my set", :description => "learn some stuff")
 
-      @language = Language.make
+      @language = Language.make!
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
@@ -460,7 +460,7 @@ describe SetsController do
     end
 
     it 'should remove a user set relationship if one already exists' do
-      UserSets.make(:set_id => @set.id, :user_id => @user.id, :language_id => @language.id)
+      UserSets.make!(:set_id => @set.id, :user_id => @user.id, :language_id => @language.id)
 
       put :unset_goal, :id => @set.id, :language_id => @language.id
 
@@ -482,48 +482,48 @@ describe SetsController do
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
       CardTiming.create(:seconds => 600)
-      @language = Language.make   #primary language to learn
-      @language2 = Language.make  #user native language
-      @language3 = Language.make
-      @language4 = Language.make  #has no terms in set
-      @set = Sets.make            #primary set
-      @set2 = Sets.make
+      @language = Language.make!   #primary language to learn
+      @language2 = Language.make!  #user native language
+      @language3 = Language.make!
+      @language4 = Language.make!  #has no terms in set
+      @set = Sets.make!            #primary set
+      @set2 = Sets.make!
 
       @user.native_language_id = @language2.id
       @user.save!
 
-      UserLanguages.make(:user_id => @user.id, :language_id => @language.id)
-      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @language.id, :chapter => 1)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @language.id)
+      UserSets.make!(:user_id => @user.id, :set_id => @set.id, :language_id => @language.id, :chapter => 1)
       
       #first idiom is in language and set
-      @idiom1 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
+      @idiom1 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set (has user native; but not learn)
-      @idiom2 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
-      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
+      @idiom2 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language3.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
 
       #third idiom is not in set but is in language
-      @idiom3 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
+      @idiom3 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
 
       #fourth idiom is in language and set
-      @idiom4 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
+      @idiom4 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom4.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom4.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
 
       #Nth idiom is in the language and set but in a subsequent chapter
-      @idiomN = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
+      @idiomN = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiomN.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiomN.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
     end
 
     it 'should redirect to languages_path if language is invalid' do
@@ -754,45 +754,45 @@ describe SetsController do
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
       CardTiming.create(:seconds => 600)
-      @language = Language.make   #primary language
-      @language2 = Language.make
-      @language3 = Language.make
-      @language4 = Language.make  #has no terms in set
-      @set = Sets.make            #primary set
-      @set2 = Sets.make
+      @language = Language.make!   #primary language
+      @language2 = Language.make!
+      @language3 = Language.make!
+      @language4 = Language.make!  #has no terms in set
+      @set = Sets.make!            #primary set
+      @set2 = Sets.make!
 
       @user.native_language_id = @language.id
       @user.save!
 
       #first idiom is in language and set
-      @idiom1 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
+      @idiom1 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set
-      @idiom2 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
-      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
+      @idiom2 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language3.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
 
       #third idiom is not in set but is in language
-      @idiom3 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
+      @idiom3 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
 
       #fourth idiom is in language and set
-      @idiom4 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
+      @idiom4 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom4.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom4.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
 
       #Nth idiom is in the language and set but in a subsequent chapter
-      @idiomN = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
+      @idiomN = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiomN.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiomN.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
     end
 
     it 'should redirect to languages_path if language is invalid' do
@@ -904,45 +904,45 @@ describe SetsController do
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
       CardTiming.create(:seconds => 600)
-      @language = Language.make   #primary language
-      @language2 = Language.make
-      @language3 = Language.make
-      @language4 = Language.make  #has no terms in set
-      @set = Sets.make            #primary set
-      @set2 = Sets.make
+      @language = Language.make!   #primary language
+      @language2 = Language.make!
+      @language3 = Language.make!
+      @language4 = Language.make!  #has no terms in set
+      @set = Sets.make!            #primary set
+      @set2 = Sets.make!
 
       @user.native_language_id = @language2.id
       @user.save!
 
       #first idiom is in language and set
-      @idiom1 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
+      @idiom1 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set
-      @idiom2 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
-      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
+      @idiom2 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language3.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
 
       #third idiom is not in set but is in language
-      @idiom3 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
+      @idiom3 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
 
       #fourth idiom is in language and set
-      @idiom4 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
+      @idiom4 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom4.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom4.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
 
       #Nth idiom is in the language and set but in a subsequent chapter
-      @idiomN = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
+      @idiomN = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiomN.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiomN.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
     end
 
     it 'should redirect to languages_path if language is invalid' do
@@ -1064,45 +1064,45 @@ describe SetsController do
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
       CardTiming.create(:seconds => 600)
-      @language = Language.make   #primary language
-      @language2 = Language.make
-      @language3 = Language.make
-      @language4 = Language.make  #has no terms in set
-      @set = Sets.make            #primary set
-      @set2 = Sets.make
+      @language = Language.make!   #primary language
+      @language2 = Language.make!
+      @language3 = Language.make!
+      @language4 = Language.make!  #has no terms in set
+      @set = Sets.make!            #primary set
+      @set2 = Sets.make!
 
       @user.native_language_id = @language2.id
       @user.save!
 
       #first idiom is in language and set
-      @idiom1 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
+      @idiom1 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set
-      @idiom2 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
-      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
+      @idiom2 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language3.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
 
       #third idiom is not in set but is in language
-      @idiom3 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom3.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
+      @idiom3 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set2.id, :term_id => @idiom3.id, :position => 1, :chapter => 1)
 
       #fourth idiom is in language and set
-      @idiom4 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom4.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
+      @idiom4 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom4.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom4.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom4.id, :position => 3, :chapter => 1)
 
       #Nth idiom is in the language and set but in a subsequent chapter
-      @idiomN = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiomN.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
+      @idiomN = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiomN.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiomN.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiomN.id, :position => 1, :chapter => 2)
     end
 
     it 'should redirect to languages_path if language is invalid' do
@@ -1207,30 +1207,30 @@ describe SetsController do
       CardTiming.create(:seconds => 25)
       CardTiming.create(:seconds => 120)
       CardTiming.create(:seconds => 600)
-      @language = Language.make   #primary language to learn
-      @language2 = Language.make  #user native language
-      @language3 = Language.make
-      @language4 = Language.make  #has no terms in set
-      @set = Sets.make            #primary set
-      @set2 = Sets.make
+      @language = Language.make!   #primary language to learn
+      @language2 = Language.make!  #user native language
+      @language3 = Language.make!
+      @language4 = Language.make!  #has no terms in set
+      @set = Sets.make!            #primary set
+      @set2 = Sets.make!
 
       @user.native_language_id = @language2.id
       @user.save!
 
-      UserLanguages.make(:user_id => @user.id, :language_id => @language.id)
-      UserSets.make(:user_id => @user.id, :set_id => @set.id, :language_id => @language.id, :chapter => 1)
+      UserLanguages.make!(:user_id => @user.id, :language_id => @language.id)
+      UserSets.make!(:user_id => @user.id, :set_id => @set.id, :language_id => @language.id, :chapter => 1)
 
       #first idiom is in language and set
-      @idiom1 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language.id)
-      t2 = Translation.make(:idiom_id => @idiom1.id, :language_id => @language2.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
+      @idiom1 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language.id)
+      t2 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @language2.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom1.id, :position => 1, :chapter => 1)
 
       #second idiom is not in language but is in set (has user native; but not learn)
-      @idiom2 = Idiom.make
-      t1 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language2.id)
-      t2 = Translation.make(:idiom_id => @idiom2.id, :language_id => @language3.id)
-      SetTerms.make(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
+      @idiom2 = Idiom.make!
+      t1 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language2.id)
+      t2 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @language3.id)
+      SetTerms.make!(:set_id => @set.id, :term_id => @idiom2.id, :position => 2, :chapter => 1)
     end
 
     it 'should return the due count' do

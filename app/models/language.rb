@@ -1,7 +1,13 @@
 class Language < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :enabled
 
   validates :name, :presence => true
+
+  scope :only_enabled, where(:enabled => true)
+
+  def self.all
+    return self.only_enabled
+  end
 
   def self.get_or_create name
     language = Language.where(:name => name)
@@ -13,5 +19,14 @@ class Language < ActiveRecord::Base
     end
 
     language
+  end
+
+  def enabled?
+    return enabled
+  end
+
+  def disable!
+    self.enabled = false
+    self.save!
   end
 end

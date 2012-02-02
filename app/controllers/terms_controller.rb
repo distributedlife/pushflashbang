@@ -69,9 +69,9 @@ class TermsController < ApplicationController
 
 
       #scan for related translations of the same language
-#      @translations.each do |translation|
-#        RelatedTranslations::create_relationships_for_translation translation
-#      end
+      @translations.each do |translation|
+        RelatedTranslations::create_relationships_for_translation translation
+      end
 
 
       #if we have a set_id. we should link the term to that set

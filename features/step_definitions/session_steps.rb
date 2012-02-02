@@ -13,19 +13,19 @@ And /^reference data has been loaded$/ do
 end
 
 And /^there are cards due$/ do
-  add(:card, Card.make(:deck_id => get(:deck_id)))
+  add(:card, Card.make!(:deck_id => get(:deck_id)))
   add(:card_id, get(:card).id)
-  add(:user_card_schedule, UserCardSchedule.make(:due, :user_id => get(:user).id, :card_id => get(:card).id))
+  add(:user_card_schedule, UserCardSchedule.make!(:due, :user_id => get(:user).id, :card_id => get(:card).id))
 
-  add(:card, Card.make(:deck_id => get(:deck_id)))
+  add(:card, Card.make!(:deck_id => get(:deck_id)))
   add(:card_id, get(:card).id)
-  add(:user_card_schedule, UserCardSchedule.make(:user_id => get(:user).id, :card_id => get(:card).id, :due => 2.days.ago))
+  add(:user_card_schedule, UserCardSchedule.make!(:user_id => get(:user).id, :card_id => get(:card).id, :due => 2.days.ago))
 end
 
 And /^the next due card is in the current chapter$/ do
   user_deck = UserDeckChapter.where(:user_id => get(:user).id, :deck_id => get(:deck_id)).first
   if user_deck.nil?
-    user_deck = UserDeckChapter.make(:user_id => get(:user).id, :deck_id => get(:deck_id))
+    user_deck = UserDeckChapter.make!(:user_id => get(:user).id, :deck_id => get(:deck_id))
     add(:user_deck, user_deck)
   end
 
@@ -35,7 +35,7 @@ end
 
 And /^the next due card is in the next chapter$/ do
   user_deck = UserDeckChapter.where(:user_id => get(:user).id, :deck_id => get(:deck_id))
-  user_deck = UserDeckChapter.make(:user_id => get(:user).id, :deck_id => get(:deck_id)) unless user_deck.nil?
+  user_deck = UserDeckChapter.make!(:user_id => get(:user).id, :deck_id => get(:deck_id)) unless user_deck.nil?
 
   #all scheduled cards are made not due
   And %{there are no cards due}
@@ -45,11 +45,11 @@ And /^the next due card is in the next chapter$/ do
 
     card.chapter = user_deck.chapter + 1
     card.save!
-    add(:card, Card.make(:deck_id => get(:deck_id), :chapter => user_deck.chapter + 1))
+    add(:card, Card.make!(:deck_id => get(:deck_id), :chapter => user_deck.chapter + 1))
     add(:card_id, card.id)
   end
 
-  add(:card, Card.make(:deck_id => get(:deck_id), :chapter => user_deck.chapter + 1))
+  add(:card, Card.make!(:deck_id => get(:deck_id), :chapter => user_deck.chapter + 1))
 end
 
 And /^the first due card is shown$/ do
@@ -71,7 +71,7 @@ When /^I have reviewed a new card$/ do
 end
 
 And /^the card has been reviewed before$/ do
-  UserCardReview.make(:card_id => get(:card_id), :user_id => get(:user).id)
+  UserCardReview.make!(:card_id => get(:card_id), :user_id => get(:user).id)
 end
 
 And /^I take (\d+) seconds to review a card that is not new$/ do |seconds|
@@ -224,12 +224,12 @@ And /^the first card in the deck is shown$/ do
 end
 
 And /^there are unscheduled cards$/ do
-  card = Card.make(:deck_id => get(:deck_id))
+  card = Card.make!(:deck_id => get(:deck_id))
 end
 
 And /^there are cards due later$/ do
-  card = Card.make(:deck_id => get(:deck_id))
-  UserCardSchedule.make(:user_id => get(:user).id, :card_id => card.id, :due => 2.days.from_now)
+  card = Card.make!(:deck_id => get(:deck_id))
+  UserCardSchedule.make!(:user_id => get(:user).id, :card_id => card.id, :due => 2.days.from_now)
 end
 
 And /^the first unscheduled card is scheduled$/ do

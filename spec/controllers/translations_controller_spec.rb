@@ -3,13 +3,13 @@ require 'spec_helper'
 describe TranslationsController do
   context '"DELETE" destroy' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
 
-      @idiom = Idiom.make
-      @translation1 = Translation.make(:idiom_id => @idiom.id)
-      @translation2 = Translation.make(:idiom_id => @idiom.id)
-      @translation3 = Translation.make(:idiom_id => @idiom.id)
+      @idiom = Idiom.make!
+      @translation1 = Translation.make!(:idiom_id => @idiom.id)
+      @translation2 = Translation.make!(:idiom_id => @idiom.id)
+      @translation3 = Translation.make!(:idiom_id => @idiom.id)
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
@@ -45,16 +45,16 @@ describe TranslationsController do
 
   context '"POST" attach_and_detach' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
 
-      @idiom1 = Idiom.make
-      @idiom2 = Idiom.make
-      @translation1 = Translation.make(:idiom_id => @idiom1.id)
-      @translation2 = Translation.make(:idiom_id => @idiom1.id)
-      @translation3 = Translation.make(:idiom_id => @idiom1.id)
-      @translation4 = Translation.make(:idiom_id => @idiom2.id)
-      @translation5 = Translation.make(:idiom_id => @idiom2.id)
+      @idiom1 = Idiom.make!
+      @idiom2 = Idiom.make!
+      @translation1 = Translation.make!(:idiom_id => @idiom1.id)
+      @translation2 = Translation.make!(:idiom_id => @idiom1.id)
+      @translation3 = Translation.make!(:idiom_id => @idiom1.id)
+      @translation4 = Translation.make!(:idiom_id => @idiom2.id)
+      @translation5 = Translation.make!(:idiom_id => @idiom2.id)
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
@@ -73,19 +73,19 @@ describe TranslationsController do
 
   context '"GET" select' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
 
-      @idiom1 = Idiom.make
-      @idiom2 = Idiom.make
-      english = Language.make(:name => "English")
-      spanish = Language.make(:name => "Spanish")
-      chinese = Language.make(:name => "Chinese")
-      @translation1 = Translation.make(:idiom_id => @idiom1.id, :language_id => english.id, :form => "Zebra")
-      @translation2 = Translation.make(:idiom_id => @idiom1.id, :language_id => spanish.id, :form => "Allegra")
-      @translation3 = Translation.make(:idiom_id => @idiom1.id, :language_id => chinese.id, :form => "ce")
-      @translation4 = Translation.make(:idiom_id => @idiom2.id, :language_id => english.id, :form => "Hobo")
-      @translation5 = Translation.make(:idiom_id => @idiom2.id, :language_id => spanish.id, :form => "Cabron")
+      @idiom1 = Idiom.make!
+      @idiom2 = Idiom.make!
+      english = Language.make!(:name => "English")
+      spanish = Language.make!(:name => "Spanish")
+      chinese = Language.make!(:name => "Chinese")
+      @translation1 = Translation.make!(:idiom_id => @idiom1.id, :language_id => english.id, :form => "Zebra")
+      @translation2 = Translation.make!(:idiom_id => @idiom1.id, :language_id => spanish.id, :form => "Allegra")
+      @translation3 = Translation.make!(:idiom_id => @idiom1.id, :language_id => chinese.id, :form => "ce")
+      @translation4 = Translation.make!(:idiom_id => @idiom2.id, :language_id => english.id, :form => "Hobo")
+      @translation5 = Translation.make!(:idiom_id => @idiom2.id, :language_id => spanish.id, :form => "Cabron")
     end
 
     it 'should not return translations in the specifid idiom' do
@@ -104,16 +104,16 @@ describe TranslationsController do
 
   context '"POST" attach' do
     before(:each) do
-      @user = User.make
+      @user = User.make!
       sign_in :user, @user
 
-      @idiom1 = Idiom.make
-      @idiom2 = Idiom.make
-      @translation1 = Translation.make(:idiom_id => @idiom1.id)
-      @translation2 = Translation.make(:idiom_id => @idiom1.id)
-      @translation3 = Translation.make(:idiom_id => @idiom1.id)
-      @translation4 = Translation.make(:idiom_id => @idiom2.id)
-      @translation5 = Translation.make(:idiom_id => @idiom2.id)
+      @idiom1 = Idiom.make!
+      @idiom2 = Idiom.make!
+      @translation1 = Translation.make!(:idiom_id => @idiom1.id)
+      @translation2 = Translation.make!(:idiom_id => @idiom1.id)
+      @translation3 = Translation.make!(:idiom_id => @idiom1.id)
+      @translation4 = Translation.make!(:idiom_id => @idiom2.id)
+      @translation5 = Translation.make!(:idiom_id => @idiom2.id)
 
       request.env["HTTP_REFERER"] = "http://pushflashbang.com"
     end
