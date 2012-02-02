@@ -148,6 +148,24 @@ describe LanguagesHelper do
       UserIdiomSchedule.where(:idiom_id => 1, :user_id => 2, :language_id => @l2.id).count.should == 0
     end
 
+    it 'should delete user idiom due items associated with deleted user idiom schedules' do
+      uis1 = UserIdiomSchedule.make!(:idiom_id => 1, :user_id => 1, :language_id => @l1.id)
+      uis2 = UserIdiomSchedule.make!(:idiom_id => 1, :user_id => 1, :language_id => @l2.id) #delete
+      UserIdiomDueItems.make!(:user_idiom_schedule_id => uis1.id)
+      UserIdiomDueItems.make!(:user_idiom_schedule_id => uis2.id)
+      UserIdiomSchedule.count.should == 2 
+      UserIdiomDueItems.count.should == 2
+
+      merge_languages @l1.id, @l2.id
+
+      UserIdiomSchedule.count.should == 1
+      UserIdiomSchedule.where(:idiom_id => 1, :user_id => 1, :language_id => @l1.id).count.should == 1
+      UserIdiomSchedule.where(:idiom_id => 1, :user_id => 1, :language_id => @l2.id).count.should == 0
+      UserIdiomDueItems.count.should == 1
+      UserIdiomDueItems.where(:user_idiom_schedule_id => uis1.id).empty?.should == false
+      UserIdiomDueItems.where(:user_idiom_schedule_id => uis2.id).empty?.should == true
+    end
+
     it 'should merge all user idiom reviews' do
       uir = UserIdiomReview.make!(:language_id => @l2.id, :success => false)
 

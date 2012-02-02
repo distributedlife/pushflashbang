@@ -50,6 +50,7 @@ module LanguagesHelper
         uis.language_id = language_id
         uis.save!
       else
+        UserIdiomDueItems.where(:user_idiom_schedule_id => uis.id).each {|uidi| uidi.delete}
         uis.delete
       end
     end
