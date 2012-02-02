@@ -98,7 +98,28 @@ describe LanguagesHelper do
       t.language_id.should == @l1.id
     end
 
-    it 'should rebuild related translations'
+    it 'should rebuild related translations' do
+      idiom = Idiom.make!
+      @t1 = Translation.make!(:idiom_id => idiom.id, :language_id => @l1.id)
+      @t2 = Translation.make!(:idiom_id => idiom.id, :language_id => @l1.id)
+      @t3 = Translation.make!(:idiom_id => idiom.id, :language_id => @l2.id)
+
+      RelatedTranslations.make!(:translation1_id => @t1.id, :translation2_id => @t2.id, :share_meaning => true, :share_written_form => false, :share_audible_form => false)
+      RelatedTranslations.make!(:translation1_id => @t2.id, :translation2_id => @t1.id, :share_meaning => true, :share_written_form => false, :share_audible_form => false)
+      RelatedTranslations.count.should == 2
+
+      merge_languages @l1.id, @l2.id
+
+      RelatedTranslations.count.should == 6
+      RelatedTranslations.where(:translation1_id => @t1.id, :translation2_id => @t2.id).count.should == 1
+      RelatedTranslations.where(:translation1_id => @t2.id, :translation2_id => @t1.id).count.should == 1
+
+      RelatedTranslations.where(:translation1_id => @t1.id, :translation2_id => @t3.id).count.should == 1
+      RelatedTranslations.where(:translation1_id => @t3.id, :translation2_id => @t1.id).count.should == 1
+
+      RelatedTranslations.where(:translation1_id => @t2.id, :translation2_id => @t3.id).count.should == 1
+      RelatedTranslations.where(:translation1_id => @t3.id, :translation2_id => @t2.id).count.should == 1
+    end
 
     it 'should merge all user idiom schedules' do
       uis = UserIdiomSchedule.make!(:language_id => @l2.id)
@@ -109,7 +130,23 @@ describe LanguagesHelper do
       uis.language_id.should == @l1.id
     end
 
-    it 'should deal with multiple user idiom schedules'
+    it 'should deal with multiple user idiom schedules' do
+      uis1 = UserIdiomSchedule.make!(:idiom_id => 1, :user_id => 1, :language_id => @l1.id)
+      uis2 = UserIdiomSchedule.make!(:idiom_id => 1, :user_id => 1, :language_id => @l2.id) #delete
+      uis3 = UserIdiomSchedule.make!(:idiom_id => 1, :user_id => 2, :language_id => @l2.id) #migrate
+      uis4 = UserIdiomSchedule.make!(:idiom_id => 2, :user_id => 1, :language_id => @l2.id) #migrate
+      UserIdiomSchedule.count.should == 4
+
+      merge_languages @l1.id, @l2.id
+
+      UserIdiomSchedule.count.should == 3
+      UserIdiomSchedule.where(:idiom_id => 1, :user_id => 1, :language_id => @l1.id).count.should == 1
+      UserIdiomSchedule.where(:idiom_id => 1, :user_id => 1, :language_id => @l2.id).count.should == 0
+      UserIdiomSchedule.where(:idiom_id => 2, :user_id => 1, :language_id => @l1.id).count.should == 1
+      UserIdiomSchedule.where(:idiom_id => 1, :user_id => 2, :language_id => @l1.id).count.should == 1
+      UserIdiomSchedule.where(:idiom_id => 2, :user_id => 1, :language_id => @l2.id).count.should == 0
+      UserIdiomSchedule.where(:idiom_id => 1, :user_id => 2, :language_id => @l2.id).count.should == 0
+    end
 
     it 'should merge all user idiom reviews' do
       uir = UserIdiomReview.make!(:language_id => @l2.id, :success => false)
@@ -119,7 +156,5 @@ describe LanguagesHelper do
       uir.reload
       uir.language_id.should == @l1.id
     end
-
-    it 'should deal with multiple user idiom reviews'
   end
 end

@@ -35,8 +35,24 @@ module LanguagesHelper
     User.where(:native_language_id => language_to_merge_id).each {|u| u.native_language_id = language_id; u.save!}
     UserLanguages.where(:language_id => language_to_merge_id).each {|ul| ul.language_id = language_id; ul.save!}
     UserSets.where(:language_id => language_to_merge_id).each {|us| us.language_id = language_id; us.save!}
-    Translation.where(:language_id => language_to_merge_id).each {|t| t.language_id = language_id; t.save!}
-    UserIdiomSchedule.where(:language_id => language_to_merge_id).each {|uis| uis.language_id = language_id; uis.save!}
+
+    translations = Translation.where(:language_id => language_to_merge_id)
+    translations.each do |t|
+      t.language_id = language_id
+      t.save!
+
+      RelatedTranslations::rebuild_relationships_for_translation t
+    end
+
+
+    UserIdiomSchedule.where(:language_id => language_to_merge_id).each do |uis|
+      if UserIdiomSchedule.where(:idiom_id => uis.idiom_id, :user_id => uis.user_id, :language_id => language_id).empty?
+        uis.language_id = language_id
+        uis.save!
+      else
+        uis.delete
+      end
+    end
     UserIdiomReview.where(:language_id => language_to_merge_id).each {|uir| uir.language_id = language_id; uir.save!}
 
 
