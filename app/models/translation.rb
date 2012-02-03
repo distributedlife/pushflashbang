@@ -84,7 +84,7 @@ class Translation < ActiveRecord::Base
     offset = 0 if offset < 0
 
     idioms = Idiom.order("id asc").where(where, :filter => filter_string, :set_id => set_id).limit(limit).offset(offset)
-    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms)
+    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms, :languages => {:enabled => true})
   end
 
   def self.remove_duplicates

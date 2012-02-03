@@ -76,6 +76,17 @@ describe TermsController do
       assigns[:translations][1].form.nil?.should be true
       assigns[:translations][1].pronunciation.nil?.should be true
     end
+
+    it 'should not return disabled languages for selection' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => false)
+      
+      get :new
+
+      assigns[:languages].count.should == 1
+      assigns[:languages].include?(l1).should == true
+      assigns[:languages].include?(l2).should == false
+    end
   end
 
   context '"POST" create' do
@@ -205,140 +216,163 @@ describe TermsController do
       Idiom.count.should == 0
     end
 
-#    it 'should relate translations within a language within the idiom by meaning' do
-#      idiom1 = Idiom.make!
-#
-#      english = Language.create(:name => "English")
-#      spanish = Language.create(:name => "Spanish")
-#
-#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
-#
-#      post :create, :translation =>
-#        {
-#          "0" => {
-#            :language_id => english.id,
-#            :form => "aaaa",
-#            :pronunciation => "apro"
-#          },
-#          "1" => {
-#            :language_id => english.id,
-#            :form => "bbbb",
-#            :pronunciation => "bpro"
-#          },
-#          "2" => {
-#            :language_id => spanish.id,
-#            :form => "cccc",
-#            :pronunciation => "cpro"
-#          }
-#        }
-#
-#      RelatedTranslations.count.should == 2
-#
-#      new_idiom = Idiom.last
-#      new_idiom_translations = Translation.where(:idiom_id => new_idiom.id)
-#
-#
-#      #new idiom translations are not related to any existing ones
-#      new_idiom_translations.each do |nit|
-#        translations_are_not_related(nit.id, term1.id)
-#        translations_are_not_related(nit.id, term2.id)
-#      end
-#
-#
-#      t_aaaa = Translation.where(:form => "aaaa").first
-#      t_bbbb = Translation.where(:form => "bbbb").first
-#      t_cccc = Translation.where(:form => "cccc").first
-#
-#      translations_are_not_related(t_aaaa.id, t_cccc.id)
-#      translations_are_not_related(t_bbbb.id, t_cccc.id)
-#      translations_are_not_related(t_cccc.id, t_aaaa.id)
-#      translations_are_not_related(t_cccc.id, t_bbbb.id)
-#
-#      translations_are_related_by_meaning?(t_aaaa.id, t_bbbb.id).should be true
-#    end
+    it 'should relate translations within a language within the idiom by meaning' do
+      idiom1 = Idiom.make!
 
-#    it 'should relate translations within a language that share form by written form' do
-#      idiom1 = Idiom.make!
-#
-#      english = Language.create(:name => "English")
-#      spanish = Language.create(:name => "Spanish")
-#
-#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
-#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
-#
-#      post :create, :translation =>
-#        {
-#          "0" => {
-#            :language_id => english.id,
-#            :form => "Zebra",
-#            :pronunciation => "apro"
-#          },
-#          "2" => {
-#            :language_id => spanish.id,
-#            :form => "cccc",
-#            :pronunciation => "cpro"
-#          }
-#        }
-#
-#      RelatedTranslations.count.should == 2
-#
-#      new_idiom = Idiom.last
-#      new_idiom_translations = Translation.where(:idiom_id => new_idiom.id)
-#
-#
-#      t_new_zebra = Translation.where(:form => "Zebra", :pronunciation => "apro").first
-#      t_cccc = Translation.where(:form => "cccc").first
-#
-#
-#
-#      translations_are_related_by_written_form?(term1.id, t_new_zebra.id).should be true
-#
-#      translations_are_not_related(term1.id, t_cccc.id)
-#
-#      translations_are_not_related(term2.id, t_new_zebra.id)
-#      translations_are_not_related(term2.id, t_cccc.id)
-#    end
-#
-#    it 'should relate translations within a language that share pronunciation by audible form' do
-#      idiom1 = Idiom.make!
-#
-#      english = Language.create(:name => "English")
-#      spanish = Language.create(:name => "Spanish")
-#
-#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
-#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
-#
-#      post :create, :translation =>
-#        {
-#          "0" => {
-#            :language_id => english.id,
-#            :form => "aaaa",
-#            :pronunciation => "apro"
-#          },
-#          "2" => {
-#            :language_id => spanish.id,
-#            :form => "cccc",
-#            :pronunciation => "cpro"
-#          }
-#        }
-#
-#      RelatedTranslations.count.should == 2
-#
-#      new_idiom = Idiom.last
-#      new_idiom_translations = Translation.where(:idiom_id => new_idiom.id)
-#
-#
-#      t_aaaa = Translation.where(:form => "aaaa").first
-#      t_cccc = Translation.where(:form => "cccc").first
-#
-#      #existing terms related to new terms
-#      translations_are_related_by_audible_form?(term1.id, t_aaaa.id).should be true
-#
-#      translations_are_not_related(term1.id, t_cccc.id)
-#      translations_are_not_related(term2.id, t_aaaa.id)
-#      translations_are_not_related(term2.id, t_cccc.id)
-#    end
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
+
+      post :create, :translation =>
+        {
+          "0" => {
+            :language_id => english.id,
+            :form => "aaaa",
+            :pronunciation => "apro"
+          },
+          "1" => {
+            :language_id => english.id,
+            :form => "bbbb",
+            :pronunciation => "bpro"
+          },
+          "2" => {
+            :language_id => spanish.id,
+            :form => "cccc",
+            :pronunciation => "cpro"
+          }
+        }
+
+      RelatedTranslations.count.should == 2
+
+      new_idiom = Idiom.last
+      new_idiom_translations = Translation.where(:idiom_id => new_idiom.id)
+
+
+      #new idiom translations are not related to any existing ones
+      new_idiom_translations.each do |nit|
+        translations_are_not_related(nit.id, term1.id)
+        translations_are_not_related(nit.id, term2.id)
+      end
+
+
+      t_aaaa = Translation.where(:form => "aaaa").first
+      t_bbbb = Translation.where(:form => "bbbb").first
+      t_cccc = Translation.where(:form => "cccc").first
+
+      translations_are_not_related(t_aaaa.id, t_cccc.id)
+      translations_are_not_related(t_bbbb.id, t_cccc.id)
+      translations_are_not_related(t_cccc.id, t_aaaa.id)
+      translations_are_not_related(t_cccc.id, t_bbbb.id)
+
+      translations_are_related_by_meaning?(t_aaaa.id, t_bbbb.id).should be true
+    end
+
+    it 'should relate translations within a language that share form by written form' do
+      idiom1 = Idiom.make!
+
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
+
+      post :create, :translation =>
+        {
+          "0" => {
+            :language_id => english.id,
+            :form => "Zebra",
+            :pronunciation => "apro"
+          },
+          "2" => {
+            :language_id => spanish.id,
+            :form => "cccc",
+            :pronunciation => "cpro"
+          }
+        }
+
+      RelatedTranslations.count.should == 2
+
+      new_idiom = Idiom.last
+      new_idiom_translations = Translation.where(:idiom_id => new_idiom.id)
+
+
+      t_new_zebra = Translation.where(:form => "Zebra", :pronunciation => "apro").first
+      t_cccc = Translation.where(:form => "cccc").first
+
+
+
+      translations_are_related_by_written_form?(term1.id, t_new_zebra.id).should be true
+
+      translations_are_not_related(term1.id, t_cccc.id)
+
+      translations_are_not_related(term2.id, t_new_zebra.id)
+      translations_are_not_related(term2.id, t_cccc.id)
+    end
+
+    it 'should relate translations within a language that share pronunciation by audible form' do
+      idiom1 = Idiom.make!
+
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
+      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "ce")
+
+      post :create, :translation =>
+        {
+          "0" => {
+            :language_id => english.id,
+            :form => "aaaa",
+            :pronunciation => "apro"
+          },
+          "2" => {
+            :language_id => spanish.id,
+            :form => "cccc",
+            :pronunciation => "cpro"
+          }
+        }
+
+      RelatedTranslations.count.should == 2
+
+      new_idiom = Idiom.last
+      new_idiom_translations = Translation.where(:idiom_id => new_idiom.id)
+
+
+      t_aaaa = Translation.where(:form => "aaaa").first
+      t_cccc = Translation.where(:form => "cccc").first
+
+      #existing terms related to new terms
+      translations_are_related_by_audible_form?(term1.id, t_aaaa.id).should be true
+
+      translations_are_not_related(term1.id, t_cccc.id)
+      translations_are_not_related(term2.id, t_aaaa.id)
+      translations_are_not_related(term2.id, t_cccc.id)
+    end
+
+    it 'should not return disabled languages when create fails' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => false)
+
+      post :create, :translation =>
+        {
+          "0" => {
+            :language_id => l1.id,
+            :form => "atrans",
+            :pronunciation => "apro"
+          },
+          "1" => {
+            :language_id => l1.id,
+            :form => "",
+            :pronunciation => "bpro"
+          }
+        }
+
+      assigns[:languages].count.should == 1
+      assigns[:languages].include?(l1).should == true
+      assigns[:languages].include?(l2).should == false
+    end
   end
 
   context '"GET" show' do
@@ -609,126 +643,153 @@ describe TermsController do
       Translation.find(translation2.id).should == translation2
     end
 
-#    it 'should remove relationships that are no longer true' do
-#      idiom1 = Idiom.make!
-#      idiom2 = Idiom.make!
-#
-#      english = Language.create(:name => "English")
-#      spanish = Language.create(:name => "Spanish")
-#
-#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
-#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "ce", :pronunciation => "zzzz")
-#      term3 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Zebra", :pronunciation => "zzzz")
-#      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "elephant", :pronunciation => "zigga")
-#
-#      RelatedTranslations::create_relationship_if_needed term1, term2
-#      RelatedTranslations::create_relationship_if_needed term1, term3
-#      RelatedTranslations::create_relationship_if_needed term1, term4
-#      RelatedTranslations::create_relationship_if_needed term2, term3
-#      RelatedTranslations::create_relationship_if_needed term2, term4
-#      RelatedTranslations::create_relationship_if_needed term3, term4
-#
-#      #idiom 1 terms are related to each other by meaning
-#      translations_are_related_by_meaning?(term1.id, term2.id).should be true
-#      translations_are_related_by_meaning?(term3.id, term4.id).should be true
-#      translations_are_related_by_written_form?(term1.id, term3.id).should be true
-#      translations_are_related_by_audible_form?(term2.id, term3.id).should be true
-#
-#
-#      put :update, :id => idiom2.id, :translation =>
-#        {
-#          "0" => {
-#            :id => term3.id,
-#            :language_id => english.id,
-#            :form => "NotMatchingForm",
-#            :pronunciation => "NotMatchingPronunciation"
-#          },
-#          "1" => {
-#            :id => term4.id,
-#            :language_id => english.id,
-#            :form => "elephant",
-#            :pronunciation => "zigga"
-#          }
-#        }
-#
-#      translations_are_related_by_meaning?(term1.id, term2.id).should be true
-#      translations_are_related_by_meaning?(term3.id, term4.id).should be true
-#
-#      translations_are_not_related(term1.id, term3.id)
-#      translations_are_not_related(term2.id, term3.id)
-#    end
-#
-#    it 'should relate new translations to existing ones' do
-#      idiom1 = Idiom.make!
-#
-#      english = Language.create(:name => "English")
-#      spanish = Language.create(:name => "Spanish")
-#
-#      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
-#      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "ce", :pronunciation => "zzzz")
-#
-#
-#      RelatedTranslations::create_relationship_if_needed term1, term2
-#
-#      #idiom 1 terms are related to each other by meaning
-#      RelatedTranslations.where(:translation1_id => term1.id, :translation2_id => term2.id).count.should == 1
-#      RelatedTranslations.where(:translation1_id => term2.id, :translation2_id => term1.id).count.should == 1
-#
-#      put :update, :id => idiom1.id, :translation =>
-#        {
-#          "0" => {
-#            :id => term1.id,
-#            :language_id => english.id,
-#            :form => "Zebra",
-#            :pronunciation => "apro"
-#          },
-#          "1" => {
-#            :id => term2.id,
-#            :language_id => english.id,
-#            :form => "ce",
-#            :pronunciation => "zzzz"
-#          },
-#          "2" => {
-#            :language_id => english.id,
-#            :form => "Zebra",
-#            :pronunciation => "fickle"
-#          },
-#          "3" => {
-#            :language_id => english.id,
-#            :form => "Mungoband",
-#            :pronunciation => "zzzz"
-#          },
-#          "4" => {
-#            :language_id => spanish.id,
-#            :form => "Mungoband",
-#            :pronunciation => "zzzz"
-#          }
-#        }
-#
-#      term3 = Translation.where(:form => "Zebra", :pronunciation => "fickle").first
-#      term4 = Translation.where(:form => "Mungoband", :pronunciation => "zzzz", :language_id => english.id).first
-#      term5 = Translation.where(:form => "Mungoband", :pronunciation => "zzzz", :language_id => spanish.id).first
-#
-#      #idiom 1 terms are still related to each other by meaning
-#      #new terms are related to existing terms by meaning
-#      translations_are_related_by_meaning?(term1.id, term2.id).should be true
-#      translations_are_related_by_meaning?(term1.id, term3.id).should be true
-#      translations_are_related_by_meaning?(term1.id, term4.id).should be true
-#      translations_are_related_by_meaning?(term2.id, term3.id).should be true
-#      translations_are_related_by_meaning?(term2.id, term4.id).should be true
-#      translations_are_related_by_meaning?(term3.id, term4.id).should be true
-#
-#      translations_are_related_by_written_form?(term1.id, term3.id).should be true
-#      translations_are_related_by_audible_form?(term2.id, term4.id).should be true
-#
-#      translations_are_not_related(term1.id, term5.id).should be true
-#      translations_are_not_related(term2.id, term5.id).should be true
-#      translations_are_not_related(term3.id, term5.id).should be true
-#      translations_are_not_related(term4.id, term5.id).should be true
-#    end
+    it 'should remove relationships that are no longer true' do
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
+
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
+      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "ce", :pronunciation => "zzzz")
+      term3 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Zebra", :pronunciation => "zzzz")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "elephant", :pronunciation => "zigga")
+
+      RelatedTranslations::create_relationship_if_needed term1, term2
+      RelatedTranslations::create_relationship_if_needed term1, term3
+      RelatedTranslations::create_relationship_if_needed term1, term4
+      RelatedTranslations::create_relationship_if_needed term2, term3
+      RelatedTranslations::create_relationship_if_needed term2, term4
+      RelatedTranslations::create_relationship_if_needed term3, term4
+
+      #idiom 1 terms are related to each other by meaning
+      translations_are_related_by_meaning?(term1.id, term2.id).should be true
+      translations_are_related_by_meaning?(term3.id, term4.id).should be true
+      translations_are_related_by_written_form?(term1.id, term3.id).should be true
+      translations_are_related_by_audible_form?(term2.id, term3.id).should be true
+
+
+      put :update, :id => idiom2.id, :translation =>
+        {
+          "0" => {
+            :id => term3.id,
+            :language_id => english.id,
+            :form => "NotMatchingForm",
+            :pronunciation => "NotMatchingPronunciation"
+          },
+          "1" => {
+            :id => term4.id,
+            :language_id => english.id,
+            :form => "elephant",
+            :pronunciation => "zigga"
+          }
+        }
+
+      translations_are_related_by_meaning?(term1.id, term2.id).should be true
+      translations_are_related_by_meaning?(term3.id, term4.id).should be true
+
+      translations_are_not_related(term1.id, term3.id)
+      translations_are_not_related(term2.id, term3.id)
+    end
+
+    it 'should relate new translations to existing ones' do
+      idiom1 = Idiom.make!
+
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra", :pronunciation => "apro")
+      term2 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "ce", :pronunciation => "zzzz")
+
+
+      RelatedTranslations::create_relationship_if_needed term1, term2
+
+      #idiom 1 terms are related to each other by meaning
+      RelatedTranslations.where(:translation1_id => term1.id, :translation2_id => term2.id).count.should == 1
+      RelatedTranslations.where(:translation1_id => term2.id, :translation2_id => term1.id).count.should == 1
+
+      put :update, :id => idiom1.id, :translation =>
+        {
+          "0" => {
+            :id => term1.id,
+            :language_id => english.id,
+            :form => "Zebra",
+            :pronunciation => "apro"
+          },
+          "1" => {
+            :id => term2.id,
+            :language_id => english.id,
+            :form => "ce",
+            :pronunciation => "zzzz"
+          },
+          "2" => {
+            :language_id => english.id,
+            :form => "Zebra",
+            :pronunciation => "fickle"
+          },
+          "3" => {
+            :language_id => english.id,
+            :form => "Mungoband",
+            :pronunciation => "zzzz"
+          },
+          "4" => {
+            :language_id => spanish.id,
+            :form => "Mungoband",
+            :pronunciation => "zzzz"
+          }
+        }
+
+      term3 = Translation.where(:form => "Zebra", :pronunciation => "fickle").first
+      term4 = Translation.where(:form => "Mungoband", :pronunciation => "zzzz", :language_id => english.id).first
+      term5 = Translation.where(:form => "Mungoband", :pronunciation => "zzzz", :language_id => spanish.id).first
+
+      #idiom 1 terms are still related to each other by meaning
+      #new terms are related to existing terms by meaning
+      translations_are_related_by_meaning?(term1.id, term2.id).should be true
+      translations_are_related_by_meaning?(term1.id, term3.id).should be true
+      translations_are_related_by_meaning?(term1.id, term4.id).should be true
+      translations_are_related_by_meaning?(term2.id, term3.id).should be true
+      translations_are_related_by_meaning?(term2.id, term4.id).should be true
+      translations_are_related_by_meaning?(term3.id, term4.id).should be true
+
+      translations_are_related_by_written_form?(term1.id, term3.id).should be true
+      translations_are_related_by_audible_form?(term2.id, term4.id).should be true
+
+      translations_are_not_related(term1.id, term5.id).should be true
+      translations_are_not_related(term2.id, term5.id).should be true
+      translations_are_not_related(term3.id, term5.id).should be true
+      translations_are_not_related(term4.id, term5.id).should be true
+    end
   end
 
   context '"POST" select' do
+    it 'should not return translations in languages that are disabled' do
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
+
+      english = Language.create(:name => "English", :enabled => false)
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+
+      get :select, :idiom_id => idiom1.id, :translation_id => term3.id
+
+
+      assigns[:translations][0].idiom_id.should == idiom2.id
+      assigns[:translations][0].language_id.should == spanish.id
+      assigns[:translations][0].form.should == "Abanana"
+
+      assigns[:translations][1].idiom_id.should == idiom2.id
+      assigns[:translations][1].language_id.should == spanish.id
+      assigns[:translations][1].form.should == "Allegra"
+    end
+
     it 'should return all terms grouped by idiom and order by language and form except the specified term' do
       idiom1 = Idiom.make!
       idiom2 = Idiom.make!
@@ -788,6 +849,35 @@ describe TermsController do
   end
 
   context '"GET" select_for_set' do
+    it 'should not return translations in sets that are disabled languages' do
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
+
+      english = Language.create(:name => "English", :enabled => false)
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+
+      set = Sets.make!
+      SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+
+      get :select_for_set, :set_id => set.id, :q => "a"
+
+      assigns[:translations].count.should == 4
+      assigns[:translations].include?(term1).should == false
+      assigns[:translations].include?(term2).should == true
+      assigns[:translations].include?(term3).should == true
+      assigns[:translations].include?(term4).should == false
+      assigns[:translations].include?(term5).should == true
+      assigns[:translations].include?(term6).should == true
+    end
+
     it 'should return an empty set by default' do
       idiom1 = Idiom.make!
       idiom2 = Idiom.make!

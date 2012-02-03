@@ -100,7 +100,7 @@ class TermsController < ApplicationController
 
     error t('notice.term-translations-incomplete') if no_user_errors?
 
-    @languages = Language.all
+    @languages = Language.only_enabled
   end
 
   def update
@@ -142,9 +142,9 @@ class TermsController < ApplicationController
 
 
       #scan for related translations of the same language
-#      @translations.each do |translation|
-#        RelatedTranslations::rebuild_relationships_for_translation translation
-#      end
+      @translations.each do |translation|
+        RelatedTranslations::rebuild_relationships_for_translation translation
+      end
 
 
 
@@ -206,7 +206,7 @@ class TermsController < ApplicationController
     return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:idiom_id]
     return error_redirect_to t('notice.not-found'), terms_path unless translation_exists? params[:translation_id]
 
-    @translations = Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where(['idiom_id != ?', params[:idiom_id]])
+    @translations = Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where('idiom_id != :idiom_id and languages.enabled = true', :idiom_id => params[:idiom_id])
   end
 
   def select_for_set

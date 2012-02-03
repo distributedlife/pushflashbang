@@ -111,7 +111,7 @@ class RelatedTranslations < ActiveRecord::Base
     SQL
 
     related = self.find_by_sql(get_related_sql)
-    related = related.map{|s| s.translation2_id}
+    related = related.map{|s| s.translation2_id} #unless related.empty?
     related | translation_ids
   end
 

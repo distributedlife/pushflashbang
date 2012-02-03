@@ -109,6 +109,14 @@ describe Translation do
         results.count.should == 1
         results.first.should == @b
       end
+
+      it 'should not return translations in a disabled language' do
+        Language.all.each {|l| l.disable!}
+
+        results = Translation::all_sorted_by_idiom_language_and_form_with_like_filter "CALM"
+
+        results.count.should == 0
+      end
     end
 
     it 'should paginate correctly' do
@@ -204,6 +212,14 @@ describe Translation do
 
         results.count.should == 1
         results.first.should == @b
+      end
+
+      it 'should not return translations in a disabled language' do
+        Language.all.each {|l| l.disable!}
+
+        results = Translation::all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter @set1.id, "CALM"
+
+        results.count.should == 0
       end
     end
 
