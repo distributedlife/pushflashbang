@@ -6,11 +6,11 @@ class LanguagesController < ApplicationController
   caches_page :index, :show
 
   def index
-    @languages = Language.order(:name).all
+    @languages = Language.order(:name).only_enabled
   end
 
   def user_languages
-    @user_languages = UserLanguages.order(:name).joins(:language).where(:user_id => current_user.id)
+    @user_languages = UserLanguages.order(:name).joins(:language).where(:user_id => current_user.id, :languages => {:enabled => true})
   end
 
   def remaining_languages
@@ -18,9 +18,9 @@ class LanguagesController < ApplicationController
     user_languages = user_languages.map{|l| l.language_id}
 
     if user_languages.empty?
-      @languages = Language.order(:name).all
+      @languages = Language.order(:name).only_enabled
     else
-      @languages = Language.order(:name).find(:all, :conditions => ["id NOT IN (?)", user_languages])
+      @languages = Language.order(:name).where("id NOT IN (:user_languages) AND enabled = true", :user_languages => user_languages)
     end
   end
 
@@ -50,6 +50,8 @@ class LanguagesController < ApplicationController
     redirect_to user_index_path and return unless language_is_valid? params[:id]
 
     @language = Language.find(params[:id])
+
+    redirect_to user_index_path and return unless @language.enabled?
   end
 
   def select
@@ -59,7 +61,7 @@ class LanguagesController < ApplicationController
     SetTerms.where(:set_id => set_id).each do |set_terms|
       Translation.where(:idiom_id => set_terms.term_id).each do |translation|
 
-        language = get_first Language.where(:id => translation.language_id)
+        language = get_first Language.where(:id => translation.language_id, :enabled => true)
         next if language.nil?
         next if language.id == current_user.native_language_id
 

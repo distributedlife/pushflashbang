@@ -7,6 +7,16 @@ describe LanguagesController do
   end
 
   context '"GET" index' do
+    it 'should not return disabled languages' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => false)
+
+      get :index
+
+      assigns[:languages].count.should == 1
+      assigns[:languages].include?(l1).should == true
+      assigns[:languages].include?(l2).should == false
+    end
   end
 
   context '"GET" user_languages' do
@@ -20,6 +30,19 @@ describe LanguagesController do
 
       assigns[:user_languages].count.should == 1
     end
+
+    it 'should not return disabled languages' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => false)
+      ul1 = UserLanguages.make!(:user_id => @user.id, :language_id => l1.id)
+      ul2 = UserLanguages.make!(:user_id => @user.id, :language_id => l2.id)
+
+      xhr :get, :user_languages
+
+      assigns[:user_languages].count.should == 1
+      assigns[:user_languages].include?(ul1).should == true
+      assigns[:user_languages].include?(ul2).should == false
+    end
   end
 
   context '"GET" remaining_languages' do
@@ -32,6 +55,26 @@ describe LanguagesController do
       xhr :get, :remaining_languages
 
       assigns[:languages].count.should == 2
+    end
+
+    it 'should return all languages if the user knows none' do
+      Language.make!
+      Language.make!
+
+      xhr :get, :remaining_languages
+
+      assigns[:languages].count.should == 2
+    end
+
+    it 'should not return disabled languages' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => false)
+
+      xhr :get, :remaining_languages
+
+      assigns[:languages].count.should == 1
+      assigns[:languages].include?(l1).should == true
+      assigns[:languages].include?(l2).should == false
     end
   end
 
@@ -114,6 +157,14 @@ describe LanguagesController do
       response.should be_redirect
       response.should redirect_to user_index_path
     end
+
+    it 'should redirect if language is disabled' do
+      l1 = Language.make!(:enabled => false)
+
+      get :show, :id => l1.id
+
+      response.should redirect_to user_index_path
+    end
   end
 
   context '"GET" select' do
@@ -137,6 +188,26 @@ describe LanguagesController do
       assigns[:languages].count.should == 1
       assigns[:languages].first.should == spanish
       assigns[:set_id].should == set.id
+    end
+
+    it 'should not return disabled languages' do
+      set = Sets.make!
+      SetName.make!(:sets_id => set.id, :name => "my set", :description => "learn some stuff")
+      idiom = Idiom.make!
+      english = Language.make!(:name =>"English")
+      spanish = Language.make!(:name =>"Spanish", :enabled => false)
+      esperanto = Language.make!(:name => "Esperanto")
+      Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      SetTerms.make!(:set_id => set.id, :term_id => idiom.id)
+      UserSets.make!(:user_id => @user.id, :set_id => set.id, :language_id => english.id)
+
+
+      get :select, :set_id => set.id
+
+      assigns[:languages].count.should == 0
+#      assigns[:languages].first.should == spanish
+#      assigns[:set_id].should == set.id
     end
 
     it 'should exclude the users native language' do
