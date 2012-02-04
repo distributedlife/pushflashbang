@@ -18,12 +18,12 @@ module LanguagesHelper
     return false unless UserLanguages.where(:user_id => user_id, :language_id => language_id).empty?
 
     begin
-      Language.find(language_id) == false
+      l = Language.find(language_id)
+
+      return l.enabled?
     rescue
       return false
     end
-
-    return true
   end
 
   def merge_languages language_id, language_to_merge_id

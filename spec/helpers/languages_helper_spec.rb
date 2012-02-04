@@ -25,12 +25,18 @@ describe LanguagesHelper do
       language_is_valid_for_user?(@language.id, @user.id).should be false
     end
 
-    it 'should return false if the user is not learning the language' do
+    it 'should return true if the user is not learning the language' do
       language_is_valid_for_user?(@language.id, @user.id + 1).should be true
     end
 
     it 'should return false if the language does not exist' do
       language_is_valid_for_user?(@language.id + 1, @user.id).should be false
+    end
+
+    it 'should return false if the language is disabled' do
+      @language.disable!
+      
+      language_is_valid_for_user?(@language.id, @user.id + 1).should be false
     end
   end
 

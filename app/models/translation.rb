@@ -48,7 +48,7 @@ class Translation < ActiveRecord::Base
     offset = 0 if offset < 0
 
     idioms = Idiom.order("id asc").where(where, :filter => filter_string).limit(limit).offset(offset)
-    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms)
+    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms, :languages => {:enabled => true})
   end
 
   def self.all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, filter, page = 1, limit = Rails.application.config.search_page_size
