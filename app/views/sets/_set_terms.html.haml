@@ -25,4 +25,5 @@
         %p= t('text.set-has-no-translations')
       - set_terms.each do |set_term|
         - set_term.idioms.each do |idiom|
+          - next if Language.where(:id => idiom.id, :enabled => true).empty?
           =render :partial => '/sets/set_idioms', :locals => {:set => set, :idiom => idiom}
