@@ -65,7 +65,6 @@ describe Translation do
 
   context 'all_sorted_by_idiom_language_and_form_with_like_filter' do
     context 'ignore pagination' do
-
       before(:each) do
         idiom1 = Idiom.make!
         idiom2 = Idiom.make!
@@ -113,7 +112,7 @@ describe Translation do
       it 'should not return translations in a disabled language' do
         Language.all.each {|l| l.disable!}
 
-        results = Translation::all_sorted_by_idiom_language_and_form_with_like_filter "CALM"
+        results = Translation::all_sorted_by_idiom_language_and_form_with_like_filter "e"
 
         results.count.should == 0
       end

@@ -1,5 +1,6 @@
 %section{:class => ["panel left"], :style => "width: 70%"}
   - idiom.translations.each do |translation|
+    - next if Language.where(:id => translation.language_id, :enabled => true).empty?
     =render :partial => '/translations/show', :locals => {:translation => translation}
   .pad_from_top
   .pad_from_top
