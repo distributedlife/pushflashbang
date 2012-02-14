@@ -1,17 +1,17 @@
-=render :partial => '/header', :locals => {:title => t('titles.language-index.title'), :subtitle => t('titles.language-index.subtitle')}
-#languages
-  %p.minor_title
-    = "#{t('text.header-languages')}:"
-    #user_languages
-      .panel
-        %p= t('text.loading')
-  .pad_from_top
+.container
+  =render :partial => '/common/page_header', :locals => {:title => t('titles.language-index.title'), :subtitle => t('titles.language-index.subtitle')}
+  #languages.content
+    #user_languages.well.span5
+      =render :partial => '/parts/user_languages_header', :locals => {:can_change => false}
+      #user_languages_list
+        .alert.alert-box.alert-info
+          = t('text.loading')
 
-  %p.minor_title
-    = "#{t('text.header-languages-options')}:"
-    #remaining_languages
-      .panel
-        %p= t('text.loading')
+    #remaining_languages.well.span5
+      =render :partial => '/parts/remaining_languages_header'
+      #remaining_languages_list
+        .alert.alert-box.alert-info
+          = t('text.loading')
 
 :javascript
   $j(document).ready(function() {

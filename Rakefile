@@ -24,3 +24,10 @@ desc "Package assets for production"
 task :assets do
   sh "bundle exec jammit --base-url http://pushflashbang.com"
 end
+
+desc 'Setup dev server'
+task :setup_dev_server do
+  Language.create(:name => "English")
+  Language.create(:name => "Chinese (Simplified)")
+  Language.create(:name => "Spanish")
+end

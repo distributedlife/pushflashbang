@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.5'
+gem 'rails', '3.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -24,12 +24,12 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
 gem 'haml'
 gem 'sass'
+gem 'sass-rails'
 gem 'heroku'
 gem 'heroku_san'
 gem 'jquery-rails'
 gem 'formtastic'
 gem 'devise', '1.4.7'
-gem 'jammit'
 gem 'paper_trail'
 gem 'dalli'
 gem 'paperclip'
@@ -38,6 +38,10 @@ gem 'aws-s3'
 gem 'mechanize'
 gem 'delayed_job'
 gem 'aws-sdk'
+gem 'twitter-bootstrap-rails'
+gem 'formtastic-bootstrap', :git => 'git://github.com/cgunther/formtastic-bootstrap.git', :branch => 'bootstrap-2'
+gem 'bootstrap-sass-rails'
+gem 'uglifier'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

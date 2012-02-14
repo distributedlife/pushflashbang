@@ -1,16 +1,11 @@
-%nav.right
+%ul.nav.pull-right
   - if user_signed_in?
-    %span.top_menu_panel
-      - if current_user.in_edit_mode?
-        %span= link_to I18n.t('actions.stop-editing'), stop_editing_user_index_path, :method => :put
-      - else
-        %span= link_to I18n.t('actions.start-editing'), start_editing_user_index_path, :method => :put
-    %span.top_menu_panel
-      %span= link_to(I18n.t('actions.edit-registration'), edit_user_registration_path)
-    %span.top_menu_panel
-      %span= link_to(I18n.t('actions.sign-out'), destroy_user_session_path)
+    - if current_user.in_edit_mode?
+      %li= link_to I18n.t('actions.stop-editing'), stop_editing_user_index_path, :method => :put
+    - else
+      %li= link_to I18n.t('actions.start-editing'), start_editing_user_index_path, :method => :put
+    %li= link_to(I18n.t('actions.edit-registration'), edit_user_registration_path)
+    %li= link_to(I18n.t('actions.sign-out'), destroy_user_session_path)
   - else
-    %span.top_menu_panel
-      %span= link_to(I18n.t('actions.sign-up'), new_user_registration_path)
-    %span.top_menu_panel
-      %span= link_to(I18n.t('actions.sign-in'), new_user_session_path)
+    %li= link_to(I18n.t('actions.sign-up'), new_user_registration_path)
+    %li= link_to(I18n.t('actions.sign-in'), new_user_session_path)

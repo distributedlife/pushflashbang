@@ -1,0 +1,7 @@
+- can_change ||= true
+%h2
+  = t('text.header-languages')
+  - if can_change
+    %strong
+      = ":"
+      = link_to t('actions.change'), user_languages_path, :class => 'contrast', :id => "add_language"

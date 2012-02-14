@@ -43,5 +43,7 @@ module PushFlashBang
     config.generators do |g|
       g.test_framework :rspec
     end
+
+    config.assets.enabled = true
   end
 end

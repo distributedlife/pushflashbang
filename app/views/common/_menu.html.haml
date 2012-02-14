@@ -1,0 +1,7 @@
+.navbar.navbar-fixed-top
+  .navbar-inner
+    .container
+      = link_to t('text.brand'), root_path, :class => "brand"
+      .nav-collapse
+        = render :partial => '/common/app_menu'
+        = render :partial => '/common/auth_menu'

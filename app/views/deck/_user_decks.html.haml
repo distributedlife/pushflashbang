@@ -1,3 +1,6 @@
+- if @decks.empty?
+  #language.alert.alert-block
+    %h4.alert-heading= t('text.user-has-no-decks')
 - @decks.each do |deck|
   #deck{:id => deck.id, :class => 'panel'}
     - if @card_counts[deck.id].nil?

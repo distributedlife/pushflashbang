@@ -1,13 +1,17 @@
-=render :partial => '/header', :locals => {:title => t('titles.user-login.title'), :subtitle => t('titles.user-login.subtitle')}
-%section{:class => ["panel"]}
-  = semantic_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
-    = f.input :email, :as => :email, :label => false, :hint => I18n.t('form.user-email'), :required => false, :wrapper_html => {:class => 'full_width'}
-    .pad_from_top
-    = f.input :password, :as => :password, :label => false, :hint => I18n.t('form.user-password'), :required => false, :wrapper_html => {:class => 'full_width'}
+.container
+  =render :partial => '/common/page_header', :locals => {:title => t('titles.user-login.title'), :subtitle => t('titles.user-login.subtitle')}
+  = semantic_form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "form-horizontal"}) do |f|
+    .clearfix
+      = f.input :email, :as => :email, :label => I18n.t('form.user-email')
+    .clearfix
+      = f.input :password, :as => :password, :label => I18n.t('form.user-password')
     - if devise_mapping.rememberable?
-      .pad_from_top
-      = f.input :remember_me, :as => :boolean, :label => I18n.t('form.user-remember-me'), :wrapper_html => {:class => 'full_width'}
-    .pad_from_top
-    = f.submit I18n.t('actions.sign-in'), :class => 'positive'
-    - if devise_mapping.recoverable? && controller_name != 'passwords'
-      = link_to I18n.t('actions.forgot-password'), new_password_path(resource_name), :class => 'neutral'
+      .clearfix
+        .input
+          %ul.inputs-list
+            = f.input :remember_me, :as => :boolean, :label => I18n.t('form.user-remember-me'), :wrapper_html => {:class => 'input-append'}
+    .form-actions
+      .input
+        = f.submit I18n.t('actions.sign-in'), :class => 'btn btn-primary btn-large'
+        - if devise_mapping.recoverable? && controller_name != 'passwords'
+          = link_to I18n.t('actions.forgot-password'), new_password_path(resource_name), :class => 'btn btn-large'

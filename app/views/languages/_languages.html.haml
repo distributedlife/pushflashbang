@@ -1,12 +1,9 @@
 - if languages.empty?
-  .panel
-    %p= t('text.no-languages-remaining')
-- languages.each do |language|
-  #hello
-  #language{:id => language.id}
-    .panel
-      =render :partial => '/languages/language', :locals => {:language => language}
-      %span.subscript
-        [
-        = link_to t('actions.start-learning'), learn_user_language_path(language.id), :method => :post, :id => "language_#{language.id}_start_learning"
-        ]
+  .alert.alert-box-alert-info
+    = t('text.no-languages-remaining')
+#ul.thumbnails
+  - languages.each do |language|
+    %li.span4
+      #language{:id => language.id}
+        =render :partial => '/languages/language', :locals => {:language => language}
+        = link_to t('actions.start-learning'), learn_user_language_path(language.id), :method => :post, :id => "language_#{language.id}_start_learning", :class => 'btn'

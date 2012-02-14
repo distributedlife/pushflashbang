@@ -1,25 +1,6 @@
 - if user_signed_in?
-  %nav.left
-    %span.top_menu_panel
-      %span= link_to(t('actions.home'), user_index_path)
-    %span.top_menu_panel
-      %span= link_to t('actions.languages'), languages_path
-    %span.top_menu_panel
-      %span= link_to t('actions.sets'), sets_path
-    %span.top_menu_panel
-      %span= link_to t('actions.terms'), terms_path
-
-    //attempt to display a deck home and then a card home depending on the current page.
-    //#TODO: simplify this code using before filters
-    - unless params[:deck_id].nil?
-      %span.top_menu_panel
-        %span= link_to 'actions.deck-home', "/deck/#{params[:deck_id]}"
-    - else
-      - unless @deck.nil?
-        - unless @deck.id.nil?
-          %span.top_menu_panel
-            %span= link_to 'actions.deck-home', "/deck/#{@deck.id}"
-      - else
-        -if params[:controller] == "deck"
-          %span.top_menu_panel
-            %span= link_to 'actions.deck-home', "/deck/#{params[:id]}"
+  %ul.nav
+    %li= link_to(t('actions.home'), user_index_path)
+    %li= link_to t('actions.languages'), languages_path
+    %li= link_to t('actions.sets'), sets_path
+    %li= link_to t('actions.terms'), terms_path

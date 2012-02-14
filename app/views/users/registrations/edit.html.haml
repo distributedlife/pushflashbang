@@ -1,19 +1,19 @@
-=render :partial => '/header', :locals => {:title => t('titles.user-edit.title'), :subtitle => t('titles.user-edit.subtitle')}
-%section{:class => ["panel"]}
-  = semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
-    = f.input :email, :as => :email, :label => false, :hint => I18n.t('form.user-change-email'), :required => false, :wrapper_html => {:class => 'full_width'}
-    .pad_from_top
-    = f.input :native_language_id, :as => :select, :collection => Language.all, :label => false, :hint => I18n.t('form.translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
-    :javascript
-      $j("#user_native_language_id").attr("class", "chzn-select")
-      $j("#user_native_language_id").attr("data-placehoder", "#{t('actions.select-language')}")
-      $j("#user_native_language_id").css('width', '100%');
-    .pad_from_top
-    = f.input :password, :as => :password, :label => false, :hint => I18n.t('form.user-change-password'), :required => false, :wrapper_html => {:class => 'full_width'}
-    .pad_from_top
-    = f.input :password_confirmation, :as => :password, :label => false, :hint => I18n.t('form.user-confirm-new-password'), :required => false, :wrapper_html => {:style => 'full_width'}
-    .pad_from_top
-    = f.input :current_password, :as => :password, :label => false, :hint => I18n.t('form.user-current-password'), :required => false, :wrapper_html => {:style => 'full_width'}
-    .pad_from_top
-    = f.submit I18n.t('actions.update-account'), :class => 'positive', :id => "update_account"
-    = link_to I18n.t('actions.cancel-account'), registration_path(resource_name), :confirm => I18n.t('actions.confirm-cancel'), :method => :delete, :class => 'negative', :id => "cancel_account"
+.container
+  =render :partial => '/common/page_header', :locals => {:title => t('titles.user-edit.title'), :subtitle => t('titles.user-edit.subtitle')}
+  = semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => "form-horizontal"} ) do |f|
+    .clearfix
+      = f.input :email, :as => :email, :label => I18n.t('form.user-change-email'), :required => false
+    .clearfix
+      = f.input :native_language_id, :as => :select, :collection => Language.all, :label => I18n.t('form.user-translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
+      :javascript
+        setup_chosen("#user_native_language_id", "#{t('actions.select-language')}")
+    .clearfix
+      = f.input :password, :as => :password, :label => I18n.t('form.user-change-password'), :required => false
+    .clearfix
+      = f.input :password_confirmation, :as => :password, :label => I18n.t('form.user-confirm-new-password'), :required => false
+    .clearfix
+      = f.input :current_password, :as => :password, :label => I18n.t('form.user-current-password')
+    .form-actions
+      .input
+        = f.submit I18n.t('actions.update-account'), :class => 'btn btn-primary', :id => "update_account"
+        = link_to I18n.t('actions.cancel-account'), registration_path(resource_name), :confirm => I18n.t('actions.confirm-cancel'), :method => :delete, :class => 'btn btn-danger', :id => "cancel_account"

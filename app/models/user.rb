@@ -7,6 +7,9 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :native_language_id, :edit_mode
 
+  has_many :user_languages, :class_name => "UserLanguages", :foreign_key => "user_id"
+  has_many :languages, :through => :user_languages
+
   validates :native_language_id, :presence => true
 
   def self.migrate_all_users_without_language_to_english

@@ -2,18 +2,19 @@
 %html
   %head
     %title PushFlashBang
-    = include_stylesheets :common
-    = include_javascripts :production
-    = include_javascripts :analytics if Rails.env.production?
+    = stylesheet_link_tag 'application'
+    = javascript_include_tag 'application'
+    = javascript_link_tag 'analytics' if Rails.env.production?
     = csrf_meta_tag
     <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-  %body
+  %body{:style => "padding-top: 48px;"}
+    = render :partial => '/common/menu'
     = yield
 
     :javascript
-      jQuery(function($){
-        $('.chzn-select').chosen();
-      });
+      //jQuery(function($){ $('.chzn-select').chosen(); });
+      $j(".chzn-select").chosen();
+      //$j(".chzn-select").chosen();
