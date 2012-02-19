@@ -5,12 +5,18 @@ class LanguagesController < ApplicationController
 
   caches_page :index, :show
 
+  can_edit_on_the_spot 
+
   def index
     @languages = Language.order(:name).only_enabled
   end
 
   def user_languages
-    @user_languages = UserLanguages.order(:name).joins(:language).where(:user_id => current_user.id, :languages => {:enabled => true})
+    @user_languages = current_user.languages.where(:enabled => true)
+#    @user_languages = UserLanguages.order(:name).joins(:language).where(:user_id => current_user.id, :languages => {:enabled => true})
+
+    @user_action = params[:user_action]
+    @user_action ||= 'none'
   end
 
   def remaining_languages
@@ -22,6 +28,9 @@ class LanguagesController < ApplicationController
     else
       @languages = Language.order(:name).where("id NOT IN (:user_languages) AND enabled = true", :user_languages => user_languages)
     end
+
+    @user_action = params[:user_action]
+    @user_action ||= 'none'
   end
 
   def learn

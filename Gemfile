@@ -42,6 +42,7 @@ gem 'twitter-bootstrap-rails'
 gem 'formtastic-bootstrap', :git => 'git://github.com/cgunther/formtastic-bootstrap.git', :branch => 'bootstrap-2'
 gem 'bootstrap-sass-rails'
 gem 'uglifier'
+gem 'on_the_spot'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

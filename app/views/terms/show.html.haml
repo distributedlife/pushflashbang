@@ -1,23 +1,28 @@
-=render :partial => '/header', :locals => {:title => t('titles.term-show.title'), :subtitle => t('titles.term-show.subtitle')}
-- if current_user.in_edit_mode?
-  %section{:class => ["panel right"], :style => "width: 15%"}
-    %span.menu= link_to t('actions.edit'), edit_term_path(params[:id]), :class => 'neutral'
-    .pad_from_top
-    %span.menu= link_to t('actions.link-translation'), select_term_translations_path(params[:id]), :class => 'neutral', :method => :post
-%section{:class => ["panel left"], :style => "width: 70%"}
-  #translations
-    - if @translations.empty?
-      %p= t('text.no-translations')
-    - @translations.each do |translation|
-      #translation
-        #translation{:id => translation.id}
-          %span#language.subscript.contrast_faint= translation.languages.name
-          %span#form= translation.form
-          - unless translation.pronunciation.empty?
-            %span#pronunciation= "(#{translation.pronunciation})"
-          - else
-            %span#pronunciation
-          - if translation.audio.file?
-            #audio
-              =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
+- idiom_id = params[:id]
 
+.container
+  = page_header t('titles.term-show.title'), t('titles.term-show.subtitle')
+
+  #translations.content.well
+    - if current_user.in_edit_mode?
+      #edit_options.pull-right
+        = edit_term_button idiom_id
+      %p &nbsp;
+
+    %table.table
+      %thead
+        = search_results_header_row
+      %tbody
+        - @translations.each do |translation|
+          = display_translation_as_table_row translation
+
+  %h2 Sets this term belongs to
+  #sets.content.well
+    - if @sets.empty?
+      = information "This term is not in any sets"
+    - else
+      = display_sets @sets
+    - if current_user.in_edit_mode?
+      #edit_options.pull-right
+        = add_term_to_set_button idiom_id
+      %p &nbsp;

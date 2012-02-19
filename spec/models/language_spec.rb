@@ -70,4 +70,8 @@ describe Language do
       l1.enabled?.should == false
     end
   end
+
+  context 'supports_set?' do
+    it 'should be tested'
+  end
 end

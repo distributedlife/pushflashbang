@@ -1,25 +1,23 @@
 = f.input :id, :as => :hidden
-#language_definition
-  =render :partial => '/common/definitions', :locals => {:topic => "translation-language"}
-= f.input :language_id, :as => :select, :collection => @languages, :id => i, :label => false, :hint => I18n.t('form.translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
+.row
+  .span25
+    = f.input :language_id, :as => :select, :collection => languages, :id => i, :label => I18n.t('form.translation-language'), :required => false
+
+  .span25
+    = f.input :form, :as => :string, :label => I18n.t('form.translation-form'), :required => false
+
+  .span25
+    = f.input :pronunciation, :as => :string, :label => I18n.t('form.translation-pronunciation'), :required => false
+
+  .span2
+    %p.align-form-button= I18n.t('form.translation-audio')
+    = f.file_field :audio
+
+  .span1
+    %p &nbsp;
+    = link_to content_tag('i', '', :class => 'icon-remove'), term_translation_path(translation.idiom_id, translation.id), :class => 'negative', :method => :delete, :id => "translation_#{i}_delete"
+    = link_to content_tag('i', '', :class => 'icon-move'), select_terms_path(:idiom_id => translation.idiom_id, :translation_id => translation.id), :class => 'neutral', :method => :post, :id => "translation_#{i}_move"
+
 :javascript
-  $j("#translation_#{i}_language_id").attr("class", "chzn-select")
-  $j("#translation_#{i}_language_id").attr("data-placehoder", "#{t('actions.select-language')}")
-  $j("#translation_#{i}_language_id").css('width', '90%');
-  
-.pad_from_top
-
-#form_definition
-  =render :partial => '/common/definitions', :locals => {:topic => "translation-form"}
-= f.input :form, :as => :string, :label => false, :hint => I18n.t('form.translation-form'), :required => false, :wrapper_html => {:class => 'width60'}
-.pad_from_top
-
-#pronunciation_definition
-  =render :partial => '/common/definitions', :locals => {:topic => "translation-pronunciation"}
-= f.input :pronunciation, :as => :string, :label => false, :hint => I18n.t('form.translation-pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
-.pad_from_top
-
-#audio_definition
-  =render :partial => '/common/definitions', :locals => {:topic => "translation-audio"}
-= f.file_field :audio
-.pad_from_top
+  setup_chosen("#translation_#{i}_language_id", "#{t('actions.select-language')}")
+  $j("#translation_#{i}_language_id").chosen();

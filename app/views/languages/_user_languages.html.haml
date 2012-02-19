@@ -1,4 +1,8 @@
-- @languages.each do |language|
-  #language{:id => user_language.language_id, :class => 'panel'}
-    %p.minor_title
-      =render :partial => '/languages/language', :locals => {:language => language}
+- show_can_change_button ||= true
+#user_languages.well.span5
+  - if show_can_change_button == true
+    = section_header t('text.header-languages'), link_to(t('actions.change'), user_languages_path, :class => 'contrast', :id => 'add_language')
+  - else
+    = section_header t('text.header-languages')
+  #user_languages_list
+    = loading_text

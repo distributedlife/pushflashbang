@@ -1,0 +1,16 @@
+#sets
+  - if sets.empty?
+    = information t('text.user-has-no-sets') if user == true
+    = information t('text.language-has-no-sets') if user == false and !language.nil?
+  - else
+    - sets.each do |set|
+      #set{:id => set.id}
+        - if language.nil?
+          = select_set set.id, idiom_id if user_action == 'select set'
+          = display_set set, 'link'
+        - else
+          = set_as_goal language, set if user_action == 'set goal'
+          = unset_as_goal language, set if user_action == 'unset goal'
+          = select_set set.id, idiom_id if user_action == 'select set'
+          = display_set_for_language language, set
+      %hr

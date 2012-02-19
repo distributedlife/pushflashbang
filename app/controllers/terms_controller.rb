@@ -8,6 +8,8 @@ class TermsController < ApplicationController
 
   caches_page :index, :show, :first_review, :review
 
+  can_edit_on_the_spot
+  
   def index
     @translations = []
     @q = nil
@@ -133,10 +135,8 @@ class TermsController < ApplicationController
 
     if invalid_count == 0 and @translations.count >= 2
       #all translation_params are valid!
-      idiom = Idiom.find(params[:id])
-
       @translations.each do |to|
-        to.idiom_id = idiom.id
+        to.idiom_id = @idiom.id
         to.save!
       end
 
@@ -149,14 +149,14 @@ class TermsController < ApplicationController
 
 
       expire_page(:controller => 'terms', :action => 'index')
-      SetTerms.where(:term_id => idiom.id).each do |set_term|
+      SetTerms.where(:term_id => @idiom.id).each do |set_term|
         expire_page(:controller => 'sets', :action => 'show' ,:id => set_term.set_id)
       end
       @translations.each do |translation|
         expire_page(:controller => 'languages', :action => 'show', :id => translation.language_id)
       end
 
-      success_redirect_to t('notice.term-update'), term_path(idiom.id) and return
+      success_redirect_to t('notice.term-update'), term_path(@idiom.id)
     end
 
     while @translations.count < 2
@@ -184,6 +184,9 @@ class TermsController < ApplicationController
     else
       error_redirect_to t('notice.not-found'), terms_path
     end
+
+    set_ids = SetTerms.where(:term_id => params[:id]).select {|st| st.set_id}
+    @sets = Sets.where(:id => set_ids)
   end
 
   def edit

@@ -1,9 +1,23 @@
-#translation{:id => translation.id}
-  %span#form= translation.form
-  - unless translation.pronunciation.empty?
-    %span#pronunciation= "(#{translation.pronunciation})"
-  %span#language.subscript.contrast_faint= translation.languages.name
-  - if translation.audio.file?
-    #audio
-      =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
-  %span{:style => "min-width: 0.3em; display:inline-block"}
+%tr{:id => translation.id, :class => classname}
+  %td
+    - if current_user.in_edit_mode?
+      = on_the_spot_edit translation, :form
+    - else
+      = translation.form
+  %td
+    - if current_user.in_edit_mode?
+      = on_the_spot_edit translation, :pronunciation
+    - else
+      - unless translation.pronunciation.blank?
+        = translation.pronunciation
+  %td
+    = translation.languages.name
+  %td
+    - if translation.audio.file?
+      = display_translation_audio translation
+    - if current_user.in_edit_mode? and !set_id.nil?
+      = link_to content_tag('i', '', :class => 'icon-remove'), remove_from_set_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_remove_from_set", :method => :put
+      = link_to content_tag('i', '', :class => 'icon-chevron-up'), prev_chapter_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_prev_chapter", :method => :post
+      = link_to content_tag('i', '', :class => 'icon-chevron-down'), next_chapter_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_next_chapter", :method => :post
+      = link_to content_tag('i', '', :class => 'icon-arrow-down'), prev_position_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_prev_position", :method => :post
+      = link_to content_tag('i', '', :class => 'icon-arrow-up'), next_position_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_next_position", :method => :post

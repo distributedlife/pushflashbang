@@ -1,23 +1,11 @@
-%section{:class => ["panel left"], :style => "width: 70%"}
+%table.table
+  %thead
+    %tr
+      %th form
+      %th pronunciation
+      %th language
+      %th &nbsp;
   - idiom.translations.each do |translation|
     - next if Language.where(:id => translation.language_id, :enabled => true).empty?
-    =render :partial => '/translations/show', :locals => {:translation => translation}
-  .pad_from_top
-  .pad_from_top
-  - if current_user.in_edit_mode?
-    %span.subscript{:style => "float: left;"}
-      [
-      = link_to t('actions.delink'), remove_from_set_set_set_term_path(set.id, idiom.id), :id => "term_#{idiom.id}_remove_from_set", :method => :put
-      ]
-      [
-      = link_to t('actions.prev-chapter'), prev_chapter_set_set_term_path(set.id, idiom.id), :id => "term_#{idiom.id}_prev_chapter", :method => :post
-      ]
-      [
-      = link_to t('actions.prev-position'), prev_position_set_set_term_path(set.id, idiom.id), :id => "term_#{idiom.id}_prev_position", :method => :post
-      ]
-      [
-      = link_to t('actions.next-position'), next_position_set_set_term_path(set.id, idiom.id), :id => "term_#{idiom.id}_next_position", :method => :post
-      ]
-      [
-      = link_to t('actions.next-chapter'), next_chapter_set_set_term_path(set.id, idiom.id), :id => "term_#{idiom.id}_next_chapter", :method => :post
-      ]
+    %tbody
+      = display_translation_as_table_row translation, "", set_id

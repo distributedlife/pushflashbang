@@ -1,0 +1,5 @@
+- set.set_name.each do |set_name|
+  %h3{:id => "set_#{set.id}_name_#{set_name.id}"}
+    = display_set_name set_name, mode == 'link', current_user.in_edit_mode?
+    %small
+      %em{:id => "set_#{set.id}_description"}= display_set_description set_name, current_user.in_edit_mode?

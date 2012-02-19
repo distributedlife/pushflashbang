@@ -30,8 +30,7 @@ class UsersController < ApplicationController
       @due_counts[deck.id] = UserCardSchedule.get_due_count_for_user_for_deck current_user.id, deck.id
     end
 
-#    @user_languages = UserLanguages.joins(:language).where(:user_id => current_user.id)
-    @user_languages = current_user.languages
+    @languages_user_is_learning = current_user.languages
   end
 
   def start_editing

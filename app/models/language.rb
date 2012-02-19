@@ -29,4 +29,10 @@ class Language < ActiveRecord::Base
     self.enabled = false
     self.save!
   end
+
+  def supports_set? set_id
+    SetTerms.where(:set_id => set_id).each do |set_terms|
+      return !Translation.where(:language_id => self.id, :idiom_id => set_terms.term_id).empty?
+    end
+  end
 end

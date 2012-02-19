@@ -1,0 +1,5 @@
+- set.set_name.each do |set_name|
+  %h3{:id => "set_#{set.id}_name_#{set_name.id}"}
+    = link_to set_name.name, language_set_path(language.id, set.id)
+    %small
+      %em{:id => "set_#{set.id}_description"}= set_name.description

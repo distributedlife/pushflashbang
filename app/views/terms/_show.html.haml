@@ -31,10 +31,8 @@
 
 
     - if typed == true
-      .pad_from_top
-      .section_break
-      .pad_from_top
-      - semantic_form_for("answer", :url => '#', :method => :put, :html => {:id => "answer"}) do |f|
+      %hr
+      = semantic_form_for("answer", :url => '#', :method => :put, :html => {:id => "answer"}) do |f|
         = f.input :form, :as => :string, :label => false, :hint => I18n.t('form.typed-answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
       %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
       :javascript
@@ -56,7 +54,7 @@
 
 #back_of_card{:class => "hidden"}
   - unless new
-    .section_break
+    %hr
   #idioms{:style => "text-align:center;"}
     - @idioms.each do |idiom|
       #idiom_group{:id => "#{idiom.id}", :class => "idiom-group", :style => "display: inline-block; text-align:center;"}
@@ -67,7 +65,7 @@
               %p.pronunciation= translation.pronunciation
             - if translation.audio.file?
               = render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url}
-        .section_break
+        %hr
         .native
           - Idiom::translations_in_idiom_and_language(idiom.id, @native_language.id).each do |translation|
             #native_translation{:id => "#{translation.id}", :style => "display: inline-block; padding: 0.3em;"}

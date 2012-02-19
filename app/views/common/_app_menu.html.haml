@@ -1,6 +1,11 @@
 - if user_signed_in?
   %ul.nav
+    %li.divider-vertical
     %li= link_to(t('actions.home'), user_index_path)
     %li= link_to t('actions.languages'), languages_path
     %li= link_to t('actions.sets'), sets_path
     %li= link_to t('actions.terms'), terms_path
+    %li.divider-vertical
+    = form_tag('/terms/search', :method => "get", :class => 'navbar-search fix-header-height') do
+      = label_tag(:q, "")
+      = text_field_tag :q, @q, :placeholder => t('text.search-input')

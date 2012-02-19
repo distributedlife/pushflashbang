@@ -1,2 +1,2 @@
-$j("#user_sets").html("#{escape_javascript(render :partial => '/sets/user_sets', :locals => {:sets => @user_sets, :language => @language})}")
-$j("#available_sets").html("#{escape_javascript(render :partial => '/sets/available_sets', :locals => {:sets => @sets, :language => @language})}")
+$j("#user_sets").html("#{escape_javascript(render :partial => '/sets/sets', :locals => {:sets => @user_sets, :language => @language, :user => true, :user_action => 'unset goal'})}")
+$j("#available_sets").html("#{escape_javascript(render :partial => '/sets/sets', :locals => {:sets => @sets, :language => @language, :user => false, :user_action => 'set goal'})}")

@@ -1,38 +1,12 @@
-- current_idiom = 0
+- set_id = params[:set_id]
+.container
+  = page_header t('titles.term-select-for-set.title'), t('titles.term-select-for-set.subtitle')
 
-=render :partial => '/header', :locals => {:title => t('titles.term-select-for-set.title'), :subtitle => t('titles.term-select-for-set.subtitle')}
-%section{:class => ["panel"]}
-  = form_tag(select_for_set_set_set_terms_path(:set_id => params[:set_id]), :method => "get") do
-    = label_tag(:q, "")
-    = text_field_tag(:q, @q, :placeholder => t('text.search-input'), :style => 'display: inline;')
-    = submit_tag t('actions.search'), :class => 'positive', :id => 'search_query'
-%section{:class => ["panel"]}
-  .button
-    %span.right= link_to t('actions.finish-adding-to-set'), set_path(params[:set_id]), :class => 'neutral'
-    .pad
-#translations
-  %section{:class => ["panel"]}
-    - if @translations.empty?
-      %p= t('text.no-results')
-    - idiom_count = 0
-    - @translations.each_with_index do |translation, i|
-      - if idiom_count == @limit
-        .button{:class => "centre large_button"}
-          = link_to t('actions.more'), select_for_set_set_set_terms_path(:set_id => params[:set_id], :q => @q, :page => @page.to_i + 1), :class => 'positive inline-block',  :id => "next_page"
-          - break
-      - if translation.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = translation.idiom_id
-        - idiom_count = idiom_count + 1
-        .pad_from_top
-        %span.subscript{:style => "float: right;"}
-          [
-          = link_to t('actions.add-to-set'), add_to_set_set_set_term_path(params[:set_id], current_idiom), :class => 'neutral', :method => :put, :id => "term_#{current_idiom}_select"
-          ]
-      #translation{:id => i}
-        %span#language.subscript.contrast_faint= translation.languages.name
-        %span#form= translation.form
-        - unless translation.pronunciation.empty?
-          %span#pronunciation= "(#{translation.pronunciation})"
-        - if translation.audio.file?
-          #audio
-            =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
+  .content.well
+    = finish_adding_to_set_button set_id
+    = form_tag(select_for_set_set_set_terms_path(:set_id => set_id), :method => "get") do
+      = label_tag(:q, "")
+      = text_field_tag(:q, @q, :placeholder => t('text.search-input'))
+      = submit_tag t('actions.search'), :class => 'btn', :id => 'search_query'
+    %hr
+    = show_search_results @translations, @q, @page, @limit, 'select', set_id

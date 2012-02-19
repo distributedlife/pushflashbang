@@ -1,9 +1,9 @@
 - if languages.empty?
-  .alert.alert-box-alert-info
-    = t('text.no-languages-remaining')
-#ul.thumbnails
-  - languages.each do |language|
-    %li.span4
-      #language{:id => language.id}
-        =render :partial => '/languages/language', :locals => {:language => language}
-        = link_to t('actions.start-learning'), learn_user_language_path(language.id), :method => :post, :id => "language_#{language.id}_start_learning", :class => 'btn'
+  = information t('text.no-user-languages') if user == true
+  = information t('text.no-languages-remaining') if user == false
+- else
+  #ul.thumbnails
+    - languages.each do |language|
+      %li.span5#language{:id => language.id}
+        %h3
+          = display_language language, action

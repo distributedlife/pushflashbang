@@ -1,12 +1,16 @@
 .container
-  =render :partial => '/common/page_header', :locals => {:title => t('titles.user-home.title'), :subtitle => t('titles.user-home.subtitle')}
+  = page_header t('titles.user-home.title'), t('titles.user-home.subtitle')
   .content
-    #user_languages.well.span5
-      =render :partial => '/parts/user_languages_header'
-      - if @user_languages.empty?
-        =render :partial => '/alert/no_languages'
-      - else
-        =render :partial => '/languages/user_languages', :locals => {:languages => @languages}
+    = user_languages @languages
+
     #user_decks.well.span5
-      =render :partial => '/parts/user_decks_header'
-      =render :partial => '/deck/user_decks', :locals => {:decks => @decks}
+      = section_header t('text.header-things'), link_to(t('actions.add'), new_deck_path, :method => :post, :class => 'contrast', :id => "add_deck")
+      - if @decks.empty?
+        = information t('text.user-has-no-decks'), "", ""
+      - else
+        = list_decks @decks
+
+:javascript
+  $j(document).ready(function() {
+    $j.ajax({ url: "/languages/user_languages?user_action=none" });
+  });

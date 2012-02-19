@@ -1,4 +1,2 @@
-$j("#translation_#{@i}").html("#{html_safe(escape_javascript(render :partial => 'terms/ajax_translation_form', :locals => {:translation => @translation, :i => @i}))}");
-$j("#translations form").append("#{escape_javascript(render :partial => 'terms/add_translation_div', :locals => {:i => @i})}");
-fieldset = $j("#translations form fieldset").detach();
-fieldset.appendTo("#translations form");
+$j("#translation_#{@i}").html("#{escape_javascript(render :partial => 'terms/create_translation_section', :locals => {:translation => @translation, :i => @i.to_i, :languages => @languages})}");
+$j("#translation_#{@i}").after("#{escape_javascript(render :partial => 'terms/add_translation_div', :locals => {:i => @i.to_i + 1})}");

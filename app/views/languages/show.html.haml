@@ -1,15 +1,9 @@
-=render :partial => '/header', :locals => {:title => @language.name, :subtitle => ""}
-#sets
-  %p.minor_title
-    = "#{t('text.header-user-sets')}:"
-    #user_sets
-      .panel
-        %p= t('text.loading')
-  %p.minor_title
-    = "#{t('text.header-available-sets')}:"
-    #available_sets
-      .panel
-        %p= t('text.loading')
+.container
+  = page_header on_the_spot_edit @language, :name
+  #sets.content
+    = user_sets
+    = available_sets
+
 :javascript
   $j(document).ready(function() {
     $j.ajax({ url: "/languages/#{params[:id]}/sets/user_sets" });

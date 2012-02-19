@@ -2,7 +2,8 @@
 = hidden_field_tag "duration", 0
 = hidden_field_tag "is_new", 0
 
-=render :partial => '/header', :locals => {:title => t('titles.term-review.title'), :subtitle => "#{t('text.term-due-count')}: ..."}
+.container
+  = page_header t('titles.term-review.title'), "#{t('text.term-due-count')}: ...")
 
 #review_mode
   .panel

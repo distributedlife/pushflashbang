@@ -1,0 +1,13 @@
+%tr{:class => classname}
+  %th &nbsp;
+  %th &nbsp;
+  %th &nbsp;
+  %th
+    - if mode == 'edit'
+      = edit_term_button idiom_id
+      = add_term_to_set_button idiom_id
+    - else
+      - if mode == 'select'
+        = link_to t('actions.add-to-set'), add_to_set_set_set_term_path(set_id, idiom_id), :class => 'btn', :method => :put, :id => "term_#{idiom_id}_select"
+      - else
+        &nbsp;

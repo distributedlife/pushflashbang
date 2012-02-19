@@ -1,0 +1,6 @@
+- words = {}
+- translation.pronunciation.split(' ').each do |word|
+  .panel.well.centre.force-stripe
+    %p.pronunciation= word
+    %hr
+    %p.pronunciation= (get_pronunciation_expansion word).html_safe

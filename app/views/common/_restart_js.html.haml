@@ -1,0 +1,8 @@
+:javascript
+  $j(".on_the_spot_editing").mouseover(function() {
+    $j(this).addClass('on_the_spot_over');
+  });
+  $j(".on_the_spot_editing").mouseout(function() {
+    $j(this).removeClass('on_the_spot_over');
+  });
+  $j('.on_the_spot_editing').each(initializeOnTheSpot);

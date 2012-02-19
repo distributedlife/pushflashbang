@@ -1,8 +1,4 @@
-- if sets.empty?
-  #set{:class => 'panel'}
-    %p= t('text.user-has-no-sets')
-- sets.each do |set|
-  #set{:id => set.id, :class => 'panel'}
-    - set.set_name.each do |set_name|
-      %p.minor_title{:id => "set_#{set.id}_name"}= link_to set_name.name, language_set_path(language.id, set.id)
-      %span{:id => "set_#{set.id}_description"}= set_name.description
+.well.span5
+  = section_header t('text.header-user-sets')
+  #user_sets
+    = loading_text

@@ -1,45 +1,11 @@
-- current_idiom = 0
+.container
+  = page_header t('titles.term-index.title'), t('titles.term-index.subtitle')
 
-=render :partial => '/header', :locals => {:title => t('titles.term-index.title'), :subtitle => t('titles.term-index.subtitle')}
-%section{:class => ["panel"]}
-  = form_tag('/terms/search', :method => "get") do
-    = label_tag(:q, "")
-    = text_field_tag(:q, @q, :placeholder => t('text.search-input'), :style => 'display: inline;')
-    = submit_tag t('actions.search'), :class => 'positive', :id => 'search_query'
-
-- if current_user.in_edit_mode?
-  %section{:class => ["panel right"], :style => "width: 15%"}
-    %span.menu= link_to t('actions.new-term'), new_term_path, :class => 'neutral'
-%section{:class => ["panel"]}
-  #translations
-    - idiom_count = 0
-    - @translations.each do |translation|
-      - if idiom_count == @limit
-        .button{:class => "centre large_button"}
-          = link_to t('actions.more'), search_terms_path(:q => @q, :page => @page.to_i + 1), :class => 'positive inline-block',  :id => "next_page"
-          - break
-      - if translation.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = translation.idiom_id
-        - idiom_count = idiom_count + 1
-        .pad_from_top
-        - if current_user.in_edit_mode?
-          %span.subscript{:style => "float: right;"}
-            [
-            = link_to t('actions.edit-term'), edit_term_path(current_idiom)
-            ]
-            [
-            = link_to t('actions.add-to-set'), select_term_term_sets_path(current_idiom), :id => "term_#{current_idiom}_add_to_set"
-            ]
-      #translation
-        #translation{:id => translation.id}
-          %span#language.subscript.contrast_faint= translation.languages.name
-          %span#form= translation.form
-          - unless translation.pronunciation.empty?
-            %span#pronunciation= "(#{translation.pronunciation})"
-          - else
-            %span#pronunciation
-          - if translation.audio.file?
-            #audio
-              =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
-    - if @translations.empty?
-      %p= t('text.no-translations')
+  - if current_user.in_edit_mode?
+    #translations.row_fluid.span7.well
+      = show_search_results @translations, @q, @page, @limit, (current_user.in_edit_mode? ? 'edit' : 'view')
+    .row_fluid.span3.well
+      = terms_menu
+  - else
+    #translations.content.well
+      = show_search_results @translations, @q, @page, @limit, (current_user.in_edit_mode? ? 'edit' : 'view')

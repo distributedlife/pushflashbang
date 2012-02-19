@@ -140,6 +140,7 @@ GEM
       thor (~> 0.14)
     jruby-jars (1.6.6)
     json (1.6.5)
+    json_pure (1.6.5)
     launchy (2.0.5)
       addressable (~> 2.2.6)
     less (2.0.9)
@@ -172,6 +173,8 @@ GEM
     nokogiri (1.5.0)
     notifier (0.1.4)
     ntlm-http (0.1.1)
+    on_the_spot (1.0.0)
+      json_pure (>= 1.4.6)
     orm_adapter (0.0.6)
     paper_trail (2.6.0)
       rails (~> 3)
@@ -317,6 +320,7 @@ DEPENDENCIES
   machinist
   mechanize
   nokogiri
+  on_the_spot
   paper_trail
   paperclip
   pg

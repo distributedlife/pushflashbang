@@ -7,6 +7,8 @@ class SetsController < ApplicationController
 
   caches_page :index, :show
 
+  can_edit_on_the_spot
+
   def new
     @set_name = SetName.new
   end
@@ -36,10 +38,9 @@ class SetsController < ApplicationController
   end
 
   def user_goals
-    @language_id = nil
-    @language_id = params[:language_id] unless params[:language_id].nil?
-
-    @user_goals = UserSets::get_for_user_and_set_where_learning_language current_user.id, params[:id]
+    @set_id = params[:id]
+    @user_goals = UserSets::get_for_user_and_set_where_learning_language current_user.id, @set_id
+    @user_languages = current_user.languages.order(:name).where(:enabled => true).select { |language| language.supports_set? @set_id}
   end
 
   def create
@@ -75,58 +76,6 @@ class SetsController < ApplicationController
 
   def index
     @sets = Sets.all
-  end
-
-  def edit
-    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? params[:id]
-
-    @set = Sets.find(params[:id])
-    @set_names = SetName.order(:name).where(:sets_id => params[:id])
-    
-    error_redirect_to t('notice.not-found'), sets_path and return if @set_names.empty?
-  end
-
-  def update
-    error_redirect_to t('notice.not-found'), sets_path and return if !set_exists? params[:id]
-
-    @set = Sets.find(params[:id])
-    @set_names = []
-    valid_count = 0
-    params[:set_name].each do |set_name|
-      set_name = set_name.last
-      existing_set = nil
-      begin
-        existing_set = SetName.find(set_name[:id])
-      rescue
-        existing_set = nil
-      end
-
-
-      if existing_set.nil?
-        new_set_name = SetName.new(set_name)
-        new_set_name.sets_id = params[:id]
-
-        # do not save if one of the names are invalid (ignoring completely empty names)
-        valid_count = valid_count + 1 if new_set_name.valid? or (new_set_name.name.blank? and new_set_name.description.blank?)
-        @set_names << new_set_name
-      else
-        existing_set.update_attributes(set_name)
-
-        valid_count = valid_count + 1 if existing_set.valid?
-        @set_names << existing_set
-      end
-    end
-
-    if valid_count == @set_names.count
-      @set_names.each do |set_name|
-        set_name.save
-      end
-
-      expire_page(:controller => 'sets', :action => 'index')
-      expire_page(:controller => 'sets', :action => 'show' ,:id => params[:id])
-
-      success_redirect_to t('notice.set-update'), set_path(params[:id])
-    end
   end
 
   def add_set_name

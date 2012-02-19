@@ -1,0 +1,16 @@
+#chapter{:id => chapter}
+  %h4
+    = chapter_header chapter
+    - if start_collapsed == true
+      = button "#{t('actions.show')}", show_chapter_set_path(:id => set_id, :chapter => chapter), {:remote => true, :id => "toggle_chapter_#{chapter}"}
+    - else
+      = button "#{t('actions.hide')}", '#', {:remote => true, :id => "show_chapter_#{chapter}"}
+  #chapter_content{:id => chapter}
+    - unless start_collapsed
+      - if set_terms.empty?
+        = information t('text.set-has-no-translations')
+      - else
+        - set_terms.each do |set_term|
+          - set_term.idioms.each do |idiom|
+            = render :partial => '/sets/set_idioms', :locals => {:set_id => set_id, :idiom => idiom}
+

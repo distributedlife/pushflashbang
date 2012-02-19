@@ -1,20 +1,11 @@
 .container
-  =render :partial => '/common/page_header', :locals => {:title => t('titles.language-index.title'), :subtitle => t('titles.language-index.subtitle')}
-  #languages.content
-    #user_languages.well.span5
-      =render :partial => '/parts/user_languages_header', :locals => {:can_change => false}
-      #user_languages_list
-        .alert.alert-box.alert-info
-          = t('text.loading')
-
-    #remaining_languages.well.span5
-      =render :partial => '/parts/remaining_languages_header'
-      #remaining_languages_list
-        .alert.alert-box.alert-info
-          = t('text.loading')
+  = page_header t('titles.language-index.title'), t('titles.language-index.subtitle')
+  #user_goals.content
+    = user_languages(@languages, {:show_can_change_button => 'false'})
+    = languages_user_can_learn @languages
 
 :javascript
   $j(document).ready(function() {
-    $j.ajax({ url: "/languages/user_languages" });
-    $j.ajax({ url: "/languages/remaining_languages" });
+    $j.ajax({ url: "/languages/user_languages?user_action=stop" });
+    $j.ajax({ url: "/languages/remaining_languages?user_action=start" });
   });

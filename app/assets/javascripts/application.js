@@ -2,7 +2,9 @@
 //= require noconflict
 //= require chosen.jquery.min
 //= require jquery_ujs
-//= require rails
+//= require jquery.jeditable.mini
+//= require jquery.jeditable.checkbox
+//= require on_the_spot
 //= require twitter/bootstrap
 //= require flash
 //= require setup_chosen

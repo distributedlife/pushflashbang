@@ -54,9 +54,10 @@ PushFlashBang::Application.routes.draw do
     collection do
       get 'user_languages'
       get 'remaining_languages'
+      put :update_attribute_on_the_spot
     end
 
-    resources :sets do
+    resources :sets, :except => ['edit', 'update']  do
       collection do
         get 'user_sets'
       end
@@ -83,7 +84,11 @@ PushFlashBang::Application.routes.draw do
     end
   end
 
-  resources :sets do
+  resources :sets, :except => ['edit', 'update'] do
+    collection do
+      put :update_attribute_on_the_spot
+    end
+    
     member do
       post 'add_set_name'
       delete 'delete_set_name'
@@ -118,6 +123,7 @@ PushFlashBang::Application.routes.draw do
       get 'add_translation'
       post 'select'
       get 'search'
+      put :update_attribute_on_the_spot
     end
 
     resources :sets, :as => "term_sets" do

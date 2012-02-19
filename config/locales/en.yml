@@ -136,11 +136,11 @@ en:
     sign-in: "Login"
     sign-up: "Join!"
     start-editing: "View Mode"
-    start-learning: "learn?"
+    start-learning: "Start learning"
     select-language: "Click here to select a language to learn."
     start-learning-emphatic: "Click here to start learning!"
     stop-editing: "Edit Mode"
-    stop-learning: "stop learning?"
+    stop-learning: "Stop learning"
     stop-sharing-deck: "Stop Sharing Deck"
     terms: "Terms"
     unlock: "Unlock"
@@ -177,6 +177,7 @@ en:
     translation-language: "the language"
     translation-form: "the translation"
     translation-pronunciation: "the pronunciation"
+    translation-audio: "audio"
     typed-answer: "your answer"
   terminology:
     card-front:
@@ -235,6 +236,7 @@ en:
     language-has-no-sets: "There are currently no sets associated with this language. Sets are automatically associated with a language when one of its translations specifies the language."
     user-has-no-sets: "You have not set any goals for this language. Choose a set as a goal and start learning."
     no-translations: "There are currently no translations in the system"
+    no-translations-found: "No translations were found matching your search term."
     set-has-no-translations: "There are currently no translations in the set"
     user-has-no-languages: "You have not selected any languages to learn."
     user-has-no-decks: "You have not selected any decks to revise."
@@ -260,8 +262,8 @@ en:
     refresh-notice: "You can leave this page open and we will take you to the next review when it is due."
     completed-set-notice: "Congratulations! You've finished all the cards in this set."
     pronunciation-guidance: "Pronunciation Guidance"
-    loading: "Loading..."
-    no-languages-remaining: "There are no languages left for you to learn."
+    loading: "Loading. Please wait..."
+    no-languages-remaining: "There are no languages available for you to learn."
     no-user-languages: "You have not started learning a language yet."
     no-results: "You search returned no results."
     search-input: "search using comma, separated, terms..."
@@ -333,13 +335,13 @@ en:
       subtitle: "The current term will be link to the selected set"
     set-show:
       title: "Set overview"
-      subtitle: "A set represents a collection of related terms"
+      subtitle: ""
     set-edit:
       title: "Edit Set"
       subtitle: "You can change existing set names and add new ones here"
     term-index:
-      title: "Showing all terms"
-      subtitle: "A term represents an idiom translated into a language"
+      title: "Search"
+      subtitle: "results"
     term-edit:
       title: "Edit term"
       subtitle: "A term represents an idiom translated into multiple languages"

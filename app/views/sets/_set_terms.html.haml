@@ -1,28 +1,23 @@
-#chapter{:id => params[:chapter]}
-  %p{:style => "clear:left;"}
-    = "#{t('text.chapter-prefix')} #{params[:chapter]}"
-    = link_to "[#{t('actions.hide')}]", "#", :class => "subscript", :remote => true, :id => "show_chapter_#{params[:chapter]}"
-    :javascript
-      $j('#show_chapter_#{params[:chapter]}').click(function(event)
-      {
-        if ($j('#show_chapter_#{params[:chapter]}').text() == "[hide]")
-        {
-          $j('#chapter_content_#{params[:chapter]}').hide();
-          $j('#show_chapter_#{params[:chapter]}').text('[show]');
-        }
-        else
-        {
-          $j('#chapter_content_#{params[:chapter]}').show();
-          $j('#show_chapter_#{params[:chapter]}').text('[hide]');
-        }
+- chapter = params[:chapter]
+- set = Sets.find params[:id]
+- set_terms = SetTerms.order(:position).where(:chapter => chapter, :set_id => set.id)
 
-        event.stopPropagation();
-      });
-    #chapter_content{:id => params[:chapter]}
-      - set = Sets.find params[:id]
-      - set_terms = SetTerms.order(:position).where(:chapter => params[:chapter], :set_id => params[:id])
-      - if set_terms.empty?
-        %p= t('text.set-has-no-translations')
-      - set_terms.each do |set_term|
-        - set_term.idioms.each do |idiom|
-          =render :partial => '/sets/set_idioms', :locals => {:set => set, :idiom => idiom}
+= display_chapter set.id, chapter, set_terms, false
+= restart_js
+
+:javascript
+  $j('#show_chapter_#{chapter}').click(function(event)
+  {
+    if ($j('#show_chapter_#{chapter}').text() == "hide")
+    {
+      $j('#chapter_content_#{chapter}').hide();
+      $j('#show_chapter_#{chapter}').text('show');
+    }
+    else
+    {
+      $j('#chapter_content_#{chapter}').show();
+      $j('#show_chapter_#{chapter}').text('hide');
+    }
+
+    event.stopPropagation();
+  });

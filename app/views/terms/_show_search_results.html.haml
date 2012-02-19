@@ -1,0 +1,28 @@
+- if translations.empty?
+  = information t('text.no-translations-found')
+- else
+  - idiom_count = 0
+  - current_idiom = 0
+  %table.table
+    %thead
+      = search_results_header_row
+    %tbody
+      - translations.each do |translation|
+        //what stripe do we have?
+        - classname = get_strip idiom_count
+
+        //next page button
+        - if idiom_count == limit
+          = next_page_buton q, page.to_i
+          - break
+
+        //next idiom so change striping
+        - if translation.idiom_id != current_idiom and !current_idiom.nil?
+          - current_idiom = translation.idiom_id
+          - idiom_count += 1
+          - classname = get_strip idiom_count
+
+          //visually start new idiom
+          = search_results_idiom_split_row classname, mode, current_idiom, set_id
+
+        = display_translation_as_table_row translation, classname

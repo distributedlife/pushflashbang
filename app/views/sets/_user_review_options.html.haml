@@ -1,6 +1,14 @@
-- unless goals.empty?
-  %section{:class => ["panel left"], :style => "width: 70%"}
-    - goals.each do |goal|
-      %h2= goal.language.name
-      = render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => params[:id]}
-      .pad_from_top
+- if languages.empty?
+  = information "You have not set this as a learning goal for any languages"
+- else
+  #ul.thumbnails
+    - languages.each do |language|
+      - goal = goals.select {|g| g.language_id == language.id}.first
+      %li.span8#language{:id => language.id}
+        %h3
+          = display_language language, 'review'
+          - if goal
+            = review_set_options_button goal
+            = unset_goal_button goal.language_id, goal.set_id
+          - else
+            = set_goal_button language.id, set_id
