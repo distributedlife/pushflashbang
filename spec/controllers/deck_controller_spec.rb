@@ -442,4 +442,8 @@ describe DeckController do
       response.should redirect_to(learn_deck_path(@deck.id))
     end
   end
+
+  context '"GET" index' do
+    it 'should be tested'
+  end
 end

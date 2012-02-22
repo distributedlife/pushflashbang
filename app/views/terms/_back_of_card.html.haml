@@ -1,0 +1,7 @@
+#back_of_card{:class => "hidden"}
+  - unless new
+    %hr
+  #idioms
+    - idioms.each do |idiom|
+      = display_learned_translations idiom, learned_language
+      = display_native_translations idiom, native_language

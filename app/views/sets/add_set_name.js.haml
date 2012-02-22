@@ -1,4 +1,2 @@
-$j("#set_name_#{@i}").html("#{html_safe(escape_javascript(render :partial => 'sets/ajax_set_name_form', :locals => {:set_name => @set_name, :i => @i}))}");
-$j("#set form").append("#{escape_javascript(render :partial => 'sets/add_set_name_div', :locals => {:i => @i})}");
-fieldset = $j("#set form fieldset").detach();
-fieldset.appendTo("#set form");
+$j("#set_name_#{@i}").html("#{escape_javascript(render :partial => 'sets/create_set_name_form', :locals => {:set_name => @set_name, :i => @i.to_i})}");
+$j("#set_name_#{@i}").after("#{escape_javascript(render :partial => 'sets/add_set_name_div', :locals => {:i => @i.to_i + 1})}");

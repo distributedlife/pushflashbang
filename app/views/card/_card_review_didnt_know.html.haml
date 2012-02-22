@@ -1,0 +1,14 @@
+= link_to t('actions.review-didnt-know'), '#', :class => 'btn btn-large', :method => :post, :id => "do_dont_know"
+:javascript
+  $j('#do_dont_know').click(function(event) {
+    var end = new Date();
+    var start_time = document.getElementById("start_time") ;
+    var duration = document.getElementById("duration") ;
+    elapsed = end - start_time.value;
+
+
+    var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know')}";
+    link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
+
+    $j('#do_dont_know').attr('href', link);
+  });

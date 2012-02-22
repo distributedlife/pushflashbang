@@ -4,6 +4,7 @@ module TranslationPagePartsHelper
   end
 
   def display_translation_audio translation
+    return unless translation.audio.file?
     render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
   end
 
@@ -75,9 +76,6 @@ module TranslationPagePartsHelper
     form.submit I18n.t('actions.save'), :class => 'btn btn-success', :id => "term_save"
   end
 
-  def delete_translation_button form
-  end
-
   def add_translation_section i
     render :partial => '/terms/add_translation_div', :locals => {:i => i}
   end
@@ -86,5 +84,25 @@ module TranslationPagePartsHelper
     unless translation.pronunciation.blank?
       render :partial => '/translations/pronunciation_guidance', :locals => {:translation => translation}
     end
+  end
+
+  def display_translation_for_review translation
+    render :partial => '/translations/display_translation_for_review', :locals => {:translation => translation}
+  end
+
+  def display_translation_for_review_no_pronunciation translation
+    render :partial => '/translations/display_translation_for_review_no_pronunciation', :locals => {:translation => translation}
+  end
+
+  def display_learned_translations idiom, language
+    render :partial => '/translations/display_translations', :locals => {:idiom => idiom, :language => language, :show_pronunciation => true}
+  end
+
+  def display_native_translations idiom, language
+    render :partial => '/translations/display_translations', :locals => {:idiom => idiom, :language => language, :show_pronunciation => false}
+  end
+
+  def display_translation_for_reveal translation
+    translation.form
   end
 end

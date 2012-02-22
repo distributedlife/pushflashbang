@@ -46,6 +46,10 @@ class DeckController < ApplicationController
     end
   end
 
+  def index
+    @decks = Deck.order(:name).where("user_id = :user_id OR shared = :shared", :user_id => current_user.id, :shared => true)
+  end
+
   def show
     begin
       if deck_is_valid?

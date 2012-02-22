@@ -1,0 +1,39 @@
+.row.centre
+  - audio_display_on_front = false
+  - if native == "front" or native == "both"
+    - native_translations.each do |native_translation|
+      %h1= display_translation_for_reveal native_translation
+      - if audio == "front" and !audio_display_on_front
+        - if native_translation.audio.file?
+          = display_translation_audio native_translation
+          - audio_display_on_front =  true
+
+  - if learned == "front" or learned == "both"
+    - learned_translations.each do |learned_translation|
+      %h1= display_translation_for_reveal learned_translation
+      - if audio == "front" and !audio_display_on_front
+        - if learned_translation.audio.file?
+          = display_translation_audio learned_translation
+          - audio_display_on_front =  true
+
+
+  - if typed == true
+    %hr
+    = semantic_form_for("answer", :url => '#', :method => :put, :html => {:id => "answer"}) do |f|
+      = f.input :form, :as => :string, :label => I18n.t('form.typed-answer'), :required => false
+    %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
+    :javascript
+      //override the enter button on the formsubmit so that clicking enter performs a reveal rather than submitting the form
+      $j("#answer").submit(function(event) {
+        event.preventDefault();
+
+        //only perform the enter action once
+        if ($j("#answer_form").attr('disabled') == true)
+        {
+          return false ;
+        }
+
+        $j('#do_reveal').click();
+
+        $j("#answer_form").attr('disabled', true);
+      });

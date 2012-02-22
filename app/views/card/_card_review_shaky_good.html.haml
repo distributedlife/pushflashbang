@@ -1,0 +1,13 @@
+= link_to t('actions.review-shaky-but-good'), '#', :class => 'btn btn-large', :method => :post, :id => "do_shaky_good"
+:javascript
+  $j('#do_shaky_good').click(function(event) {
+    var end = new Date();
+    var start_time = document.getElementById("start_time") ;
+    var duration = document.getElementById("duration") ;
+    elapsed = end - start_time.value;
+
+    var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good')}";
+    link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
+
+    $j('#do_shaky_good').attr('href', link);
+  });

@@ -1,26 +1,13 @@
-- semantic_form_for(@deck, :url => create_deck_path, :method => :post) do |f|
-  #brief_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "deck-name"}
-  = f.input :name, :as => :string, :label => false, :hint => I18n.t('form.deck-name'), :required => false, :wrapper_html => {:class => 'width60'}
-  .pad_from_top
+= semantic_form_for(@deck, :url => create_deck_path, :method => :post) do |f|
+  .row
+    .span3
+      = f.input :name, :as => :string, :label => I18n.t('form.deck-name'), :required => false
+    .span3
+      = f.input :description, :as => :text, :label => I18n.t('form.deck-description'), :required => false, :input_html => {:rows => 5}
+  .row
+    .span8
+      = f.input :pronunciation_side, :label => I18n.t('form.deck-pronunciation'), :required => false, :as => :radio, :collection => @pronunciation_side_values
 
-  #description_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "deck-description"}
-  = f.input :description, :as => :text, :label => false, :hint => I18n.t('form.deck-description'), :required => false, :wrapper_html => {:class => 'width60'}
-  .pad_from_top
-
-  #pronunciation_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "deck-pronunciation"}
-  = f.input :pronunciation_side, :label => I18n.t('form.deck-pronunciation'), :required => false, :as => :radio, :collection => @pronunciation_side_values, :wrapper_html => {:class => 'lo_propose'}
-  .pad_from_top
-  .pad_from_top
-
-  #pronunciation_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "deck-supports-written-answer"}
-  = f.input :supports_written_answer, :label => I18n.t('form.deck-supports-written-answer'), :required => false, :as => :boolean, :wrapper_html => {:class => 'lo_propose'}
-  .pad_from_top
-  .pad_from_top
-  .pad_from_top
-
-  - f.buttons do
-    = f.submit I18n.t('actions.save'), :class => 'positive', :id => "deck_create"
+  = f.buttons do
+    = f.submit I18n.t('actions.save'), :class => 'btn btn-large btn-success', :id => "deck_create"
+    = link_to I18n.t('actions.cancel'), user_index_path, :class => 'btn btn-large align-form-button'

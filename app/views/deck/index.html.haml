@@ -1,0 +1,18 @@
+.container
+  = page_header "All decks", ""
+
+  .row_fluid.span8.well
+    #ul.thumbnails
+      - @decks.each do |deck|
+        %li.span8#deck{:id => deck.id}
+          .pull-right
+            = link_to content_tag('i', '', :class => 'icon-edit'), edit_deck_path(deck.id), :id => "edit_deck_#{deck.id}"
+          %h3
+            = link_to deck.name, show_deck_path(deck.id)
+            %small= deck_subtitle(deck)
+            %blockquote
+              %em= deck.description
+  .row_fluid.span3
+    %ul.nav.nav-list.well
+      %li.nav-header Actions
+      %li= new_deck_link

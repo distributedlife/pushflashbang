@@ -24,9 +24,12 @@ class TranslationsController < ApplicationController
     return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:term_id]
     return error_redirect_to t('notice.not-found'), terms_path unless translation_exists? params[:id]
 
-    if Translation.where(:idiom_id => params[:term_id], :id => params[:id]).empty?
-      new_translation = Translation.find(params[:id]).clone
-      new_translation.idiom_id = params[:term_id]
+    idiom_id = params[:term_id]
+    translation_id = params[:id]
+    
+    if Translation.where(:idiom_id => idiom_id, :id => translation_id).empty?
+      new_translation = Translation.find(translation_id).dup
+      new_translation.idiom_id = idiom_id
       new_translation.save!
 
       RelatedTranslations::rebuild_relationships_for_translation Translation.find(new_translation.id)

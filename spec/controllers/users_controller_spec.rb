@@ -63,7 +63,7 @@ describe UsersController do
 
       get :index
 
-      assigns[:user_languages].count.should == 1
+      assigns[:languages_user_is_learning].count.should == 1
     end
   end
 

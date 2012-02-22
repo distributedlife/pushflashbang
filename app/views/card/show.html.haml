@@ -1,14 +1,11 @@
-=render :partial => '/header', :locals => {:title => t('titles.card-show.title'), :subtitle => t('titles.card-show.subtitle')}
-%section{:class => ["panel"]}
-  %p.giant= @card.front
-  - if @card.audio.file?
-    =render :partial => '/audio_controls', :locals => {:audio_url => @card.audio.url}
-  - unless @card.back == ""
-    .section_break
-    %p.giant= @card.back
-  - unless @card.pronunciation == ""
-    .section_break
-    .pad_from_top
-    %p.centre= t('text.pronunciation')
-    %p.giant= @card.pronunciation
-  .pad
+.container
+  = page_header deck_home_link(@card.deck_id), t('titles.card-show.title')
+
+  .content.well.centre
+    .pull-right
+      = edit_card_link @card.deck_id, @card.id
+
+    = show_card_front_large @card
+    = show_card_audio @card
+    = show_card_back_large @card
+    = show_card_pronunciation_large @card

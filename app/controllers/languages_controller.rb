@@ -84,6 +84,6 @@ class LanguagesController < ApplicationController
       end
     end
 
-    @set_id = set_id
+    @set_id = set_id.to_i
   end
 end

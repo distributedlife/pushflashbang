@@ -1,0 +1,7 @@
+%hr
+- words = {}
+.centre.inline-block
+  - card.pronunciation.split(' ').each do |word|
+    %p.pronunciation= word
+    %hr
+    %p.pronunciation= (get_pronunciation_expansion word).html_safe

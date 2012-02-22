@@ -1,5 +1,5 @@
-=render :partial => '/header', :locals => {:title => t('titles.deck-create.title'), :subtitle => t('titles.deck-create.subtitle')}
-%section{:class => ["panel"]}
-  #create_deck{:class => ['left'], :style => "width:100%"}
+.container
+  = page_header t('titles.deck-create.title'), t('titles.deck-create.subtitle')
+
+  #create_deck.content.well
     =render :partial => 'create_deck_form', :locals => {:deck => @deck}
-  .pad

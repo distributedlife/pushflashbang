@@ -4,7 +4,7 @@
     = user_languages @languages
 
     #user_decks.well.span5
-      = section_header t('text.header-things'), link_to(t('actions.add'), new_deck_path, :method => :post, :class => 'contrast', :id => "add_deck")
+      = section_header t('text.header-things'), link_to("change", deck_index_path, :id => "all_decks")
       - if @decks.empty?
         = information t('text.user-has-no-decks'), "", ""
       - else

@@ -1,0 +1,10 @@
+#review_buttons{:class => "hidden"}
+  .centre
+    = semantic_form_for("review_result", :url => terms_path(:set_id => params[:set_id]), :method => :post) do |f|
+      .row
+        = record_review_buttons review_mode, review_text, f
+
+      .form-actions
+        .row
+          = record_answer_button review_mode
+          = record_perfect_answer_button review_mode

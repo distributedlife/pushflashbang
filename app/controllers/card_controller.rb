@@ -143,7 +143,7 @@ class CardController < ApplicationController
             user_card_review.save
             updated_first = true
           else
-            additional_review = user_card_review.clone
+            additional_review = user_card_review.dup
             additional_review.review_type = review_type
             additional_review.save
           end

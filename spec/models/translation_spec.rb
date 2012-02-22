@@ -321,9 +321,9 @@ describe Translation do
 
     it 'should merge all duplicates' do
       a = Translation.make!
-      b = a.clone
+      b = a.dup
       b.save!
-      c = a.clone
+      c = a.dup
       c.save!
 
       Translation.count.should == 3
@@ -335,7 +335,7 @@ describe Translation do
 
     it 'should delete related translations' do
       a = Translation.make!
-      b = a.clone
+      b = a.dup
       b.save!
       c = Translation.make!
       RelatedTranslations.make!(:translation1_id => a.id, :translation2_id => b.id)

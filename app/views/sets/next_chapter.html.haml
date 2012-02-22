@@ -1,15 +1,13 @@
-=render :partial => '/header', :locals => {:title => t('titles.set-next-chapter.title', :chapter => @next_chapter), :subtitle => t('titles.set-next-chapter.subtitle')}
+.container
+  = page_header t('titles.set-next-chapter.title'), t('titles.set-next-chapter.subtitle')
 
-#advance_button
-  .panel
-    .button{:class => "centre big_button"}
-      = link_to t('actions.advance'), advance_chapter_language_set_path(params[:language_id], params[:id], :review_mode => params[:review_mode]), :class => 'positive', :id => 'do_advance', :method => :post
-    .pad_from_top
+  .content
+    #next_due
+      = success "#{t('text.next-review-notice')} #{distance_of_time_in_words(Time.now, @next_due_time, true)}"
 
-#next_due
-  .panel
-    %p= "#{t('text.next-review-notice')} #{distance_of_time_in_words(Time.now, @next_due_time, true)}"
-    .pad_from_top
+    #advance_button.well.centre
+      = advance_button params[:language_id], params[:id], params[:review_mode]
+
 :javascript
   $j("html").everyTime(#{@refresh_in_ms}, function(i) {
     location.reload();

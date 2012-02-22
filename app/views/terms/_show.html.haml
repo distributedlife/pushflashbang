@@ -1,73 +1,14 @@
 - new ||= false
 - answer = nil
 - card_answer = ""
-- @learned_translations_in_idiom.each do |learned_translation|
+- learned_translations_in_idiom.each do |learned_translation|
   - card_answer = "#{card_answer}, #{learned_translation.form}" unless card_answer.empty?
   - card_answer = learned_translation.form if card_answer.empty?
-  - answer = learned_translation.clone
+  - answer = Marshal::load(Marshal.dump(learned_translation.clone))
   - answer.form = ""
 
 = hidden_field_tag "term_typed_answer", "#{card_answer}"
 
-- unless new
-  .panel{:style => "text-align: center;"}
-    - audio_display_on_front = false
-    - if native == "front" or native == "both"
-      - @native_translations.each do |native_translation|
-        %p{:class => "giant mandarin", :style => "display: inline-block;"}
-          %span.native_form= native_translation.form
-        - if audio == "front" and !audio_display_on_front
-          - if native_translation.audio.file?
-            = render :partial => '/audio_controls_start_only', :locals => {:audio_url => native_translation.audio.url}
-            - audio_display_on_front =  true
-    - if learned == "front" or learned == "both"
-      - @learned_translations_in_idiom.each do |learned_translation|
-        %p{:class => "giant mandarin", :style => "display: inline-block;"}
-          %span.learned_form{:style => "padding: 0.3em;"}= learned_translation.form
-        - if audio == "front" and !audio_display_on_front
-          - if learned_translation.audio.file?
-            = render :partial => '/audio_controls_start_only', :locals => {:audio_url => learned_translation.audio.url}
-            - audio_display_on_front =  true
-
-
-    - if typed == true
-      %hr
-      = semantic_form_for("answer", :url => '#', :method => :put, :html => {:id => "answer"}) do |f|
-        = f.input :form, :as => :string, :label => false, :hint => I18n.t('form.typed-answer'), :required => false, :wrapper_html => {:class => 'width80 centre mandarin'}
-      %p{:class => "centre contrast hidden", :id => "answer_result"} is correct
-      :javascript
-        //override the enter button on the formsubmit so that clicking enter performs a reveal rather than submitting the form
-        $j("#answer").submit(function(event) {
-          event.preventDefault();
-
-          //only perform the enter action once
-          if ($j("#answer_form").attr('disabled') == true)
-          {
-            return false ;
-          }
-
-          $j('#do_reveal').click();
-
-          $j("#answer_form").attr('disabled', true);
-        });
-
-
-#back_of_card{:class => "hidden"}
-  - unless new
-    %hr
-  #idioms{:style => "text-align:center;"}
-    - @idioms.each do |idiom|
-      #idiom_group{:id => "#{idiom.id}", :class => "idiom-group", :style => "display: inline-block; text-align:center;"}
-        .learned
-          - Idiom::translations_in_idiom_and_language(idiom.id, @learned_language.id).each do |translation|
-            #learned_translation{:id => "#{translation.id}", :style => "display: inline-block; "}
-              %p.learned_form= translation.form
-              %p.pronunciation= translation.pronunciation
-            - if translation.audio.file?
-              = render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url}
-        %hr
-        .native
-          - Idiom::translations_in_idiom_and_language(idiom.id, @native_language.id).each do |translation|
-            #native_translation{:id => "#{translation.id}", :style => "display: inline-block; padding: 0.3em;"}
-              %p.native_form= translation.form
-              %p.pronunciation= translation.pronunciation
+= display_review_content native_translations, learned_translations_in_idiom, native, learned, audio, typed, new
+= back_of_card idioms, learned_language, native_language, new
+      

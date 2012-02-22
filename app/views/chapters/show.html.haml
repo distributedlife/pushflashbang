@@ -1,29 +1,23 @@
-=render :partial => '/header', :locals => {:title => t('titles.deck-chapter.title', :chapter => params[:id]), :subtitle => t('titles.deck-chapter.subtitle', :count => @due_count)}
+.container
+  = page_header t('titles.deck-chapter.title', :chapter => params[:id]), "#{t('titles.deck-chapter.subtitle', :count => @due_count)}: ..."
 
-#advance_button
-  .panel
-    .button{:class => "centre big_button"}
-      = link_to t('actions.advance'), advance_deck_chapter_path(@deck.id), :class => 'positive', :id => 'do_advance'
-    .pad_from_top
+  .content
+    = success "If you don't review your next card is due in #{distance_of_time_in_words(Time.now, @upcoming_cards.first["due"], true)}"
 
-.cards
-- @upcoming_cards.each do |upcoming_card|
-  .div{:class => "card_panel_full_page left centre"}
-    %p#upcoming{:id => upcoming_card["id"]}= "#{upcoming_card["front"]}"
-    - if @deck.pronunciation_side == "front" && !upcoming_card["pronunciation"].nil? && upcoming_card["pronunciation"] != ""
-      %p{:class => "subtitle centre"}= "[#{upcoming_card["pronunciation"]}]"
-    .pad_from_top
-    .pad_from_top
-    %p.subscript= "due in #{distance_of_time_in_words(Time.now, upcoming_card["due"], true)}"
-  :javascript
-    $j("html").everyTime(30000, function(i) {
-      location.reload();
-    }, 0);
+    #advance_button.centre
+      = chapter_advance_button @deck.id
+
 
 :javascript
-  $j('html').keypress(function(event) {
+  $j("html").everyTime(30000, function(i)
+  {
+    location.reload();
+  }, 0);
+
+  $j('html').keypress(function(event)
+  {
     if (event.which == '32')
     {
-        $j('#do_advance').click();
+      $j('#do_advance').click();
     }
   });

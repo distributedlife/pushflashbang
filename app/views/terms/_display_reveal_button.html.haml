@@ -1,0 +1,40 @@
+#reveal_button.centre
+  .row
+    = reveal_button
+
+:javascript
+  $j('#do_reveal').click(function(event) {
+    var end = new Date();
+    var start_time = document.getElementById("start_time") ;
+    var duration = document.getElementById("duration") ;
+    var card_answer = document.getElementById("term_typed_answer") ;
+    var user_answer = document.getElementById("answer_form") ;
+    var is_new = document.getElementById("is_new") ;
+
+
+    duration.value = end - start_time.value;
+
+
+    if (user_answer)
+    {
+      if (card_answer.value != user_answer.value)
+      {
+        //tell the user their answer didn't match
+        $j("#answer_result").text("#{t('text.incorrect-notice')}");
+        $j("#review_result_typing").attr('checked', false);
+      }
+
+      $j("#answer_result").show();
+    }
+
+
+    $j("#reveal_button").hide();
+
+    $j("#pronunciation_guidance").attr("class", "")
+    $j("#review_buttons").attr("class", "")
+    $j("#back_of_card").attr("class", "")
+
+    $j("#pronunciation_guidance").show();
+    $j("#review_buttons").show();
+    $j("#back_of_card").show();
+  });

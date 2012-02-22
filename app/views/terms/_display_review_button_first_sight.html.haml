@@ -1,0 +1,26 @@
+#review_buttons.centre
+  .row
+    = ok_first_review_button
+
+:javascript
+  $j('#do_results').click(function(event) {
+    var link = "#{record_first_review_language_set_term_path()}";
+    link = link + "?review_mode=" + "#{review_mode}" ;
+    link = link + "&listening=true";
+    link = link + "&reading=true";
+    link = link + "&speaking=true";
+    link = link + "&writing=true";
+    link = link + "&typing=true";
+    link = link + "&translating=true";
+
+    $j('#do_results').attr('href', link);
+  });
+
+  $j('html').keypress(function(event) {
+    if (event.which == '32')
+    {
+      $j('#do_results').click();
+
+      event.preventDefault();
+    }
+  });

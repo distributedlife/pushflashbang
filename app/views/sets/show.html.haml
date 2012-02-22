@@ -2,6 +2,9 @@
   = page_header t('titles.set-show.title'), t('titles.set-show.subtitle')
   - if current_user.in_edit_mode?
     .row_fluid.span8.well
+      #edit_options.pull-right
+        = edit_set_button @set.id
+      %p &nbsp;
       = display_set @set, 'no link'
       %hr
       = set_user_review_options

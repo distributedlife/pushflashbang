@@ -1,21 +1,18 @@
-=render :partial => '/header', :locals => {:title => t('titles.set-edit.title'), :subtitle => t('titles.set-edit.subtitle')}
-#set
-  %section{:class => ["panel"]}
-    - semantic_form_for(@set, :url => set_path(@set.id), :method => :put) do |form|
+.container
+  = page_header t('titles.set-edit.title'), t('titles.set-edit.subtitle')
+
+  #set.content.well
+    = semantic_form_for(@set, :url => set_path(@set.id), :method => :put) do |form|
       - @set_names.each_with_index do |set_name, i|
         #set_name{:id => i}
-          %p.minor_title= "#{t('text.set-name-translation')}: #{i + 1}"
-          %section{:class => ["panel"]}
-            = semantic_fields_for "set_name[#{i}]", set_name do |f|
-              = render :partial => 'create_set_name_form', :locals => {:set_name => set_name, :i => i, :f => f}
-              = link_to I18n.t('actions.delete'), delete_set_name_set_path(@set.id, :set_name_id => set_name.id), :class => 'negative', :method => :delete, :id => "set_name_#{i}_delete"
-              .pad
-      #set_name{:id => @set_names.count}
-        = link_to I18n.t('actions.add-set-name'), add_set_name_set_path(:i => @set_names.count), :class => 'neutral', :method => :post, :remote => :true
-        .pad_from_top
-        .pad_from_top
+          .pull-right
+            = delete_set_name_button @set.id, set_name.id
+          = edit_set_section set_name, i
+        %hr
 
-      = link_to I18n.t('actions.delete'), set_path(@set.id), :class => 'negative', :method => :delete, :id => "set_delete"
+      = add_set_name_section @set_names.count
+      //= add_set_name_button @set_names.count
 
-      - form.buttons do
-        = form.submit I18n.t('actions.save'), :class => 'positive'
+      = form.buttons do
+        = save_set_button form
+        = delete_set_button @set.id

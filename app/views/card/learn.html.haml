@@ -2,94 +2,33 @@
 = hidden_field_tag "duration", 0
 = hidden_field_tag "is_new", 0
 
-=render :partial => '/header', :locals => {:title => t('titles.deck-learn.title-old'), :subtitle => "#{t('text.cards-due-notice')}: ..."}
-=render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => "#{t('text.new-card-notice')}", :with_group => true}
+.container
+  = page_header "#{deck_home_link(@card.deck_id)} #{t('titles.deck-learn.title-old')}".html_safe, "#{t('text.cards-due-notice')}: ..."
 
-%section{:class => ["panel"]}
-  =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}
-  
-- unless @card.nil?
+  = render :partial => '/common/notice', :locals => {:id => 'new_card_notice', :keys => ['success', 'hidden'], :value => "#{t('text.new-card-notice')}", :with_group => true}
 
-  #reveal_button
-    .panel
-      .button{:class => "centre big_button"}
-        = link_to t('actions.reveal'), '#', :class => 'positive', :id => "do_reveal"
-      .pad_from_top
+  .content
+    .well.centre
+      =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}
 
-  #review_buttons{:class => "hidden"}
-    .panel
-      .button{:class => "centre large_button"}
-        %ul
-          %li{:class => 'left inline-block'}
-            = link_to t('actions.review-didnt-know'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_dont_know", :style => 'width:12em;'
-            :javascript
-              $j('#do_dont_know').click(function(event) {
-                var end = new Date();
-                var start_time = document.getElementById("start_time") ;
-                var duration = document.getElementById("duration") ;
-                elapsed = end - start_time.value;
+    .centre
+      - unless @card.nil?
+        #reveal_button
+          = card_reveal_button
 
-
-                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'didnt_know')}";
-                link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
-
-                $j('#do_dont_know').attr('href', link);
-              });
-          %li{:class => 'right inline-block'}
-            = link_to t('actions.review-shaky-but-good'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_shaky_good", :style => 'width:12em;'
-            :javascript
-              $j('#do_shaky_good').click(function(event) {
-                var end = new Date();
-                var start_time = document.getElementById("start_time") ;
-                var duration = document.getElementById("duration") ;
-                elapsed = end - start_time.value;
-
-                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'shaky_good')}";
-                link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
-
-                $j('#do_shaky_good').attr('href', link);
-              });
-          .pad_from_top
-          .pad_from_top
-          .pad_from_top
-          %li{:class => 'left inline-block'}
-            = link_to t('actions.review-partial-answer'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_partial_answer", :style => 'width:12em;'
-            :javascript
-              $j('#do_partial_answer').click(function(event) {
-                var end = new Date();
-                var start_time = document.getElementById("start_time") ;
-                var duration = document.getElementById("duration") ;
-                elapsed = end - start_time.value;
-
-                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'partial_correct')}";
-                link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
-
-                $j('#do_partial_answer').attr('href', link);
-              });
-          %li{:class => 'right inline-block'}
-            = link_to t('actions.review-confident'), '#', :class => 'neutral large inline-block', :method => :post, :id => "do_good", :style => 'width:12em;'
-            :javascript
-              $j('#do_good').click(function(event) {
-                var end = new Date();
-                var start_time = document.getElementById("start_time") ;
-                var duration = document.getElementById("duration") ;
-                elapsed = end - start_time.value;
-
-                var link = "#{review_deck_card_path(:deck_id => @card.deck_id, :id => @card.id, :answer => 'good')}";
-                link = link + "&duration=" + duration.value + "&elapsed=" + elapsed ;
-
-                $j('#do_good').attr('href', link);
-              });
-        .pad_from_top
-        .pad_from_top
-        .pad
-
+        #review_buttons.hidden.centre
+          = card_review_didnt_know @card
+          = card_review_shaky_good @card
+          = card_review_partial_answer @card
+          = card_review_confident @card
+          
+          
 :javascript
   $j('html').keypress(function(event) {
-    if (event.which == '32') 
+    if (event.which == '32')
     {
       //we are quoting the ruby variable resolution because the javascript test driver crashes doing it. wtf!
-      if ($j('#do_reveal').is(":visible") && ("#{@deck.supports_written_answer}" == "false"))
+      if ($j('#do_reveal').is(":visible"))
       {
         $j('#do_reveal').click();
       }
@@ -115,6 +54,8 @@
           $j('#do_good').click();
         }
       }
+
+      event.preventDefault();
     }
     if ($j('#do_reveal').is(":hidden"))
     {
@@ -152,7 +93,7 @@
         {
           $j("#new_card_notice").show();
         }
-    
+
         var is_new = document.getElementById("is_new") ;
         is_new.value = data ;
       }
@@ -170,8 +111,31 @@
     });
   });
 
+  
+  function make_primary_and_give_focus(id)
+  {
+    var positive_style = 'btn btn-large btn-success' ;
+
+    $j(id).attr('class', positive_style)
+    $j(id).focus();
+  }
+
+  function show_after_reveal()
+  {
+    $j("#back_of_card").removeClass("hidden");
+    $j("#review_buttons").removeClass("hidden");
+    $j("#reveal_button").hide();
+  }
+
+
+  function determine_button_to_highlight(quick_response)
+  {
+    return (quick_response ? "#do_good" : "#do_shaky_good")
+  }
+
   //perform the reveal action
-  $j('#do_reveal').click(function(event) {
+  $j('#do_reveal').click(function(event)
+  {
     var end = new Date();
     var start_time = document.getElementById("start_time") ;
     var duration = document.getElementById("duration") ;
@@ -180,77 +144,19 @@
     var is_new = document.getElementById("is_new") ;
 
     duration.value = end - start_time.value;
+    var quick_response = duration.value <= 2000 ? true : false ;
 
-    var positive_style = 'positive large inline-block' ;
 
     //don't highlight buttons based on time if first button is positive (i.e. first reveal)
-    if (is_new.value == "false")
+    if (is_new.value != "false")
     {
-      //highlight buttons based on speed of answer
-      if (duration.value <= 2000)
-      {
-        //highlight buttons based on typed answer
-        if (user_answer)
-        {
-          if (card_answer.innerHTML == user_answer.value)
-          {
-            $j('#do_good').attr('class', positive_style)
-            $j("#do_good").focus();
-          }
-          else
-          {
-            $j('#do_partial_answer').attr('class', positive_style)
-            $j("#do_partial_answer").focus();
+      make_primary_and_give_focus("#do_dont_know");
+      show_after_reveal();
 
-            //tell the user their answer didn't match
-            $j("#answer_result").text("#{t('text.incorrect-notice')}");
-          }
-
-          $j("#answer_result").show();
-        }
-        else
-        {
-          $j('#do_good').attr('class', positive_style)
-          $j("#do_good").focus();
-        }
-      }
-      else
-      {
-        //highlight buttons based on typed answer
-        if (user_answer)
-        {
-          if (card_answer.innerHTML == user_answer.value)
-          {
-            $j('#do_shaky_good').attr('class', positive_style)
-            $j("#do_shaky_good").focus();
-          }
-          else
-          {
-            $j('#do_partial_answer').attr('class', positive_style)
-            $j("#do_partial_answer").focus();
-
-            //tell the user their answer didn't match
-            $j("#answer_result").text("#{t('text.incorrect-notice')}");
-          }
-
-          $j("#answer_result").show();
-        }
-        else
-        {
-          $j('#do_shaky_good').attr('class', positive_style)
-          $j("#do_shaky_good").focus();
-        }
-      }
-    }
-    else
-    {
-      $j('#do_dont_know').attr('class', positive_style)
-      $j("#do_dont_know").focus();
+      return;
     }
 
 
-
-    $j("#back_of_card").show();
-    $j("#reveal_button").hide();
-    $j("#review_buttons").show();
+    make_primary_and_give_focus(determine_button_to_highlight(quick_response))
+    show_after_reveal();
   });

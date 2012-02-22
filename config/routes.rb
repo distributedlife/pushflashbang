@@ -57,7 +57,7 @@ PushFlashBang::Application.routes.draw do
       put :update_attribute_on_the_spot
     end
 
-    resources :sets, :except => ['edit', 'update']  do
+    resources :sets do
       collection do
         get 'user_sets'
       end
@@ -84,7 +84,7 @@ PushFlashBang::Application.routes.draw do
     end
   end
 
-  resources :sets, :except => ['edit', 'update'] do
+  resources :sets do
     collection do
       put :update_attribute_on_the_spot
     end

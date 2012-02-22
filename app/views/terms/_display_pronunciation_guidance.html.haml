@@ -1,0 +1,7 @@
+#pronunciation_guidance{:class => "#{hidden ? "hidden" : ""}"}
+  %h2= t('text.pronunciation-guidance')
+  .well.centre
+    .row
+      - idioms.each do |idiom|
+        - Idiom::translations_in_idiom_and_language(idiom.id, language.id).each do |translation|
+          = display_pronuciation_guidance translation

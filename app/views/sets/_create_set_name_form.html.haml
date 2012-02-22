@@ -1,11 +1,7 @@
-= f.input :id, :as => :hidden
-#name_definition
-  =render :partial => '/common/definitions', :locals => {:topic => "set-name"}
-= f.input :name, :as => :string, :label => false, :hint => I18n.t('form.set-name'), :required => false, :wrapper_html => {:class => 'width60'}
-.pad_from_top
-.pad_from_top
-
-#description_definition
-  =render :partial => '/common/definitions', :locals => {:topic => "set-name-description"}
-= f.input :description, :as => :text, :label => false, :hint => I18n.t('form.set-description'), :required => false, :wrapper_html => {:class => 'width60'}
-.pad_from_top
+= semantic_fields_for "set_name[#{i}]", set_name do |f|
+  = f.input :id, :as => :hidden
+  .row
+    .span3
+      = f.input :name, :as => :string, :label => I18n.t('form.set-name'), :required => false
+    .span8
+      = f.input :description, :as => :text, :label => I18n.t('form.set-description'), :required => false, :input_html => { :rows => 5, :cols => 80 }

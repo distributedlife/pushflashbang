@@ -1,28 +1,18 @@
-- semantic_form_for(@card, :url => "/deck/#{@card.deck_id}/card", :html => {:multipart => true}, :method => :post) do |f|
-  #front_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "card-front"}
-  = f.input :front, :as => :text, :label => false, :hint => I18n.t('form.card-front'), :required => false, :wrapper_html => {:class => 'width60'}
-  .pad_from_top
+= semantic_form_for(@card, :url => "/deck/#{@card.deck_id}/card", :html => {:multipart => true}, :method => :post) do |f|
+  .row
+    .span3
+      = f.input :front, :as => :text, :label => I18n.t('form.card-front'), :required => false, :input_html => {:rows => 5}
+    .span3
+      = f.input :back, :as => :text, :label => I18n.t('form.card-back'), :required => false, :input_html => {:rows => 5}
+    .span3
+      = f.input :pronunciation, :as => :text, :label => I18n.t('form.card-pronunciation'), :required => false, :input_html => {:rows => 5}
+  .row
+    .span8
+      = f.file_field :audio_file_name
+  .row
+    .span8
+      = f.input :chapter, :label => I18n.t('form.card-chapter'), :required => false
 
-  #back_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "card-back"}
-  = f.input :back, :as => :text, :label => false, :hint => I18n.t('form.card-back'), :required => false, :wrapper_html => {:class => 'width60'}
-  .pad_from_top
-
-  #pronunciation_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "card-pronunciation"}
-  = f.input :pronunciation, :as => :text, :label => false, :hint => I18n.t('form.card-pronunciation'), :required => false, :wrapper_html => {:class => 'width60'}
-  .pad_from_top
-
-  #audio_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "card-audio"}
-  = f.file_field :audio_file_name
-  .pad_from_top
-
-  #chapter_definition
-    =render :partial => '/common/definitions', :locals => {:topic => "card-chapter"}
-  = f.input :chapter, :label => false, :hint => I18n.t('form.card-chapter'), :required => false, :wrapper_html => {:class => 'width60'}
-  .pad_from_top
-
-  - f.buttons do
-    = f.submit I18n.t('actions.save'), :class => 'positive', :id => "card_create"
+  = f.buttons do
+    = f.submit I18n.t('actions.save'), :class => 'btn btn-large btn-success', :id => "card_create"
+    = link_to I18n.t('actions.cancel'), deck_path(@card.deck_id), :class => 'btn btn-large align-form-button'

@@ -1,5 +1,5 @@
-=render :partial => '/header', :locals => {:title => t('titles.card-create.title'), :subtitle => t('titles.card-create.subtitle')}
-%section{:class => ["panel"]}
-  #create_card{:class => ['left'], :style => "width:100%"}
+.container
+  = page_header t('titles.card-create.title'), t('titles.card-create.subtitle')
+
+  #create_card.content.well
     =render :partial => 'create_card_form', :locals => {:card => @card}
-  .pad

@@ -34,14 +34,14 @@ describe LanguagesController do
     it 'should not return disabled languages' do
       l1 = Language.make!(:enabled => true)
       l2 = Language.make!(:enabled => false)
-      ul1 = UserLanguages.make!(:user_id => @user.id, :language_id => l1.id)
-      ul2 = UserLanguages.make!(:user_id => @user.id, :language_id => l2.id)
+      UserLanguages.make!(:user_id => @user.id, :language_id => l1.id)
+      UserLanguages.make!(:user_id => @user.id, :language_id => l2.id)
 
       xhr :get, :user_languages
 
       assigns[:user_languages].count.should == 1
-      assigns[:user_languages].include?(ul1).should == true
-      assigns[:user_languages].include?(ul2).should == false
+      assigns[:user_languages].include?(l1).should == true
+      assigns[:user_languages].include?(l2).should == false
     end
   end
 

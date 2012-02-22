@@ -1,13 +1,7 @@
-.cards
-- upcoming_cards.each do |upcoming_card|
-  .div{:class => "card_panel_full_page left centre"}
-    %p#upcoming{:id => upcoming_card["id"]}= "#{upcoming_card["front"]}"
-    - if is_pronunciation_on_front? pronunciation_side
-      %p{:class => "subtitle centre"}= "[#{upcoming_card["pronunciation"]}]"
-    .pad_from_top
-    .pad_from_top
-    %p.subscript= "due in #{distance_of_time_in_words(Time.now, upcoming_card["due"], true)}"
+= success "due in #{distance_of_time_in_words(Time.now, @upcoming_cards.first["due"], true)}"
+    
 :javascript
-  $J("html").everyTime(30000, function(i) {
+  $j("html").everyTime(30000, function(i)
+  {
     location.reload();
   }, 0);

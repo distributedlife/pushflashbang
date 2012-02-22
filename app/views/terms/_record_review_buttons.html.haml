@@ -1,0 +1,31 @@
+%p rate how well your knew the terms
+.btn-group.centre.inline-block{:data => {:toggle => "buttons-checkbox"}}
+  - review_mode.split(",").each do |review_type|
+    - review_type.strip!
+    - next if review_type.empty?
+
+    = link_to "#{review_text[review_type]}", '#', :class => 'btn btn-large btn-danger btn-zomg', :id => "do_#{review_type}"
+
+
+- review_mode.split(",").each do |review_type|
+  - review_type.strip!
+  - next if review_type.empty?
+
+  = f.input review_type.to_sym, :required => false, :as => :boolean, :id => "#{review_type}_result", :class => "hidden", :html => {:class => "hidden"}, :label => ""
+
+  :javascript
+    $j("#do_#{review_type}").click(function(event)
+    {
+      if ($j("##{review_type}_result").checked)
+      {
+        $j("##{review_type}_result").prop("checked", false);
+      }
+      else
+      {
+        $j("##{review_type}_result").prop("checked", true);
+      }
+
+      event.preventDefault();
+    });
+
+    $j("#review_result_#{review_type}_input").hide();

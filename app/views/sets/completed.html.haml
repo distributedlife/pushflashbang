@@ -1,15 +1,9 @@
-=render :partial => '/header', :locals => {:title => t('titles.set-completed.title'), :subtitle => t('titles.set-completed.subtitle')}
+.container
+  = page_header t('titles.set-completed.title'), t('titles.set-completed.subtitle')
 
-#next_due
-  .panel
-    %p= "#{t('text.completed-set-notice')} #{t('text.next-review-notice')} #{distance_of_time_in_words(Time.now, @next_due_time, true)}"
-    .pad_from_top
-    %p= t('text.refresh-notice')
-    .pad_from_top
-    %p
-      =t('text.continue-learning')
-      =link_to t('actions.different-review-mode'), set_path(params[:id]), :class => "contrast"
-    .pad_from_top
+  #next_due
+    = success t('text.completed-set-notice'), "#{t('text.next-review-notice')} #{distance_of_time_in_words(Time.now, @next_due_time, true)}", link_to(t('actions.different-review-mode'), set_path(params[:id]), :class => "contrast")
+
 :javascript
   $j("html").everyTime(#{@refresh_in_ms}, function(i) {
     location.reload();

@@ -121,13 +121,13 @@ describe TranslationsController do
     it 'should link the translation id to the specified idiom id' do
       post :attach, :term_id => @idiom2.id, :id => @translation3.id
 
-      Translation.where(:idiom_id => @idiom1.id, :id => @translation1.id).empty?.should be false
-      Translation.where(:idiom_id => @idiom1.id, :id => @translation2.id).empty?.should be false
-      Translation.where(:idiom_id => @idiom1.id, :id => @translation3.id).empty?.should be false
-      Translation.where(:idiom_id => @idiom2.id, :id => @translation4.id).empty?.should be false
-      Translation.where(:idiom_id => @idiom2.id, :id => @translation5.id).empty?.should be false
+      Translation.where(:idiom_id => @idiom1.id, :id => @translation1.id).empty?.should == false
+      Translation.where(:idiom_id => @idiom1.id, :id => @translation2.id).empty?.should == false
+      Translation.where(:idiom_id => @idiom1.id, :id => @translation3.id).empty?.should == false
+      Translation.where(:idiom_id => @idiom2.id, :id => @translation4.id).empty?.should == false
+      Translation.where(:idiom_id => @idiom2.id, :id => @translation5.id).empty?.should == false
       
-      Translation.where(:idiom_id => @idiom2.id, :form => @translation3.form).empty?.should be false
+      Translation.where(:idiom_id => @idiom2.id, :form => @translation3.form).empty?.should == false
     end
   end
 end

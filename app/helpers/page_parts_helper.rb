@@ -15,6 +15,10 @@ module PagePartsHelper
     render :partial => '/alert/information', :locals => {:header => header, :text => text, :link => link}
   end
 
+  def success header = "", text = "", link = ""
+    render :partial => '/alert/success', :locals => {:header => header, :text => text, :link => link}
+  end
+
   def null_link text
     link_to text, '#'
   end

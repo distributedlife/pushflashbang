@@ -1,4 +1,2 @@
-#set_name{:id => @i.to_i + 1}
-  = link_to I18n.t('actions.new-set-name'), add_set_name_set_path(:i => @i.to_i + 1), :class => 'neutral', :method => :post, :remote => :true
-  .pad_from_top
-  .pad_from_top
+#set_name{:id => i}
+  = add_set_name_button i

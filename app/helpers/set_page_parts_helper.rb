@@ -110,4 +110,32 @@ module SetPagePartsHelper
   def finish_adding_to_set_button set_id
     link_to t('actions.finish-adding-to-set'), set_path(set_id), :class => 'btn btn-danger pull-right'
   end
+
+  def edit_set_button set_id
+    link_to content_tag('i', '', :class => 'icon-edit'), edit_set_path(:id => set_id), :class => 'btn'
+  end
+
+  def save_set_button form
+    form.submit I18n.t('actions.save'), :class => 'btn btn-primary'
+  end
+
+  def delete_set_button set_id
+    link_to I18n.t('actions.delete-set'), set_path(set_id), :class => 'btn btn-danger', :method => :delete, :id => "set_delete"
+  end
+
+  def delete_set_name_button set_id, set_name_id
+    link_to content_tag('i', '', :class => 'icon-remove'), delete_set_name_set_path(set_id, :set_name_id => set_name_id), :method => :delete, :id => "set_name_#{set_name_id}_delete"
+  end
+
+  def add_set_name_section i
+    render :partial => '/sets/add_set_name_div', :locals => {:i => i}
+  end
+
+  def add_set_name_button i
+    link_to I18n.t('actions.new-set-name'), add_set_name_set_path(:i => i), :class => 'btn', :method => :post, :remote => :true
+  end
+
+  def edit_set_section set_name, i
+    render :partial => '/sets/create_set_name_form', :locals => {:set_name => set_name, :i => i}
+  end
 end

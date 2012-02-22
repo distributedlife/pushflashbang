@@ -1,23 +1,17 @@
-=render :partial => '/header', :locals => {:title => t('titles.deck-learn.title-old'), :subtitle => ''}
+.container
+  = page_header "#{deck_home_link(@card.deck_id)} #{t('titles.deck-learn.title-old')}".html_safe, ''
 
-%section{:class => ["panel"]}
-  =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}
-  
-- unless @card.nil?
-  #reveal_button
-    .panel
-      .button{:class => "centre big_button"}
-        = link_to t('actions.reveal'), '#', :class => 'positive', :id => "do_reveal"
-      .pad_from_top
+  .content
+    .well.centre
+      =render :partial => '/card/show', :locals => {:card => @card, :pronunciation_side => @deck.pronunciation_side, :supports_typed_answer => @deck.supports_written_answer}
 
-  #review_buttons{:class => "hidden"}
-    .panel
-      .button{:class => "centre large_button"}
-        %ul
-          %li{:class => 'left inline-block centre'}
-            = link_to t('actions.next'), cram_deck_chapter_path(:deck_id => @deck.id, :id => @card.chapter, :card_id => @card.id), :id => "do_next", :class => 'large positive inline-block', :method => :get, :style => 'width:12em;'
-        .pad_from_top
-        .pad
+    .centre
+      - unless @card.nil?
+        #reveal_button
+          = card_reveal_button
+
+        #review_buttons.hidden.centre
+          = card_cram_next_button @deck, @card
 
 :javascript
   $j('html').keypress(function(event) {
@@ -32,10 +26,14 @@
         $j('#do_next').click();
       }
     }
+
+    event.preventDefault() ;
   });
 
-  $j('#do_reveal').click(function(event) {
-    $j("#back_of_card").show();
+  $j('#do_reveal').click(function(event)
+  {
+    $j("#back_of_card").removeClass('hidden');
+    $j("#review_buttons").removeClass('hidden');
+
     $j("#reveal_button").hide();
-    $j("#review_buttons").show();
   });
