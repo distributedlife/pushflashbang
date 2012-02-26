@@ -2,7 +2,7 @@
 .container
   = page_header t('titles.term-select-for-set.title'), t('titles.term-select-for-set.subtitle')
 
-  .content.well
+  #search.content.well
     = finish_adding_to_set_button set_id
     = form_tag(select_for_set_set_set_terms_path(:set_id => set_id), :method => "get") do
       = label_tag(:q, "")

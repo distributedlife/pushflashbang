@@ -7,7 +7,7 @@ Feature: language features
   Scenario: a new user does not have any language choice
     Given I am a new, authenticated user
     When I go to the "user home" page
-    Then I should see "You have not selected to learn any languages."
+    Then I should see "You have not started learning a language yet."
 
   Scenario Outline: a user can select a language choice from the list
     Given I know the following languages: "<current languages>"

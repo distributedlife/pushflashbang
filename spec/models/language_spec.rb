@@ -72,6 +72,25 @@ describe Language do
   end
 
   context 'supports_set?' do
-    it 'should be tested'
+    it 'should return true if the set has a translation in this language' do
+      l1 = Language.make!(:enabled => true)
+      s = Sets.make!
+      i = Idiom.make!
+      Translation.make!(:language_id => l1.id, :idiom_id => i.id)
+      SetTerms.make!(:set_id => s.id, :term_id => i.id)
+
+      l1.supports_set?(s.id).should == true
+    end
+
+    it 'should return false if the set does not have a translation in this language' do
+      l1 = Language.make!(:enabled => true)
+      l2 = Language.make!(:enabled => true)
+      s = Sets.make!
+      i = Idiom.make!
+      Translation.make!(:language_id => l1.id, :idiom_id => i.id)
+      SetTerms.make(:set_id => s.id, :term_id => i.id)
+
+      l1.supports_set?(s.id).should == false
+    end
   end
 end

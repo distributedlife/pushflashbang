@@ -115,14 +115,14 @@ end
 When /^I reveal the answer I will be told I am correct$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.reveal!
-    page.is_answer_correct?.should be true
+    page.is_answer_correct?.should == true
   end
 end
 
 When /^I reveal the answer I will be told I am incorrect$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.reveal!
-    page.is_answer_incorrect?.should be true
+    page.is_answer_incorrect?.should == true
   end
 end
 
@@ -223,32 +223,32 @@ end
 
 Then /^the before the reveal the audio is displayed$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.is_audio_visible?.should be true
+    page.is_audio_visible?.should == true
   end
 end
 
 Then /^before the reveal the audio is not displayed$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.is_audio_hidden?.should be true
+    page.is_audio_hidden?.should == true
   end
 end
 
 Then /^after the reveal the audio is displayed$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.reveal!
-    page.is_audio_visible?.should be true
+    page.is_audio_visible?.should == true
   end
 end
 
 Then /^before the reveal the native language is not displayed$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.native_language_is_hidden?.should be true
+    page.native_language_is_hidden?.should == true
   end
 end
 
 Then /^before the reveal the learned language is not displayed$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.learned_language_is_hidden?.should be true
+    page.learned_language_is_hidden?.should == true
   end
 end
 
@@ -260,7 +260,7 @@ Then /^before the reveal the native language is displayed$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
     idiom_translations.each do |idiom_translation|
       if idiom_translation.language_id == get(:user).native_language_id
-        page.native_language_contains?(idiom_translation.form).should be true
+        page.native_language_contains?(idiom_translation.form).should == true
       end
     end
   end
@@ -271,11 +271,11 @@ Then /^before the reveal the learned language is displayed$/ do
   language = get(:language)
 
   idiom_translations = get_translation_group_using_idiom idiom
-
+  
   on_page :ReviewTermPage, Capybara.current_session do |page|
     idiom_translations.each do |idiom_translation|
       if idiom_translation.language_id == language.id
-        page.learned_language_contains?(idiom_translation.form).should be true
+        page.learned_language_contains?(idiom_translation.form).should == true
       end
     end
   end
@@ -291,7 +291,7 @@ Then /^after the reveal the native language is displayed$/ do
 
     idiom_translations.each do |idiom_translation|
       if idiom_translation.language_id == get(:user).native_language_id
-        page.native_language_contains?(idiom_translation.form).should be true
+        page.native_language_contains?(idiom_translation.form).should == true
       end
     end
   end
@@ -307,7 +307,7 @@ Then /^after the reveal the learned language is displayed$/ do
     page.reveal!
     idiom_translations.each do |idiom_translation|
       if idiom_translation.language_id == language.id
-        page.learned_language_contains?(idiom_translation.form).should be true
+        page.learned_language_contains?(idiom_translation.form).should == true
       end
     end
   end
@@ -315,37 +315,37 @@ end
 
 Then /^the text answer input control is shown$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.text_input_is_visible?.should be true
+    page.text_input_is_visible?.should == true
   end
 end
 
 Then /^the text answer input control is not shown$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.text_input_is_hidden?.should be true
+    page.text_input_is_hidden?.should == true
   end
 end
 
 Then /^I will be told I am correct$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.is_answer_correct?.should be true
+    page.is_answer_correct?.should == true
   end
 end
 
 Then /^I will be told I am not correct$/ do
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.is_answer_incorrect?.should be true
+    page.is_answer_incorrect?.should == true
   end
 end
 
 Then /^I should see a "([^"]*)" checkbox and it is checked$/ do |review_type|
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.answer_control_is_set_as?(review_type, true)
+    page.answer_control_is_set_as?(review_type, "1")
   end
 end
 
 Then /^I should see a "([^"]*)" checkbox and it is not checked$/ do |review_type|
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.answer_control_is_set_as?(review_type, false)
+    page.answer_control_is_set_as?(review_type, "0")
   end
 end
 
@@ -362,7 +362,7 @@ Then /^I the term containing "([^"]*)" for language "([^"]*)" should have a succ
   language = get_language(language_name)
 
   review = UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
-  review.first.success.should be true
+  review.first.success.should == true
 end
 
 Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an unsuccessful "([^"]*)" review$/ do |containing_form, language_name, review_type|
@@ -384,26 +384,26 @@ end
 
 Then /^before the reveal I should see native text containing "([^"]*)"$/ do |text|
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.native_language_contains?(text).should be true
+    page.native_language_contains?(text).should == true
   end
 end
 
 Then /^before the reveal I should see learned text containing "([^"]*)"$/ do |text|
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.learned_language_contains?(text).should be true
+    page.learned_language_contains?(text).should == true
   end
 end
 
 
 Then /^before the reveal I should see "([^"]*)" meanings$/ do |meaning_count|
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.meaning_count_is?(meaning_count).should be true
+    page.meaning_count_is?(meaning_count).should == true
   end
 end
 
 Then /^before the reveal I should see "([^"]*)" meaning$/ do |meaning_count|
   on_page :ReviewTermPage, Capybara.current_session do |page|
-    page.meaning_count_is?(meaning_count).should be true
+    page.meaning_count_is?(meaning_count).should == true
   end
 end
 
@@ -411,21 +411,21 @@ end
 Then /^after the reveal I should see learned text containing "([^"]*)"$/ do |text|
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.reveal!
-    page.learned_language_contains?(text).should be true
+    page.learned_language_contains?(text).should == true
   end
 end
 
 Then /^after the reveal I should see native text containing "([^"]*)"$/ do |text|
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.reveal!
-    page.native_language_contains?(text).should be true
+    page.native_language_contains?(text).should == true
   end
 end
 
 Then /^after the reveal I should not see native text containing "([^"]*)"$/ do |text|
   on_page :ReviewTermPage, Capybara.current_session do |page|
     page.reveal!
-    page.native_language_contains?(text).should be false
+    page.native_language_contains?(text).should == false
   end
 end
 

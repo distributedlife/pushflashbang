@@ -31,7 +31,7 @@ Feature: review term results
     And I should see the "Too Easy! Show me this less often" button
     And I should see a "reading" checkbox and it is checked
     And I should see a "speaking" checkbox and it is checked
-    And I should see a "typing" checkbox and it is not checked
+#    And I should see a "typing" checkbox and it is not checked
 
 #  Scenario: user review check box exists for each listening and writing
 #    Given I review the "greetings" set in "Spanish" using the "listening and writing" review mode
@@ -48,7 +48,7 @@ Feature: review term results
     And I should see the "Too Easy! Show me this less often" button
     And I should see a "reading" checkbox and it is checked
     And I should see a "speaking" checkbox and it is checked
-    And I should see a "typing" checkbox and it is not checked
+#    And I should see a "typing" checkbox and it is not checked
 
   Scenario: submitted options are recorded
     Given I review the "greetings" set in "Spanish" using the "reading, speaking and typing" review mode

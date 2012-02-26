@@ -26,7 +26,7 @@ And /^I should be on the "([^"]*)" page$/ do |page_name|
       And %{show me the page}
     end
 
-    page.is_current_page?.should be true
+    page.is_current_page?.should == true
   end
   
   add(:page, page)

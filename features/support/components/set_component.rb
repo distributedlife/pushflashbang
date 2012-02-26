@@ -48,6 +48,10 @@ module SetComponent
     return Sets.find(set_name.first.sets_id)
   end
 
+  def get_set_name name
+    get_first SetName.where(:name => name)
+  end
+
   def attach_idiom_to_set idiom, set, chapter = 1, position = 1
     add(:set_term, SetTerms.make!(:set_id => set.id, :term_id => idiom.id, :chapter => chapter, :position => position))
   end

@@ -7,7 +7,7 @@
 
       - @translations.each_with_index do |translation, i|
         #translation{:id => i}
-          = create_translation_section translation, i
+          = create_translation_section translation, i, @languages
 
       = add_translation_section @translations.count
 

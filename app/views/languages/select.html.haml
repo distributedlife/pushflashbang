@@ -2,5 +2,4 @@
 #languages
   - @languages.each do |language|
     #language{:id => language.id}
-      .panel
-        %span= link_to language.name, set_goal_language_set_path(language.id, @set_id, :redirect_to => "sets"), :id => "language_#{language.id}_select", :method => :put
+      %span= link_to language.name, set_goal_language_set_path(language.id, @set_id, :redirect_to => "sets"), :id => "language_#{language.id}_select", :method => :put

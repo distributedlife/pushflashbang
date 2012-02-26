@@ -35,7 +35,7 @@ class DenormaliseTranslationsJob
         end
 
 
-        denormalised_translation = translation.clone
+        denormalised_translation = translation.dup
         denormalised_translation.idiom_id = it.idiom_id
         denormalised_translation.save!
       end

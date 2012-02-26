@@ -37,8 +37,9 @@ module ShowSetPage
     @session.find_link("term_#{id}_remove_from_set").click
   end
 
-  def add_term
-    @session.find_link("add_term").click
+  def add_term set_id
+    @session.find_link("add_term_to_set_#{set_id}").click
+#    @session.find_link("add_term").click
   end
 
   def move_term_next_chapter id
@@ -57,8 +58,8 @@ module ShowSetPage
     @session.find_link("term_#{id}_prev_position").click
   end
 
-  def set_as_goal
-    @session.find_link("set_goal").click
+  def set_as_goal set_id, language_id
+    @session.find_link("set_#{set_id}_for_#{language_id}_goal").click
   end
 
   def unset_as_goal

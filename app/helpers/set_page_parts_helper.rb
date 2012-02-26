@@ -24,11 +24,19 @@ module SetPagePartsHelper
   end
 
   def set_as_goal language, set
-    link_to t('actions.set-goal'), set_goal_language_set_path(language.id, set.id), :class => 'btn pull-right', :id => "set_#{set.id}_goal", :method => :put
+    set_goal_button language.id, set.id
+  end
+
+  def set_goal_button language_id, set_id
+    link_to t('actions.set-goal'), set_goal_language_set_path(language_id, set_id), :class => 'btn pull-right', :id => "set_#{set_id}_for_#{language_id}_goal", :method => :put
   end
 
   def unset_as_goal language, set
     link_to t('actions.unset-goal'), unset_goal_language_set_path(language.id, set.id), :class => 'btn btn-danger pull-right', :id => "set_#{set.id}_goal", :method => :put
+  end
+
+  def unset_goal_button language_id, set_id
+    link_to t('actions.unset-goal'), unset_goal_language_set_path(language_id, set_id), :class => 'btn btn-danger', :id => "unset_goal", :method => :put
   end
 
   def create_set_button
@@ -57,14 +65,6 @@ module SetPagePartsHelper
 
   def review_set_options_button goal
     render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => goal.set_id}
-  end
-
-  def set_goal_button language_id, set_id
-    link_to t('actions.set-goal'), set_goal_language_set_path(language_id, set_id), :class => 'btn', :id => "set_goal", :method => :put
-  end
-
-  def unset_goal_button language_id, set_id
-    link_to t('actions.unset-goal'), unset_goal_language_set_path(language_id, set_id), :class => 'btn btn-danger', :id => "unset_goal", :method => :put
   end
 
   def set_user_review_options

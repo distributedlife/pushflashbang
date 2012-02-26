@@ -1,17 +1,17 @@
 %tr{:id => translation.id, :class => classname}
   %td
     - if current_user.in_edit_mode?
-      = on_the_spot_edit translation, :form
+      #form= on_the_spot_edit translation, :form
     - else
-      = translation.form
+      #form= translation.form
   %td
     - if current_user.in_edit_mode?
-      = on_the_spot_edit translation, :pronunciation
+      #pronunciation= on_the_spot_edit translation, :pronunciation
     - else
       - unless translation.pronunciation.blank?
-        = translation.pronunciation
+        #pronunciation= translation.pronunciation
   %td
-    = translation.languages.name
+    #language= translation.languages.name
   %td
     - if translation.audio.file?
       = display_translation_audio translation

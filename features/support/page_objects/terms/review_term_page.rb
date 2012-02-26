@@ -47,11 +47,15 @@ module ReviewTermPage
   end
   
   def native_language_contains? form
-    does_one_element_of_set_contain '.native_form', form
+    back_of_card = @session.find("#back_of_card")
+    native = back_of_card.find("#native")
+    native.has_content? form
   end
 
   def learned_language_contains? form
-    does_one_element_of_set_contain '.learned_form', form
+    back_of_card = @session.find("#back_of_card")
+    learned = back_of_card.find("#learned")
+    learned.has_content? form
   end
 
   def set_text_answer answer
@@ -67,9 +71,7 @@ module ReviewTermPage
   end
 
   def answer_control_is_set_as? review_type, value
-    element_is_visible("#review_result_#{review_type}").should == true
-
-    @session.find_field("review_result_#{review_type}")[:checked].should == value.to_s
+    @session.find_field("review_result_#{review_type}").value.should == value.to_s
   end
 
   def button_exists? button_name

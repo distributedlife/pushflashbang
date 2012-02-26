@@ -4,7 +4,7 @@
     - review_type.strip!
     - next if review_type.empty?
 
-    = link_to "#{review_text[review_type]}", '#', :class => 'btn btn-large btn-danger btn-zomg', :id => "do_#{review_type}"
+    = link_to "#{review_text[review_type]}", '#', :class => 'btn btn-large btn-success btn-zomg', :id => "do_#{review_type}"
 
 
 - review_mode.split(",").each do |review_type|
@@ -16,16 +16,17 @@
   :javascript
     $j("#do_#{review_type}").click(function(event)
     {
-      if ($j("##{review_type}_result").checked)
+      if ($j("#review_result_#{review_type}").val() == "1")
       {
-        $j("##{review_type}_result").prop("checked", false);
+        $j("#review_result_#{review_type}").prop("value", "0");
       }
       else
       {
-        $j("##{review_type}_result").prop("checked", true);
+        $j("#review_result_#{review_type}").prop("value", "1");
       }
 
       event.preventDefault();
     });
 
+    $j("#review_result_#{review_type}").prop("value", "1");
     $j("#review_result_#{review_type}_input").hide();

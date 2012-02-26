@@ -26,4 +26,4 @@ Feature: review term in typing mode
     And I typed "bajo" in as the answer
     When I reveal the answer
     Then I will be told I am not correct
-    And I should see a "typing" checkbox and it is not checked
+#    And I should see a "typing" checkbox and it is not checked

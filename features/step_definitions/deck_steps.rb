@@ -66,7 +66,7 @@ And /^I have a deck with (\d+) chapters$/ do |chapter_count|
 end
 
 And /^I edit all deck properties$/ do
-  add(:original_deck, get(:deck).clone)
+  add(:original_deck, get(:deck).dup)
 
   new_name = "Edit deck name"
   new_description = "Edit deck description"

@@ -37,13 +37,3 @@ Feature: deck cards
     When I click on "Delete"
     Then the card should be deleted
     And I should be on the "show deck" page
-
-#Scenario: card has audio
-#    Given I have created a card with audio
-#    When I go to the "show card" page
-#    Then I should see audio tags
-#
-#  Scenario: card has audio
-#    Given I have created a card without audio
-#    When I go to the "show card" page
-#    Then I should not see audio tags

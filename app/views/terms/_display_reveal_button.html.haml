@@ -3,7 +3,8 @@
     = reveal_button
 
 :javascript
-  $j('#do_reveal').click(function(event) {
+  $j('#do_reveal').click(function(event)
+  {
     var end = new Date();
     var start_time = document.getElementById("start_time") ;
     var duration = document.getElementById("duration") ;
@@ -21,7 +22,7 @@
       {
         //tell the user their answer didn't match
         $j("#answer_result").text("#{t('text.incorrect-notice')}");
-        $j("#review_result_typing").attr('checked', false);
+        $j("#do_typing").click();
       }
 
       $j("#answer_result").show();
@@ -30,11 +31,7 @@
 
     $j("#reveal_button").hide();
 
-    $j("#pronunciation_guidance").attr("class", "")
-    $j("#review_buttons").attr("class", "")
-    $j("#back_of_card").attr("class", "")
-
-    $j("#pronunciation_guidance").show();
-    $j("#review_buttons").show();
-    $j("#back_of_card").show();
+    $j("#pronunciation_guidance").removeClass("hidden")
+    $j("#review_buttons").removeClass("hidden")
+    $j("#back_of_card").removeClass("hidden")
   });

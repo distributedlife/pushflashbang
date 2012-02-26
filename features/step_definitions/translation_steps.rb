@@ -85,8 +85,8 @@ When /^translations will all linked to the same idiom$/ do
     link.idiom_id.should == idiom.id
   end
 
-  Translation.count.should_not be 0
-  Idiom.count.should_not be 0
+  Translation.count.should_not == 0
+  Idiom.count.should_not == 0
 end
 
 When /^I view the following translations to the group containing "([^"]*)"$/ do |form|
@@ -157,8 +157,10 @@ When /^I attach "([^"]*)" to the group containing "([^"]*)"$/ do |form, target_g
   end
 
   translation = Translation.where(:form => form).first
-  on_page :SelectTranslationPage, Capybara.current_session do |page|
-    page.select_translation translation.id
+  on_page :SelectTermForSetPage, Capybara.current_session do |page|
+    page.search_for translation.form
+    page.select_term translation.idiom_id
+#    page.select_translation translation.id
   end
 end
 

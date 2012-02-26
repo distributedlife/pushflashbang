@@ -34,5 +34,7 @@ class Language < ActiveRecord::Base
     SetTerms.where(:set_id => set_id).each do |set_terms|
       return !Translation.where(:language_id => self.id, :idiom_id => set_terms.term_id).empty?
     end
+
+    return false
   end
 end

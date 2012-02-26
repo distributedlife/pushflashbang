@@ -2,6 +2,15 @@
   - unless new
     %hr
   #idioms
-    - idioms.each do |idiom|
-      = display_learned_translations idiom, learned_language
-      = display_native_translations idiom, native_language
+    #learned
+      %h2= learned_language.name
+      %p if multiple words show here they share meaning
+      - idioms.each do |idiom|
+        #idiom_group.centre.inline-block{:id => "#{idiom.id}"}
+          = display_learned_translations idiom, learned_language
+    #native
+      %h2= native_language.name
+      %p if multiple words show here they share meaning
+      - idioms.each do |idiom|
+        #idiom_group.centre.inline-block{:id => "#{idiom.id}"}
+          = display_native_translations idiom, native_language

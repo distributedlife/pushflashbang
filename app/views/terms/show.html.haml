@@ -14,7 +14,8 @@
         = search_results_header_row
       %tbody
         - @translations.each do |translation|
-          = display_translation_as_table_row translation
+          #translation
+            = display_translation_as_table_row translation
 
   %h2 Sets this term belongs to
   #sets.content.well

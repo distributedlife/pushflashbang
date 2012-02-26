@@ -444,6 +444,44 @@ describe DeckController do
   end
 
   context '"GET" index' do
-    it 'should be tested'
+    it 'should redirect to the login page if user is not logged in' do
+      sign_out @user
+
+      deck = Deck.make!(:user_id => @user.id)
+
+      get :index
+      response.should be_redirect
+      response.should redirect_to(new_user_session_path)
+
+      sign_in :user, @user
+      get :index
+      response.should be_success
+    end
+
+    it 'should return all the decks belonging to the user' do
+      deck1 = Deck.make!(:user_id => @user.id)
+      deck2 = Deck.make!(:user_id => @user.id)
+      deck3 = Deck.make!(:user_id => @user.id + 100)
+
+      get :index
+
+      assigns[:decks].count.should == 2
+      assigns[:decks].include?(deck1).should == true
+      assigns[:decks].include?(deck2).should == true
+      assigns[:decks].include?(deck3).should == false
+    end
+    
+    it 'should return all shared decks' do
+      deck1 = Deck.make!(:user_id => @user.id)
+      deck2 = Deck.make!(:user_id => @user.id)
+      deck3 = Deck.make!(:user_id => @user.id + 100, :shared => true)
+
+      get :index
+
+      assigns[:decks].count.should == 3
+      assigns[:decks].include?(deck1).should == true
+      assigns[:decks].include?(deck2).should == true
+      assigns[:decks].include?(deck3).should == true
+    end
   end
 end

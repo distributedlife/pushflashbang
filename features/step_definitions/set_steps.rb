@@ -78,9 +78,10 @@ end
 
 When /^I delete the set name "([^"]*)"$/ do |set_name|
   add(:set, get_set_from_name(set_name))
+  add(:set_name, get_set_name(set_name))
 
   goto_page :EditSetPage, Capybara.current_session, sut do |page|
-    page.delete_set_name page.get_index_where_set_name set_name
+    page.delete_set_name get(:set_name).id
   end
 end
 
@@ -110,11 +111,12 @@ When /^I add the group containing "([^"]*)" to the current set$/ do |containing_
   idiom = get_idiom_containing_form containing_form
 
   on_page :ShowSetPage, Capybara.current_session do |page|
-    page.add_term
+    page.add_term get(:set).id
   end
 
   on_page :SelectTermForSetPage, Capybara.current_session do |page|
-    page.search_for "a little bit"
+#    page.search_for "a little bit"
+    page.search_for containing_form
     page.select_term idiom.id
   end
 end
@@ -205,12 +207,13 @@ When /^I choose the set "([^"]*)" for the "([^"]*)" language as a goal$/ do |set
   language = get_language language
 
   goto_page :ShowSetPage, Capybara.current_session, sut do |page|
-    page.set_as_goal
+    sleep 2
+    page.set_as_goal get(:set).id, language.id
   end
 
-  on_page :SelectLanguagePage, Capybara.current_session do |page|
-    page.select_language language.id
-  end
+#  on_page :SelectLanguagePage, Capybara.current_session do |page|
+#    page.select_language language.id
+#  end
 end
 
 When /^I choose to unset "([^"]*)" for the "([^"]*)" language as a goal$/ do |set_name, language|

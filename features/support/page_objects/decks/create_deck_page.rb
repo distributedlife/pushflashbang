@@ -4,7 +4,7 @@ module CreateDeckPage
   end
 
   def navigate_to
-    @session.visit "/users"
+    @session.visit "/deck"
     @session.find_link("add_deck").click
   end
 

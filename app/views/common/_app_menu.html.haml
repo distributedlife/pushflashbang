@@ -6,6 +6,7 @@
     %li= link_to t('actions.sets'), sets_path
     %li= link_to t('actions.terms'), terms_path
     %li.divider-vertical
-    = form_tag('/terms/search', :method => "get", :class => 'navbar-search fix-header-height') do
+    = form_tag('/terms/search', :method => "get", :class => 'navbar-search fix-header-height') do 
       = label_tag(:q, "")
       = text_field_tag :q, @q, :placeholder => t('text.search-input')
+      = submit_tag t('actions.search'), :class => 'hidden', :id => 'search_query'

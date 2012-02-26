@@ -53,9 +53,9 @@ class TranslationsController < ApplicationController
     success_redirect_to t('notice.translation-moved'), term_path(params[:term_id])
   end
 
-  def select
-    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:term_id]
-    
-    @translations = Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where(['idiom_id != ?', params[:term_id]])
-  end
+#  def select
+#    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:term_id]
+#
+#    @translations = Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where(['idiom_id != ?', params[:term_id]])
+#  end
 end

@@ -16,7 +16,8 @@ module SelectTermForSetPage
   end
 
   def search_for term
-    @session.fill_in(:q, :with => term)
-    @session.click_link_or_button("search_query")
+    search = @session.find("#search")
+    search.fill_in(:q, :with => term)
+    search.click_link_or_button("search_query")
   end
 end

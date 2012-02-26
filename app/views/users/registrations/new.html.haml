@@ -10,6 +10,10 @@
           An account with your email address already exists. If this is your account, type your password in and we'll link them.
     .clearfix
       = f.input :email, :as => :email, :label => I18n.t('form.user-email')
+    .clearfix
+      = f.input :native_language_id, :as => :select, :collection => Language.all, :label => I18n.t('form.user-translation-language'), :required => false, :wrapper_html => {:class => 'width60'}
+      :javascript
+        setup_chosen("#user_native_language_id", "#{t('actions.select-language')}")
     - unless params[:email_only] and resource.email.nil?
       .clearfix
         = f.input :password, :as => :password, :label => I18n.t('form.user-password')

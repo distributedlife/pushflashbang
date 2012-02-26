@@ -38,7 +38,6 @@ Feature: sessions
     And there are no unscheduled cards
     When I go to the "deck session" page
     Then I should see "No cards available for review"
-    And I should see when each card is scheduled to be reviewed
 
   Scenario: no cards in deck
     Given there are no cards in the deck

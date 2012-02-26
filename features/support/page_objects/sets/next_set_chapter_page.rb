@@ -8,7 +8,7 @@ module NextSetChapterPage
   end
 
   def is_current_page?
-    @session.has_content? "You've reached chapter"
+    @session.has_content? "You've reached the end of this chapter"
   end
 
   def advance!

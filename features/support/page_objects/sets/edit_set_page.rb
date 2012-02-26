@@ -24,8 +24,8 @@ module EditSetPage
     @session.click_on("Save")
   end
   
-  def delete_set_name index
-    @session.find_link("set_name_#{index}_delete").click
+  def delete_set_name set_name_id
+    @session.find_link("set_name_#{set_name_id}_delete").click
   end
 
   def delete_set

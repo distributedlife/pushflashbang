@@ -1,4 +1,4 @@
-= success "due in #{distance_of_time_in_words(Time.now, @upcoming_cards.first["due"], true)}"
+= success "No cards available for review. The next review is due in #{distance_of_time_in_words(Time.now, @upcoming_cards.first["due"], true)}"
     
 :javascript
   $j("html").everyTime(30000, function(i)
