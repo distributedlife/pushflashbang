@@ -90,15 +90,14 @@ class Translation < ActiveRecord::Base
     offset = 0 if offset < 0
 
     idioms = Idiom.order("id asc").where(where, :filter => filter_string, :set_id => set_id).limit(limit).offset(offset)
-#    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms, :languages => {:enabled => true})
     self.get_sorted_selection idioms
   end
 
   def self.remove_duplicates
     identical_sql = <<-SQL
-      SELECT form, language_id, idiom_id, t_type, count(*)
+      SELECT form, language_id, idiom_id, pronunciation, count(*)
       FROM translations
-      GROUP BY form, language_id, idiom_id, t_type
+      GROUP BY form, language_id, idiom_id, pronunciation
       HAVING count(*) > 1
     SQL
 
