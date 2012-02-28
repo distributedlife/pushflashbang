@@ -143,24 +143,29 @@ When /^I move "([^"]*)" to the group containing "([^"]*)"$/ do |form, target_gro
 
   idiom_translations = get_translation_group_using_form target_group_form
   on_page :SelectTermPage, Capybara.current_session do |page|
-    page.select_term idiom_translations.first.idiom_id
+    page.search_for target_group_form
+    page.select_term_to_move idiom_translations.first.idiom_id
   end
 end
 
 When /^I attach "([^"]*)" to the group containing "([^"]*)"$/ do |form, target_group_form|
-  idiom = get_idiom_containing_form target_group_form
+  idiom = get_idiom_containing_form form
 
   add(:idiom, idiom)
 
-  goto_page :ShowTermPage, Capybara.current_session, sut do |page|
-    page.attach_translation
+  goto_page :EditTermPage, Capybara.current_session, sut do |page|
+#    page.attach_translation
+    page.move_translation(page.get_index_where_form(form))
   end
 
-  translation = Translation.where(:form => form).first
-  on_page :SelectTermForSetPage, Capybara.current_session do |page|
-    page.search_for translation.form
-    page.select_term translation.idiom_id
+  idiom_translations = get_translation_group_using_form target_group_form
+#  translation = Translation.where(:form => form).first
+  on_page :SelectTermPage, Capybara.current_session do |page|
+    page.search_for target_group_form
+#    page.select_term translation.idiom_id
 #    page.select_translation translation.id
+#    page.search_for target_group_form
+    page.select_term idiom_translations.first.idiom_id
   end
 end
 

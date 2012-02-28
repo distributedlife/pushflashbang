@@ -15,8 +15,8 @@
 
   .span1
     %p &nbsp;
-    = link_to content_tag('i', '', :class => 'icon-remove'), term_translation_path(translation.idiom_id, translation.id), :class => 'negative', :method => :delete, :id => "translation_#{i}_delete"
-    = link_to content_tag('i', '', :class => 'icon-move'), select_terms_path(:idiom_id => translation.idiom_id, :translation_id => translation.id), :class => 'neutral', :method => :post, :id => "translation_#{i}_move"
+    = link_to content_tag('i', '', :class => 'icon-remove'), term_translation_path(translation.idiom_id, translation.id), :method => :delete, :id => "translation_#{i}_delete"
+    = link_to content_tag('i', '', :class => 'icon-move'), select_terms_path(:idiom_id => translation.idiom_id, :translation_id => translation.id), :method => :post, :id => "translation_#{i}_move"
 
 :javascript
   setup_chosen("#translation_#{i}_language_id", "#{t('actions.select-language')}")

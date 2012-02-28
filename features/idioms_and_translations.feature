@@ -103,3 +103,47 @@ Feature: users can add new terms to the system
       | un poco de   | Spanish              |               |
       | 一点儿        | Chinese (Simplified) | yì diǎnr      |
 
+  @user
+  Scenario: user can attach an existing term to multiple idioms
+    Given the following related translations:
+      | form         | language             | pronunciation |
+      | un poco de   | Spanish              |               |
+      | a little bit | English              |               |
+      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
+    And the following related translations:
+      | form  | language             | pronunciation |
+      | Hello | English              |               |
+      | 你好    | Chinese (Simplified) | nǐ hǎo        |
+    When I attach "a little bit" to the group containing "Hello"
+    Then the group containing "Hello" should have the following translations:
+      | form         | language             | pronunciation |
+      | a little bit | English              |               |
+      | Hello        | English              |               |
+      | 你好           | Chinese (Simplified) | nǐ hǎo        |
+    And the group containing "un poco de" should have the following translations:
+      | form         | language             | pronunciation |
+      | a little bit | English              |               |
+      | un poco de   | Spanish              |               |
+      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
+
+#  @user
+#  Scenario: attach translation to new idiom and detach from old
+#    Given the following related translations:
+#      | form         | language             | pronunciation |
+#      | un poco de   | Spanish              |               |
+#      | a little bit | English              |               |
+#      | 一点儿          | Chinese (Simplified) | yì diǎnr      |
+#    And the following related translations:
+#      | form  | language             | pronunciation |
+#      | Hello | English              |               |
+#      | 你好    | Chinese (Simplified) | nǐ hǎo        |
+#    When I attach and remove "a little bit" to the group containing "Hello"
+#    Then the group containing "Hello" should have the following translations:
+#      | form         | language             | pronunciation |
+#      | a little bit | English              |               |
+#      | Hello        | English              |               |
+#      | 你好           | Chinese (Simplified) | nǐ hǎo        |
+#    And the group containing "un poco de" should have the following translations:
+#      | form       | language             | pronunciation |
+#      | un poco de | Spanish              |               |
+#      | 一点儿        | Chinese (Simplified) | yì diǎnr      |

@@ -26,6 +26,10 @@ class Translation < ActiveRecord::Base
     return super
   end
 
+  def self.get_sorted_selection idioms
+    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms, :languages => {:enabled => true})
+  end
+
   def self.all_sorted_by_idiom_language_and_form_with_like_filter filter, page = 1, limit = Rails.application.config.search_page_size
     if filter.kind_of? Array
       filter_string = "(%#{filter.join('%|%')}%)"
@@ -39,6 +43,8 @@ class Translation < ActiveRecord::Base
       (
         SELECT t.idiom_id
         FROM translations t
+        INNER JOIN languages l
+        ON t.language_id = l.id AND l.enabled = true
         WHERE lower(t.form) SIMILAR TO :filter
         OR lower(t.pronunciation) SIMILAR TO :filter
       )
@@ -48,7 +54,7 @@ class Translation < ActiveRecord::Base
     offset = 0 if offset < 0
 
     idioms = Idiom.order("id asc").where(where, :filter => filter_string).limit(limit).offset(offset)
-    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms, :languages => {:enabled => true})
+    self.get_sorted_selection idioms
   end
 
   def self.all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, filter, page = 1, limit = Rails.application.config.search_page_size
@@ -84,7 +90,8 @@ class Translation < ActiveRecord::Base
     offset = 0 if offset < 0
 
     idioms = Idiom.order("id asc").where(where, :filter => filter_string, :set_id => set_id).limit(limit).offset(offset)
-    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms, :languages => {:enabled => true})
+#    Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms, :languages => {:enabled => true})
+    self.get_sorted_selection idioms
   end
 
   def self.remove_duplicates
@@ -102,7 +109,7 @@ class Translation < ActiveRecord::Base
     identical.each do |record|
       identical_translations = Translation.where(:form => record["form"], :language_id => record["language_id"], :idiom_id => record["idiom_id"], :t_type => record["t_type"])
         identical_translations.each_with_index do |translation, index|
-        next if index == 0
+        next if index == 0 #we need to keep one
 
         translation.delete
       end

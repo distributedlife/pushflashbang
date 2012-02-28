@@ -4,10 +4,14 @@
   %th &nbsp;
   %th
     - if mode == 'edit'
-      = edit_term_button idiom_id
-      = add_term_to_set_button idiom_id
+      = edit_term_button data[:idiom_id]
+      = add_term_to_set_button data[:idiom_id]
     - else
       - if mode == 'select'
-        = link_to t('actions.add-to-set'), add_to_set_set_set_term_path(set_id, idiom_id), :class => 'btn', :method => :put, :id => "term_#{idiom_id}_select"
+        = link_to t('actions.add-to-set'), add_to_set_set_set_term_path(data[:set_id], data[:idiom_id]), :class => 'btn', :method => :put, :id => "term_#{data[:idiom_id]}_select"
+      - if mode == 'move'
+        - unless data[:idiom_id].to_s == data[:remove_from_idiom_id].to_s
+          = link_to content_tag('i', '', :class => 'icon-plus'), attach_term_translation_path(:term_id => data[:idiom_id], :id => data[:translation_id]), :method => :post, :id => "term_#{data[:idiom_id]}_select"
+          = link_to content_tag('i', '', :class => 'icon-move'), attach_and_detach_term_translation_path(:term_id => data[:idiom_id], :id => data[:translation_id], :remove_from_idiom_id => data[:remove_from_idiom_id]), :method => :post, :id => "term_#{data[:idiom_id]}_select_and_remove"
       - else
         &nbsp;

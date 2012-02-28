@@ -780,14 +780,13 @@ describe TermsController do
 
       get :select, :idiom_id => idiom1.id, :translation_id => term3.id
 
+      assigns[:translations][0].idiom_id.should == idiom1.id
+      assigns[:translations][0].language_id.should == chinese.id
+      assigns[:translations][0].form.should == "ce"
 
-      assigns[:translations][0].idiom_id.should == idiom2.id
-      assigns[:translations][0].language_id.should == spanish.id
-      assigns[:translations][0].form.should == "Abanana"
-
-      assigns[:translations][1].idiom_id.should == idiom2.id
+      assigns[:translations][1].idiom_id.should == idiom1.id
       assigns[:translations][1].language_id.should == spanish.id
-      assigns[:translations][1].form.should == "Allegra"
+      assigns[:translations][1].form.should == "Cabron"
     end
 
     it 'should return all terms grouped by idiom and order by language and form except the specified term' do
@@ -808,17 +807,17 @@ describe TermsController do
       get :select, :idiom_id => idiom1.id, :translation_id => term3.id
       
 
-      assigns[:translations][0].idiom_id.should == idiom2.id
-      assigns[:translations][0].language_id.should == english.id
-      assigns[:translations][0].form.should == "Hobo"
+      assigns[:translations][0].idiom_id.should == idiom1.id
+      assigns[:translations][0].language_id.should == chinese.id
+      assigns[:translations][0].form.should == "ce"
 
-      assigns[:translations][1].idiom_id.should == idiom2.id
-      assigns[:translations][1].language_id.should == spanish.id
-      assigns[:translations][1].form.should == "Abanana"
+      assigns[:translations][1].idiom_id.should == idiom1.id
+      assigns[:translations][1].language_id.should == english.id
+      assigns[:translations][1].form.should == "Zebra"
 
-      assigns[:translations][2].idiom_id.should == idiom2.id
+      assigns[:translations][2].idiom_id.should == idiom1.id
       assigns[:translations][2].language_id.should == spanish.id
-      assigns[:translations][2].form.should == "Allegra"
+      assigns[:translations][2].form.should == "Cabron"
     end
 
     it 'should redirect to terms_path if the idiom does not exist' do

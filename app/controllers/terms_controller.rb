@@ -206,10 +206,24 @@ class TermsController < ApplicationController
   end
 
   def select
-    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? params[:idiom_id]
-    return error_redirect_to t('notice.not-found'), terms_path unless translation_exists? params[:translation_id]
+    @idiom_id = params[:idiom_id]
+    @translation_id = params[:translation_id]
+    return error_redirect_to t('notice.not-found'), terms_path unless idiom_exists? @idiom_id
+    return error_redirect_to t('notice.not-found'), terms_path unless translation_exists? @translation_id
 
-    @translations = Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where('idiom_id != :idiom_id and languages.enabled = true', :idiom_id => params[:idiom_id])
+    @page = params[:page]
+    @page ||= 1
+    @q = params[:q]
+
+
+    if @q.nil?
+      @q = Translation.find(@translation_id).form
+    end
+
+    
+    @q.gsub!("%", "")
+    @translations = Translation.all_sorted_by_idiom_language_and_form_with_like_filter @q.split(','), @page.to_i
+#    @translations = Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where('idiom_id != :idiom_id and languages.enabled = true', :idiom_id => params[:idiom_id])
   end
 
   def select_for_set

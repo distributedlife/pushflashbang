@@ -1,23 +1,29 @@
 - current_idiom = 0
 
-=render :partial => '/header', :locals => {:title => t('titles.term-select.title'), :subtitle => t('titles.term-select.subtitle')}
-%section{:class => ["panel right"], :style => "width: 15%"}
-  %span.menu= link_to t('actions.cancel'), terms_path
-%section{:class => ["panel left"], :style => "width: 70%"}
-  #translations
-    - @translations.each_with_index do |translation, i|
-      - if translation.idiom_id != current_idiom and !current_idiom.nil?
-        - current_idiom = translation.idiom_id
-        .pad_from_top
-        %span.subscript{:style => "float: right;"}
-          [
-          = link_to t('actions.move-translation-here'), attach_and_detach_term_translation_path(:term_id => current_idiom, :id => params[:translation_id], :remove_from_idiom_id => params[:idiom_id]), :class => 'neutral', :method => :post, :id => "translation_#{current_idiom}_select"
-          ]
-      #translation{:id => i}
-        %span#language.subscript.contrast_faint= translation.languages.name
-        %span#form= translation.form
-        - unless translation.pronunciation.empty?
-          %span#pronunciation= "(#{translation.pronunciation})"
-        - if translation.audio.file?
-          #audio
-            =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
+.container
+  = page_header t('titles.translation-select.title'), t('titles.translation-select.subtitle')
+
+  #translations.content.well
+    = link_to t('actions.cancel'), term_path(:id => params[:idiom_id]), :class => 'btn btn-danger btn-large pull-right'
+    = form_tag(select_terms_path, :method => "post") do
+      = hidden_field_tag(:idiom_id, @idiom_id)
+      = hidden_field_tag(:translation_id, @translation_id)
+      = label_tag(:q, "")
+      = text_field_tag(:q, @q, :placeholder => t('text.search-input'))
+      = submit_tag t('actions.search'), :class => 'btn', :id => 'search_query'
+
+    %hr
+    = show_search_results @translations, @q, @page, @limit, 'move', {:translation_id => @translation_id, :remove_from_idiom_id => @idiom_id}
+    //#translations
+    //  - @translations.each_with_index do |translation, i|
+    //    - if translation.idiom_id != current_idiom and !current_idiom.nil?
+    //      - current_idiom = translation.idiom_id
+    //    #translation{:id => i}
+    //      %span#language{:style => "width: 10em; display: inline-block;"}= translation.languages.name
+    //      %span#form{:style => "display: inline-block;"}= translation.form
+    //      %span#pronunciation{:class => "right", :style => "width: 10em; display: inline-block;"}= translation.pronunciation
+    //      - if translation.audio.file?
+    //        #audio
+    //          =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
+    //      = link_to 'attach translation', attach_term_translation_path(:term_id => params[:idiom_id], :id => translation.id), :class => 'neutral', :method => :post, :id => "translation_#{translation.id}_select"
+    //      = link_to 'move translation', attach_and_detach_term_translation_path(:term_id => params[:idiom_id], :id => translation.id, :remove_from_idiom_id => translation.idiom_id), :class => 'neutral', :method => :post, :id => "translation_#{translation.id}_select_and_remove"

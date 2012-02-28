@@ -32,16 +32,16 @@ module TranslationPagePartsHelper
     render :partial => '/terms/search_results_header_row'
   end
 
-  def search_results_idiom_split_row classname, mode = 'view', idiom_id = nil, set_id = nil
-    render :partial => '/terms/search_results_idiom_split_row', :locals => {:classname => classname, :mode => mode, :idiom_id => idiom_id, :set_id => set_id}
+  def search_results_idiom_split_row classname, mode = 'view', data = {}
+    render :partial => '/terms/search_results_idiom_split_row', :locals => {:classname => classname, :mode => mode, :data => data}
   end
 
   def get_strip idiom_count
     "#{(idiom_count % 2 == 0) ? 'force-stripe' : ''}"
   end
 
-  def show_search_results translations, query, current_page_number, results_per_page_limit, mode, set_id = nil
-    render :partial => '/terms/show_search_results', :locals => {:translations => translations, :q => query, :page => current_page_number, :limit => results_per_page_limit, :mode => mode, :set_id => set_id}
+  def show_search_results translations, query, current_page_number, results_per_page_limit, mode, data = {}
+    render :partial => '/terms/show_search_results', :locals => {:translations => translations, :q => query, :page => current_page_number, :limit => results_per_page_limit, :mode => mode, :data => data}
   end
 
   def create_translation_section translation, i, languages

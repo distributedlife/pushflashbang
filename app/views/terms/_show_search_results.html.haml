@@ -23,6 +23,7 @@
           - classname = get_strip idiom_count
 
           //visually start new idiom
-          = search_results_idiom_split_row classname, mode, current_idiom, set_id
+          - data[:idiom_id] = current_idiom
+          = search_results_idiom_split_row classname, mode, data
 
         = display_translation_as_table_row translation, classname
