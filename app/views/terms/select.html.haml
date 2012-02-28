@@ -14,16 +14,3 @@
 
     %hr
     = show_search_results @translations, @q, @page, @limit, 'move', {:translation_id => @translation_id, :remove_from_idiom_id => @idiom_id}
-    //#translations
-    //  - @translations.each_with_index do |translation, i|
-    //    - if translation.idiom_id != current_idiom and !current_idiom.nil?
-    //      - current_idiom = translation.idiom_id
-    //    #translation{:id => i}
-    //      %span#language{:style => "width: 10em; display: inline-block;"}= translation.languages.name
-    //      %span#form{:style => "display: inline-block;"}= translation.form
-    //      %span#pronunciation{:class => "right", :style => "width: 10em; display: inline-block;"}= translation.pronunciation
-    //      - if translation.audio.file?
-    //        #audio
-    //          =render :partial => '/audio_controls_start_only', :locals => {:audio_url => translation.audio.url, :id => translation.id}
-    //      = link_to 'attach translation', attach_term_translation_path(:term_id => params[:idiom_id], :id => translation.id), :class => 'neutral', :method => :post, :id => "translation_#{translation.id}_select"
-    //      = link_to 'move translation', attach_and_detach_term_translation_path(:term_id => params[:idiom_id], :id => translation.id, :remove_from_idiom_id => translation.idiom_id), :class => 'neutral', :method => :post, :id => "translation_#{translation.id}_select_and_remove"

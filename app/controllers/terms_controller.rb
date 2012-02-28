@@ -223,7 +223,6 @@ class TermsController < ApplicationController
     
     @q.gsub!("%", "")
     @translations = Translation.all_sorted_by_idiom_language_and_form_with_like_filter @q.split(','), @page.to_i
-#    @translations = Translation.joins(:languages).order(:idiom_id).order(:name).order(:form).where('idiom_id != :idiom_id and languages.enabled = true', :idiom_id => params[:idiom_id])
   end
 
   def select_for_set

@@ -1,6 +1,3 @@
-//#idiom_group.centre.row{:id => "#{idiom.id}"}
-//  %h2= language.name
-//  %p if multiple words show here they share meaning
 - Idiom::translations_in_idiom_and_language(idiom.id, language.id).each do |translation|
   - if show_pronunciation
     = display_translation_for_review translation

@@ -154,17 +154,12 @@ When /^I attach "([^"]*)" to the group containing "([^"]*)"$/ do |form, target_g
   add(:idiom, idiom)
 
   goto_page :EditTermPage, Capybara.current_session, sut do |page|
-#    page.attach_translation
     page.move_translation(page.get_index_where_form(form))
   end
 
   idiom_translations = get_translation_group_using_form target_group_form
-#  translation = Translation.where(:form => form).first
   on_page :SelectTermPage, Capybara.current_session do |page|
     page.search_for target_group_form
-#    page.select_term translation.idiom_id
-#    page.select_translation translation.id
-#    page.search_for target_group_form
     page.select_term idiom_translations.first.idiom_id
   end
 end

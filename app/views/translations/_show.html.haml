@@ -15,6 +15,8 @@
   %td
     - if translation.audio.file?
       = display_translation_audio translation
+    - if current_user.in_edit_mode? and set_id.nil?
+      = link_to content_tag('i', '', :class => 'icon-remove'), term_translation_path(translation.idiom_id, translation.id), :method => :delete, :id => "translation_#{translation.id}_delete"
     - if current_user.in_edit_mode? and !set_id.nil?
       = link_to content_tag('i', '', :class => 'icon-remove'), remove_from_set_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_remove_from_set", :method => :put
       = link_to content_tag('i', '', :class => 'icon-chevron-up'), prev_chapter_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_prev_chapter", :method => :post
