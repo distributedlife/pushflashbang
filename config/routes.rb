@@ -126,6 +126,11 @@ PushFlashBang::Application.routes.draw do
       put :update_attribute_on_the_spot
     end
 
+    member do
+      get 'select_for_merge'
+      post 'merge_into'
+    end
+    
     resources :sets, :as => "term_sets" do
       collection do
         get 'select'

@@ -243,6 +243,23 @@ class TermsController < ApplicationController
     end
   end
 
+  def select_for_merge
+    error_redirect_to t('notice.not-found'), terms_path and return unless idiom_exists? params[:id]
+
+    @page = params[:page]
+    @page ||= 1
+    @q = params[:q]
+
+    
+
+    if @q.nil?
+      @translations = []
+    else
+      @q.gsub!("%", "")
+      @translations = Translation.all_sorted_by_idiom_language_and_form_with_like_filter @q.split(','), @page.to_i
+    end
+  end
+
   def first_review
     begin
       native_language_id = current_user.native_language_id
@@ -609,5 +626,18 @@ class TermsController < ApplicationController
     end
 
     redirect_to review_language_set_path(params[:language_id], params[:set_id], :review_mode => params[:review_mode])
+  end
+
+  def merge_into
+    merge_source = params[:id]
+    merge_target = params[:idiom_id]
+
+    error_redirect_to t('notice.not-found'), terms_path and return unless idiom_exists? merge_source
+    error_redirect_to t('notice.not-found'), terms_path and return unless idiom_exists? merge_target
+    
+
+    Idiom.find(merge_source).merge_into merge_target
+
+    redirect_to term_path(merge_target)
   end
 end

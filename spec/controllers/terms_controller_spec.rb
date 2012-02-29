@@ -2088,4 +2088,116 @@ describe TermsController do
       end
     end
   end
+
+  context '"POST" merge_into' do
+    before(:each) do
+      @idiom1 = Idiom.make!
+      @idiom2 = Idiom.make!
+
+      Translation.make!(:idiom_id => @idiom1.id)
+      Translation.make!(:idiom_id => @idiom2.id)
+    end
+
+    it 'should require a valid idiom as a source' do
+      post :merge_into, :id => @idiom1.id + 100, :idiom_id => @idiom2.id
+
+      response.should redirect_to terms_path
+    end
+
+    it 'should require a valid idiom as a merge target' do
+      post :merge_into, :id => @idiom1.id, :idiom_id => @idiom2.id + 100
+
+      response.should redirect_to terms_path
+    end
+
+    it 'should merge the source idiom into the merge target idiom' do
+      post :merge_into, :id => @idiom1.id, :idiom_id => @idiom2.id
+
+      Translation.count.should == 2
+      Translation.all.each {|t| t.idiom_id.should == @idiom2.id }
+      Idiom.count.should == 1
+      Idiom.first.should == @idiom2
+    end
+
+    it 'should redirect into the merged term' do
+      post :merge_into, :id => @idiom1.id, :idiom_id => @idiom2.id
+
+      response.should redirect_to term_path(@idiom2.id)
+    end
+  end
+
+  context '"GET" select_for_merge' do
+    it 'should not return translations in languages that are disabled' do
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
+
+      english = Language.create(:name => "English", :enabled => false)
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+
+      get :select_for_merge, :id => idiom1.id, :q => "ce"
+
+      assigns[:translations][0].idiom_id.should == idiom1.id
+      assigns[:translations][0].language_id.should == chinese.id
+      assigns[:translations][0].form.should == "ce"
+
+      assigns[:translations][1].idiom_id.should == idiom1.id
+      assigns[:translations][1].language_id.should == spanish.id
+      assigns[:translations][1].form.should == "Cabron"
+    end
+
+    it 'should return all terms grouped by idiom and order by language and form except the specified term' do
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
+
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+
+      get :select_for_merge, :id => idiom1.id, :q => "ce"
+
+
+      assigns[:translations][0].idiom_id.should == idiom1.id
+      assigns[:translations][0].language_id.should == chinese.id
+      assigns[:translations][0].form.should == "ce"
+
+      assigns[:translations][1].idiom_id.should == idiom1.id
+      assigns[:translations][1].language_id.should == english.id
+      assigns[:translations][1].form.should == "Zebra"
+
+      assigns[:translations][2].idiom_id.should == idiom1.id
+      assigns[:translations][2].language_id.should == spanish.id
+      assigns[:translations][2].form.should == "Cabron"
+    end
+
+    it 'should redirect to terms_path if the idiom does not exist' do
+      idiom1 = Idiom.make!
+
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+
+      get :select_for_merge, :id => idiom1.id + 100, :q => "ce"
+
+      response.should redirect_to terms_path
+    end
+  end
 end

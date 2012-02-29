@@ -6,6 +6,7 @@
     - if mode == 'edit'
       = edit_term_button data[:idiom_id]
       = add_term_to_set_button data[:idiom_id]
+      = link_to t('actions.merge'), select_for_merge_term_path(:id => data[:idiom_id]), :class => 'btn', :id => "term_#{data[:idiom_id]}_select_for_merge"
     - else
       - if mode == 'select'
         = link_to t('actions.add-to-set'), add_to_set_set_set_term_path(data[:set_id], data[:idiom_id]), :class => 'btn', :method => :put, :id => "term_#{data[:idiom_id]}_select"
@@ -13,5 +14,7 @@
         - unless data[:idiom_id].to_s == data[:remove_from_idiom_id].to_s
           = link_to content_tag('i', '', :class => 'icon-plus'), attach_term_translation_path(:term_id => data[:idiom_id], :id => data[:translation_id]), :method => :post, :id => "term_#{data[:idiom_id]}_select"
           = link_to content_tag('i', '', :class => 'icon-move'), attach_and_detach_term_translation_path(:term_id => data[:idiom_id], :id => data[:translation_id], :remove_from_idiom_id => data[:remove_from_idiom_id]), :method => :post, :id => "term_#{data[:idiom_id]}_select_and_remove"
+      - if mode == 'merge'
+        = link_to t('actions.merge'), merge_into_term_path(:id => params[:id], :idiom_id => data[:idiom_id]), :class => 'btn', :method => :post, :id => "term_#{params[:id]}_merge_into_#{data[:idiom_id]}"
       - else
         &nbsp;

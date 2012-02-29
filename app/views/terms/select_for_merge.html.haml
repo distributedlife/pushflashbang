@@ -1,0 +1,14 @@
+- current_idiom = 0
+
+.container
+  = page_header t('titles.translation-select.title'), t('titles.translation-select.subtitle')
+
+  #translations.content.well
+    = link_to t('actions.cancel'), term_path(:id => params[:id]), :class => 'btn btn-danger btn-large pull-right'
+    = form_tag(select_for_merge_term_path(params[:id]), :method => "get") do
+      = label_tag(:q, "")
+      = text_field_tag(:q, @q, :placeholder => t('text.search-input'))
+      = submit_tag t('actions.search'), :class => 'btn', :id => 'search_query'
+
+    %hr
+    = show_search_results @translations, @q, @page, @limit, 'merge'
