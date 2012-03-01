@@ -7,6 +7,7 @@
     - if current_user.in_edit_mode?
       #edit_options.pull-right
         = edit_term_button idiom_id
+        = link_to t('actions.merge'), select_for_merge_term_path(:id => params[:id]), :class => 'btn', :id => "term_#{params[:id]}_select_for_merge"
       %p &nbsp;
 
     %table.table
