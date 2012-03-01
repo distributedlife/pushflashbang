@@ -1,5 +1,5 @@
 .container
-  = page_header t('titles.translation-create.title'), t('titles.translation-create.subtitle')
+  = page_header t('titles.term-edit.title'), t('titles.term-edit.subtitle')
 
   #translations.content.well
     = semantic_form_for(@idiom, :url => term_path(@idiom.id), :method => :put, :html => {:multipart => true}) do |form|

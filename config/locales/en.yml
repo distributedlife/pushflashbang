@@ -179,6 +179,7 @@ en:
     translation-form: "the translation"
     translation-pronunciation: "the pronunciation"
     translation-audio: "audio"
+    translation-split: "split?"
     typed-answer: "your answer"
   terminology:
     card-front:
@@ -346,6 +347,9 @@ en:
     term-edit:
       title: "Edit term"
       subtitle: "A term represents an idiom translated into multiple languages"
+    term-split:
+      title: "Split term"
+      subtitle: "Split a term into two"
     term-show:
       title: "Term Overview"
       subtitle: "An term is a concept translated into multiple languages"

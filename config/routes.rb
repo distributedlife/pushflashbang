@@ -127,6 +127,8 @@ PushFlashBang::Application.routes.draw do
     end
 
     member do
+      get 'split'
+      post 'seperate'
       get 'select_for_merge'
       post 'merge_into'
     end

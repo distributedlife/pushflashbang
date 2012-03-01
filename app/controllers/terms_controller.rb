@@ -205,6 +205,49 @@ class TermsController < ApplicationController
     @languages = Language.all
   end
 
+  def split
+    error_redirect_to t('notice.not-found'), terms_path and return unless idiom_exists? params[:id]
+
+    @idiom = Idiom.find(params[:id])
+    @translations = all_translations_sorted_correctly_for_idiom params[:id]
+    if @translations.empty?
+      error_redirect_to t('notice.term-no-translations'), terms_path
+    end
+    
+    @languages = Language.all
+  end
+
+  def seperate
+    error_redirect_to t('notice.not-found'), terms_path and return unless idiom_exists? params[:id]
+
+    new_idiom = nil
+
+    translation_params = params[:translation]
+    translation_params.each do |translation|
+      begin
+        next unless translation[1]['split'] == 'Yes'
+
+        t = Translation.find(translation[1]['id'])
+        next unless t.idiom_id == params[:id].to_i
+
+        new_idiom ||= Idiom.find(params[:id]).dup
+        new_idiom.save
+
+        t.idiom_id = new_idiom.id
+        t.save
+      rescue
+        #ignore derps who send invalid translations
+      end
+    end
+
+    
+    if new_idiom.nil?
+      redirect_to split_term_path(params[:id])
+    else
+      success_redirect_to 'The idiom has been split!', term_path(new_idiom.id)
+    end
+  end
+
   def select
     @idiom_id = params[:idiom_id]
     @translation_id = params[:translation_id]

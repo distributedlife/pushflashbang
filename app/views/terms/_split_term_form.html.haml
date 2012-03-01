@@ -1,0 +1,24 @@
+= f.input :id, :as => :hidden
+.row
+  .span25
+    .select.control-group.optional
+      .controls
+        %label split?
+        = select_tag :split, options_for_select(['No', 'Yes']), {:include_blank => false, :id => "translation_#{i}_split", :name => "translation[#{i}][split]"}
+
+  .span25
+    .select.control-group.optional
+      .controls
+        %label= I18n.t('form.translation-language')
+        = text_field_tag :language_id, languages.select {|l| l.id == translation[:language_id]}.first.name, {:disabled => true}
+
+  .span25
+    = f.input :form, :as => :string, :label => I18n.t('form.translation-form'), :required => false, :input_html => { :disabled => true }
+
+  .span25
+    = f.input :pronunciation, :as => :string, :label => I18n.t('form.translation-pronunciation'), :required => false, :input_html => { :disabled => true }
+
+
+:javascript
+  setup_chosen("#translation_#{i}_split")
+  $j("#translation_#{i}_split").chosen();

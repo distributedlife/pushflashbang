@@ -2200,4 +2200,179 @@ describe TermsController do
       response.should redirect_to terms_path
     end
   end
+
+  context '"GET" split' do
+    it 'should redirect to the show all terms path if the idiom is not found' do
+      get :split, :id => 100
+
+      response.should be_redirect
+      response.should redirect_to terms_path
+    end
+
+    it 'should redirect to the show all terms path if the idiom has no translations' do
+      idiom = Idiom.make!
+
+      get :split, :id => idiom.id
+
+      response.should redirect_to terms_path
+    end
+
+    it 'should return the idiom translation terms order by language and form' do
+      idiom1 = Idiom.make!
+      idiom2 = Idiom.make!
+
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      chinese = Language.create(:name => "Chinese")
+
+      term1 = Translation.make!(:idiom_id => idiom1.id, :language_id => english.id, :form => "Zebra")
+      term2 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Allegra")
+      term3 = Translation.make!(:idiom_id => idiom1.id, :language_id => chinese.id, :form => "ce")
+      term4 = Translation.make!(:idiom_id => idiom2.id, :language_id => english.id, :form => "Hobo")
+      term5 = Translation.make!(:idiom_id => idiom1.id, :language_id => spanish.id, :form => "Cabron")
+      term6 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "Abanana")
+
+      get :split, :id => idiom1.id
+
+      assigns[:translations][0].idiom_id.should == idiom1.id
+      assigns[:translations][0].language_id.should == chinese.id
+      assigns[:translations][0].form.should == "ce"
+
+      assigns[:translations][1].idiom_id.should == idiom1.id
+      assigns[:translations][1].language_id.should == english.id
+      assigns[:translations][1].form.should == "Zebra"
+
+      assigns[:translations][2].idiom_id.should == idiom1.id
+      assigns[:translations][2].language_id.should == spanish.id
+      assigns[:translations][2].form.should == "Cabron"
+    end
+  end
+
+  context '"POST" seperate' do
+    it 'should redirect to the show all terms path if the idiom is not found' do
+      post :seperate, :id => 100
+
+      response.should redirect_to terms_path
+    end
+
+    it 'should move all marked as "yes" into a new idiom' do
+      idiom = Idiom.make!
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+
+      post :seperate, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :split => "Yes"
+          },
+          "1" => {
+            :id => translation2.id,
+            :split => "No"
+          }
+        }
+
+      Idiom.count.should == 2
+      Idiom.first.should == idiom
+      Idiom.first.translations.first.should == translation2
+      Idiom.last.translations.first.should == translation1
+    end
+    
+    it 'should ignore invalid translations' do
+      idiom = Idiom.make!
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+
+      post :seperate, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :split => "No"
+          },
+          "1" => {
+            :id => 100,
+            :split => "Yes"
+          }
+        }
+
+      Idiom.count.should == 1
+      Idiom.first.should == idiom
+      idiom.reload
+      idiom.translations.count.should == 2
+    end
+
+    it 'should ignore translations not in the original idiom' do
+      idiom = Idiom.make!
+      idiom2 = Idiom.make!
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+      translation3 = Translation.make!(:idiom_id => idiom2.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+
+      post :seperate, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :split => "No"
+          },
+          "1" => {
+            :id => translation3.id,
+            :split => "Yes"
+          }
+        }
+
+      Idiom.count.should == 2
+      idiom.reload
+      idiom.translations.count.should == 2
+    end
+
+    it 'should redirect to the new term if one is created' do
+      idiom = Idiom.make!
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+
+      post :seperate, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :split => "Yes"
+          },
+          "1" => {
+            :id => translation2.id,
+            :split => "No"
+          }
+        }
+
+      response.should redirect_to term_path(Idiom.last.id)
+    end
+
+    it 'should redirect to the split term page if no term created' do
+      idiom = Idiom.make!
+      english = Language.create(:name => "English")
+      spanish = Language.create(:name => "Spanish")
+      translation1 = Translation.make!(:idiom_id => idiom.id, :language_id => english.id, :form => "hello", :pronunciation => "")
+      translation2 = Translation.make!(:idiom_id => idiom.id, :language_id => spanish.id, :form => "hola", :pronunciation => "")
+
+      post :seperate, :id => idiom.id, :translation =>
+        {
+          "0" => {
+            :id => translation1.id,
+            :split => "No"
+          },
+          "1" => {
+            :id => translation2.id,
+            :split => "No"
+          }
+        }
+
+      response.should redirect_to split_term_path(idiom.id)
+    end
+  end
 end

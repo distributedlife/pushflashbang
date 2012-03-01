@@ -52,6 +52,10 @@ module TranslationPagePartsHelper
     render :partial => '/terms/edit_translation_section', :locals => {:translation => translation, :i => i, :languages => languages}
   end
 
+  def split_translation_section translation, i, languages
+    render :partial => '/terms/split_translation_section', :locals => {:translation => translation, :i => i, :languages => languages}
+  end
+
   def create_translation_header i
     "#{t('text.header-translation-count')} #{i + 1}"
   end
@@ -62,6 +66,10 @@ module TranslationPagePartsHelper
 
   def edit_term_form translation, i, f, languages
     render :partial => 'edit_term_form', :locals => {:translation => translation, :i => i, :f => f, :languages => languages}
+  end
+
+  def split_term_form translation, i, f, languages
+    render :partial => 'split_term_form', :locals => {:translation => translation, :i => i, :f => f, :languages => languages}
   end
 
   def add_translation_button i

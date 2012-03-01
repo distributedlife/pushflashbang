@@ -1,0 +1,13 @@
+.container
+  = page_header t('titles.term-split.title'), t('titles.term-split.subtitle')
+
+  #translations.content.well
+    = semantic_form_for(@idiom, :url => seperate_term_path(@idiom.id), :method => :post, :html => {:multipart => true}) do |form|
+      = form.input :set_id, :as => :hidden, :value => @set_id
+
+      - @translations.each_with_index do |translation, i|
+        #translation{:id => i}
+          = split_translation_section translation, i, @languages
+
+      = form.buttons do
+        = save_translation_button form
