@@ -14,3 +14,4 @@
 
     %hr
     = show_search_results @translations, @q, @page, @limit, 'move', {:translation_id => @translation_id, :remove_from_idiom_id => @idiom_id}
+    = next_page_post_button @next_page, @q

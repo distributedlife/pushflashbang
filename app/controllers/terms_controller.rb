@@ -26,6 +26,8 @@ class TermsController < ApplicationController
 
     @translations = Translation.all_sorted_by_idiom_language_and_form_with_like_filter @q.split(','), @page.to_i
 
+    @next_page = search_terms_path(:q => @q, :page => @page.to_i + 1)
+    
     render :index
   end
 
@@ -263,6 +265,7 @@ class TermsController < ApplicationController
       @q = Translation.find(@translation_id).form
     end
 
+    @next_page = select_terms_path(:q => @q, :page => @page.to_i + 1, :idiom_id => @idiom_id, :translation_id => @translation_id)
     
     @q.gsub!("%", "")
     @translations = Translation.all_sorted_by_idiom_language_and_form_with_like_filter @q.split(','), @page.to_i
@@ -282,8 +285,10 @@ class TermsController < ApplicationController
       @translations = []
     else
       @q.gsub!("%", "")
-      @translations = Translation.all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, @q.split(','), @page
+      @translations = Translation.all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, @q.split(','), @page.to_i
     end
+
+    @next_page = select_for_set_set_set_terms_path(:q => @q, :page => @page.to_i + 1, :set_id => params[:set_id])
   end
 
   def select_for_merge
@@ -301,6 +306,8 @@ class TermsController < ApplicationController
       @q.gsub!("%", "")
       @translations = Translation.all_sorted_by_idiom_language_and_form_with_like_filter @q.split(','), @page.to_i
     end
+
+    @next_page = select_for_merge_term_path(:q => @q, :page => @page.to_i + 1, :id => params[:id])
   end
 
   def first_review

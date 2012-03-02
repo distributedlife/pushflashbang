@@ -4,8 +4,11 @@
   - if current_user.in_edit_mode?
     #translations.row_fluid.span7.well
       = show_search_results @translations, @q, @page, @limit, (current_user.in_edit_mode? ? 'edit' : 'view')
+      = next_page_button @next_page, @q
     .row_fluid.span3.well
       = terms_menu
   - else
     #translations.content.well
       = show_search_results @translations, @q, @page, @limit, (current_user.in_edit_mode? ? 'edit' : 'view')
+      = next_page_button @next_page, @q
+

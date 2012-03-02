@@ -1,6 +1,9 @@
 = semantic_form_for(@set_name, :url => "/sets", :method => :post) do |f|
-  = f.input :name, :as => :string, :label => false, :hint => I18n.t('form.set-name'), :required => false, :wrapper_html => {:class => 'width60'}
-
-  = f.input :description, :as => :text, :label => false, :hint => I18n.t('form.set-description'), :required => false, :wrapper_html => {:class => 'width60'}
-
-  = f.submit I18n.t('actions.save'), :class => 'positive'
+  .row
+    .span3
+      = f.input :name, :as => :string, :label => I18n.t('form.set-name'), :required => false
+    .span3
+      = f.input :description, :as => :text, :label => I18n.t('form.set-description'), :required => false, :input_html => {:rows => '5'}
+  .row
+    .span8
+      = f.submit I18n.t('actions.save'), :class => 'btn btn-large btn-primary'

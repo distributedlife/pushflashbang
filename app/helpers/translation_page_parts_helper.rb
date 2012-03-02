@@ -113,4 +113,16 @@ module TranslationPagePartsHelper
   def display_translation_for_reveal translation
     translation.form
   end
+
+  def next_page_button link, query
+    return if query.blank?
+    
+    link_to 'Next Page', link, :class => 'btn btn-large btn-primary'
+  end
+
+  def next_page_post_button link, query
+    return if query.blank?
+
+    link_to 'Next Page', link, :class => 'btn btn-large btn-primary', :method => :post
+  end
 end

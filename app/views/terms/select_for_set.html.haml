@@ -10,3 +10,4 @@
       = submit_tag t('actions.search'), :class => 'btn', :id => 'search_query'
     %hr
     = show_search_results @translations, @q, @page, @limit, 'select', {:set_id => set_id}
+    = next_page_button @next_page, @q

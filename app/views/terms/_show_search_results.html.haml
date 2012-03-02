@@ -1,5 +1,11 @@
 - if translations.empty?
-  = information t('text.no-translations-found')
+  - if q.blank?
+    = information "Enter your search criterion in to the search box above."
+  - else
+    - if page.to_i > 1
+      = information "No more results found"
+    - else
+      = information t('text.no-translations-found')
 - else
   - idiom_count = 0
   - current_idiom = 0

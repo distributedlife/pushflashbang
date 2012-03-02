@@ -1,5 +1,6 @@
-=render :partial => '/header', :locals => {:title => t('titles.set-create.title'), :subtitle => t('titles.set-create.subtitle')}
-%section{:class => ["panel"]}
-  #create_set{:class => ['left'], :style => "width:100%"}
-    =render :partial => 'create_set_form', :locals => {:set_name => @set_name}
-  .pad
+.container
+  = page_header t('titles.set-create.title'), t('titles.set-create.subtitle')
+
+  .content.well
+    #create_set
+      =render :partial => 'create_set_form', :locals => {:set_name => @set_name}
