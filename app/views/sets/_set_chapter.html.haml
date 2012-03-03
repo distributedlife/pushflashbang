@@ -15,7 +15,7 @@
           - set_terms.each do |set_term|
             - set_term.idioms.each do |idiom|
               - index += 1
-              %li#item{:id => idiom.id}
+              %li#item.force-stripe.well.relative{:id => idiom.id}
                 %strong.pull-right
                   edit chapter:
                   = on_the_spot_edit set_term, :chapter
@@ -32,5 +32,6 @@
 
   $j("#list").sortable({
     opacity:0.5,
-    axis: "y"
+    axis: "y",
+    tolerance: 'pointer'
   });
