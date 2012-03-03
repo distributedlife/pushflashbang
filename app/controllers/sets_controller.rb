@@ -363,4 +363,36 @@ class SetsController < ApplicationController
       success_redirect_to t('notice.set-update'), set_path(params[:id])
     end
   end
+
+  def save_chapter_order
+    set_id = params[:id]
+    
+    error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? set_id
+
+    lowest_position = nil
+    changed_set_terms = []
+    index = 0
+    params[:item].each do |item|
+      set_term = get_first SetTerms.where(:set_id => set_id, :term_id => item)
+      next if set_term.nil?
+
+      if lowest_position.nil? or lowest_position > set_term.position
+        lowest_position = set_term.position
+      end
+
+      set_term.position = index
+
+      changed_set_terms << set_term
+      index += 1
+    end
+
+    changed_set_terms.each do |set_term|
+      set_term.position += lowest_position
+      set_term.save
+    end
+
+    Sets.find(set_id).remove_gaps_in_ordering
+
+    redirect_to set_path(set_id)
+  end
 end

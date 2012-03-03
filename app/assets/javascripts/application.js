@@ -2,6 +2,7 @@
 //= require noconflict
 //= require chosen.jquery.min
 //= require jquery_ujs
+//= require jquery-ui
 //= require jquery.jeditable.mini
 //= require jquery.jeditable.checkbox
 //= require on_the_spot

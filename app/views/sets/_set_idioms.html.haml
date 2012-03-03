@@ -1,11 +1,17 @@
-%table.table
-  %thead
-    %tr
-      %th form
-      %th pronunciation
-      %th language
-      %th &nbsp;
+.table
+  .row
+    .span2
+      %strong form
+    .span2
+      %strong pronunciation
+    .span2
+      %strong language
+    .span1
+      - if current_user.in_edit_mode? and !set_id.nil?
+        //= link_to content_tag('i', '', :class => 'icon-chevron-up'), prev_chapter_set_set_term_path(set_id, idiom.id), :id => "term_#{idiom.id}_prev_chapter", :method => :post
+        //= link_to content_tag('i', '', :class => 'icon-chevron-down'), next_chapter_set_set_term_path(set_id, idiom.id), :id => "term_#{idiom.id}_next_chapter", :method => :post
+        //= link_to content_tag('i', '', :class => 'icon-arrow-up'), prev_position_set_set_term_path(set_id, idiom.id), :id => "term_#{idiom.id}_prev_position", :method => :post
+        //= link_to content_tag('i', '', :class => 'icon-arrow-down'), next_position_set_set_term_path(set_id, idiom.id), :id => "term_#{idiom.id}_next_position", :method => :post
   - idiom.translations.each do |translation|
     - next if Language.where(:id => translation.language_id, :enabled => true).empty?
-    %tbody
-      = display_translation_as_table_row translation, "", set_id
+    = display_translation_as_table_row translation, "", set_id

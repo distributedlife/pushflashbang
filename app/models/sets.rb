@@ -43,4 +43,19 @@ class Sets < ActiveRecord::Base
 
     false
   end
+
+  def remove_gaps_in_ordering
+    chapter = 0
+    last_chapter = 0
+    SetTerms.order(:chapter, :position).where(:set_id => self.id).each_with_index do |set_term, index|
+      if set_term.chapter != last_chapter
+        chapter += 1
+        last_chapter = set_term.chapter
+      end
+      
+      set_term.chapter = chapter
+      set_term.position = index + 1
+      set_term.save!
+    end
+  end
 end

@@ -1259,4 +1259,68 @@ describe SetsController do
       assigns[:due_count].should be 0
     end
   end
+
+  context '"POST" save_chapter_order' do
+    before(:each) do
+      @set = Sets.make!
+      @i1 = Idiom.make!
+      @i2 = Idiom.make!
+      @i3 = Idiom.make!
+      @i4 = Idiom.make!
+      SetTerms.make!(:set_id => @set.id, :term_id => @i1.id, :position => 1)
+      SetTerms.make!(:set_id => @set.id, :term_id => @i2.id, :position => 2)
+      SetTerms.make!(:set_id => @set.id, :term_id => @i3.id, :position => 3)
+    end
+    
+    it 'should require a valid set' do
+      post :save_chapter_order, :id => 234
+
+      response.should redirect_to sets_path
+    end
+
+    it 'should save the chapter order' do
+      
+
+
+      post :save_chapter_order, :id => @set.id, :item => [@i3.id, @i1.id, @i2.id]
+
+
+      SetTerms.where(:set_id => @set.id, :term_id => @i1.id).first.position.should == 2
+      SetTerms.where(:set_id => @set.id, :term_id => @i2.id).first.position.should == 3
+      SetTerms.where(:set_id => @set.id, :term_id => @i3.id).first.position.should == 1
+    end
+
+    it 'should redirect to the show set page' do
+      post :save_chapter_order, :id => @set.id, :item => [@i3.id, @i1.id, @i2.id]
+
+      response.should redirect_to set_path(@set.id)
+    end
+
+    it 'should ignore terms not in the set' do
+      post :save_chapter_order, :id => @set.id, :item => [@i4.id, @i3.id, @i1.id, @i2.id]
+
+      
+      SetTerms.count.should == 3
+      SetTerms.where(:set_id => @set.id, :term_id => @i1.id).first.position.should == 2
+      SetTerms.where(:set_id => @set.id, :term_id => @i2.id).first.position.should == 3
+      SetTerms.where(:set_id => @set.id, :term_id => @i3.id).first.position.should == 1
+    end
+
+    it 'should ensure that the position is kept correct across chapters' do
+      SetTerms.delete_all
+      SetTerms.make!(:set_id => @set.id, :term_id => @i1.id, :position => 1, :chapter => 1)
+      SetTerms.make!(:set_id => @set.id, :term_id => @i2.id, :position => 2, :chapter => 2)
+      SetTerms.make!(:set_id => @set.id, :term_id => @i3.id, :position => 3, :chapter => 2)
+      SetTerms.make!(:set_id => @set.id, :term_id => @i4.id, :position => 2, :chapter => 3)
+
+
+      post :save_chapter_order, :id => @set.id, :item => [@i3.id, @i2.id]
+
+
+      SetTerms.where(:set_id => @set.id, :term_id => @i1.id).first.position.should == 1
+      SetTerms.where(:set_id => @set.id, :term_id => @i2.id).first.position.should == 3
+      SetTerms.where(:set_id => @set.id, :term_id => @i3.id).first.position.should == 2
+      SetTerms.where(:set_id => @set.id, :term_id => @i4.id).first.position.should == 4
+    end
+  end
 end
