@@ -10,7 +10,7 @@
       - if set_terms.empty?
         = information t('text.set-has-no-translations')
       - else
-        %ul#list.no-list-style
+        %ul#list.no-list-style{:id => chapter}
           - index = 0
           - set_terms.each do |set_term|
             - set_term.idioms.each do |idiom|
@@ -22,16 +22,17 @@
                 = render :partial => '/sets/set_idioms', :locals => {:set_id => set_id, :idiom => idiom}
         = link_to 'save order', save_chapter_order_set_path(:id => set_id), :class => 'btn', :id => "save_chapter_#{chapter}_order", :method => :post
 :javascript
+  $j("#list_#{chapter}").sortable({
+    opacity: 0.5,
+    axis: "y",
+    tolerance: "pointer"
+  });
+
   $j("#save_chapter_#{chapter}_order").click(function(event) {
     var link = $j("#save_chapter_#{chapter}_order").attr('href')
 
-    link = link + "?" + $j('#list').sortable('serialize');
+    link = link + "?" + $j('#list_#{chapter}').sortable('serialize');
 
     $j("#save_chapter_#{chapter}_order").attr('href', link);
   });
 
-  $j("#list").sortable({
-    opacity:0.5,
-    axis: "y",
-    tolerance: 'pointer'
-  });

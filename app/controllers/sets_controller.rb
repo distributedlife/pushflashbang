@@ -366,9 +366,10 @@ class SetsController < ApplicationController
 
   def save_chapter_order
     set_id = params[:id]
-    
     error_redirect_to t('notice.not-found'), sets_path and return unless set_exists? set_id
+    return redirect_to set_path(set_id) if params[:item].nil?
 
+    
     lowest_position = nil
     changed_set_terms = []
     index = 0

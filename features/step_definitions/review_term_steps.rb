@@ -361,8 +361,8 @@ Then /^I the term containing "([^"]*)" for language "([^"]*)" should have a succ
   idiom = get_idiom_containing_form containing_form
   language = get_language(language_name)
 
-  review = UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
-  review.first.success.should == true
+  review = get_first UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
+  review.success.should == true
 end
 
 Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an unsuccessful "([^"]*)" review$/ do |containing_form, language_name, review_type|
@@ -371,8 +371,8 @@ Then /^I the term containing "([^"]*)" for language "([^"]*)" should have an uns
   idiom = get_idiom_containing_form containing_form
   language = get_language(language_name)
 
-  review = UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
-  review.first.success.should == false
+  review = get_first UserIdiomReview.where(:idiom_id => idiom.id, :user_id => get(:user).id, :language_id => language.id, :review_type => UserIdiomReview.to_review_type_int(review_type))
+  review.success.should == false
 end
 
 Then /^I should be on chapter (\d+)$/ do |chapter|

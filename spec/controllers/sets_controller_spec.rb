@@ -1279,9 +1279,6 @@ describe SetsController do
     end
 
     it 'should save the chapter order' do
-      
-
-
       post :save_chapter_order, :id => @set.id, :item => [@i3.id, @i1.id, @i2.id]
 
 
@@ -1321,6 +1318,15 @@ describe SetsController do
       SetTerms.where(:set_id => @set.id, :term_id => @i2.id).first.position.should == 3
       SetTerms.where(:set_id => @set.id, :term_id => @i3.id).first.position.should == 2
       SetTerms.where(:set_id => @set.id, :term_id => @i4.id).first.position.should == 4
+    end
+
+    it 'should do nothing if no items are supplied' do
+      post :save_chapter_order, :id => @set.id
+
+
+      SetTerms.where(:set_id => @set.id, :term_id => @i1.id).first.position.should == 1
+      SetTerms.where(:set_id => @set.id, :term_id => @i2.id).first.position.should == 2
+      SetTerms.where(:set_id => @set.id, :term_id => @i3.id).first.position.should == 3
     end
   end
 end
