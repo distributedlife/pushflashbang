@@ -5,6 +5,7 @@
 //= require jquery-ui
 //= require jquery.jeditable.mini
 //= require jquery.jeditable.checkbox
+//= require jquery.timers.1.2
 //= require on_the_spot
 //= require twitter/bootstrap
 //= require flash

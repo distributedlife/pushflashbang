@@ -29,7 +29,7 @@
           });
 
           $j("#save_chapter_#{chapter}_order").click(function(event) {
-            var link = $j("#save_chapter_#{chapter}_order").attr('href')
+            var link = $j("#save_chapter_#{chapter}_order").attr('href');
 
             link = link + "?" + $j('#list_#{chapter}').sortable('serialize');
 
