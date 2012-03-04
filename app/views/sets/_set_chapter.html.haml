@@ -21,18 +21,18 @@
                   = on_the_spot_edit set_term, :chapter
                 = render :partial => '/sets/set_idioms', :locals => {:set_id => set_id, :idiom => idiom}
         = link_to 'save order', save_chapter_order_set_path(:id => set_id), :class => 'btn', :id => "save_chapter_#{chapter}_order", :method => :post
-:javascript
-  $j("#list_#{chapter}").sortable({
-    opacity: 0.5,
-    axis: "y",
-    tolerance: "pointer"
-  });
+        :javascript
+          $j("#list_#{chapter}").sortable({
+            opacity: 0.5,
+            axis: "y",
+            tolerance: "pointer"
+          });
 
-  $j("#save_chapter_#{chapter}_order").click(function(event) {
-    var link = $j("#save_chapter_#{chapter}_order").attr('href')
+          $j("#save_chapter_#{chapter}_order").click(function(event) {
+            var link = $j("#save_chapter_#{chapter}_order").attr('href')
 
-    link = link + "?" + $j('#list_#{chapter}').sortable('serialize');
+            link = link + "?" + $j('#list_#{chapter}').sortable('serialize');
 
-    $j("#save_chapter_#{chapter}_order").attr('href', link);
-  });
+            $j("#save_chapter_#{chapter}_order").attr('href', link);
+          });
 
