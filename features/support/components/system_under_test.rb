@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module SystemUnderTest
   def init
     @stack ||= HashWithIndifferentAccess.new

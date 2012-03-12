@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module PagePartsHelper
   def page_header title = "", subtitle = ""
     render :partial => '/common/page_header', :locals => {:title => title, :subtitle => subtitle}

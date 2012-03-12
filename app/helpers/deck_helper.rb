@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module DeckHelper
   def is_pronunciation_on_front? side
     return side == 'front'

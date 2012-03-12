@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module TestWorld
   def on_page page_name, session
     page = BasePage.new session

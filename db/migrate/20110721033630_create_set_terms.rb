@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateSetTerms < ActiveRecord::Migration
   def self.up
     create_table :set_terms do |t|

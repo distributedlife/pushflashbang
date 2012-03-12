@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Scrap
 	COMMIFY_REGEX = /(\d)(?=(\d\d\d)+(?!\d))/
 	CRLF = "\r\n"

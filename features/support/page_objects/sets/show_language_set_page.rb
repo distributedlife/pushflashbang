@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 load 'features/support/page_objects/sets/show_set_page.rb'
 
 module ShowLanguageSetPage

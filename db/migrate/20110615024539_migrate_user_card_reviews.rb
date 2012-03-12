@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class MigrateUserCardReviews < ActiveRecord::Migration
   def self.up
     #create column to store migrate data

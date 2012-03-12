@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module SetPagePartsHelper
   def user_sets
     render :partial => '/sets/user_sets'

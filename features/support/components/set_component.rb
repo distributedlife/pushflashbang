@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module SetComponent
   def create_set hash
     verify_set_prerequisites

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddPositionToSetTerms < ActiveRecord::Migration
   def self.up
     add_column :set_terms, :position, :integer

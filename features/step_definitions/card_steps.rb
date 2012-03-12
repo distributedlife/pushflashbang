@@ -1,6 +1,7 @@
+# -*- encoding : utf-8 -*-
 And /^I am logged in and have created a deck$/ do
-  And %{I am a new, authenticated user}
-  And %{I have created a deck}
+  step %{I am a new, authenticated user}
+  step %{I have created a deck}
 end
 
 And /^I have created multiple cards$/ do
@@ -37,7 +38,7 @@ And /^I have created a card with audio$/ do
 end
 
 And /^I have created a card without audio$/ do
-  And %{I have created a card}
+  step %{I have created a card}
 end
 
 And /^I create a card without a front$/ do
@@ -65,7 +66,7 @@ And /^I change all deck properties$/ do
     page.pronunciation = "cheese"
     #    attach_file('card_audio', 'features/support/paperclip/card/ash.jpg')
 
-    And %{I attach an "audio" "mp3" file to a "card" on S3}
+    step %{I attach an "audio" "mp3" file to a "card" on S3}
   end
 end
 
@@ -93,15 +94,15 @@ And /^I can see the card changes$/ do
   get(:card).reload
 
   on_page :ShowCardPage, Capybara.current_session do |page|
-    And %{I should not see "#{get(:original_card).front}"}
-    And %{I should not see "#{get(:original_card).back}"}
-    And %{I should not see "#{get(:original_card).pronunciation}"}
+    step %{I should not see "#{get(:original_card).front}"}
+    step %{I should not see "#{get(:original_card).back}"}
+    step %{I should not see "#{get(:original_card).pronunciation}"}
 
-    And %{I should see "#{get(:card).front}"}
-    And %{I should see "#{get(:card).back}"}
-    And %{I should see "#{get(:card).pronunciation}"}
+    step %{I should see "#{get(:card).front}"}
+    step %{I should see "#{get(:card).back}"}
+    step %{I should see "#{get(:card).pronunciation}"}
 
-    And %{I should see audio tags}
+    step %{I should see audio tags}
   end
 end
 
@@ -111,13 +112,13 @@ end
 
 And /^I should see all cards in the deck$/ do
   Card.where(:deck_id => get(:deck_id)).each do |card|
-    And %{I should see "#{card.front}"}
+    step %{I should see "#{card.front}"}
   end
 end
 
 And /^I should see the pronunciation$/ do
   get(:card).pronunciation.split(" ").each do |word|
-    And %{I should see "#{word}"}
+    step %{I should see "#{word}"}
   end
 end
 

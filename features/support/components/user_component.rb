@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module UserComponent
   def create_user
     english = ensure_language_exists "English"
@@ -6,7 +7,7 @@ module UserComponent
   end
 
   def log_in_user
-    And %{I login with "#{get(:user).email}" and "#{get(:user).password}"}
+    step %{I login with "#{get(:user).email}" and "#{get(:user).password}"}
   end
 
   def ensure_user_exists_and_is_logged_in

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddReviewTypesToDeck < ActiveRecord::Migration
   def self.up
     add_column :decks, :review_types, :integer

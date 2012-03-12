@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module ShowSetsPage
   def is_get?
     true

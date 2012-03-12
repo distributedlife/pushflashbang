@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateUserIdiomSchedules < ActiveRecord::Migration
   def self.up
     create_table :user_idiom_schedules do |t|

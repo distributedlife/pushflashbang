@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 Given /^the term containing "([^"]*)" in "([^"]*)" is due$/ do |containing_form, language_name|
   idiom = get_idiom_containing_form containing_form
   language = get_language(language_name)

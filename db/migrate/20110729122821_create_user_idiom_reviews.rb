@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateUserIdiomReviews < ActiveRecord::Migration
   def self.up
     create_table :user_idiom_reviews do |t|

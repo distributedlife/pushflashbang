@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Deck < ActiveRecord::Base
   has_paper_trail
   

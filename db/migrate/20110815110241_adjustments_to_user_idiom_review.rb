@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AdjustmentsToUserIdiomReview < ActiveRecord::Migration
   def self.up
     remove_column :user_idiom_reviews, :result_success

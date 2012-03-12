@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateCardTimings < ActiveRecord::Migration
   def self.up
     create_table :card_timings do |t|

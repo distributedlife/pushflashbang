@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 Delayed::Worker.destroy_failed_jobs = false
 silence_warnings do
   Delayed::Worker.sleep_delay = 60

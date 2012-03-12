@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 Given /^the "([^"]*)" language has been created$/ do |language_name|
   add(:language, create_language(language_name))
 end
@@ -19,9 +20,9 @@ And /^I am a new, authenticated user$/ do
   email = 'user@testing.com'
   password = 'password'
 
-  And %{the "English" language has been created}
-  And %{I have one user "#{email}" with password "#{password}"}
-  And %{I login with "#{email}" and "#{password}"}
+  step %{the "English" language has been created}
+  step %{I have one user "#{email}" with password "#{password}"}
+  step %{I login with "#{email}" and "#{password}"}
 end
 
 And /^I have one\s+user "([^\"]*)" with password "([^\"]*)"$/ do |email, password|
@@ -29,10 +30,11 @@ And /^I have one\s+user "([^\"]*)" with password "([^\"]*)"$/ do |email, passwor
 end
 
 And /^I login with "([^\"]*)" and "([^\"]*)"$/ do |email, password|
-  And %{I go to the "user login" page}
-  And %{I fill in "user_email" with "#{email}"}
-  And %{I fill in "user_password" with "#{password}"}
-  And %{I press "Login"}
+  step %{I go to the "user login" page}
+  step %{I fill in "user_email" with "#{email}"}
+  step %{I fill in "user_password" with "#{password}"}
+  find_by_id('do_login').click
+
 
   add(:email, email)
   add(:password, password)
@@ -41,11 +43,11 @@ And /^I login with "([^\"]*)" and "([^\"]*)"$/ do |email, password|
 end
 
 And /^I log in as "([^"]*)"$/ do |email|
-  And %{I login with "#{email}" and "#{get(:password)}"}
+  step %{I login with "#{email}" and "#{get(:password)}"}
 end
 
 And /^I log in using a password of "([^"]*)"$/ do |password|
-  And %{I login with "#{get(:email)}" and "#{password}"}
+  step %{I login with "#{get(:email)}" and "#{password}"}
 end
 
 And /^I change my email address to "([^"]*)"$/ do |email|

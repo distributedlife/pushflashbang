@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module LanguageComponent
   def ensure_languages_exist table
     # make! sure our languages exist before we go to the page

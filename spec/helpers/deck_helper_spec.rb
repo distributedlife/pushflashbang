@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'spec_helper'
 
 describe DeckHelper do
@@ -51,11 +52,11 @@ describe DeckHelper do
     end
 
     it 'should consider multi byte chars' do
-      get_size_in_bytes("ā").should == 2
+      get_size_in_bytes("ā").should == 1
     end
 
     it 'should consider mixed byte strings' do
-      get_size_in_bytes("āa").should == 3
+      get_size_in_bytes("āa").should == 2
     end
   end
 

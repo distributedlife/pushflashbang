@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 Given /^the user native language is "([^"]*)"$/ do |language_name|
   language = get_language language_name
 

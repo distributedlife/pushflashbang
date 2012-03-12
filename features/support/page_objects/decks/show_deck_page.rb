@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module ShowDeckPage
   def is_get?
     true

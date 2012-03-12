@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module TranslationHelper
   def all_translations_sorted_correctly
     Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").all

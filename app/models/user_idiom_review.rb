@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class UserIdiomReview < ActiveRecord::Base
   attr_accessible :user_id, :idiom_id, :language_id, :review_type, :due, :review_start, :reveal, :result_recorded, :success, :interval
 

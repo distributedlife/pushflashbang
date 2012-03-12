@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 Then /^the translation "([^"]*)" is related to translation "([^"]*)" by meaning$/ do |t1_form, t2_form|
   t1 = get_translation_using_form(t1_form).first
   t2 = get_translation_using_form(t2_form).last

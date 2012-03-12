@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 include LanguagesHelper
 
 class LanguagesController < ApplicationController

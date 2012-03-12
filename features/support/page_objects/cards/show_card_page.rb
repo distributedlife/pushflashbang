@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module ShowCardPage
   def is_get?
     true

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class BasePage
   def initialize session
     @session = session

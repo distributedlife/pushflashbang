@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module DeckSessionPage
   def is_get?
     true

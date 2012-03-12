@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module CreateDeckPage
   def is_get?
     false

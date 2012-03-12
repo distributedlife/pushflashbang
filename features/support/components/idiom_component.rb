@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module IdiomComponent
   def create_idiom
     verify_idiom_prerequisites

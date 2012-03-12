@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CardTiming < ActiveRecord::Base
   attr_accessible :seconds
 

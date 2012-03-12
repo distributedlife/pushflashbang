@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 include ArrayHelper
 
 class RelatedTranslations < ActiveRecord::Base

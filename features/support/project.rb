@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'bermuda/cucumber'
 
 #add blueprints path (needed to cuke steps to access blueprints)

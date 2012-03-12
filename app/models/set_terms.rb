@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class SetTerms < ActiveRecord::Base
   has_many :idioms, :class_name => "Idiom", :primary_key => :term_id, :foreign_key => :id
 

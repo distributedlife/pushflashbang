@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module ReviewSetPage
   def is_get?
     true

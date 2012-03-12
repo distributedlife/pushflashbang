@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddEnabledToLanguage < ActiveRecord::Migration
   def self.up
     add_column :languages, :enabled, :boolean, :default => true

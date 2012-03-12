@@ -1,4 +1,4 @@
-# encoding: utf-8
+# -*- encoding : utf-8 -*-
 Formtastic::Helpers::FormHelper.builder = FormtasticBootstrap::FormBuilder
 # --------------------------------------------------------------------------------------------------
 # Please note: If you're subclassing Formtastic::SemanticFormBuilder in a Rails 3 project, 
@@ -43,8 +43,8 @@ Formtastic::Helpers::FormHelper.builder = FormtasticBootstrap::FormBuilder
 # Formtastic uses the following classes as default for hints, inline_errors and error list
 
 # If you override the class here, please ensure to override it in your formtastic_changes.css stylesheet as well
-Formtastic::SemanticFormBuilder.default_hint_class = "strong"
-Formtastic::SemanticFormBuilder.default_inline_error_class = "help"
+# Formtastic::SemanticFormBuilder.default_hint_class = "strong"
+# Formtastic::SemanticFormBuilder.default_inline_error_class = "help"
 # Formtastic::SemanticFormBuilder.default_hint_class = "inline-hints"
 # Formtastic::SemanticFormBuilder.default_inline_error_class = "inline-errors"
 # Formtastic::SemanticFormBuilder.default_error_list_class = "errors"
@@ -77,7 +77,7 @@ Formtastic::FormBuilder.custom_inline_order[:select] = [:hints, :errors, :input]
 # Specifies if labels/hints for input fields automatically be looked up using I18n.
 # Default value: false. Overridden for specific fields by setting value to true,
 # i.e. :label => true, or :hint => true (or opposite depending on initialized value)
-Formtastic::SemanticFormBuilder.i18n_lookups_by_default = true
+Formtastic::FormBuilder.i18n_lookups_by_default = true
 
 # You can add custom inputs or override parts of Formtastic by subclassing SemanticFormBuilder and
 # specifying that class here.  Defaults to SemanticFormBuilder.

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module SetHelper
   def set_exists? id
     Sets::exists? id

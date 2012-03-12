@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddSharedToDeck < ActiveRecord::Migration
   def self.up
     add_column :decks, :shared, :boolean, :default => false

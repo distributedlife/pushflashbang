@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AddTermPage
   def is_get?
     true

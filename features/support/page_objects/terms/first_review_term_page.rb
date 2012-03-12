@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module FirstReviewTermPage
   def is_get?
     true

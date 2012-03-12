@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 PushFlashBang::Application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations" }
 

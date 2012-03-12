@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module IdiomHelper
   def idiom_exists? idiom_id
     Idiom::exists? idiom_id

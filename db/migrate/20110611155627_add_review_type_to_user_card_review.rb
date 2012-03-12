@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddReviewTypeToUserCardReview < ActiveRecord::Migration
   def self.up
     add_column :user_card_reviews, :review_type, :integer

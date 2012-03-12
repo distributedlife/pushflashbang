@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 def string_to_class_symbol string
   string.titleize.delete(' ').to_sym
 end
@@ -23,7 +24,7 @@ And /^I should be on the "([^"]*)" page$/ do |page_name|
 
   on_page page_symbol, Capybara.current_session do |page|
     unless page.is_current_page?
-      And %{show me the page}
+      step %{show me the page}
     end
 
     page.is_current_page?.should == true

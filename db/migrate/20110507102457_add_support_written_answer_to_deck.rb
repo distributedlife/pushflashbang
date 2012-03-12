@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddSupportWrittenAnswerToDeck < ActiveRecord::Migration
   def self.up
     add_column :decks, :supports_written_answer, :boolean

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module RedirectHelper
   def log message
     puts "User (#{current_user.email}) redirected: #{message}"

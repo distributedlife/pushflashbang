@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class RebuildAllRelationshipsJob
   def perform
     start = Time.now

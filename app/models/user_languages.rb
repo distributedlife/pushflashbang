@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class UserLanguages < ActiveRecord::Base
   attr_accessible :language_id, :user_id
 

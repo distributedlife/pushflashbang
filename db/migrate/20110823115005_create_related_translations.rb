@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateRelatedTranslations < ActiveRecord::Migration
   def self.up
     create_table :related_translations do |t|

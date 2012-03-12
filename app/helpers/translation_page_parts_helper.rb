@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module TranslationPagePartsHelper
   def display_translation_as_table_row translation, classname = "", set_id = nil
     render :partial => '/translations/show', :locals => {:translation => translation, :set_id => set_id, :classname => classname}

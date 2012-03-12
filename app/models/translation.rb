@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Translation < ActiveRecord::Base
   belongs_to :languages, :class_name => "Language", :foreign_key => "language_id"
   

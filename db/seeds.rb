@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 Delayed::Job.enqueue UploadDictionaryJob.new("french", "en-fr-a")
 Delayed::Job.enqueue UploadDictionaryJob.new("french", "en-fr-b")
 Delayed::Job.enqueue UploadDictionaryJob.new("french", "en-fr-c")

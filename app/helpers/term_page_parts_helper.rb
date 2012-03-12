@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module TermPagePartsHelper
   def ok_first_review_button
     link_to t('actions.ok'), '#', :class => 'btn btn-large btn-primary', :method => :post, :id => "do_results"

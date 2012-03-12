@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateUserCardSchedules < ActiveRecord::Migration
   def self.up
     create_table :user_card_schedules do |t|

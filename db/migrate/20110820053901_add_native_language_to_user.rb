@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddNativeLanguageToUser < ActiveRecord::Migration
   def self.up
     add_column :users, :native_language_id, :integer

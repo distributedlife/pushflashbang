@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 include RedirectHelper
 
 class InfoController < ApplicationController

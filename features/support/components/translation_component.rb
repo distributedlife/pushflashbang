@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module TranslationComponent
   def create_translation hash
     verify_translation_prerequisites

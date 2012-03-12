@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module UserIdiomScheduleComponent
   def create_schedule_and_due_items user_id, idiom_id, language_id, due_date
     schedule = UserIdiomSchedule.create(:user_id => user_id, :idiom_id => idiom_id, :language_id => language_id)

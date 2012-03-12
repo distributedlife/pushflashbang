@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 And /^I create a deck$/ do
   on_page :CreateDeckPage, Capybara.current_session do |page|
     page.create_deck "my deck", "this is my deck of stuff to learn"
@@ -91,10 +92,10 @@ And /^the deck should be updated$/ do
   get(:deck).reload
   
   on_page :ShowDeckPage, Capybara.current_session do |page|
-    And %{I should not see "#{get(:original_deck).name}"}
-    And %{I should not see "#{get(:original_deck).description}"}
-    And %{I should see "#{get(:deck).name}"}
-    And %{I should see "#{get(:deck).description}"}
+    step %{I should not see "#{get(:original_deck).name}"}
+    step %{I should not see "#{get(:original_deck).description}"}
+    step %{I should see "#{get(:deck).name}"}
+    step %{I should see "#{get(:deck).description}"}
   end
 end
 
@@ -102,10 +103,10 @@ And /^the deck is not updated$/ do
   get(:deck).reload
 
   on_page :ShowDeckPage, Capybara.current_session do |page|
-    And %{I should not see "#{get(:deck).name}"}
-    And %{I should not see "#{get(:deck).description}"}
-    And %{I should see "#{get(:edited_deck_name)}"}
-    And %{I should see "#{get(:edited_deck_description)}"}
+    step %{I should not see "#{get(:deck).name}"}
+    step %{I should not see "#{get(:deck).description}"}
+    step %{I should see "#{get(:edited_deck_name)}"}
+    step %{I should see "#{get(:edited_deck_description)}"}
   end
 end
 
@@ -117,9 +118,9 @@ And /^I can see all of my decks$/ do
   decks = Deck.where(:user_id => get(:user).id)
 
   decks.each do |deck|
-    And %{I should see "#{deck.name}"}
-    And %{I should see "#{deck.description}"}
-    And %{I should see "#{deck.pronunciation_side}"}
+    step %{I should see "#{deck.name}"}
+    step %{I should see "#{deck.description}"}
+    step %{I should see "#{deck.pronunciation_side}"}
   end
 end
 
@@ -128,10 +129,10 @@ And /^I will not see decks created by other users$/ do
 
   decks.each do |deck|
     if deck.user_id != get(:user).id
-      And %{I should not see "#{deck.name}"}
+      step %{I should not see "#{deck.name}"}
 
       unless deck.description.nil?
-        And %{I should not see "#{deck.description}"}
+        step %{I should not see "#{deck.description}"}
       end
     end
   end
@@ -143,18 +144,18 @@ And /^I will see shared decks created by other users$/ do
   decks.each do |deck|
     if deck.user_id != get(:user).id
       if deck.shared == true
-        And %{I should see "#{deck.name}"}
-        And %{I should see "#{deck.pronunciation_side}"}
+        step %{I should see "#{deck.name}"}
+        step %{I should see "#{deck.pronunciation_side}"}
 
         unless deck.description.nil?
-          And %{I should see "#{deck.description}"}
+          step %{I should see "#{deck.description}"}
         end
       else
-        And %{I should not see "#{deck.name}"}
-        And %{I should not see "#{deck.pronunciation_side}"}
+        step %{I should not see "#{deck.name}"}
+        step %{I should not see "#{deck.pronunciation_side}"}
 
         unless deck.description.nil?
-          And %{I should not see "#{deck.description}"}
+          step %{I should not see "#{deck.description}"}
         end
       end
     end
@@ -174,11 +175,11 @@ Then /^the deck should not be shared$/ do
 end
 
 And /^I should see the card count$/ do
-  And %{I should see "#{Card.where(:deck_id => get(:deck_id)).count}"}
+  step %{I should see "#{Card.where(:deck_id => get(:deck_id)).count}"}
 end
 
 And /^I should see the card due count$/ do
-  And %{I should see "#{UserCardSchedule.get_due_count_for_user_for_deck(get(:user).id, get(:deck_id))}"}
+  step %{I should see "#{UserCardSchedule.get_due_count_for_user_for_deck(get(:user).id, get(:deck_id))}"}
 end
 
 And /^I should see an input field to type my answer$/ do
@@ -200,9 +201,9 @@ And /^I type the answer incorrectly$/ do
 end
 
 And /^I should see my answer was correct$/ do
-  And %{I should see "is correct"}
+  step %{I should see "is correct"}
 end
 
 And /^I should see my answer was incorrect$/ do
-  And %{I should see "is not correct"}
+  step %{I should see "is not correct"}
 end

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddLanguageReferenceToTranslation < ActiveRecord::Migration
   def self.up
     add_column :translations, :language_id, :integer

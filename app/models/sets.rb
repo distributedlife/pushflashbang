@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Sets < ActiveRecord::Base
   has_many :set_name
   has_many :set_terms, :class_name => "SetTerms", :foreign_key => "set_id"

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddChapter < ActiveRecord::Migration
   def self.up
     add_column :cards, :chapter, :integer

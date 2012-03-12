@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddPronunciationSideToDeck < ActiveRecord::Migration
   def self.up
     add_column :decks, :pronunciation_side, :string

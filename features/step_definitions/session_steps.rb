@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 And /^reference data has been loaded$/ do
   CardTiming.create(:seconds => 5)                            # 5 seconds
   CardTiming.create(:seconds => 25)                           # 25 seconds
@@ -38,7 +39,7 @@ And /^the next due card is in the next chapter$/ do
   user_deck = UserDeckChapter.make!(:user_id => get(:user).id, :deck_id => get(:deck_id)) unless user_deck.nil?
 
   #all scheduled cards are made not due
-  And %{there are no cards due}
+  step %{there are no cards due}
 
   Card.all.each do |card|
     next unless UserCardSchedule.where(:user_id => get(:user).id, :card_id => card.id).first.nil?
@@ -54,20 +55,20 @@ end
 
 And /^the first due card is shown$/ do
   scheduled_card = Card.find(UserCardSchedule.order(:due).find(:first, :conditions => ["user_id = ? and due <= ?", get(:user).id, Time.now]).card_id)
-  And %{I should see "#{scheduled_card.front}"}
+  step %{I should see "#{scheduled_card.front}"}
 end
 
 When /^I have reviewed a card with an interval of (\d+)$/ do |interval|
-  Given %{there are cards due}
-  And %{the card interval is #{interval}}
-  And %{I go to the "deck session" page}
-  And %{I click on "Reveal"}
+  step %{there are cards due}
+  step %{the card interval is #{interval}}
+  step %{I go to the "deck session" page}
+  step %{I click on "Reveal"}
 end
 
 When /^I have reviewed a new card$/ do
-  Given %{there are cards due}
-  And %{I go to the "deck session" page}
-  And %{I click on "Reveal"}
+  step %{there are cards due}
+  step %{I go to the "deck session" page}
+  step %{I click on "Reveal"}
 end
 
 And /^the card has been reviewed before$/ do
@@ -75,38 +76,38 @@ And /^the card has been reviewed before$/ do
 end
 
 And /^I take (\d+) seconds to review a card that is not new$/ do |seconds|
-  And %{there are cards due}
-  And %{the card has been reviewed before}
-  And %{I go to the "deck session" page}
+  step %{there are cards due}
+  step %{the card has been reviewed before}
+  step %{I go to the "deck session" page}
   sleep seconds.to_i
-  And %{I click on "Reveal"}
+  step %{I click on "Reveal"}
 end
 
 
 And /^a new card is scheduled$/ do
-  And %{there are no cards due}
-  And %{there are cards due later}
-  And %{there are unscheduled cards}
-  And %{I go to the "deck session" page}
+  step %{there are no cards due}
+  step %{there are cards due later}
+  step %{there are unscheduled cards}
+  step %{I go to the "deck session" page}
 end
 
 And /^I have reviewed a card$/ do
-  And %{there are cards due}
-  And %{I go to the "deck session" page}
-  And %{I click on "Reveal"}
+  step %{there are cards due}
+  step %{I go to the "deck session" page}
+  step %{I click on "Reveal"}
 end
 
 And /^I am reviewing a card$/ do
-  And %{there are cards due}
-  And %{I go to the "deck session" page}
+  step %{there are cards due}
+  step %{I go to the "deck session" page}
 end
 
 When /^a card is scheduled$/ do
-  And %{I go to the "deck session" page}
+  step %{I go to the "deck session" page}
 end
 
 And /^I record my result$/ do
-  And %{I click on "Too Easy! Show me this less often"}
+  step %{I click on "Too Easy! Show me this less often"}
   sleep 0.5
 end
 
@@ -115,9 +116,9 @@ And /^I review the same card again$/ do
   card_schedule.due = 10.days.ago
   card_schedule.save!
 
-  And %{I go to the "deck session" page}
-  And %{I click on "Reveal"}
-  And %{I click on "Too Easy! Show me this less often"}
+  step %{I go to the "deck session" page}
+  step %{I click on "Reveal"}
+  step %{I click on "Too Easy! Show me this less often"}
   sleep 0.5
 end
 
@@ -127,7 +128,6 @@ And /^the card interval should be (\d+)$/ do |interval|
 end
 
 And /^the interval should be (\d+) to the next plus up to (\d+) percent$/ do |interval, range|
-#And /^the interval should be (\d+) to the next plus or minus (\d+) seconds$/ do |interval, range|
   interval = interval.to_i
   range = range.to_i
   range = (range / 100) + 1
@@ -220,7 +220,7 @@ end
 And /^the first card in the deck is shown$/ do
   scheduled_card = Card.find(UserCardSchedule.first.card_id)
 
-  And %{I should see "#{scheduled_card.front}"}
+  step %{I should see "#{scheduled_card.front}"}
 end
 
 And /^there are unscheduled cards$/ do
@@ -243,7 +243,7 @@ end
 And /^the first unscheduled card is shown$/ do
   cards = Card.find_by_sql("SELECT * from cards where id not in (select card_id from user_card_schedules where id not in (select max(id) from user_card_schedules))")
 
-  And %{I should see "#{cards.first.front}"}
+  step %{I should see "#{cards.first.front}"}
 end
 
 And /^there are no unscheduled cards$/ do
@@ -259,23 +259,23 @@ And /^there are no cards in the deck$/ do
 end
 
 And /^the number of cards due is shown$/ do
-  And %{I should see "#{UserCardSchedule.get_due_count_for_user(get(:user).id)}"}
+  step %{I should see "#{UserCardSchedule.get_due_count_for_user(get(:user).id)}"}
 end
 
 And /^I should see the back of the card$/ do
   scheduled_card = Card.find(UserCardSchedule.order(:due).find(:first, :conditions => ["user_id = ? and due <= ?", get(:user).id, Time.now]).card_id)
-  And %{I should see "#{scheduled_card.back}"}
+  step %{I should see "#{scheduled_card.back}"}
 end
 
 And /^I click on the "([^"]*)" button$/ do |button_number|
   if button_number == "first"
-    And %{I click on "I didn't know the answer"}
+    step %{I click on "I didn't know the answer"}
   elsif button_number == "second"
-    And %{I click on "I knew some of the answer"}
+    step %{I click on "I knew some of the answer"}
   elsif button_number == "third"
-    And %{I click on "I was shaky but I got it"}
+    step %{I click on "I was shaky but I got it"}
   elsif button_number == "fourth"
-    And %{I click on "Too Easy! Show me this less often"}
+    step %{I click on "Too Easy! Show me this less often"}
   end
   sleep 0.5
 end
@@ -313,7 +313,7 @@ end
 
 And /^I should see when each card is scheduled to be reviewed$/ do
   UserCardSchedule.all.each do |scheduled_card|
-    And %{I should see "#{Card.find(scheduled_card.card_id).front}"}
-    And %{I should see "due in 1 day"}
+    step %{I should see "#{Card.find(scheduled_card.card_id).front}"}
+    step %{I should see "due in 1 day"}
   end
 end

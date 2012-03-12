@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module UserHomePage
   def is_get?
     true

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 include DeckHelper
 include RedirectHelper
 

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 Given /^a term with (\d+) translations/ do |count|
   ensure_user_exists_and_is_logged_in
 

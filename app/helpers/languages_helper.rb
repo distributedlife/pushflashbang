@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module LanguagesHelper
   def language_is_valid? language_id
     begin

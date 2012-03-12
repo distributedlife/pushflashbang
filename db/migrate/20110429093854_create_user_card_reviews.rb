@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateUserCardReviews < ActiveRecord::Migration
   def self.up
     create_table :user_card_reviews do |t|

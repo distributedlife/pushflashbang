@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class UserCardReview < ActiveRecord::Base
   attr_accessible :user_id, :card_id, :due, :review_start, :reveal, :result_recorded, :result_success, :interval, :review_type
 

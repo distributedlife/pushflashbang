@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module SelectTermPage
   def is_get?
     false

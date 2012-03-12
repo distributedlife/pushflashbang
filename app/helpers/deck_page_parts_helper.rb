@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module DeckPagePartsHelper
   def new_deck_link
     link_to "New Deck", new_deck_path, :method => :post, :class => 'contrast', :id => "add_deck"

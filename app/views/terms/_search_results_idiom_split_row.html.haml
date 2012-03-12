@@ -1,8 +1,11 @@
-%tr{:class => classname}
-  %th &nbsp;
-  %th &nbsp;
-  %th &nbsp;
-  %th
+.row{:class => classname}
+  .span2
+    &nbsp;
+  .span2
+    &nbsp;
+  .span2
+    &nbsp;
+  .span2
     - if mode == 'edit'
       = edit_term_button data[:idiom_id]
       = add_term_to_set_button data[:idiom_id]

@@ -12,6 +12,6 @@
             = f.input :remember_me, :as => :boolean, :label => I18n.t('form.user-remember-me'), :wrapper_html => {:class => 'input-append'}
     .form-actions
       .input
-        = f.submit I18n.t('actions.sign-in'), :class => 'btn btn-primary btn-large'
+        = f.submit I18n.t('actions.sign-in'), :class => 'btn btn-primary btn-large', :id => 'do_login'
         - if devise_mapping.recoverable? && controller_name != 'passwords'
           = link_to I18n.t('actions.forgot-password'), new_password_path(resource_name), :class => 'btn btn-large'

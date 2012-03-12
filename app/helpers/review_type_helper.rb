@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module ReviewTypeHelper
   def parse_review_types review_types
     return [] if review_types.nil?

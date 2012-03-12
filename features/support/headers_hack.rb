@@ -1,33 +1,34 @@
-module RackTestMixin
+# # -*- encoding : utf-8 -*-
+# module RackTestMixin
 
-  def self.included(mod)
-    mod.class_eval do
-      # This is where we save additional entries.
-      def hacked_env
-        @hacked_env ||= {}
-      end
+#   def self.included(mod)
+#     mod.class_eval do
+#       # This is where we save additional entries.
+#       def hacked_env
+#         @hacked_env ||= {}
+#       end
 
-      # Alias the original method for further use.
-      alias_method  :original_env, :env
+#       # Alias the original method for further use.
+#       alias_method  :original_env, :env
 
-      # Override the method to merge additional headers.
-      # Plus this implicitly makes it public.
-      def env
-        original_env.merge(hacked_env)
-      end
-    end
-  end
+#       # Override the method to merge additional headers.
+#       # Plus this implicitly makes it public.
+#       def env
+#         original_env.merge(hacked_env)
+#       end
+#     end
+#   end
 
-end
+# end
 
-Capybara::Driver::RackTest.send :include, RackTestMixin
+# Capybara::Driver::RackTest.send :include, RackTestMixin
 
-module HeadersHackHelper
+# module HeadersHackHelper
 
-  def add_headers(headers)
-    page.driver.hacked_env.merge!(headers)
-  end
+#   def add_headers(headers)
+#     page.driver.hacked_env.merge!(headers)
+#   end
 
-end
+# end
 
-World(HeadersHackHelper)
+# World(HeadersHackHelper)

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class UserIdiomSchedule < ActiveRecord::Base
   belongs_to :user
   belongs_to :idiom

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class UserDeckChapter < ActiveRecord::Base
   attr_accessible :user_id, :deck_id, :chapter
 

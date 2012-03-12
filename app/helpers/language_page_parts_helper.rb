@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module LanguagePagePartsHelper
   #options[:show_can_change_button] is used to do just that
   def user_languages languages, options = {}

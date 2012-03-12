@@ -2,23 +2,8 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 gem 'sqlite3'
 
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-# gem 'ruby-debug'
-# gem 'ruby-debug19', :require => 'ruby-debug'
-
-# Bundle the extra gems:
-# gem 'bj'
 gem 'nokogiri'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
@@ -26,7 +11,7 @@ gem 'haml'
 gem 'sass'
 gem 'sass-rails'
 gem 'heroku'
-gem 'heroku_san'
+gem 'heroku_san', '<= 2.0.0'
 gem 'jquery-rails'
 gem 'formtastic'
 gem 'devise', '1.4.7'
@@ -50,7 +35,7 @@ gem 'on_the_spot'
 group :development, :test do
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'gherkin', '2.4.6'
+  gem 'gherkin'
   gem 'cucumber-rails'
   gem 'cucumber'
   gem 'rspec-rails'
@@ -59,14 +44,24 @@ group :development, :test do
   gem 'autotest-rails'
   gem 'test_notifier'
   gem 'awesome_print'
-  gem 'akephalos'
   gem 'machinist'
   gem 'faker'
-  gem 'ruby-debug'
+  gem 'ruby-debug19'
   gem 'bermuda'
   gem 'blueprints'
   gem 'fakeweb'
   gem 'silent-postgres'
-  gem 'capybara-webkit'
+  gem 'capybara-webkit', '0.8.0'
+
   gem 'bullet'
+  gem 'roodi', :git => 'git://github.com/Jetstar/roodi.git'
+  gem 'rcov', '0.9.11'
+  gem 'metric_fu'
+  gem 'fattr'
+  gem 'arrayfields'
+  gem 'map'
+  gem 'jslint_on_rails'
+  gem 'cucumber_timing_presenter'
+
+  gem 'magic_encoding'
 end

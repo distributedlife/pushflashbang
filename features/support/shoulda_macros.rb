@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Paperclip
   module Shoulda
     def stub_paperclip_s3(model, attachment, extension)

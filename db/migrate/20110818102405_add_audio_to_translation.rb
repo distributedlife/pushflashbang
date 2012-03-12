@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddAudioToTranslation < ActiveRecord::Migration
   def self.up
     add_column :translations, :audio_file_name, :string

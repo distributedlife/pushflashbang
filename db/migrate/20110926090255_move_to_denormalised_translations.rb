@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class MoveToDenormalisedTranslations < ActiveRecord::Migration
   def self.up
     # add idiom to translation

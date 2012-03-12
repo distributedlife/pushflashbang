@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Card < ActiveRecord::Base
   has_paper_trail
   has_attached_file :audio,

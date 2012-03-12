@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class UserSets < ActiveRecord::Base
   belongs_to :language
   belongs_to :user_languages, :class_name => "UserLanguages", :primary_key => "language_id", :foreign_key => "language_id"
