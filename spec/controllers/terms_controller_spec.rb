@@ -904,7 +904,7 @@ describe TermsController do
     end
 
     context 'when searching' do
-      it 'should return matching results group by idiom and order by language and form where the idiom is not already in the set' do
+      it 'should return matching results group by idiom and order by language and form where the idiom is not already in any set' do
         idiom1 = Idiom.make!
         idiom2 = Idiom.make!
 

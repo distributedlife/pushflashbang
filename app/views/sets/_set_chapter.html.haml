@@ -23,8 +23,6 @@
         = link_to 'save order', save_chapter_order_set_path(:id => set_id), :class => 'btn', :id => "save_chapter_#{chapter}_order", :method => :post
           
         :javascript
-          //alert('this is working');
-          //$j("#list_#{chapter}").sortable();
           $j("#list_#{chapter}").sortable({
             opacity: 0.5,
             axis: "y",
@@ -38,5 +36,3 @@
 
             $j("#save_chapter_#{chapter}_order").attr('href', link);
           });
-          //alert('this is working too');
-

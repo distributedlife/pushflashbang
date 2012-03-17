@@ -286,7 +286,8 @@ class TermsController < ApplicationController
       @translations = []
     else
       @q.gsub!("%", "")
-      @translations = Translation.all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, @q.split(','), @page.to_i
+
+      @translations = Translation.all_not_in_any_set_sorted_by_idiom_language_and_form_with_like_filter @q.split(','), @page.to_i
     end
 
     @next_page = select_for_set_set_set_terms_path(:q => @q, :page => @page.to_i + 1, :set_id => params[:set_id])

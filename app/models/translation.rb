@@ -94,6 +94,41 @@ class Translation < ActiveRecord::Base
     self.get_sorted_selection idioms
   end
 
+  def self.all_not_in_any_set_sorted_by_idiom_language_and_form_with_like_filter filter, page = 1, limit = Rails.application.config.search_page_size
+    if filter.kind_of? Array
+      filter_string = "(%#{filter.join('%|%')}%)"
+    else
+      filter_string = "(%#{filter.strip}%)"
+    end
+    filter_string.downcase!
+
+    terms_matching_filter = <<-SQL
+      SELECT t.idiom_id
+      FROM translations t
+      WHERE lower(t.form) SIMILAR TO :filter
+      OR lower(t.pronunciation) SIMILAR TO :filter
+    SQL
+    terms_already_in_set = <<-SQL
+      SELECT term_id
+      FROM set_terms
+    SQL
+
+    where = <<-SQL
+      id IN
+      (
+        #{terms_matching_filter}
+        EXCEPT
+        #{terms_already_in_set}
+      )
+    SQL
+
+    offset = (page - 1) * limit
+    offset = 0 if offset < 0
+
+    idioms = Idiom.order("id asc").where(where, :filter => filter_string).limit(limit).offset(offset)
+    self.get_sorted_selection idioms
+  end
+
   def self.remove_duplicates
     identical_sql = <<-SQL
       SELECT form, language_id, idiom_id, pronunciation, count(*)
