@@ -1,14 +1,13 @@
 -id ||= 0
-.div{:style => "margin-left:auto; margin-right: auto; width: 35px"}
-  #audio{:id => id}
-  .jp-audio
-    .jp-type-play-only
-      #jp_interface{:id => id, :class => "jp-interface"}
-        %ul.jp-controls
-          %li
-            = link_to t('actions.play'), '#', :class => "jp-play", :tabindex => "1"
-          %li
-            = link_to t('actions.pause'), '#', :class => "jp-pause", :tabindex => "1"
+#audio.hidden{:id => id}
+.jp-audio
+  .jp-type-play-only
+    #jp_interface.jp-interface{:id => id}
+      %ul.jp-controls.no-list-style.remove-margin
+        %li
+          = link_to content_tag('i', '', :class => 'icon-play'), '#', :class => "jp-play", :tabindex => "1"
+        %li
+          = link_to content_tag('i', '', :class => 'icon-play'), '#', :class => "jp-pause", :tabindex => "1"
 
 :javascript
   $j(document).ready(function() {

@@ -38,7 +38,7 @@ module TranslationPagePartsHelper
   end
 
   def get_strip idiom_count
-    "#{(idiom_count % 2 == 0) ? 'force-stripe' : ''}"
+    "#{(idiom_count % 2 == 0) ? 'force-stripe' : 'normal-stripe'}"
   end
 
   def show_search_results translations, query, current_page_number, results_per_page_limit, mode, data = {}

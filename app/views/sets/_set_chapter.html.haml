@@ -5,7 +5,7 @@
       = button "#{t('actions.show')}", show_chapter_set_path(:id => set_id, :chapter => chapter), {:remote => true, :id => "toggle_chapter_#{chapter}"}
     - else
       = button "#{t('actions.hide')}", '#', {:id => "show_chapter_#{chapter}"}
-  #chapter_content{:id => chapter}
+  #chapter_content.set-chapter-align{:id => chapter}
     - unless start_collapsed
       - if set_terms.empty?
         = information t('text.set-has-no-translations')

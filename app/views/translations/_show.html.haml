@@ -1,21 +1,22 @@
 .row{:id => translation.id, :class => classname}
-  .span2
+  .span2.small-margin
     - if current_user.in_edit_mode?
       #form= on_the_spot_edit translation, :form
     - else
       #form= translation.form
-  .span2
+  .span2.small-margin
     - if current_user.in_edit_mode?
       #pronunciation= on_the_spot_edit translation, :pronunciation
     - else
       - unless translation.pronunciation.blank?
         #pronunciation= translation.pronunciation
-  .span2
+  .span2.small-margin
     #language= translation.languages.name
-  .span1
+  .span1.small-margin
+    .inline-block.pull-left
+      - if current_user.in_edit_mode? and set_id.nil?
+        = link_to content_tag('i', '', :class => 'icon-remove'), term_translation_path(translation.idiom_id, translation.id), :method => :delete, :id => "translation_#{translation.id}_delete"
+      - if current_user.in_edit_mode? and !set_id.nil?
+        = link_to content_tag('i', '', :class => 'icon-remove'), remove_from_set_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_remove_from_set", :method => :put
     - if translation.audio.file?
       = display_translation_audio translation
-    - if current_user.in_edit_mode? and set_id.nil?
-      = link_to content_tag('i', '', :class => 'icon-remove'), term_translation_path(translation.idiom_id, translation.id), :method => :delete, :id => "translation_#{translation.id}_delete"
-    - if current_user.in_edit_mode? and !set_id.nil?
-      = link_to content_tag('i', '', :class => 'icon-remove'), remove_from_set_set_set_term_path(set_id, translation.idiom_id), :id => "term_#{translation.idiom_id}_remove_from_set", :method => :put

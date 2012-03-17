@@ -20,10 +20,10 @@ input[type="submit"] { margin-bottom: 3px; }
 
 .inline-block {display: inline-block !important;}
 .align-drop-down-menu {margin-bottom: -0.6em;}
-.force-stripe {background-color: #f9f9f9 !important;}
 .align-form-button {margin: 0 0 4px;}
 .fix-header-height {margin-top: 0px;}
 .no-list-style {list-style: none;}
+.remove-margin {margin:0}
 
 .span25     { #gridSystem > .columns(@gridGutterWidth, @gridColumnWidth, @gridRowWidth, 3); }
 
@@ -64,4 +64,37 @@ p.pronunciation
 .relative
 {
   position: relative;
+}
+
+.force-stripe
+{
+  background-color: #f9f9f9 !important;
+  margin-left: -20px;
+  margin-right: -20px;
+  border-left: 1px solid #eee;
+  border-left: 1px solid rgba(0,0,0,.05);
+  border-right: 1px solid #eee;
+  border-right: 1px solid rgba(0,0,0,.05);
+}
+
+.normal-stripe
+{
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.small-margin
+{
+  margin-left: 20px;
+}
+
+.button-row
+{
+  min-height: 3em;
+}
+
+.set-chapter-align
+{
+  margin-left: -10px;
+  margin-right: 20px;
 }

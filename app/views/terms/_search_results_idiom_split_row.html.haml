@@ -1,11 +1,11 @@
-.row{:class => classname}
-  .span2
+.relative.row.button-row{:class => classname}
+  .span2.small-margin
     &nbsp;
-  .span2
+  .span2.small-margin
     &nbsp;
-  .span2
+  .span2.small-margin
     &nbsp;
-  .span2
+  .top-right
     - if mode == 'edit'
       = edit_term_button data[:idiom_id]
       = add_term_to_set_button data[:idiom_id]
