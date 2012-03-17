@@ -359,14 +359,15 @@ describe SetsController do
 
   context '"GET" select' do
     it 'should return all sets the idiom is in separatly' do
+      idiom = Idiom.make!
       set1 = Sets.make!
       SetName.make!(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
       set2 = Sets.make!
       SetName.make!(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
-      SetTerms.make!(:term_id => 1, :set_id => set1.id)
+      SetTerms.make!(:term_id => idiom.id, :set_id => set1.id)
 
 
-      get :select, :term_id => 1
+      get :select, :term_id => idiom.id
       assigns[:idiom_sets][0].should == set1
       assigns[:available_sets][0].should == set2
 
@@ -375,6 +376,7 @@ describe SetsController do
     end
 
     it 'should return all set names for all sets' do
+      idiom = Idiom.make!
       set1 = Sets.make!
       sn11 = SetName.make!(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
       sn12 = SetName.make!(:name => 'set name b', :sets_id => set1.id, :description => "desc b")
@@ -383,7 +385,7 @@ describe SetsController do
       sn22 = SetName.make!(:name => 'set name b', :sets_id => set2.id, :description => "desc b")
 
 
-      get :select, :term_id => 1
+      get :select, :term_id => idiom.id
       assigns[:available_sets][0].should == set1
       assigns[:available_sets][0].set_name[0].should == sn11
       assigns[:available_sets][0].set_name[1].should == sn12
