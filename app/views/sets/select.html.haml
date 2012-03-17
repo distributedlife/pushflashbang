@@ -1,6 +1,11 @@
 .container
   = page_header t('titles.set-select.title'), t('titles.set-select.subtitle')
 
-  .well
-    = link_to t('actions.cancel'), terms_path, :class => 'btn btn-danger pull-right'
-    = display_sets_for_selection @sets, @idiom_id, "select set"
+  %h1 Sets that include this term
+  .well.relative
+    = display_sets_for_selection @idiom_sets, @idiom_id
+
+  %h1 Available Sets
+  .well.relative
+    = link_to t('actions.cancel'), terms_path, :class => 'btn btn-danger top-right'
+    = display_sets_for_selection @available_sets, @idiom_id, "select set"

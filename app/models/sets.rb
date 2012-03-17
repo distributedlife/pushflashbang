@@ -59,4 +59,23 @@ class Sets < ActiveRecord::Base
       set_term.save!
     end
   end
+
+  def self.all_containing_idiom idiom_id
+    Sets.joins(:set_terms).where(:set_terms => {:term_id => idiom_id})
+  end
+
+  def self.all_not_containing_idiom idiom_id
+    sql = <<-SQL
+      SELECT *
+      FROM SETS
+      WHERE id NOT IN
+      (
+        SELECT set_id
+        FROM set_terms
+        WHERE term_id = #{idiom_id}
+      )
+    SQL
+    
+    Sets.find_by_sql(sql)
+  end
 end

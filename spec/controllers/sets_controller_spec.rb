@@ -358,6 +358,22 @@ describe SetsController do
   end
 
   context '"GET" select' do
+    it 'should return all sets the idiom is in separatly' do
+      set1 = Sets.make!
+      SetName.make!(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
+      set2 = Sets.make!
+      SetName.make!(:name => 'set name a', :sets_id => set2.id, :description => "desc a")
+      SetTerms.make!(:term_id => 1, :set_id => set1.id)
+
+
+      get :select, :term_id => 1
+      assigns[:idiom_sets][0].should == set1
+      assigns[:available_sets][0].should == set2
+
+      assigns[:idiom_sets].count.should == 1
+      assigns[:available_sets].count.should == 1
+    end
+
     it 'should return all set names for all sets' do
       set1 = Sets.make!
       sn11 = SetName.make!(:name => 'set name a', :sets_id => set1.id, :description => "desc a")
@@ -368,17 +384,17 @@ describe SetsController do
 
 
       get :select, :term_id => 1
-      assigns[:sets][0].should == set1
-      assigns[:sets][0].set_name[0].should == sn11
-      assigns[:sets][0].set_name[1].should == sn12
-      assigns[:sets][1].should == set2
-      assigns[:sets][1].set_name[0].should == sn21
-      assigns[:sets][1].set_name[1].should == sn22
+      assigns[:available_sets][0].should == set1
+      assigns[:available_sets][0].set_name[0].should == sn11
+      assigns[:available_sets][0].set_name[1].should == sn12
+      assigns[:available_sets][1].should == set2
+      assigns[:available_sets][1].set_name[0].should == sn21
+      assigns[:available_sets][1].set_name[1].should == sn22
 
-      assigns[:sets].count.should == 2
+      assigns[:available_sets].count.should == 2
     end
 
-    it 'should redirect to sets_path if there are no sets' do
+    it 'should redirect to sets_path if there the idiom does not exist' do
       get :select, :term_id => 1
 
       response.should be_redirect

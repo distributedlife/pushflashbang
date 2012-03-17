@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+include IdiomHelper
 include SetHelper
 include LanguagesHelper
 include ReviewTypeHelper
@@ -115,10 +116,11 @@ class SetsController < ApplicationController
 
   def select
     @idiom_id = params[:term_id]
-    @sets = Sets.all
+    error_redirect_to t('notice.not-found'), user_index_path and return unless idiom_exists? @idiom_id
 
-    error_redirect_to t('notice.not-found'), user_index_path and return if @idiom_id.nil?
-    error_redirect_to t('notice.not-found'), user_index_path and return if @sets.empty?
+    
+    @available_sets = Sets.all_not_containing_idiom(@idiom_id)
+    @idiom_sets = Sets.all_containing_idiom(@idiom_id)
   end
 
   def set_goal

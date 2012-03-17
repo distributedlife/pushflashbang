@@ -105,4 +105,45 @@ describe Sets do
       SetTerms.where(:set_id => set.id, :term_id => i4.id).first.chapter.should == 3
     end
   end
+
+  context 'all_containing_idiom' do
+    before(:each) do
+      @set1 = Sets.make!
+      @set2 = Sets.make!
+      @i1 = Idiom.make!
+      @i2 = Idiom.make!
+
+      SetTerms.make!(:set_id => @set1.id, :term_id => @i1.id)
+    end
+
+    it 'should return all sets containing the idiom' do
+      Sets.all_containing_idiom(@i1.id).count.should == 1
+      Sets.all_containing_idiom(@i1.id).include?(@set1).should == true
+    end
+
+    it 'should not return sets that do not contain the idiom' do
+      Sets.all_containing_idiom(@i1.id).include?(@set2).should == false
+    end
+  end
+
+  context 'all_not_containing_idiom' do
+    before(:each) do
+      @set1 = Sets.make!
+      @set2 = Sets.make!
+      @i1 = Idiom.make!
+      @i2 = Idiom.make!
+
+      SetTerms.make!(:set_id => @set1.id, :term_id => @i1.id)
+    end
+
+
+    it 'should return all sets not containing the idiom' do
+      Sets.all_not_containing_idiom(@i1.id).count.should == 1
+      Sets.all_not_containing_idiom(@i1.id).include?(@set2).should == true
+    end
+
+    it 'should not return sets that contain the idiom' do
+      Sets.all_not_containing_idiom(@i1.id).include?(@set1).should == false
+    end
+  end
 end
