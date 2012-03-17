@@ -277,12 +277,7 @@ describe Idiom do
       Translation.count.should == 2
       Translation.where(:idiom_id => @idiom1.id).count.should == 2
       Translation.where(:id => @t3.id).count.should == 1
-      Translation.where(:id => [@t1.id, @t3.id]).count.should == 2
-
-#      @t1.reload
-#      @t3.reload
-#      @t1.idiom_id.should == @idiom1.id
-#      @t3.idiom_id.should == @idiom1.id
+      Translation.where(:id => [@t1.id, @t2.id]).count.should == 1
     end
 
     it 'should delete the now merged idiom' do
