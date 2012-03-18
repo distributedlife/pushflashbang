@@ -150,4 +150,13 @@ class Translation < ActiveRecord::Base
       end
     end
   end
+
+  def should_be_ignored_during_creation?
+    self.language_id.nil? and self.form.blank? and self.pronunciation.blank?
+  end
+
+  def update_idiom! idiom_id
+    self.idiom_id = idiom_id
+    self.save!
+  end
 end

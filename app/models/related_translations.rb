@@ -34,9 +34,17 @@ class RelatedTranslations < ActiveRecord::Base
     RelatedTranslations::relate_all_that_share_meaning
   end
 
+  def self.rebuild_relationships_for_translations translations
+    translations.each {|translation| rebuild_relationships_for_translation translation }
+  end
+
   def self.rebuild_relationships_for_translation translation
     RelatedTranslations::delete_relationships_for_translation translation
     RelatedTranslations::create_relationships_for_translation translation
+  end
+
+  def self.create_relationships_for_translations translations
+    translations.each {|translation| create_relationships_for_translation translation }
   end
 
   def self.create_relationships_for_translation translation

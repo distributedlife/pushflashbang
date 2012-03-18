@@ -24,16 +24,6 @@ describe Idiom do
     end
   end
 
-  describe 'exists?' do
-    it 'should return true if the idiom exists' do
-      Idiom::exists?(Idiom.make!.id).should == true
-    end
-
-    it 'should return false if the idiom does not exist' do
-      Idiom::exists?(100).should == false
-    end
-  end
-
   describe 'get_from_translations' do
     before(:each) do
       @idiom = Idiom.make!

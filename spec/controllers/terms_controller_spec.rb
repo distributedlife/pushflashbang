@@ -410,8 +410,7 @@ describe TermsController do
     it 'should redirect to the show all terms path if the idiom is not found' do
       get :show, :id => 100
 
-      response.should be_redirect
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
 
     it 'should redirect to the show all terms path if the idiom has no translations' do
@@ -419,8 +418,7 @@ describe TermsController do
 
       get :show, :id => idiom.id
       
-      response.should be_redirect
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
   end
 
@@ -428,8 +426,7 @@ describe TermsController do
     it 'should redirect to the show all terms path if the idiom is not found' do
       get :edit, :id => 100
 
-      response.should be_redirect
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
 
     it 'should redirect to the show all terms path if the idiom has no translations' do
@@ -834,8 +831,7 @@ describe TermsController do
 
       get :select, :idiom_id => 100, :translation_id => term3.id
 
-      response.should be_redirect
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
 
     it 'should redirect to terms_path if the translation does not exist' do
@@ -843,8 +839,7 @@ describe TermsController do
 
       get :select, :idiom_id => idiom1.id, :translation_id => 100
 
-      response.should be_redirect
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
   end
 
@@ -951,8 +946,7 @@ describe TermsController do
     it 'should redirect to sets_path if the set does not exist' do
       get :select_for_set, :set_id => 100
 
-      response.should be_redirect
-      response.should redirect_to sets_path
+      response.should redirect_to root_path
     end
   end
 
@@ -982,8 +976,7 @@ describe TermsController do
 
       put :add_to_set, :set_id => 1, :id => idiom.id
 
-      response.should be_redirect
-      response.should redirect_to user_index_path
+      response.should redirect_to root_path
     end
 
     it 'should return to the set home if the term does not exist' do
@@ -991,8 +984,7 @@ describe TermsController do
 
       put :add_to_set, :set_id => set.id, :id => 1
 
-      response.should be_redirect
-      response.should redirect_to user_index_path
+      response.should redirect_to root_path
     end
 
     it 'should not add a term twice if it already exists' do
@@ -1034,8 +1026,7 @@ describe TermsController do
 
       put :remove_from_set, :set_id => 1, :id => idiom.id
 
-      response.should be_redirect
-      response.should redirect_to user_index_path
+      response.should redirect_to root_path
     end
 
     it 'should return to the set home if the term does not exist' do
@@ -1043,8 +1034,7 @@ describe TermsController do
 
       put :remove_from_set, :set_id => set.id, :id => 1
 
-      response.should be_redirect
-      response.should redirect_to user_index_path
+      response.should redirect_to root_path
     end
 
     it 'should not error a term twice is not linked' do
@@ -1093,28 +1083,24 @@ describe TermsController do
     it 'should redirect to review set if term is not valid' do
       post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id + 100, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
 
-      response.should be_redirect
-      response.should redirect_to review_language_set_path(@spanish.id, @set.id, :review_mode => "listening,reading,writing,speaking,typing")
+      response.should redirect_to root_path
     end
 
     it 'should redirect to show language if set is not valid' do
       post :record_review, :language_id => @spanish.id, :set_id => @set.id + 100, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
 
-      response.should be_redirect
-      response.should redirect_to language_path(@spanish.id)
+      response.should redirect_to root_path
     end
 
     it 'should redirect to user home if langauge is not valid' do
       post :record_review, :language_id => @spanish.id + 100, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
 
-      response.should be_redirect
       response.should redirect_to user_index_path
     end
 
     it 'should redirect show language if user is not learning language' do
       post :record_review, :language_id => @english.id, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1"
 
-      response.should be_redirect
       response.should redirect_to language_path(@english.id)
     end
 
@@ -1341,21 +1327,18 @@ describe TermsController do
     it 'should redirect to language set path if idiom does not exist' do
       get :review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id + 100, :review_mode => 'reading'
 
-      response.should be_redirect
-      response.should redirect_to language_set_path(@spanish.id, @set.id)
+      response.should redirect_to root_path
     end
 
     it 'should redirect to language path if set does not exist' do
       get :review, :language_id => @spanish.id, :set_id => @set.id + 100, :id => @idiom.id, :review_mode => 'reading'
 
-      response.should be_redirect
-      response.should redirect_to language_path(@spanish.id)
+      response.should redirect_to root_path
     end
 
     it 'should redirect to user home if language does not exist' do
       get :review, :language_id => @spanish.id + 100, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
 
-      response.should redirect_to user_index_path
       response.should be_redirect
     end
 
@@ -1603,22 +1586,19 @@ describe TermsController do
     it 'should redirect to language set path if idiom does not exist' do
       get :first_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id + 100, :review_mode => 'reading'
 
-      response.should be_redirect
-      response.should redirect_to language_set_path(@spanish.id, @set.id)
+      response.should redirect_to root_path
     end
 
     it 'should redirect to language path if set does not exist' do
       get :first_review, :language_id => @spanish.id, :set_id => @set.id + 100, :id => @idiom.id, :review_mode => 'reading'
 
-      response.should be_redirect
-      response.should redirect_to language_path(@spanish.id)
+      response.should redirect_to root_path
     end
 
     it 'should redirect to user home if language does not exist' do
       get :first_review, :language_id => @spanish.id + 100, :set_id => @set.id, :id => @idiom.id, :review_mode => 'reading'
 
       response.should redirect_to user_index_path
-      response.should be_redirect
     end
 
     it 'should return the term' do
@@ -1720,42 +1700,36 @@ describe TermsController do
     it 'should redirect to review set if term is not valid' do
       post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id + 100, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
 
-      response.should be_redirect
-      response.should redirect_to review_language_set_path(@spanish.id, @set.id, :review_mode => "listening,reading,writing,speaking,typing")
+      response.should redirect_to root_path
     end
 
     it 'should redirect to show language if set is not valid' do
       post :record_review, :language_id => @spanish.id, :set_id => @set.id + 100, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
 
-      response.should be_redirect
-      response.should redirect_to language_path(@spanish.id)
+      response.should redirect_to root_path
     end
 
     it 'should redirect to user home if langauge is not valid' do
       post :record_review, :language_id => @spanish.id + 100, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
 
-      response.should be_redirect
       response.should redirect_to user_index_path
     end
 
     it 'should redirect show language if user is not learning language' do
       post :record_review, :language_id => @english.id, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1"
 
-      response.should be_redirect
       response.should redirect_to language_path(@english.id)
     end
 
     it 'should redirect to review set if review mode is not supplied or is not valid' do
       post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0
 
-      response.should be_redirect
       response.should redirect_to review_language_set_path(@spanish.id, @set.id)
     end
 
     it 'should redirect to review set if the term has not been scheduled' do
       post :record_review, :language_id => @spanish.id, :set_id => @set.id, :id => @idiom.id, :duration => 0, :elapsed => 0, :listening => "true", :reading => true, :writing => false, :speaking => "false", :typing => "1", :review_mode => "listening,reading,writing,speaking,typing"
 
-      response.should be_redirect
       response.should redirect_to review_language_set_path(@spanish.id, @set.id, :review_mode => "listening,reading,writing,speaking,typing")
     end
 
@@ -1797,7 +1771,7 @@ describe TermsController do
     it 'should require a valid idiom as a source' do
       post :merge_into, :id => @idiom1.id + 100, :idiom_id => @idiom2.id
 
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
 
     it 'should require a valid idiom as a merge target' do
@@ -1893,7 +1867,7 @@ describe TermsController do
 
       get :select_for_merge, :id => idiom1.id + 100, :q => "ce"
 
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
   end
 
@@ -1902,7 +1876,7 @@ describe TermsController do
       get :split, :id => 100
 
       response.should be_redirect
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
 
     it 'should redirect to the show all terms path if the idiom has no translations' do
@@ -1948,7 +1922,7 @@ describe TermsController do
     it 'should redirect to the show all terms path if the idiom is not found' do
       post :seperate, :id => 100
 
-      response.should redirect_to terms_path
+      response.should redirect_to root_path
     end
 
     it 'should move all marked as "yes" into a new idiom' do
