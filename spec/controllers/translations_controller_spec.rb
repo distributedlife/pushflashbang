@@ -25,17 +25,6 @@ describe TranslationsController do
       Translation.count.should == 2
     end
 
-    it 'should not delete a translation the belongs to a term with a total of two translations' do
-      delete :destroy, :term_id => @idiom.id, :id => @translation1.id
-      delete :destroy, :term_id => @idiom.id, :id => @translation2.id
-
-      Translation.where(:id => @translation1.id).empty?.should be true
-      Translation.where(:id => @translation2.id).empty?.should be false
-      Translation.where(:id => @translation3.id).empty?.should be false
-
-      Translation.count.should == 2
-    end
-
     it 'should redirect to back' do
       delete :destroy, :term_id => @idiom.id, :id => @translation1.id
 
