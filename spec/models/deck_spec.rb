@@ -141,7 +141,7 @@ describe Deck do
     end
   end
 
-  context 'getChapters' do
+  context 'get_chapters' do
     before(:each) do
       @user = User.make!
       @deck = Deck.make!(:user_id => @user.id)
@@ -164,6 +164,38 @@ describe Deck do
       chapters[3].chapter.should be 8
 
       chapters.count.should be 4
+    end
+  end
+
+  context 'get_visible_decks_for_user' do
+    before(:each) do
+      @user1 = User.make!
+      @user2 = User.make!
+
+      @shared_deck = Deck.make!(:user_id => @user2.id, :shared => true)
+      @other_user_deck = Deck.make!(:user_id => @user2.id, :shared => false)
+      @my_deck = Deck.make!(:user_id => @user1.id)
+    end
+
+    it 'should return all decks the user owns' do
+      Deck.get_visible_decks_for_user(@user1.id).include?(@my_deck).should == true
+    end
+
+    it 'should return all shared decks' do
+      Deck.get_visible_decks_for_user(@user1.id).include?(@shared_deck).should == true
+      Deck.get_visible_decks_for_user(@user1.id).include?(@other_user_deck).should == false
+    end
+  end
+
+  context 'cards' do
+    it 'should return all cards in the deck' do
+      deck1 = Deck.make!
+      deck2 = Deck.make!
+      card1 = Card.make!(:deck_id => deck1.id)
+      card2 = Card.make!(:deck_id => deck2.id)
+
+      deck1.cards.include?(card1).should == true
+      deck1.cards.include?(card2).should == false
     end
   end
 end

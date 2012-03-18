@@ -3,6 +3,7 @@ class Deck < ActiveRecord::Base
   has_paper_trail
   
   belongs_to :user
+  has_many :cards, :class_name => "Card", :foreign_key => "deck_id"
 
   attr_accessible :name, :description, :shared, :pronunciation_side, :supports_written_answer, :review_types
 
@@ -43,5 +44,9 @@ class Deck < ActiveRecord::Base
     SQL
 
     Card.find_by_sql(sql)
+  end
+
+  def self.get_visible_decks_for_user user_id
+    Deck.order(:name).where("user_id = :user_id OR shared = :shared", :user_id => user_id, :shared => true)
   end
 end

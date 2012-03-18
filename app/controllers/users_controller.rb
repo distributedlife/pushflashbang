@@ -19,11 +19,11 @@ class UsersController < ApplicationController
   end
 
   def index
-    @decks = Deck.order(:name).where("user_id = ? OR shared = ?", current_user.id, true)
+    @decks = Deck.get_visible_decks_for_user current_user.id
 
     @card_counts = []
     @decks.each do |deck|
-      @card_counts[deck.id] = Card.where(:deck_id => deck.id).count
+      @card_counts[deck.id] = Deck.find(deck.id).cards.count
     end
 
     @due_counts = []
