@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 include TranslationHelper
-include IdiomHelper
 
 class TranslationsController < ApplicationController
   before_filter :authenticate_user!
