@@ -71,17 +71,6 @@ Feature: users can add new terms to the system
       | 一点儿          | Chinese (Simplified) | yì diǎnr      |
 
   @user
-  Scenario Outline: user can't delete a term from an idiom if there are only two left
-    Given a term with <translation count> translations
-    When I delete a translation
-    Then the term will have <after delete count> translations
-
-    Examples:
-      | translation count | after delete count |
-      | 2                 | 2                  |
-      | 3                 | 2                  |
-
-  @user
   Scenario: detach translation from current idiom and attach to new
     Given the following related translations:
       | form         | language             | pronunciation |
