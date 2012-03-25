@@ -29,15 +29,36 @@ class Translation < ActiveRecord::Base
 
   def self.get_sorted_selection idioms
     Translation.joins(:languages).order("idiom_id asc").order("name asc").order("form asc").where(:idiom_id => idioms, :languages => {:enabled => true})
+
   end
 
   def self.all_sorted_by_idiom_language_and_form_with_like_filter filter, page = 1, limit = Rails.application.config.search_page_size
+    filter_string = ""
+
     if filter.kind_of? Array
-      filter_string = "(%#{filter.join('%|%')}%)"
+      exact = filter.select {|f| f.include?('"')}
+      filter = filter - exact
+      exact.map {|f| f.gsub!('"', '')}
+
+      if exact.empty?
+        filter_string = "(%#{filter.join('%|%')}%)"
+      else
+        filter_string = "^(#{exact.join('%|%')})$" unless exact.empty?
+      end
     else
-      filter_string = "(%#{filter.strip}%)"
+      if filter.include? '"'
+        filter_string = "^(#{filter.strip})$"
+        filter_string.gsub!('"', '')
+      else
+        filter_string = "(%#{filter.strip}%)"
+      end
     end
+
     filter_string.downcase!
+
+
+    offset = (page - 1) * limit
+    offset = 0 if offset < 0
 
     where = <<-SQL
       id IN
@@ -50,9 +71,6 @@ class Translation < ActiveRecord::Base
         OR lower(t.pronunciation) SIMILAR TO :filter
       )
     SQL
-
-    offset = (page - 1) * limit
-    offset = 0 if offset < 0
 
     idioms = Idiom.order("id asc").where(where, :filter => filter_string).limit(limit).offset(offset)
     self.get_sorted_selection idioms

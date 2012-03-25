@@ -117,9 +117,22 @@ describe Translation do
 
         results.count.should == 0
       end
+
+      it 'should return quoted words as exact matches' do
+        results = Translation::all_sorted_by_idiom_language_and_form_with_like_filter ['"elephant"', "desire"]
+
+        results.count.should == 1
+        results.first.should == @a
+
+
+        results = Translation::all_sorted_by_idiom_language_and_form_with_like_filter '"elephant"'
+
+        results.count.should == 1
+        results.first.should == @a
+      end
     end
 
-    it 'should paginate correctly' do
+    it 'should paginate correctly (idioms are paginated upon, translations are returned)' do
       idiom1 = Idiom.make!
       idiom2 = Idiom.make!
       idiom3 = Idiom.make!
