@@ -234,6 +234,19 @@ describe Translation do
 
         results.count.should == 0
       end
+
+      it 'should return quoted words as exact matches' do
+        results = Translation::all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter @set1.id, ['"elephant"', "desire"]
+
+        results.count.should == 1
+        results.first.should == @a
+
+
+        results = Translation::all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter @set1.id, '"elephant"'
+
+        results.count.should == 1
+        results.first.should == @a
+      end
     end
 
     it 'should paginate correctly' do
@@ -358,6 +371,19 @@ describe Translation do
         SetTerms.create(:set_id => @set1.id, :term_id => @idiom2.id, :chapter => 1, :position => 1)
 
         results.count.should == 0
+      end
+
+      it 'should return quoted words as exact matches' do
+        results = Translation::all_not_in_any_set_sorted_by_idiom_language_and_form_with_like_filter ['"elephant"', "desire"]
+
+        results.count.should == 1
+        results.first.should == @a
+
+
+        results = Translation::all_not_in_any_set_sorted_by_idiom_language_and_form_with_like_filter '"elephant"'
+
+        results.count.should == 1
+        results.first.should == @a
       end
     end
 
@@ -487,6 +513,53 @@ describe Translation do
 
       Translation.count.should == 2
       RelatedTranslations.count.should == 1
+    end
+  end
+
+  context 'get_offset' do
+    it 'return zero if the offset is negative or any parameter is nil' do
+      Translation.get_offset(0, 0).should == 0
+      Translation.get_offset(nil, 0).should == 0
+      Translation.get_offset(0, nil).should == 0
+    end
+
+    it 'should adjust the page from a 1-based index to a 0-based offset' do
+      Translation.get_offset(0, 20).should == 0
+      Translation.get_offset(1, 20).should == 0
+    end
+
+    it 'should return the offset as adjusted page * limit' do
+      Translation.get_offset(20, 0).should == 0
+
+      Translation.get_offset(2, 20).should == 20
+      Translation.get_offset(3, 20).should == 40
+
+      Translation.get_offset(1, 10).should == 0
+      Translation.get_offset(2, 10).should == 10
+    end
+  end
+
+  context 'get_filter_string' do
+    context 'when given an array' do
+      it 'should split the terms and rejoin for use as regex' do
+        Translation.get_filter_string(["first", "second"]).should == "(%first%|%second%)"
+      end
+
+      it 'should reduce the set to quoted terms only when supplied' do
+        Translation.get_filter_string(['"first"', "second"]).should == "^(first)$"
+
+        Translation.get_filter_string(['"first"', "second", '"third"']).should == "^(first|third)$"
+      end
+    end
+
+    context 'when given a string' do
+      it 'should split the terms and rejoin for use as regex' do
+        Translation.get_filter_string("first").should == "(%first%)"
+      end
+
+      it 'should reduce the set to quoted terms only when supplied' do
+        Translation.get_filter_string('"first"').should == "^(first)$"
+      end
     end
   end
 end

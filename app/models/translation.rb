@@ -32,7 +32,7 @@ class Translation < ActiveRecord::Base
 
   end
 
-  def self.all_sorted_by_idiom_language_and_form_with_like_filter filter, page = 1, limit = Rails.application.config.search_page_size
+  def self.get_filter_string filter
     filter_string = ""
 
     if filter.kind_of? Array
@@ -43,7 +43,7 @@ class Translation < ActiveRecord::Base
       if exact.empty?
         filter_string = "(%#{filter.join('%|%')}%)"
       else
-        filter_string = "^(#{exact.join('%|%')})$" unless exact.empty?
+        filter_string = "^(#{exact.join('|')})$" unless exact.empty?
       end
     else
       if filter.include? '"'
@@ -54,11 +54,21 @@ class Translation < ActiveRecord::Base
       end
     end
 
-    filter_string.downcase!
+    filter_string.downcase
+  end
 
+  def self.get_offset page, limit
+    return 0 if page.nil? or limit.nil?
 
     offset = (page - 1) * limit
     offset = 0 if offset < 0
+
+    offset
+  end
+
+  def self.all_sorted_by_idiom_language_and_form_with_like_filter filter, page = 1, limit = Rails.application.config.search_page_size
+    filter_string = self.get_filter_string filter
+    offset = self.get_offset page, limit
 
     where = <<-SQL
       id IN
@@ -77,12 +87,7 @@ class Translation < ActiveRecord::Base
   end
 
   def self.all_not_in_set_sorted_by_idiom_language_and_form_with_like_filter set_id, filter, page = 1, limit = Rails.application.config.search_page_size
-    if filter.kind_of? Array
-      filter_string = "(%#{filter.join('%|%')}%)"
-    else
-      filter_string = "(%#{filter.strip}%)"
-    end
-    filter_string.downcase!
+    filter_string = self.get_filter_string filter
 
     terms_matching_filter = <<-SQL
       SELECT t.idiom_id
@@ -105,20 +110,14 @@ class Translation < ActiveRecord::Base
       )
     SQL
 
-    offset = (page - 1) * limit
-    offset = 0 if offset < 0
+    offset = self.get_offset page, limit
 
     idioms = Idiom.order("id asc").where(where, :filter => filter_string, :set_id => set_id).limit(limit).offset(offset)
     self.get_sorted_selection idioms
   end
 
   def self.all_not_in_any_set_sorted_by_idiom_language_and_form_with_like_filter filter, page = 1, limit = Rails.application.config.search_page_size
-    if filter.kind_of? Array
-      filter_string = "(%#{filter.join('%|%')}%)"
-    else
-      filter_string = "(%#{filter.strip}%)"
-    end
-    filter_string.downcase!
+    filter_string = self.get_filter_string filter
 
     terms_matching_filter = <<-SQL
       SELECT t.idiom_id
@@ -140,8 +139,7 @@ class Translation < ActiveRecord::Base
       )
     SQL
 
-    offset = (page - 1) * limit
-    offset = 0 if offset < 0
+    offset = self.get_offset page, limit
 
     idioms = Idiom.order("id asc").where(where, :filter => filter_string).limit(limit).offset(offset)
     self.get_sorted_selection idioms
