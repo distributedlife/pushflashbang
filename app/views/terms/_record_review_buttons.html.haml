@@ -18,10 +18,12 @@
     {
       if ($j("#review_result_#{review_type}").val() == "1")
       {
+        $j("#do_#{review_type}").addClass('active')
         $j("#review_result_#{review_type}").prop("value", "0");
       }
       else
       {
+        $j("#do_#{review_type}").removeClass('active')
         $j("#review_result_#{review_type}").prop("value", "1");
       }
 
