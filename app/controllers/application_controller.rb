@@ -24,15 +24,15 @@ class ApplicationController < ActionController::Base
   end
 
   def self.resolve_layout_type user_agent
-    MOBILE_BROWSERS.each do |m|
-      if user_agent.match(m)
-        EXCLUSIONS.each do |ex|
-          return 'application' if user_agent.match(ex)
-        end
-
-        return 'mobile_application'
-      end
-    end
+#   MOBILE_BROWSERS.each do |m|
+#     if user_agent.match(m)
+#       EXCLUSIONS.each do |ex|
+#         return 'application' if user_agent.match(ex)
+#       end
+#
+#       return 'mobile_application'
+#     end
+#   end
 
 #    return 'mobile_application'        # enable this for some mobile page testing
     return 'application'

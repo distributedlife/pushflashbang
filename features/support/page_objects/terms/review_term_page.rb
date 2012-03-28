@@ -80,11 +80,8 @@ module ReviewTermPage
   end
 
   def set_check_box review_type, state
-    if state == "checked"
-      @session.execute_script("$j(\"label[for='review_result_#{review_type}']\").attr('class', 'checked')")
-    else
-      @session.execute_script("$j(\"label[for='review_result_#{review_type}']\").attr('class', 'unchecked')")
-    end
+    return if state == "checked"
+		@session.click_on "do_#{review_type}"
   end
 
   def do_record_review

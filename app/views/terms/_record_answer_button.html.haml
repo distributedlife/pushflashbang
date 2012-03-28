@@ -1,5 +1,25 @@
 %p= link_to t('actions.review-record-answer'), '#', :class => 'btn btn-large btn-primary', :method => :post, :id => "do_results"
 :javascript
+  function is_review_type_enabled(review_type)
+  {
+    return ($j("#review_result_" + review_type).length > 0) ;
+  };
+
+  function review_type_result(review_type)
+  {
+    return $j("#review_result_" + review_type).val() == "1" ;
+  };
+
+  function review_type_query_string(review_type)
+  {
+    if (is_review_type_enabled(review_type))
+    {
+      return "&" + review_type + "=" + review_type_result(review_type) ;
+    }
+
+    return "" ;
+  };
+
   $j('#do_results').click(function(event) {
     var end = new Date();
     var start_time = document.getElementById("start_time") ;
@@ -11,30 +31,12 @@
     link = link + "&elapsed=" + elapsed ;
     link = link + "&review_mode=" + "#{review_mode}" ;
 
-    if ($j("#review_result_listening").length > 0)
-    {
-      link = link + "&listening=" + ($j("label[for='review_result_listening']").attr('class') == "checked");
-    }
-    if ($j("#review_result_reading").length > 0)
-    {
-      link = link + "&reading=" + ($j("label[for='review_result_reading']").attr('class') == "checked");
-    }
-    if ($j("#review_result_speaking").length > 0)
-    {
-      link = link + "&speaking=" + ($j("label[for='review_result_speaking']").attr('class') == "checked");
-    }
-    if ($j("#review_result_writing").length > 0)
-    {
-      link = link + "&writing=" + ($j("label[for='review_result_writing']").attr('class') == "checked")
-    }
-    if ($j("#review_result_typing").length > 0)
-    {
-      link = link + "&typing=" + ($j("label[for='review_result_typing']").attr('class') == "checked")
-    }
-    if ($j("#review_result_translating").length > 0)
-    {
-      link = link + "&translating=" + ($j("label[for='review_result_translating']").attr('class') == "checked")
-    }
+    link = link + review_type_query_string('listening') ;
+    link = link + review_type_query_string('reading') ;
+    link = link + review_type_query_string('speaking') ;
+    link = link + review_type_query_string('typing') ;
+    link = link + review_type_query_string('translating') ;
+    link = link + review_type_query_string('writing') ;
 
     $j('#do_results').attr('href', link);
   });
