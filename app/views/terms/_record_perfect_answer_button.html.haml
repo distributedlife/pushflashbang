@@ -1,6 +1,7 @@
 %p= link_to t('actions.review-confident'), '#', :class => 'btn btn-large btn-warning', :method => :post, :id => "do_result_perfect"
 :javascript
-  $j('#do_result_perfect').click(function(event) {
+  $j('#do_result_perfect').click(function(event) 
+  {
     var end = new Date();
     var start_time = document.getElementById("start_time") ;
     var duration = document.getElementById("duration") ;
@@ -12,30 +13,12 @@
     link = link + "&review_mode=" + "#{review_mode}" ;
     link = link + "&skip=true" ;
 
-    if ($j("#review_result_listening").length > 0)
-    {
-      link = link + "&listening=" + ($j("label[for='review_result_listening']").attr('class') == "checked");
-    }
-    if ($j("#review_result_reading").length > 0)
-    {
-      link = link + "&reading=" + ($j("label[for='review_result_reading']").attr('class') == "checked");
-    }
-    if ($j("#review_result_speaking").length > 0)
-    {
-      link = link + "&speaking=" + ($j("label[for='review_result_speaking']").attr('class') == "checked");
-    }
-    if ($j("#review_result_writing").length > 0)
-    {
-      link = link + "&writing=" + ($j("label[for='review_result_writing']").attr('class') == "checked");
-    }
-    if ($j("#review_result_typing").length > 0)
-    {
-      link = link + "&typing=" + ($j("label[for='review_result_typing']").attr('class') == "checked");
-    }
-    if ($j("#review_result_translating").length > 0)
-    {
-      link = link + "&translating=" + ($j("label[for='review_result_translating']").attr('class') == "checked");
-    }
+    link = link + review_type_query_string('listening') ;
+    link = link + review_type_query_string('reading') ;
+    link = link + review_type_query_string('speaking') ;
+    link = link + review_type_query_string('typing') ;
+    link = link + review_type_query_string('translating') ;
+    link = link + review_type_query_string('writing') ;
 
     $j('#do_result_perfect').attr('href', link);
   });

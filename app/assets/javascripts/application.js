@@ -11,3 +11,4 @@
 //= require twitter/bootstrap
 //= require flash
 //= require setup_chosen
+//= require review.js

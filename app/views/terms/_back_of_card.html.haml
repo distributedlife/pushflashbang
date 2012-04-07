@@ -1,16 +1,16 @@
 #back_of_card{:class => "hidden"}
-  - unless new
-    %hr
   #idioms
-    #learned
-      %h2= learned_language.name
-      %p if multiple words show here they share meaning
+    #learned.left
+      %h2
+        = learned_language.name
+        %em.force-small multiple words here share meaning
       - idioms.each do |idiom|
-        #idiom_group.centre.inline-block{:id => "#{idiom.id}"}
+        #idiom_group.inline-block{:id => "#{idiom.id}"}
           = display_learned_translations idiom, learned_language
-    #native
-      %h2= native_language.name
-      %p if multiple words show here they share meaning
+    #native.left
+      %h2
+        = native_language.name
+        %em.force-small multiple words here share meaning
       - idioms.each do |idiom|
-        #idiom_group.centre.inline-block{:id => "#{idiom.id}"}
+        #idiom_group.inline-block{:id => "#{idiom.id}"}
           = display_native_translations idiom, native_language

@@ -11,7 +11,8 @@
   = display_review_buttons params[:review_mode], @review_text
         
 :javascript
-  $j('html').keypress(function(event) {
+  $j('html').keypress(function(event) 
+  {
     if (event.which == '32')
     {
       //we are quoting the ruby variable resolution because the javascript test driver crashes doing it. wtf!

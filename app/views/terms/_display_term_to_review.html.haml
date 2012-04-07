@@ -1,12 +1,13 @@
-#review_mode.content.well
-  .centre
-    - unless new
-      %p.pronunciation
-        The current review mode is:
-        %em= "#{params[:review_mode]}."
-        This term has
-        %span#meaning_count= "#{@related_count}"
-        = "answer#{"s" if @related_count > 1}."
+.content.well
+  #review_mode
+    .centre
+      - unless new
+        %p.pronunciation
+          The current review mode is:
+          %em= "#{params[:review_mode]}."
+          This term has
+          %span#meaning_count= "#{@related_count}"
+          = "answer#{"s" if @related_count > 1}."
 
-    #term{:id =>  term.id}
-      =render :partial => '/terms/show', :locals => {:term => term, :native => native, :learned => learned, :audio => audio, :typed => typed, :learned_translations_in_idiom => learned_translations_in_idiom, :native_translations => native_translations, :new => new, :idioms => idioms, :learned_language => learned_language, :native_language => native_language}
+  #term.centre{:id =>  term.id}
+    =render :partial => '/terms/show', :locals => {:term => term, :native => native, :learned => learned, :audio => audio, :typed => typed, :learned_translations_in_idiom => learned_translations_in_idiom, :native_translations => native_translations, :new => new, :idioms => idioms, :learned_language => learned_language, :native_language => native_language}
