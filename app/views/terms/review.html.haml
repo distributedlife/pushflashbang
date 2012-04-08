@@ -45,7 +45,7 @@
     $j.ajax({
       url: "/languages/#{@learned_language.id}/sets/#{params[:set_id]}/due_count?review_mode=#{params[:review_mode]}",
       success: function(data){
-        $j("header p.subtitle").text("#{t('text.cards-due-notice')}: " + (data - 1));
+        $j(".page-header h1 small").text("#{t('text.cards-due-notice')}: " + (data - 1));
       }
     });
   });

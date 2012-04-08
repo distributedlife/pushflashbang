@@ -28,7 +28,11 @@ gem 'formtastic-bootstrap', :git => 'git://github.com/cgunther/formtastic-bootst
 gem 'bootstrap-sass-rails'
 gem 'uglifier'
 gem 'on_the_spot'
+
+#instrumentation work
+gem 'statsd_helper'
 gem 'statsd-instrument'
+gem 'vitals', :git => "git://github.com/distributedlife/vitals.git"
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
