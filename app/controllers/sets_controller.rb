@@ -240,7 +240,6 @@ class SetsController < ApplicationController
     review_types = parse_review_types params[:review_mode]
     return error_redirect_to t('notice.review-mode-not-set'), language_set_path(params[:language_id], params[:id]) if review_types.empty?
 
-    
     #get user set
     user_set = UserSets.where(:user_id => current_user.id, :set_id => params[:id], :language_id => params[:language_id])
     if user_set.empty?
@@ -307,7 +306,7 @@ class SetsController < ApplicationController
   def due_count
     review_types = parse_review_types params[:review_mode]
 
-    @due_count = UserIdiomSchedule.get_due_count_for_user_for_set_for_proficiencies(params[:language_id], current_user.id, params[:id], review_types)
+    @due_count = get_first(UserSets.where(:user_id => current_user.id, :language_id => params[:language_id], :set_id => params[:id])).due_count(review_types)
 
     respond_to do |format|
       format.json { render :json => @due_count}

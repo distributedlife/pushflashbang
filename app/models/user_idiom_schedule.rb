@@ -124,4 +124,111 @@ class UserIdiomSchedule < ActiveRecord::Base
       next_terms.first
     end
   end
+
+  def self.get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies language_id, user_native_language_id, user_id, set_id, proficiencies, user_set_chapter
+    terms_the_user_can_learn = <<-SQL
+      SELECT term_id
+      FROM set_terms
+      JOIN translations
+        ON set_terms.term_id = translations.idiom_id
+        AND translations.language_id = #{language_id}
+      WHERE set_id = #{set_id}
+      AND set_terms.chapter <= #{user_set_chapter}
+    SQL
+
+    terms_the_user_has_scheduled = <<-SQL
+      SELECT idiom_id
+      FROM user_idiom_schedules
+      JOIN user_idiom_due_items
+        ON user_idiom_schedules.id = user_idiom_due_items.user_idiom_schedule_id
+        AND review_type in (#{proficiencies.join(',')})
+      WHERE user_id = #{user_id}
+    SQL
+
+    terms_that_support_the_users_native_language = <<-SQL
+      SELECT term_id
+      FROM set_terms
+      JOIN translations
+        ON set_terms.term_id = translations.idiom_id
+        AND translations.language_id = #{user_native_language_id}
+      WHERE set_id = #{set_id}
+    SQL
+
+#    AND
+#        (
+#          translations.audio_file_name IS NOT NULL
+#          AND #{UserIdiomReview::HEARING} IN (#{proficiencies.join(',')})
+#        )
+
+
+    sql = <<-SQL
+      SELECT *
+      FROM set_terms
+      WHERE term_id in
+      (
+        #{terms_the_user_can_learn}
+        intersect #{terms_that_support_the_users_native_language}
+        except #{terms_the_user_has_scheduled}
+      )
+      AND set_id = #{set_id}
+      ORDER BY
+        chapter ASC,
+        position ASC
+    SQL
+
+    SetTerms.find_by_sql(sql).count
+  end
+
+  def self.get_count_of_remaining_terms_for_user_for_set_for_proficiencies language_id, user_native_language_id, user_id, set_id, proficiencies
+    terms_the_user_can_learn = <<-SQL
+      SELECT term_id
+      FROM set_terms
+      JOIN translations
+        ON set_terms.term_id = translations.idiom_id
+        AND translations.language_id = #{language_id}
+      WHERE set_id = #{set_id}
+    SQL
+
+    terms_the_user_has_scheduled = <<-SQL
+      SELECT idiom_id
+      FROM user_idiom_schedules
+      JOIN user_idiom_due_items
+        ON user_idiom_schedules.id = user_idiom_due_items.user_idiom_schedule_id
+        AND review_type in (#{proficiencies.join(',')})
+      WHERE user_id = #{user_id}
+    SQL
+
+    terms_that_support_the_users_native_language = <<-SQL
+      SELECT term_id
+      FROM set_terms
+      JOIN translations
+        ON set_terms.term_id = translations.idiom_id
+        AND translations.language_id = #{user_native_language_id}
+      WHERE set_id = #{set_id}
+    SQL
+
+#    AND
+#        (
+#          translations.audio_file_name IS NOT NULL
+#          AND #{UserIdiomReview::HEARING} IN (#{proficiencies.join(',')})
+#        )
+
+
+    sql = <<-SQL
+      SELECT *
+      FROM set_terms
+      WHERE term_id in
+      (
+        #{terms_the_user_can_learn}
+        intersect #{terms_that_support_the_users_native_language}
+        except #{terms_the_user_has_scheduled}
+      )
+      AND set_id = #{set_id}
+      ORDER BY
+        chapter ASC,
+        position ASC
+    SQL
+
+    SetTerms.find_by_sql(sql).count
+  end
 end

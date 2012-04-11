@@ -33,11 +33,11 @@ module SetPagePartsHelper
   end
 
   def unset_as_goal language, set
-    link_to t('actions.unset-goal'), unset_goal_language_set_path(language.id, set.id), :class => 'btn btn-danger pull-right', :id => "set_#{set.id}_goal", :method => :put
+    link_to content_tag('i', '', :class => 'icon-remove'), unset_goal_language_set_path(language.id, set.id), :class => 'btn btn-danger pull-right', :id => "set_#{set.id}_goal", :method => :put
   end
 
   def unset_goal_button language_id, set_id
-    link_to t('actions.unset-goal'), unset_goal_language_set_path(language_id, set_id), :class => 'btn btn-danger', :id => "unset_goal", :method => :put
+    link_to content_tag('i', '', :class => 'icon-remove'), unset_goal_language_set_path(language_id, set_id), :class => 'btn btn-danger', :id => "unset_goal", :method => :put
   end
 
   def create_set_button
@@ -65,7 +65,7 @@ module SetPagePartsHelper
   end
 
   def review_set_options_button goal
-    render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => goal.set_id}
+    render :partial => '/sets/review_set_options', :locals => {:language_id => goal.language_id, :set_id => goal.set_id, :goal => goal}
   end
 
   def set_user_review_options
@@ -138,5 +138,11 @@ module SetPagePartsHelper
 
   def edit_set_section set_name, i
     render :partial => '/sets/create_set_name_form', :locals => {:set_name => set_name, :i => i}
+  end
+
+  def review_mode_link text, review_modes, goal
+    review_types = parse_review_types review_modes
+
+    link_to "#{t(text)} (#{goal.due_count(review_types)} due / #{goal.remaining_in_chapter(review_types)} in chapter / #{goal.remaining_in_set(review_types)} in set)", review_language_set_path(:language_id => goal.language_id, :id => goal.set_id, :review_mode => review_modes), :class => 'contrast', :id => "review_#{goal.set_id}"
   end
 end

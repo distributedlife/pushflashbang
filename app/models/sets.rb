@@ -2,6 +2,7 @@
 class Sets < ActiveRecord::Base
   has_many :set_name
   has_many :set_terms, :class_name => "SetTerms", :foreign_key => "set_id"
+  has_many :idioms, :class_name => "Idiom", :through => :set_terms
 
   def delete
     SetName.where(:sets_id => self.id).each do |set_name|
@@ -78,4 +79,12 @@ class Sets < ActiveRecord::Base
     
     Sets.find_by_sql(sql)
   end
+
+  def term_count
+    self.set_terms.count
+  end
+
+  def term_count_for_language language_id
+    self.idioms.select {|i| i.supports_language?(language_id)}.count
+  end 
 end

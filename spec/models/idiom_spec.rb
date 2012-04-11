@@ -279,4 +279,17 @@ describe Idiom do
       Idiom.first.should == @idiom1
     end
   end
+
+  describe 'supports_language?' do
+    let(:subject) {Idiom.make!}
+    it 'should return true if the idiom has translation for the specified language' do
+      t = Translation.make!(:language_id => 1, :idiom_id => subject.id)
+      subject.supports_language?(t.language_id).should be_true
+    end
+
+    it 'should return false if the idiom has no translations for the specified language' do
+      t = Translation.make!(:language_id => 1, :idiom_id => subject.id)
+      subject.supports_language?(t.language_id + 1).should be_false
+    end
+  end
 end

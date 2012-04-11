@@ -143,7 +143,37 @@ describe Sets do
     end
 
     it 'should not return sets that contain the idiom' do
-      Sets.all_not_containing_idiom(@i1.id).include?(@set1).should == false
+      Sets.all_not_containing_idiom(@i1.id).include?(@set1).should == false    end
+  end
+
+  context 'term_count_for_language' do
+    let(:subject) {Sets.make!}
+
+    it 'should ignore terms that dont support the language' do
+      2.times do
+        i = Idiom.make! 
+        Translation.make!(:language_id => 1, :idiom_id => i.id) 
+        SetTerms.make!(:term_id => i.id, :set_id => subject.id)
+      end
+      1.times do
+        i = Idiom.make! 
+        Translation.make!(:language_id => 2, :idiom_id => i.id)
+        SetTerms.make!(:term_id => i.id, :set_id => subject.id)
+      end
+
+      subject.term_count_for_language(1).should == 2
+    end
+
+    it 'should include all terms that support the language' do
+      2.times do
+        i = Idiom.make! 
+        Translation.make!(:language_id => 1, :idiom_id => i.id) 
+        Translation.make!(:language_id => 1, :idiom_id => i.id) 
+        Translation.make!(:language_id => 2, :idiom_id => i.id) 
+        SetTerms.make!(:term_id => i.id, :set_id => subject.id)
+      end
+
+      subject.term_count_for_language(1).should == 2
     end
   end
 end

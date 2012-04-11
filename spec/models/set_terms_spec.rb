@@ -77,4 +77,14 @@ describe SetTerms do
       SetTerms.where(:set_id => 2, :term_id => 5).first.chapter.should == 1
     end
   end
+
+  context 'term_count' do
+    it 'should return the count of all terms in the set' do
+      set = Sets.make!
+      2.times {i = Idiom.make!; SetTerms.make!(:term_id => i.id, :set_id => set.id)}
+      1.times {i = Idiom.make!; SetTerms.make!(:term_id => i.id, :set_id => set.id + 1)}
+
+      set.term_count.should == 2
+    end
+  end
 end

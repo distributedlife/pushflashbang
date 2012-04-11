@@ -5,10 +5,10 @@
     //%li= link_to t('actions.review-listen-write'), review_language_set_path(:language_id => language_id, :id => set_id, :review_mode => 'listening, writing'), :class => 'contrast', :id => "review_#{set_id}"
     //%li= link_to t('actions.review-listen-type'), review_language_set_path(:language_id => language_id, :id => set_id, :review_mode => 'listening, typing'), :class => 'contrast', :id => "review_#{set_id}"
     //%li.divider
-    %li= link_to t('actions.review-reading'), review_language_set_path(:language_id => language_id, :id => set_id, :review_mode => 'reading'), :class => 'contrast', :id => "review_#{set_id}"
-    %li= link_to t('actions.review-read-speak'), review_language_set_path(:language_id => language_id, :id => set_id, :review_mode => 'reading, speaking'), :class => 'contrast', :id => "review_#{set_id}"
-    %li= link_to t('actions.review-read-speak-type'), review_language_set_path(:language_id => language_id, :id => set_id, :review_mode => 'reading, speaking, typing'), :class => 'contrast', :id => "review_#{set_id}"
+    %li= review_mode_link 'actions.review-reading', 'reading', goal
+    %li= review_mode_link 'actions.review-read-speak', 'reading, speaking', goal
+    %li= review_mode_link 'actions.review-read-speak-type', 'reading, speaking, typing', goal
     %li.divider
-    %li= link_to t('actions.review-translating-speaking'), review_language_set_path(:language_id => language_id, :id => set_id, :review_mode => 'translating, speaking'), :class => 'contrast', :id => "review_#{set_id}"
-    %li= link_to t('actions.review-translate-speak-write'), review_language_set_path(:language_id => language_id, :id => set_id, :review_mode => 'translating, speaking, writing'), :class => 'contrast', :id => "review_#{set_id}"
-    %li= link_to t('actions.review-translate-speak-type'), review_language_set_path(:language_id => language_id, :id => set_id, :review_mode => 'translating, speaking, typing'), :class => 'contrast', :id => "review_#{set_id}"
+    %li= review_mode_link 'actions.review-translating-speaking', 'translating, speaking', goal
+    %li= review_mode_link 'actions.review-translate-speak-write', 'translating, speaking, writing', goal
+    %li= review_mode_link 'actions.review-translate-speak-type', 'translating, speaking, typing', goal

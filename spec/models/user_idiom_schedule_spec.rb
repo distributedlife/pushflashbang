@@ -765,4 +765,158 @@ describe UserIdiomSchedule do
       first.should == @st11
     end
   end
+
+  context 'get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies' do
+    before(:each) do
+      @english = Language.make!
+      @spanish = Language.make!
+      @chinese = Language.make!
+      
+      @user = User.make!(:native_language_id => @english.id)
+      
+      #an idiom with spanish, english and chinese
+      @idiom1 = Idiom.make!
+      @t11 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @english.id)
+      @t12 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @spanish.id)
+      @t13 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @chinese.id)
+      
+      @set1 = Sets.make!
+      @st11 = SetTerms.make!(:set_id => @set1.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
+      
+      @set2 = Sets.make!
+      
+      CardTiming.create(:seconds => 5)
+    end
+
+    it 'should ignore terms that have been reviewed for the specified review type' do
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1], 1
+      count.should == 1
+      
+      schedule = UserIdiomSchedule.make!(:user_id => @user.id, :idiom_id => @idiom1.id, :language_id => @spanish.id)
+      UserIdiomDueItems.make!(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.from_now)
+      
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1], 1
+      count.should == 0
+    end
+
+    it 'should ignore terms that dont support the users native language' do
+      #spanish and chinese
+      @idiom3 = Idiom.make!
+      @t31 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @spanish.id)
+      @t32 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @chinese.id)
+      @st13 = SetTerms.make!(:set_id => @set1.id, :term_id => @idiom3.id, :chapter => 1, :position => 3) #to be ignore
+      
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32], 1
+      count.should == 1
+    end
+
+    it 'should ignore terms that dont support the learn language' do
+      #english and chinese
+      @idiom2 = Idiom.make!
+      @t21 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @english.id)
+      @t22 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id)
+      @st12 = SetTerms.make!(:set_id => @set1.id, :term_id => @idiom2.id, :chapter => 1, :position => 2) #to be ignore
+      
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32], 1
+      count.should == 1
+    end
+
+    it 'should ignore terms that are not in the set' do
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies @spanish.id, @english.id, @user.id, @set2.id, [1,2,4,8,16,32], 1
+      count.should == 0
+    end
+
+    it 'should ignore terms that are in a later chapter' do
+      #an idiom with spanish, english
+      @idiom5 = Idiom.make!
+      @t51 = Translation.make!(:idiom_id => @idiom5.id, :language_id => @english.id)
+      @t52 = Translation.make!(:idiom_id => @idiom5.id, :language_id => @spanish.id)
+      @st15 = SetTerms.make!(:set_id => @set1.id, :term_id => @idiom5.id, :chapter => 2, :position => 1)
+      
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32], 1
+      count.should == 1
+    end
+
+    it 'should return the count of unscheduled terms for the set chapters, user native lang, learned language' do
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_chapter_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32], 1
+      count.should == 1
+    end
+  end
+
+  context 'get_count_of_remaining_terms_for_user_for_set_for_proficiencies' do
+    before(:each) do
+      @english = Language.make!
+      @spanish = Language.make!
+      @chinese = Language.make!
+      
+      @user = User.make!(:native_language_id => @english.id)
+      
+      #an idiom with spanish, english and chinese
+      @idiom1 = Idiom.make!
+      @t11 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @english.id)
+      @t12 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @spanish.id)
+      @t13 = Translation.make!(:idiom_id => @idiom1.id, :language_id => @chinese.id)
+      
+      @set1 = Sets.make!
+      @st11 = SetTerms.make!(:set_id => @set1.id, :term_id => @idiom1.id, :chapter => 1, :position => 1)
+      
+      @set2 = Sets.make!
+      
+      CardTiming.create(:seconds => 5)
+    end
+
+    it 'should ignore terms that have been reviewed for the specified review type' do
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1]
+      count.should == 1
+      
+      schedule = UserIdiomSchedule.make!(:user_id => @user.id, :idiom_id => @idiom1.id, :language_id => @spanish.id)
+      UserIdiomDueItems.make!(:user_idiom_schedule_id => schedule.id, :review_type => 1, :due => 1.day.from_now)
+      
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1]
+      count.should == 0
+    end
+
+    it 'should ignore terms that dont support the users native language' do
+      #spanish and chinese
+      @idiom3 = Idiom.make!
+      @t31 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @spanish.id)
+      @t32 = Translation.make!(:idiom_id => @idiom3.id, :language_id => @chinese.id)
+      @st13 = SetTerms.make!(:set_id => @set1.id, :term_id => @idiom3.id, :chapter => 1, :position => 3) #to be ignore
+      
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32]
+      count.should == 1
+    end
+
+    it 'should ignore terms that dont support the learn language' do
+      #english and chinese
+      @idiom2 = Idiom.make!
+      @t21 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @english.id)
+      @t22 = Translation.make!(:idiom_id => @idiom2.id, :language_id => @chinese.id)
+      @st12 = SetTerms.make!(:set_id => @set1.id, :term_id => @idiom2.id, :chapter => 1, :position => 2) #to be ignore
+      
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32]
+      count.should == 1
+    end
+
+    it 'should ignore terms that are not in the set' do
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set2.id, [1,2,4,8,16,32]
+      count.should == 0
+    end
+
+    it 'should not ignore terms that are in a later chapter' do
+      #an idiom with spanish, english
+      @idiom5 = Idiom.make!
+      @t51 = Translation.make!(:idiom_id => @idiom5.id, :language_id => @english.id)
+      @t52 = Translation.make!(:idiom_id => @idiom5.id, :language_id => @spanish.id)
+      @st15 = SetTerms.make!(:set_id => @set1.id, :term_id => @idiom5.id, :chapter => 2, :position => 1)
+      
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32]
+      count.should == 2
+    end
+
+    it 'should return the count of unscheduled terms for the set chapters, user native lang, learned language' do
+      count = UserIdiomSchedule::get_count_of_remaining_terms_for_user_for_set_for_proficiencies @spanish.id, @english.id, @user.id, @set1.id, [1,2,4,8,16,32]
+      count.should == 1
+    end
+  end
 end

@@ -6,6 +6,9 @@ class Idiom < ActiveRecord::Base
 
   attr_accessible :idiom_type
 
+  def supports_language? language_id
+    self.translations.where(:language_id => language_id).count > 0
+  end
   
   def self.translations_in_idiom_and_language idiom_id, language_id
     Translation.joins(:languages).order(:form).where(:language_id => language_id, :idiom_id => idiom_id)
