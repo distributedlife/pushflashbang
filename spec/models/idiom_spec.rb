@@ -180,7 +180,7 @@ describe Idiom do
         end
         UserIdiomDueItems.count.should == 12
         UserIdiomDueItems.where(:user_idiom_schedule_id => uis1.id, :review_type => UserIdiomReview::READING).first.due.should == day_from_now
-        UserIdiomDueItems.where(:user_idiom_schedule_id => uis1.id, :review_type => UserIdiomReview::WRITING).first.due.should == day_ago
+        UserIdiomDueItems.where(:user_idiom_schedule_id => uis1.id, :review_type => UserIdiomReview::WRITING).first.due.should.to_s == day_ago.to_s
         UserIdiomDueItems.where(:user_idiom_schedule_id => uis1.id, :review_type => UserIdiomReview::TYPING).first.due.should == day_from_now
         UserIdiomDueItems.where(:user_idiom_schedule_id => uis1.id, :review_type => UserIdiomReview::HEARING).first.due.should == day_ago
         UserIdiomDueItems.where(:user_idiom_schedule_id => uis1.id, :review_type => UserIdiomReview::SPEAKING).first.due.should == day_from_now
