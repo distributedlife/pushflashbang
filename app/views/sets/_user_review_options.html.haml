@@ -9,6 +9,7 @@
           = display_language language, 'review'
           - if goal
             = review_set_options_button goal
+            = goal.remaining_in_chapter('reading, translating, listening')
             = unset_goal_button goal.language_id, goal.set_id
           - else
             = set_goal_button language.id, set_id
